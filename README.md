@@ -1,2 +1,11 @@
 # Centralized-pharmacy-information-system
-ISA 2020
+
+| Our members          | 
+| -------------------- | 
+| Ana Perišić          | 
+| Milana Todorović     | 
+| Nemanja Pualić       | 
+| Vladislav Maksimović | 
+
+## Help
+Aditional help find [here]()
