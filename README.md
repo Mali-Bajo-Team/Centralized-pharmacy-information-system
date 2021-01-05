@@ -92,7 +92,6 @@ It's same for windows, just type in CMD
 <h1 align="center"> STEP 3 </h1>
 Pull project frontend-vue-js from this repository 
 
-![image](https://user-images.githubusercontent.com/49925421/79359886-6ad37200-7f43-11ea-9ceb-3a4d63f91859.png)
 
 <h1 align="center"> STEP 4 </h1>
 
@@ -105,8 +104,9 @@ Change diretory to frontend-vue-js (cd path/frontend-vue-js), and start server
 
 ![image](https://user-images.githubusercontent.com/49925421/103670684-2af16680-4f7a-11eb-96aa-c67588231188.png)
 
+![image](https://user-images.githubusercontent.com/49925421/103670847-6ee46b80-4f7a-11eb-9d7a-b3f9accc8308.png)
 
-![image](https://user-images.githubusercontent.com/49925421/79361113-2943c680-7f45-11ea-955b-2c2f68633c5f.png)
+
 
 
 </details>
