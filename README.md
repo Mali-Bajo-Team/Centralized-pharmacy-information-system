@@ -14,7 +14,7 @@
   <br>
   
    - Skini Intelij i instalitaj ga: https://www.jetbrains.com/idea/download/#section=windows 
-   - Maven-Example projekat pulluj sa linka: https://github.com/katarinaa94/isa/tree/master/Vezbe1/Tools/maven-example
+   - Backend-spring-boot projekat pulluj sa ovog repozitorijuma
    - Otvori pom.xml 
     <p align="left">
       <img src="https://user-images.githubusercontent.com/49925421/98149271-7a111180-1ecd-11eb-92d7-9e9938f51ff8.png" width="1000" title="hover text">
@@ -26,10 +26,6 @@
     </p>
   
    - Nakon toga InteliJ ce da importuje projekat i sve potrebne dependencije, ovo moze da potraje vise minuta u zavisnosti od vase internet konekcije
-   - U pom.xml fajlu dodaj ove dve linije ako vec nisu dodate 
-     <p align="left">
-      <img src="https://user-images.githubusercontent.com/49925421/98149835-04f20c00-1ece-11eb-8769-7d2716832f0c.png" width="700" title="hover text">
-     </p>
    
    - Skini jdk 11 i instaliraj ga, meni je radilo na javi 11 nije na javi 15 https://www.oracle.com/java/technologies/javase-jdk11-downloads.html
    - Dodaj JDK 11 
