@@ -1,7 +1,7 @@
 package com.pharmacy.cpis.controller;
 
 import com.pharmacy.cpis.dto.UserDTO;
-import com.pharmacy.cpis.model.User;
+import com.pharmacy.cpis.model.UserAcc;
 import com.pharmacy.cpis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,11 +18,11 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserDTO>> getCourses() {
 
-        List<User> users = userService.findAll();
+        List<UserAcc> users = userService.findAll();
 
         // convert users to DTOs
         List<UserDTO> usersDTO = new ArrayList<>();
-        for (User u : users) {
+        for (UserAcc u : users) {
             usersDTO.add(new UserDTO(u));
         }
 

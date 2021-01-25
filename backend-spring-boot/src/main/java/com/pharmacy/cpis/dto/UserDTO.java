@@ -1,6 +1,6 @@
 package com.pharmacy.cpis.dto;
 
-import com.pharmacy.cpis.model.User;
+import com.pharmacy.cpis.model.UserAcc;
 
 public class UserDTO {
     private Long id;
@@ -10,7 +10,7 @@ public class UserDTO {
 
     }
 
-    public UserDTO(User user) { this(user.getId(), user.getEmail()); }
+    public UserDTO(UserAcc user) { this(user.getId(), user.getEmail()); }
 
     public UserDTO(Long id, String email) {
         super();

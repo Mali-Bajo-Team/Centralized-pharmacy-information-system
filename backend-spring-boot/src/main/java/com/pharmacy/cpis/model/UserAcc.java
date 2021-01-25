@@ -5,7 +5,7 @@ import java.util.Objects;
 
 
 @Entity
-public class User {
+public class UserAcc {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -59,7 +59,7 @@ public class User {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        User u = (User) o;
+        UserAcc u = (UserAcc) o;
         if (u.id == null || id == null) {
             return false;
         }
@@ -77,7 +77,7 @@ public class User {
                 "id=" + id +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", isActive=" + isActive +
+//                ", isActive=" + isActive +
                 '}';
     }
 }
