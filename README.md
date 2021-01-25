@@ -1,4 +1,4 @@
-# Centralized-pharmacy-information-system
+﻿# Centralized-pharmacy-information-system
 
 | Our members          | 
 | -------------------- | 
@@ -13,7 +13,7 @@
   <summary> Instalation Guide for IDEA Intelij Maven </summary>
   <br>
   
-   - Skini Intelij i instalitaj ga: https://www.jetbrains.com/idea/download/#section=windows 
+   - Skini Intelij i instaliraj ga: https://www.jetbrains.com/idea/download/#section=windows 
    - Backend-spring-boot projekat pulluj sa ovog repozitorijuma
    - Otvori pom.xml 
     <p align="left">
