@@ -2,17 +2,17 @@ package com.pharmacy.cpis.dto;
 
 import com.pharmacy.cpis.model.UserAcc;
 
-public class UserDTO {
+public class UserAccDTO {
     private Long id;
     private String email;
 
-    public UserDTO() {
+    public UserAccDTO() {
 
     }
 
-    public UserDTO(UserAcc user) { this(user.getId(), user.getEmail()); }
+    public UserAccDTO(UserAcc user) { this(user.getId(), user.getEmail()); }
 
-    public UserDTO(Long id, String email) {
+    public UserAccDTO(Long id, String email) {
         super();
         this.id = id;
         this.email = email;
