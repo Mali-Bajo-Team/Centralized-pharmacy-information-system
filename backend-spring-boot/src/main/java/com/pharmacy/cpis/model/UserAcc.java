@@ -77,7 +77,7 @@ public class UserAcc {
                 "id=" + id +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-//                ", isActive=" + isActive +
+                ", isActive=" + isActive +
                 '}';
     }
 }

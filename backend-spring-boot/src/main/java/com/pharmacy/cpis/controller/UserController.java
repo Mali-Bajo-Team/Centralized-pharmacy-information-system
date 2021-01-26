@@ -6,9 +6,7 @@ import com.pharmacy.cpis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +17,7 @@ public class UserController {
     private UserService userAccService;
 
     @GetMapping
-    public ResponseEntity<List<UserAccDTO>> getCourses() {
+    public ResponseEntity<List<UserAccDTO>> getUsersAccs() {
 
         List<UserAcc> usersACC = userAccService.findAll();
 
@@ -33,7 +31,7 @@ public class UserController {
     }
 
     @GetMapping("userAcc/{id}")
-    public ResponseEntity<UserAccDTO> getCourse(@PathVariable Long id) {
+    public ResponseEntity<UserAccDTO> getUserAcc(@PathVariable Long id) {
 
         UserAcc userAcc = userAccService.findOne(id);
 
@@ -42,5 +40,17 @@ public class UserController {
         }
 
         return new ResponseEntity<>(new UserAccDTO(userAcc), HttpStatus.OK);
+    }
+
+    @PostMapping(consumes = "application/json")
+    public ResponseEntity<UserAccDTO> saveUserAcc(@RequestBody UserAcc userAcc) {
+
+        UserAcc userAccForSave = new UserAcc();
+        userAccForSave.setEmail(userAcc.getEmail());
+        userAccForSave.setPassword(userAcc.getPassword());
+        userAccForSave.setActive(true);
+
+        userAcc = userAccService.save(userAccForSave);
+        return new ResponseEntity<>(new UserAccDTO(userAcc), HttpStatus.CREATED);
     }
 }
