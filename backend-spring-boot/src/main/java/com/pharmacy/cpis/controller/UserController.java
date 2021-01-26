@@ -16,6 +16,7 @@ public class UserController {
     @Autowired
     private UserService userAccService;
 
+    @CrossOrigin
     @GetMapping
     public ResponseEntity<List<UserAccDTO>> getUsersAccs() {
 
