@@ -53,4 +53,22 @@ public class UserController {
         userAcc = userAccService.save(userAccForSave);
         return new ResponseEntity<>(new UserAccDTO(userAcc), HttpStatus.CREATED);
     }
+
+    @PutMapping(consumes = "application/json")
+    public ResponseEntity<UserAccDTO> updateUserAcc(@RequestBody UserAcc userAcc) {
+
+        // a userAcc must exist
+        UserAcc userAccForUpdate = userAccService.findOne(userAcc.getId());
+
+        if (userAccForUpdate == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        userAccForUpdate.setEmail(userAcc.getEmail());
+        userAccForUpdate.setPassword(userAcc.getPassword());
+
+        userAcc = userAccService.save(userAccForUpdate);
+        return new ResponseEntity<>(new UserAccDTO(userAcc), HttpStatus.OK);
+    }
+
 }
