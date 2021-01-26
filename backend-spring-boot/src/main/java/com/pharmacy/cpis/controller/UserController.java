@@ -71,4 +71,17 @@ public class UserController {
         return new ResponseEntity<>(new UserAccDTO(userAcc), HttpStatus.OK);
     }
 
+    @DeleteMapping(value = "userAcc/{id}")
+    public ResponseEntity<Void> deleteUserAcc(@PathVariable Long id) {
+
+        UserAcc userAcc = userAccService.findOne(id);
+
+        if (userAcc != null) {
+            userAccService.remove(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 }
