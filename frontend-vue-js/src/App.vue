@@ -20,6 +20,10 @@
         Favorites tab
         <p>Maiores, dolorum. Beatae, optio tempore fuga odit aperiam velit, consequuntur magni inventore sapiente alias sequi odio qui harum dolorem sunt quasi corporis.</p>
       </md-tab>
+
+       <md-tab id="tab-login" md-label="Login" to="/login">
+       
+      </md-tab>
     </md-tabs>
   </div>
       <div>
@@ -30,10 +34,14 @@
 </template>
 
 <script>
+
+import VueMaterial from 'vue-material'
 import Vue from 'vue'
 import { MdButton, MdContent, MdTabs } from 'vue-material/dist/components'
 import 'vue-material/dist/vue-material.min.css'
 import 'vue-material/dist/theme/default.css'
+
+Vue.use(VueMaterial)
 
 Vue.use(MdButton)
 Vue.use(MdContent)
