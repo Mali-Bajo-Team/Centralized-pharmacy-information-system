@@ -3,14 +3,12 @@
         <h1>Fetch ALL USERS with API</h1>
         <table border="1px">
             <tr>
-                <td>Name</td>
-                <td>Salary</td>
-                <td>Age</td>
+                <td>Id</td>
+                <td>Mail</td>
             </tr>
             <tr v-for="item in list" v-bind:key="item.id">
-                <td>{{item.employee_name}}</td>
-                <td>Salary</td>
-                <td>Age</td>
+                <td>{{item.id}}</td>
+                <td>{{item.email}}</td>
             </tr>
         </table>
 
@@ -31,9 +29,9 @@ export default {
         return {list:undefined}
     },
     mounted(){
-        Vue.axios.get('http://dummy.restapiexample.com/api/v1/employees')
+        Vue.axios.get('http://localhost:8080/')
         .then((resp)=>{
-            this.list = resp.data.data;
+           this.list = resp.data;
         })
     }
 }
