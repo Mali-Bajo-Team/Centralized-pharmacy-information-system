@@ -1,7 +1,7 @@
-import allUsers from './components/allUsers.vue';
+import allUsers from './components/unregistered/Allusers.vue';
 import unregisterLanding from './components/unregistered/Landingpage.vue';
 
 export default [
     { path: '/', component: unregisterLanding},
-    { path: '/allUsers', component: allUsers},
+    { path: '/components/unregistered/Allusers.vue', component: allUsers},
 ]

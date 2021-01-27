@@ -5,7 +5,6 @@
             <tr>
                 <td>Id</td>
                 <td>Mail</td>
-                <div>URL: {{ url }}</div> 
             </tr>
             <tr v-for="item in list" v-bind:key="item.id">
                 <td>{{item.id}}</td>
@@ -29,11 +28,10 @@ export default {
     {
         return {
             url: process.env.VUE_APP_APIUSERSURL,
-           list:undefined}
-        
+            list: undefined
+        }
     },
     mounted(){
-         console.log(`Working on '${process.env.VUE_APP_APIUSERSURL}' mode`)
         Vue.axios.get(this.url)
         .then((resp)=>{
            this.list = resp.data;

@@ -5,7 +5,7 @@
             <md-tab id="tab-home" md-label="Home" to="/" exact>
             </md-tab>
 
-            <md-tab id="tab-pages" md-label="Pages" to="/allUsers">
+            <md-tab id="tab-pages" md-label="Allusers" to="/components/unregistered/Allusers.vue">
               Pages tab
             </md-tab>
 
