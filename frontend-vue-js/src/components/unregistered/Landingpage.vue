@@ -75,10 +75,18 @@ export default {
     auth() {
       // your code to login user
       // this is only for example of loading
+      
       this.loading = true;
       setTimeout(() => {
         this.loading = false;
       }, 5000);
+
+      if(new String(this.form.email).valueOf() == new String("systemadmin@gmail.com").valueOf()){
+          this.$router.push({ name: 'systemadminLanding' })
+      }else{
+        console.log("eerro")
+      }
+
     },
      getValidationClass (fieldName) {
         const field = this.$v.form[fieldName]
