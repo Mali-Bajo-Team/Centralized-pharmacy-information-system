@@ -29,7 +29,7 @@ export default {
         return {list:undefined}
     },
     mounted(){
-        Vue.axios.get('http://localhost:8080/')
+        Vue.axios.get('http://localhost:8081/api/users')
         .then((resp)=>{
            this.list = resp.data;
         })
