@@ -2,7 +2,7 @@
   <div id="app">
       <div>
         <md-tabs md-sync-route>
-            <md-tab id="tab-home" md-label="Home" to="/login" exact>
+            <md-tab id="tab-home" md-label="Home" to="/" exact>
             </md-tab>
 
             <md-tab id="tab-pages" md-label="Pages" to="/allUsers">
