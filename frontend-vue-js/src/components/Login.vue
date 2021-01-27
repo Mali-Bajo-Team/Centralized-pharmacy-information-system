@@ -8,22 +8,26 @@
         <div class="md-body-1">Please fill the form</div>
       </div>
 
-      <div class="form">
-        <md-field>
+      <form class="form" @submit.prevent="validateUser">
+        <md-field :class="getValidationClass('email')">
           <label>E-mail</label>
-          <md-input v-model="login.email" autofocus></md-input>
+          <md-input v-model="form.email" autofocus></md-input>
+            <span class="md-error" v-if="!$v.form.email.required">The email is required</span>
+            <span class="md-error" v-else-if="!$v.form.email.email">Invalid email</span>
         </md-field>
 
-        <md-field md-has-password>
+        <md-field :class="getValidationClass('password')">
           <label>Password</label>
-          <md-input v-model="login.password" type="password"></md-input>
+          <md-input v-model="form.password" type="password"></md-input>
+          <span class="md-error" v-if="!$v.form.password.required">The password is required</span>
+          <span class="md-error" v-else-if="!$v.form.password.minlength">Invalid password</span>
         </md-field>
-      </div>
-
       <div class="actions md-layout md-alignment-center-space-between">
         <a href="/resetpassword">Reset password</a>
-        <md-button class="md-raised md-primary" @click="auth">Log in</md-button>
+        <md-button class="md-raised md-primary" type="submit">Log in</md-button>
       </div>
+      
+      </form>
 
       <div class="loading-overlay" v-if="loading">
         <md-progress-spinner md-mode="indeterminate" :md-stroke="2"></md-progress-spinner>
@@ -35,16 +39,37 @@
 </template>
 
 <script>
+import { validationMixin } from 'vuelidate'
+  import {
+    required,
+    email,
+    minLength,
+    //maxLength
+  } from 'vuelidate/lib/validators'
+
 export default {
-  name: "App",
+  name: 'FormValidation',
+  mixins: [validationMixin],
   data() {
     return {
       loading: false,
-      login: {
+      form: {
         email: "",
         password: ""
       }
     };
+  },
+  validations: {
+      form: {
+        password: {
+          required,
+          minLength: minLength(3)
+        },
+        email: {
+          required,
+          email
+        }
+      }
   },
   methods: {
     auth() {
@@ -54,7 +79,24 @@ export default {
       setTimeout(() => {
         this.loading = false;
       }, 5000);
-    }
+    },
+     getValidationClass (fieldName) {
+        const field = this.$v.form[fieldName]
+
+        if (field) {
+          return {
+            'md-invalid': field.$invalid && field.$dirty
+          }
+        }
+      },
+      validateUser () {
+        this.$v.$touch()
+
+        if (!this.$v.$invalid) {
+          //this.saveUser()
+          this.auth()
+        }
+      }
   }
 };
 </script>
