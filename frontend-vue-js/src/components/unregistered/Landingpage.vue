@@ -83,6 +83,16 @@ export default {
 
       if(new String(this.form.email).valueOf() == new String("systemadmin@gmail.com").valueOf()){
           this.$router.push({ name: 'systemadminLanding' })
+      }else if(new String(this.form.email).valueOf() == new String("supplier@gmail.com").valueOf()){
+          this.$router.push({ name: 'supplierLanding' }) 
+      }else if(new String(this.form.email).valueOf() == new String("pharmacyadmin@gmail.com").valueOf()){
+          this.$router.push({ name: 'pharmacyadminLanding' }) 
+      }else if(new String(this.form.email).valueOf() == new String("pharmacist@gmail.com").valueOf()){
+          this.$router.push({ name: 'pharmacistLanding' }) 
+      }else if(new String(this.form.email).valueOf() == new String("patient@gmail.com").valueOf()){
+          this.$router.push({ name: 'patientLanding' }) 
+      }else if(new String(this.form.email).valueOf() == new String("dermatologist@gmail.com").valueOf()){
+          this.$router.push({ name: 'dermatologistLanding' }) 
       }else{
         console.log("eerro")
       }

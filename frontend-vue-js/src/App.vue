@@ -1,29 +1,8 @@
 <template>
   <div id="app">
-      <div>
-        <md-tabs md-sync-route>
-            <md-tab id="tab-home" md-label="Home" to="/" exact>
-            </md-tab>
-
-            <md-tab id="tab-pages" md-label="Allusers" to="/components/unregistered/Allusers.vue">
-              Pages tab
-            </md-tab>
-
-            <md-tab id="tab-posts" md-label="Posts" to="/components/tabs/posts">
-              Posts tab
-              <p>Qui, voluptas repellat impedit ducimus earum at ad architecto consectetur perferendis aspernatur iste amet ex tempora animi, illum tenetur quae assumenda iusto.</p>
-            </md-tab>
-
-            <md-tab id="tab-favorites" md-label="Favorites" to="/components/tabs/favorites">
-              Favorites tab
-              <p>Maiores, dolorum. Beatae, optio tempore fuga odit aperiam velit, consequuntur magni inventore sapiente alias sequi odio qui harum dolorem sunt quasi corporis.</p>
-            </md-tab>
-       </md-tabs>
-      </div>
     <div>
     <router-view></router-view>
-  </div>
-    
+    </div>
   </div>
 </template>
 
