@@ -6,6 +6,7 @@ import com.pharmacy.cpis.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class UserController {
 
     @CrossOrigin
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserAccDTO>> getUsersAccs() {
 
         List<UserAcc> usersACC = userAccService.findAll();
@@ -35,6 +37,7 @@ public class UserController {
     }
 
     @GetMapping("userAcc/{id}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<UserAccDTO> getUserAcc(@PathVariable Long id) {
 
         UserAcc userAcc = userAccService.findOne(id);
@@ -47,6 +50,7 @@ public class UserController {
     }
 
     @PostMapping(consumes = "application/json")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<UserAccDTO> saveUserAcc(@RequestBody UserAcc userAcc) {
 
         UserAcc userAccForSave = new UserAcc();
@@ -59,6 +63,7 @@ public class UserController {
     }
 
     @PutMapping(consumes = "application/json")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<UserAccDTO> updateUserAcc(@RequestBody UserAcc userAcc) {
 
         // a userAcc must exist
@@ -76,6 +81,7 @@ public class UserController {
     }
 
     @DeleteMapping(value = "userAcc/{id}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Void> deleteUserAcc(@PathVariable Long id) {
 
         UserAcc userAcc = userAccService.findOne(id);
