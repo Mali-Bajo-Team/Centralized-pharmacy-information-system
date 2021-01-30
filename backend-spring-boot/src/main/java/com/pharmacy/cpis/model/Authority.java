@@ -5,7 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 
-// POJO which implement Spring Security GrantedAuthority, with that we can define roles in aplication
+// POJO which implement Spring Security GrantedAuthority, with that we can define roles in application
 @Entity
 @Table(name="AUTHORITY")
 public class Authority implements GrantedAuthority {

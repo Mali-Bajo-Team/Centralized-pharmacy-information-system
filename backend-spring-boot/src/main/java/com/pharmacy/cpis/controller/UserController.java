@@ -9,7 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "api/users")
@@ -84,6 +86,13 @@ public class UserController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/public")
+    public Map<String, String> getPublicApi() {
+        Map<String, String> fooObj = new HashMap<>();
+        fooObj.put("key", "value");
+        return fooObj;
     }
 
 }
