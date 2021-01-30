@@ -10,7 +10,9 @@ public class UserAccDTO {
 
     }
 
-    public UserAccDTO(UserAcc user) { this(user.getId(), user.getEmail()); }
+    public UserAccDTO(UserAcc user) {
+        this(user.getId(), user.getEmail());
+    }
 
     public UserAccDTO(Long id, String email) {
         super();
