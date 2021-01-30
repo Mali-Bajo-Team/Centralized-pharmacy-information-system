@@ -1,5 +1,6 @@
 <template>
     <div>
+        <Navbar></Navbar>
         <h1>WELCOME PHARMACIST</h1>
         <h3>Fetcing all Users from API</h3>
         <table border="1px">
