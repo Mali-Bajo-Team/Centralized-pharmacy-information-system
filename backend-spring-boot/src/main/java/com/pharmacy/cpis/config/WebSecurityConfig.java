@@ -2,6 +2,8 @@ package com.pharmacy.cpis.config;
 
 import com.pharmacy.cpis.security.TokenUtils;
 import com.pharmacy.cpis.security.auth.RestAuthenticationEntryPoint;
+import com.pharmacy.cpis.security.auth.TokenAuthenticationFilter;
+import com.pharmacy.cpis.service.IUserService;
 import com.pharmacy.cpis.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +24,13 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    // Implement PasswordEncoder using the BCrypt hashing function.
+    // BCrypt defaults to 10 rounds of forward value hashing.
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     // Service which is used for reading data about application users
     @Autowired
     private UserService jwtUserDetailsService;
@@ -37,11 +46,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    // We define instructions for the authentication manager which service to use to retrieve data about the user who wants to authenticate
+    // Define instructions for the authentication manager which service to use to extract data about the user who wants to be authenticated,
+    // as well as through which encoder to pass the password received from the client in the request to compare the adequate hash obtained as a result of the bcrypt algorithm with the one in the database (since no plain password is stored in the database)
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(jwtUserDetailsService);
+        auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
     }
+
+    // We inject an implementation from the TokenUtils class so we can use its methods to work with JWT in the TokenAuthenticationFilter
+    @Autowired
+    private TokenUtils tokenUtils;
 
     // We define access rights to specific URLs
     @Override
@@ -55,27 +69,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 // Allow all users to access defined paths (/h2-console/** if we are use temporary DB instead postgres )
                 .authorizeRequests()
-                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/auth/login").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/api/users/public").permitAll() // Test some endpoint which is allowed
 
                 // For every other request the user must be authenticated
                 .anyRequest().authenticated().and()
                 // For development purposes include configuration for CORS from the WebConfig class
-                .cors().and();
+                .cors().and()
 
                 // Insert custom filter TokenAuthenticationFilter to check JWT tokens instead of pure username and password (performed by BasicAuthenticationFilter)
-//                .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService),
-//                        BasicAuthenticationFilter.class);
+                .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService),
+                        BasicAuthenticationFilter.class);
         // Due to the simplicity of the example
         http.csrf().disable();
     }
 
-    // Generalna bezbednost aplikacije
+    // General security of the application
     @Override
     public void configure(WebSecurity web) throws Exception {
         // TokenAuthenticationFilter will ignore everything below the specified path
-        web.ignoring().antMatchers(HttpMethod.POST, "/auth/login");
+//        web.ignoring().antMatchers(HttpMethod.POST, "/auth/login");
         web.ignoring().antMatchers(HttpMethod.GET, "/", "/webjars/**", "/*.html", "/favicon.ico", "/**/*.html",
                 "/**/*.css", "/**/*.js");
     }

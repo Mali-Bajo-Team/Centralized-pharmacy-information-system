@@ -2,7 +2,7 @@ package com.pharmacy.cpis.controller;
 
 import com.pharmacy.cpis.dto.UserAccDTO;
 import com.pharmacy.cpis.model.UserAcc;
-import com.pharmacy.cpis.service.impl.UserService;
+import com.pharmacy.cpis.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ import java.util.Map;
 @RequestMapping(value = "api/users")
 public class UserController {
     @Autowired
-    private UserService userAccService;
+    private IUserService userAccService;
 
     @CrossOrigin
     @GetMapping
