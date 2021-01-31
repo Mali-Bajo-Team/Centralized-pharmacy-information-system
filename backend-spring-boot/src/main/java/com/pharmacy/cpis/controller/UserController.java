@@ -8,9 +8,11 @@ import com.pharmacy.cpis.service.EmailService;
 import com.pharmacy.cpis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -67,6 +69,40 @@ public class UserController {
 
         userAcc = userAccService.save(userAccForSave);
         return new ResponseEntity<>(new UserAccDTO(userAcc), HttpStatus.CREATED);
+    }
+
+    // Endpoint za registraciju novog korisnika
+    @PostMapping("/signup")
+    public ResponseEntity<UserAcc> addUser(@RequestBody UserRegisterDTO userRequest) {
+
+        // TODO: When we merge with security branch, make this exception & make better signup !! For now, it's harder, i will make just more conflicts...
+//        UserAcc existUser = userAccService.findByUsername(userRequest.getUsername());
+//        if (existUser != null) {
+//            System.out.println("User with that email, already exists");
+//            throw new ResourceConflictException(userRequest.getId(), "Username already exists");
+//        }
+
+        UserAcc newUser = new UserAcc();
+
+        newUser.setActive(false);
+        newUser.setPassword(userRequest.getPassword());
+        newUser.setEmail(userRequest.getEmail());
+
+        UserAcc user = userAccService.save(newUser);
+        UserActivationDTO userActivationDTO = new UserActivationDTO();
+        userActivationDTO.setId(user.getId().toString());
+        userActivationDTO.setEmail(user.getEmail());
+        userActivationDTO.setName("dear user");         // TODO: When merge with security branch, add here real name!
+
+        // email sending
+        try {
+            System.out.println("Slanje mejla u toku..");
+            emailService.sendNotificaitionAsync(userActivationDTO);
+        }catch( Exception e ){
+            System.out.println("Greska prilikom slanja emaila: " + e.getMessage());
+        }
+
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
     @PutMapping(consumes = "application/json")

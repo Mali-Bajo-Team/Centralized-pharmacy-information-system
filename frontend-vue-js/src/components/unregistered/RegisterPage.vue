@@ -156,14 +156,7 @@ export default {
   methods: {
 
     auth() {
-      // your code to login user
-      // this is only for example of loading
-    
-
-      this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
-      }, 5000);
+      // your code to register user
 
       if (
         new String(this.form.email).valueOf() ==
@@ -229,7 +222,7 @@ export default {
   align-items: center;
   justify-content: center;
   position: relative;
-  height: 120vh;
+  height: 150vh;
   .title {
     text-align: center;
     margin-bottom: 15px;
@@ -261,7 +254,7 @@ export default {
     z-index: 1;
     padding: 40px;
     width: 100%;
-    max-width: 400px;
+    max-width: 600px;
     position: relative;
   }
   .loading-overlay {

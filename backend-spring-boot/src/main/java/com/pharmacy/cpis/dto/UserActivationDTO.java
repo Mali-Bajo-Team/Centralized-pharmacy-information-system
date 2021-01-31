@@ -5,6 +5,10 @@ public class UserActivationDTO {
     private String email;
     private String name;
 
+    public UserActivationDTO(){
+
+    }
+
     public UserActivationDTO(String id, String email, String name) {
         this.id = id;
         this.email = email;
