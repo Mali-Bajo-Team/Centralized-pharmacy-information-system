@@ -1,21 +1,34 @@
 package com.pharmacy.cpis.controller;
 
 import com.pharmacy.cpis.dto.UserAccDTO;
+import com.pharmacy.cpis.dto.UserActivationDTO;
+import com.pharmacy.cpis.dto.UserRegisterDTO;
 import com.pharmacy.cpis.model.UserAcc;
+import com.pharmacy.cpis.service.EmailService;
 import com.pharmacy.cpis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/users")
 public class UserController {
+
+    // Use a class to read values from the application.properties file
+    @Autowired
+    private Environment env;
+
     @Autowired
     private UserService userAccService;
+
+    @Autowired
+    private EmailService emailService;
 
     @CrossOrigin
     @GetMapping
@@ -73,6 +86,29 @@ public class UserController {
         return new ResponseEntity<>(new UserAccDTO(userAcc), HttpStatus.OK);
     }
 
+    // GET is because of easy click-activate method
+    @GetMapping("activate/{id}")
+    public void activateAccount(@PathVariable Long id, HttpServletResponse httpServletResponse) {
+
+        // a userAcc must exist
+        UserAcc userAccForUpdate = userAccService.findOne(id);
+
+        if (userAccForUpdate == null) {
+            return;
+        }
+
+        userAccForUpdate.setActive(true);
+        userAccService.save(userAccForUpdate);
+        redirectToLoginPage(httpServletResponse);
+    }
+
+    private void redirectToLoginPage(HttpServletResponse httpServletResponse) {
+        String projectUrl = env.getProperty("APP_FRONT") + env.getProperty("FRONT_PORT") + "/";
+        httpServletResponse.setHeader("Location", projectUrl);
+        httpServletResponse.setStatus(302);
+    }
+
+
     @DeleteMapping(value = "userAcc/{id}")
     public ResponseEntity<Void> deleteUserAcc(@PathVariable Long id) {
 
@@ -84,6 +120,20 @@ public class UserController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PostMapping("/signup/async")
+    public String signUpAsync(@RequestBody UserActivationDTO user){
+
+        //slanje emaila
+        try {
+            System.out.println("Slanje mejla u toku..");
+            emailService.sendNotificaitionAsync(user);
+        }catch( Exception e ){
+            System.out.println("Greska prilikom slanja emaila: " + e.getMessage());
+        }
+
+        return "success";
     }
 
 }
