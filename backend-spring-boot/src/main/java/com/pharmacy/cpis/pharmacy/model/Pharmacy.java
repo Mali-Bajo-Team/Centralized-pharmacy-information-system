@@ -4,6 +4,7 @@ import java.util.Set;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -13,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
+import com.pharmacy.cpis.drugsales.model.AvailableDrug;
 import com.pharmacy.cpis.users.model.Patient;
 
 @Entity
@@ -37,9 +39,12 @@ public class Pharmacy {
 	@AttributeOverrides(value = { @AttributeOverride(name = "latitude", column = @Column(nullable = false)),
 			@AttributeOverride(name = "longitude", column = @Column(nullable = false)) })
 	private Location location;
-	
+
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "subscriptions")
 	private Set<Patient> subscribers;
+
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "pharmacy", cascade = CascadeType.ALL)
+	private Set<AvailableDrug> availableDrugs;
 
 	public Pharmacy() {
 		super();

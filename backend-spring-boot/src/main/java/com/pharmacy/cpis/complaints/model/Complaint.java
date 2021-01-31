@@ -1,11 +1,17 @@
 package com.pharmacy.cpis.complaints.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import com.pharmacy.cpis.pharmacy.model.Pharmacy;
 import com.pharmacy.cpis.users.model.Consultant;
@@ -22,6 +28,11 @@ public class Complaint {
 
 	@Column(length = 1000)
 	private String response;
+
+	@CreationTimestamp
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column
+	private Date creationTimestamp;
 
 	@ManyToOne(optional = false)
 	private Patient creator;
@@ -58,6 +69,14 @@ public class Complaint {
 
 	public void setResponse(String response) {
 		this.response = response;
+	}
+
+	public Date getCreationTimestamp() {
+		return creationTimestamp;
+	}
+
+	public void setCreationTimestamp(Date creationTimestamp) {
+		this.creationTimestamp = creationTimestamp;
 	}
 
 	public Patient getCreator() {
