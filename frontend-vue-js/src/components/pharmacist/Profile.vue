@@ -4,41 +4,47 @@
 
     <h1 id="pharmacistprofile">Pharmacist profile</h1>
 
-    <div class="separator">
+    <div class="separator"></div>
     <md-avatar id="avatar" class="md-avatar-icon md-primary">P</md-avatar>
 
-    <div id="containerprofiledata"> 
-      <p class="profiledata profiledataName">{{name}}</p>
-      <p class="profiledata">{{surname}}</p>
-      <p class="profiledata">{{phoneNumber}}</p>
-      <p class="profiledata">{{location}}</p>
-       <md-button id="editbutton" class="md-fab md-plain">
-        <md-icon id="editicon">edit</md-icon>
-      </md-button>
+    <div>
+      <div id="containerprofiledata">
+        <p class="profiledata profiledataName">{{ name }}</p>
+        <p class="profiledata">{{ surname }}</p>
+        <p class="profiledata">{{ phoneNumber }}</p>
+        <p class="profiledata">{{ location }}</p>
+        <md-button id="editbutton" class="md-fab md-plain">
+          <md-icon id="editicon">edit</md-icon>
+        </md-button>
+      </div>
+
+      <!--Same as before, just passing default value as second parameter-->
+      <div class="text-center section" id="calendar">
+        <v-calendar
+          class="custom-calendar max-w-full"
+          :masks="masks"
+          :attributes="attributes"
+          disable-page-swipe
+          is-expanded
+        >
+          <template v-slot:day-content="{ day, attributes }">
+            <div class="flex flex-col h-full z-10 overflow-hidden">
+              <span class="day-label text-sm text-gray-900">{{ day.day }}</span>
+              <div class="flex-grow overflow-y-auto overflow-x-auto">
+                <p
+                  v-for="attr in attributes"
+                  :key="attr.key"
+                  class="text-xs leading-tight rounded-sm p-1 mt-0 mb-1"
+                  :class="attr.customData.class"
+                >
+                  {{ attr.customData.title }}
+                </p>
+              </div>
+            </div>
+          </template>
+        </v-calendar>
+      </div>
     </div>
-    </div>
-    <v-calendar
-      class="custom-calendar max-w-full"
-      :masks="masks"
-      :attributes="attributes"
-      disable-page-swipe
-      is-expanded
-    >
-      <template v-slot:day-content="{ day, attributes }">
-        <div class="flex flex-col h-full z-10 overflow-hidden">
-          <span class="day-label text-sm text-gray-900">{{ day.day }}</span>
-          <div class="flex-grow overflow-y-auto overflow-x-auto">
-            <p
-              v-for="attr in attributes" :key="attr.key"
-              class="text-xs leading-tight rounded-sm p-1 mt-0 mb-1"
-              :class="attr.customData.class"
-            >
-              {{ attr.customData.title }}
-            </p>
-          </div>
-        </div>
-      </template>
-    </v-calendar>
   </div>
 </template>
 
@@ -52,8 +58,7 @@ Vue.use(VueAxios, axios);
 export default {
   name: "PharmacistLanding",
   data() {
-
-      const month = new Date().getMonth();
+    const month = new Date().getMonth();
     const year = new Date().getFullYear();
     return {
       url: process.env.VUE_APP_APIUSERSURL,
@@ -62,24 +67,23 @@ export default {
       surname: "",
       phoneNumber: "",
       location: "",
-       masks: {
-        weekdays: 'WWW',
+      masks: {
+        weekdays: "WWW",
       },
-      
       attributes: [
         {
           key: 1,
           customData: {
-            title: 'Lunch with mom.',
-            class: 'bg-red-600 text-white',
+            title: "Lunch with mom.",
+            class: "bg-red-600 text-white",
           },
           dates: new Date(year, month, 1),
         },
         {
           key: 2,
           customData: {
-            title: 'Take Noah to basketball practice',
-            class: 'bg-blue-500 text-white',
+            title: "Take Noah to basketball practice",
+            class: "bg-blue-500 text-white",
           },
           dates: new Date(year, month, 2),
         },
@@ -87,23 +91,23 @@ export default {
           key: 3,
           customData: {
             title: "Noah's basketball game.",
-            class: 'bg-blue-500 text-white',
+            class: "bg-blue-500 text-white",
           },
           dates: new Date(year, month, 5),
         },
         {
           key: 4,
           customData: {
-            title: 'Take car to the shop',
-            class: 'bg-indigo-500 text-white',
+            title: "Take car to the shop",
+            class: "bg-indigo-500 text-white",
           },
           dates: new Date(year, month, 5),
         },
         {
           key: 4,
           customData: {
-            title: 'Meeting with new client.',
-            class: 'bg-teal-500 text-white',
+            title: "Meeting with new client.",
+            class: "bg-teal-500 text-white",
           },
           dates: new Date(year, month, 7),
         },
@@ -111,15 +115,15 @@ export default {
           key: 5,
           customData: {
             title: "Mia's gymnastics practice.",
-            class: 'bg-pink-500 text-white',
+            class: "bg-pink-500 text-white",
           },
           dates: new Date(year, month, 11),
         },
         {
           key: 6,
           customData: {
-            title: 'Cookout with friends.',
-            class: 'bg-orange-500 text-white',
+            title: "Cookout with friends.",
+            class: "bg-orange-500 text-white",
           },
           dates: { months: 5, ordinalWeekdays: { 2: 1 } },
         },
@@ -127,15 +131,15 @@ export default {
           key: 7,
           customData: {
             title: "Mia's gymnastics recital.",
-            class: 'bg-pink-500 text-white',
+            class: "bg-pink-500 text-white",
           },
           dates: new Date(year, month, 22),
         },
         {
           key: 8,
           customData: {
-            title: 'Visit great grandma.',
-            class: 'bg-red-600 text-white',
+            title: "Visit great grandma.",
+            class: "bg-red-600 text-white",
           },
           dates: new Date(year, month, 25),
         },
@@ -146,17 +150,55 @@ export default {
     // Vue.axios.get(this.url).then((resp) => {
     //   this.list = resp.data;
     // });
-  
-      //Use data from local storage not from API req  
-      if (localStorage.name) {
-        this.name = localStorage.name;
-        this.surname = localStorage.surname;
-        this.phoneNumber = localStorage.phoneNumber;
-        this.location = localStorage.location;
-      }//else send req to APi
+
+    //Use data from local storage not from API req
+    if (localStorage.name) {
+      this.name = localStorage.name;
+      this.surname = localStorage.surname;
+      this.phoneNumber = localStorage.phoneNumber;
+      this.location = localStorage.location;
+    } //else send req to APi
   },
 };
 </script>
+
+<style>
+#calendar {
+  width: 40%;
+  margin-left: 50%;
+  margin-top: -22%;
+}
+#avatar {
+  width: 80px;
+  height: 80px;
+  margin-top: 5%;
+  margin-right: 80%;
+}
+.profiledata {
+  color: white;
+  font-size: 30px;
+}
+.profiledataName {
+  padding-top: 20px;
+}
+#containerprofiledata {
+  width: 400px;
+  height: 300px;
+  margin-left: 12%;
+  background-color: #448aff;
+  border-radius: 5%;
+}
+#editbutton {
+  background-color: white;
+}
+#editicon {
+  color: #448aff;
+}
+#pharmacistprofile {
+  color: #448aff;
+  font-size: 40px;
+}
+</style>
 <style lang="postcss" scoped>
 ::-webkit-scrollbar {
   width: 0px;
@@ -210,39 +252,4 @@ export default {
     margin-bottom: 5px;
   }
 }
-</style>
-<style>
-#avatar {
-  width: 80px;
-  height: 80px;
-  margin-top: 5%;
-  margin-right: 80%;
-}
-.profiledata{
-  color: white;
-  font-size: 30px;
-}
-.profiledataName{
-  padding-top: 20px;
-}
-#containerprofiledata{
-  width: 400px;
-  height: 300px;
-  margin-left: 12%;
-  background-color: #448aff;
-  border-radius: 5%;
-}
-#editbutton{
-  background-color: white;
-}
-#editicon {
-  color: #448aff;
-}
-#pharmacistprofile{
-  color: #448aff;
-  font-size: 40px;
-}
-
-
-
 </style>

@@ -12,14 +12,12 @@ const router = new VueRouter({
 
 Vue.config.productionTip = false
 
+Vue.component('NavbarPharmacist', require('./components/pharmacist/NavbarPharmacist.vue').default);
 import Calendar from 'v-calendar/lib/components/calendar.umd'
 
+
+// Register components in your 'main.js'
 Vue.component('v-calendar', Calendar)
-
-Vue.component('NavbarPharmacist', require('./components/pharmacist/NavbarPharmacist.vue').default);
-
-
-
 new Vue({
   render: h => h(App),
   router: router
