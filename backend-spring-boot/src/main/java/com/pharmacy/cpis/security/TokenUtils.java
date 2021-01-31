@@ -1,6 +1,6 @@
 package com.pharmacy.cpis.security;
 
-import com.pharmacy.cpis.model.UserAcc;
+import com.pharmacy.cpis.users.model.UserAccount;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -93,7 +93,7 @@ public class TokenUtils {
 
     // JWT token validation function
     public Boolean validateToken(String token, UserDetails userDetails) {
-        UserAcc user = (UserAcc) userDetails;
+        UserAccount user = (UserAccount) userDetails;
         final String email = getEmailFromToken(token);
         final Date created = getIssuedAtDateFromToken(token);
 

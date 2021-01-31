@@ -1,17 +1,16 @@
 package com.pharmacy.cpis.service;
 
-import com.pharmacy.cpis.dto.UserAccDTO;
-import com.pharmacy.cpis.model.UserAcc;
+import com.pharmacy.cpis.users.model.UserAccount;
 
 import java.util.List;
 
 public interface IUserService {
 
-    public UserAcc findOne(Long id);
+    public UserAccount findOne(Long id);
 
-    public List<UserAcc> findAll();
+    public List<UserAccount> findAll();
 
-    public UserAcc save(UserAcc userRequest);
+    public UserAccount save(UserAccount userRequest);
 
     public void remove(Long id);
 }

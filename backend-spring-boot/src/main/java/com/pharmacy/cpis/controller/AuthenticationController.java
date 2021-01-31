@@ -2,9 +2,9 @@ package com.pharmacy.cpis.controller;
 
 import com.pharmacy.cpis.dto.JwtAuthenticationRequest;
 import com.pharmacy.cpis.dto.UserTokenState;
-import com.pharmacy.cpis.model.UserAcc;
 import com.pharmacy.cpis.security.TokenUtils;
 import com.pharmacy.cpis.service.IUserService;
+import com.pharmacy.cpis.users.model.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +48,7 @@ public class AuthenticationController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         // Create a token for that user
-        UserAcc user = (UserAcc) authentication.getPrincipal();
+        UserAccount user = (UserAccount) authentication.getPrincipal();
         String jwt = tokenUtils.generateToken(user.getUsername());
         int expiresIn = tokenUtils.getExpiredIn();
 

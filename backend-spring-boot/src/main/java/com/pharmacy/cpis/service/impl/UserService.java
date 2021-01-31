@@ -1,10 +1,10 @@
 package com.pharmacy.cpis.service.impl;
 
 import com.pharmacy.cpis.model.Authority;
-import com.pharmacy.cpis.model.UserAcc;
 import com.pharmacy.cpis.repository.IUserRepository;
 import com.pharmacy.cpis.service.IAuthorityService;
 import com.pharmacy.cpis.service.IUserService;
+import com.pharmacy.cpis.users.model.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,18 +22,18 @@ public class UserService implements IUserService, UserDetailsService {
     private IAuthorityService authService;
 
     @Override
-    public UserAcc findOne(Long id) {
+    public UserAccount findOne(Long id) {
         return userRepository.findById(id).orElseGet(null);
     }
 
     @Override
-    public List<UserAcc> findAll() {
+    public List<UserAccount> findAll() {
         return userRepository.findAll();
     }
 
     @Override
-    public UserAcc save(UserAcc userRequest) {
-        UserAcc newUserAccount = new UserAcc();
+    public UserAccount save(UserAccount userRequest) {
+        UserAccount newUserAccount = new UserAccount();
 
         newUserAccount.setEmail(userRequest.getEmail());
         newUserAccount.setPassword(userRequest.getPassword());  //TODO: Implement ENCODER/DECODER for password
@@ -54,7 +54,7 @@ public class UserService implements IUserService, UserDetailsService {
     // Username is unique identifier in UserDetailsService, in our system that is email !
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        UserAcc user = userRepository.findByEmail(email);
+        UserAccount user = userRepository.findByEmail(email);
         if (user == null) {
             throw new UsernameNotFoundException(String.format("No user found with email '%s'.", email));
         } else {
