@@ -30,6 +30,42 @@
             <span class="md-error" v-else-if="!$v.form.repeatPassword.isMatchedPassword"> Must be same as password field </span>
         </md-field>
 
+        <md-field :class="getValidationClass('name')">
+            <label> Name </label>
+            <md-input v-model="form.name"></md-input>
+            <span class="md-error" v-if="!$v.form.name.required">The name is required</span>
+        </md-field>
+
+        <md-field :class="getValidationClass('surname')">
+            <label> Surname </label>
+            <md-input v-model="form.surname"></md-input>
+            <span class="md-error" v-if="!$v.form.surname.required">The surname is required</span>
+        </md-field>
+
+        <md-field :class="getValidationClass('address')">
+            <label> Residence address </label>
+            <md-input v-model="form.address"></md-input>
+            <span class="md-error" v-if="!$v.form.address.required">The address is required</span>
+        </md-field>
+
+        <md-field :class="getValidationClass('city')">
+            <label> City </label>
+            <md-input v-model="form.city"></md-input>
+            <span class="md-error" v-if="!$v.form.city.required">The city is required</span>
+        </md-field>
+
+        <md-field :class="getValidationClass('country')">
+            <label> Country </label>
+            <md-input v-model="form.country"></md-input>
+            <span class="md-error" v-if="!$v.form.country.required">The country is required</span>
+        </md-field>
+
+        <md-field :class="getValidationClass('mobile')">
+            <label> Mobile </label>
+            <md-input v-model="form.mobile"></md-input>
+            <span class="md-error" v-if="!$v.form.mobile.required">The mobile is required</span>
+        </md-field>
+
         <div class="actions md-layout md-alignment-center-space-between">
           <a href="/resetpassword">Reset password</a>
           <md-button class="md-raised md-primary" type="submit">Log in</md-button>
@@ -71,6 +107,9 @@ export default {
         email: "",
         password: "",
         repeatPassword: "",
+        name:"",
+        surname: "",
+        city: "",
       }
     };
   },
@@ -83,12 +122,35 @@ export default {
       repeatPassword:{
         required,
         isMatchedPassword,
-    
       },
       email: {
         required,
         email,
       },
+      name:{
+        required,
+        minLength: minLength(3),
+      },
+      surname: {
+        required,
+        minLength: minLength(3),
+      },
+      address: {
+        required,
+        minLength: minLength(3),
+      },
+      city: {
+        required,
+        minLength: minLength(3),
+      },
+      country: {
+        required,
+        minLength: minLength(3),
+      },
+      mobile: {
+        required,
+        minLength: minLength(3),
+      }
     },
   },
   methods: {
@@ -167,10 +229,10 @@ export default {
   align-items: center;
   justify-content: center;
   position: relative;
-  height: 100vh;
+  height: 120vh;
   .title {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
     img {
       margin-bottom: 16px;
       max-width: 80px;
