@@ -85,5 +85,6 @@ export default {
 }
 #pharmacistprofile{
   color: #448aff;
+  font-size: 40px;
 }
 </style>

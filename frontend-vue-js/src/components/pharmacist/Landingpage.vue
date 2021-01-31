@@ -2,7 +2,7 @@
   <div>
     <NavbarPharmacist></NavbarPharmacist>
 
-    <h1>WELCOME PHARMACIST</h1>
+    <h1 id="welcomepharmacist">Welcome pharmacist</h1>
 
     <div class="separator">
  
@@ -44,5 +44,8 @@ export default {
 </script>
 
 <style>
-
+#welcomepharmacist{
+  color: #448aff;
+  font-size: 40px;
+}
 </style>
