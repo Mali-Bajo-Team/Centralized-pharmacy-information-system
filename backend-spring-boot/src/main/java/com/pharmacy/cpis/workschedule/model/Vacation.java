@@ -1,8 +1,6 @@
-package com.pharmacy.cpis.drugsales.model;
+package com.pharmacy.cpis.workschedule.model;
 
-import java.util.Date;
-
-import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -10,22 +8,22 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.pharmacy.cpis.users.model.Consultant;
+import com.pharmacy.cpis.util.DateRange;
+
 @Entity
-public class Price {
+public class Vacation {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false)
-	private Double price;
-
-	@Column(nullable = false)
-	private Date date;
+	@Embedded
+	private DateRange dateRange;
 
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	private AvailableDrug drug;
+	private Consultant consultant;
 
-	public Price() {
+	public Vacation() {
 		super();
 	}
 
@@ -37,30 +35,20 @@ public class Price {
 		this.id = id;
 	}
 
-	public Double getPrice() {
-		return price;
+	public DateRange getDateRange() {
+		return dateRange;
 	}
 
-	public void setPrice(Double price) {
-		this.price = price;
+	public void setDateRange(DateRange dateRange) {
+		this.dateRange = dateRange;
 	}
 
-	
-
-	public Date getDate() {
-		return date;
+	public Consultant getConsultant() {
+		return consultant;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
-	public AvailableDrug getDrug() {
-		return drug;
-	}
-
-	public void setDrug(AvailableDrug drug) {
-		this.drug = drug;
+	public void setConsultant(Consultant consultant) {
+		this.consultant = consultant;
 	}
 
 	@Override
@@ -79,7 +67,7 @@ public class Price {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Price other = (Price) obj;
+		Vacation other = (Vacation) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

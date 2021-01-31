@@ -13,9 +13,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import com.pharmacy.cpis.drugsales.model.AvailableDrug;
 import com.pharmacy.cpis.users.model.Patient;
+import com.pharmacy.cpis.workschedule.model.WorkingTimes;
 
 @Entity
 public class Pharmacy {
@@ -43,8 +45,11 @@ public class Pharmacy {
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "subscriptions")
 	private Set<Patient> subscribers;
 
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "pharmacy", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "pharmacy", cascade = CascadeType.ALL)
 	private Set<AvailableDrug> availableDrugs;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "pharmacy")
+	private Set<WorkingTimes> consultants;
 
 	public Pharmacy() {
 		super();
