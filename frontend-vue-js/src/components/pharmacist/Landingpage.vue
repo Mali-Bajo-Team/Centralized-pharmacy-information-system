@@ -30,19 +30,19 @@ export default {
   mounted() {
     // Vue.axios.get(this.url).then((resp) => {
     //   this.list = resp.data;
-       
-  
     // });
+
+    //set data to local storage
+    //global idea is to set one time data and there is no reason to make evry time new api request
+    localStorage.name = "Mark";
+    localStorage.surname = "Ivancevic";
+    localStorage.phoneNumber = "062 236 563 12";
+    localStorage.location = "Novi Sad, Puskinova 13";
 
   },
 };
 </script>
 
 <style>
-#avatar {
-  width: 80px;
-  height: 80px;
-  margin-top: 5%;
-  margin-right: 80%;
-}
+
 </style>
