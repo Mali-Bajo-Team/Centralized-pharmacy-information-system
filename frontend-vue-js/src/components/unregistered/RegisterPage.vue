@@ -68,7 +68,7 @@
 
         <div class="actions md-layout md-alignment-center-space-between">
           <a href="/resetpassword">Reset password</a>
-          <md-button class="md-raised md-primary" type="submit">Log in</md-button>
+          <md-button class="md-raised md-primary" type="submit">REGISTER</md-button>
         </div>
          
       </form>
