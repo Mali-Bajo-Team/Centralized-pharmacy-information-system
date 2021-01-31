@@ -19,10 +19,10 @@ public class DrugSpecification {
 	@Column(nullable = false)
 	private String manufacturer;
 
-	@Column
+	@Column(length = 500)
 	private String contraindications;
 
-	@Column
+	@Column(length = 500)
 	private String additionalNotes;
 
 	@Column
