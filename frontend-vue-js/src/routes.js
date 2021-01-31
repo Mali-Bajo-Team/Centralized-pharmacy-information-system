@@ -3,8 +3,10 @@ import systemadminLanding from './components/systemadmin/Landingpage.vue';
 import supplierLanding from './components/supplier/Landingpage.vue';
 import pharmacyadminLanding from './components/pharmacyadmin/Landingpage.vue';
 import pharmacistLanding from './components/pharmacist/Landingpage.vue';
+import pharmacistProfile from './components/pharmacist/Profile.vue';
 import patientLanding from './components/patient/Landingpage.vue';
 import dermatologistLanding from './components/dermatologist/Landingpage.vue';
+
 
 export default [
     { path: '/', component: unregisterLanding },
@@ -14,5 +16,6 @@ export default [
     { path: '/components/pharmacist/Landingpage.vue', component: pharmacistLanding, name: 'pharmacistLanding'},
     { path: '/components/patient/Landingpage.vue', component: patientLanding, name: 'patientLanding'},
     { path: '/components/dermatologist/Landingpage.vue', component: dermatologistLanding, name: 'dermatologistLanding'},
+    { path: '/components/pharmacist/Profile.vue', component: pharmacistProfile, name: 'pharmacistProfile'},
 ]
 

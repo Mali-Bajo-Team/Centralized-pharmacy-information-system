@@ -12,7 +12,7 @@ const router = new VueRouter({
 
 Vue.config.productionTip = false
 
-Vue.component('Navbar', require('./components/Navbar.vue').default);
+Vue.component('NavbarPharmacist', require('./components/pharmacist/NavbarPharmacist.vue').default);
 
 new Vue({
   render: h => h(App),

@@ -3,9 +3,11 @@
     <NavbarPharmacist></NavbarPharmacist>
 
     <h1>WELCOME PHARMACIST</h1>
-
+    <h3>Fetcing all Users from API</h3>
     <div class="separator">
- 
+
+      <md-avatar id="avatar" class="md-avatar-icon md-primary">P</md-avatar>
+    <h1>{{name}}</h1>
     </div>
    
   </div>
@@ -33,7 +35,11 @@ export default {
        
   
     // });
+        localStorage.name = "Mark";
 
+      if (localStorage.name) {
+        this.name = localStorage.name;
+      }
   },
 };
 </script>
