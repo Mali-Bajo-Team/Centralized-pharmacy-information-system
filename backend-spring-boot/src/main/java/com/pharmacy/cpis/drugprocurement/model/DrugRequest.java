@@ -1,4 +1,4 @@
-package com.pharmacy.cpis.drugsales.model;
+package com.pharmacy.cpis.drugprocurement.model;
 
 import java.util.Date;
 
@@ -15,10 +15,10 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import com.pharmacy.cpis.drug.model.Drug;
 import com.pharmacy.cpis.pharmacy.model.Pharmacy;
-import com.pharmacy.cpis.users.model.Patient;
+import com.pharmacy.cpis.users.model.Consultant;
 
 @Entity
-public class DrugPurchase {
+public class DrugRequest {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -28,25 +28,16 @@ public class DrugPurchase {
 	@Column(nullable = false)
 	private Date timestamp;
 
-	@Column(nullable = false)
-	private Integer amount;
-
-	@Column(nullable = false)
-	private Double price;
-
-	@Column(nullable = false)
-	private DrugPurchaseType type;
-
-	@ManyToOne(optional = false)
-	private Patient patient;
-
 	@ManyToOne(optional = false)
 	private Drug drug;
 
 	@ManyToOne(optional = false)
 	private Pharmacy pharmacy;
 
-	public DrugPurchase() {
+	@ManyToOne(optional = false)
+	private Consultant cosultant;
+
+	public DrugRequest() {
 		super();
 	}
 
@@ -66,38 +57,6 @@ public class DrugPurchase {
 		this.timestamp = timestamp;
 	}
 
-	public Integer getAmount() {
-		return amount;
-	}
-
-	public void setAmount(Integer amount) {
-		this.amount = amount;
-	}
-
-	public Double getPrice() {
-		return price;
-	}
-
-	public void setPrice(Double price) {
-		this.price = price;
-	}
-
-	public DrugPurchaseType getType() {
-		return type;
-	}
-
-	public void setType(DrugPurchaseType type) {
-		this.type = type;
-	}
-
-	public Patient getPatient() {
-		return patient;
-	}
-
-	public void setPatient(Patient patient) {
-		this.patient = patient;
-	}
-
 	public Drug getDrug() {
 		return drug;
 	}
@@ -112,6 +71,14 @@ public class DrugPurchase {
 
 	public void setPharmacy(Pharmacy pharmacy) {
 		this.pharmacy = pharmacy;
+	}
+
+	public Consultant getCosultant() {
+		return cosultant;
+	}
+
+	public void setCosultant(Consultant cosultant) {
+		this.cosultant = cosultant;
 	}
 
 	@Override
@@ -130,7 +97,7 @@ public class DrugPurchase {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		DrugPurchase other = (DrugPurchase) obj;
+		DrugRequest other = (DrugRequest) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
