@@ -39,7 +39,7 @@ public class Person {
 	@Column(nullable = false)
 	private String country;
 
-	@OneToOne(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
 	private UserAccount account;
 
 	public Person() {

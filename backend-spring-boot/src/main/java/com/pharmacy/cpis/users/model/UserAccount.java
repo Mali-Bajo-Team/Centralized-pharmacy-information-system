@@ -18,8 +18,8 @@ public class UserAccount {
 	@Column(name = "isActive", nullable = false)
 	boolean isActive;
 
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "person_id", referencedColumnName = "id", nullable = false)
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "person_id", referencedColumnName = "id")
 	private Person person;
 
 	public Long getId() {
