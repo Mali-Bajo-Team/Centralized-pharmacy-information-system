@@ -37,7 +37,7 @@ public class UserController {
 	}
 
     @GetMapping("userAcc/{id}")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('PATIENT')")
     public ResponseEntity<UserAccDTO> getUserAcc(@PathVariable Long id) {
 
 		UserAccount userAcc = userAccService.findOne(id);
@@ -50,7 +50,7 @@ public class UserController {
 	}
 
     @PostMapping(consumes = "application/json")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('PATIENT')")
     public ResponseEntity<UserAccDTO> saveUserAcc(@RequestBody UserAccount userAcc) {
 
 		UserAccount userAccForSave = new UserAccount();
@@ -63,7 +63,7 @@ public class UserController {
 	}
 
     @PutMapping(consumes = "application/json")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('PATIENT')")
     public ResponseEntity<UserAccDTO> updateUserAcc(@RequestBody UserAccount userAcc) {
 		// a userAcc must exist
 		UserAccount userAccForUpdate = userAccService.findOne(userAcc.getId());
@@ -80,7 +80,7 @@ public class UserController {
 	}
 
 	@DeleteMapping(value = "userAcc/{id}")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('PATIENT')")
     public ResponseEntity<Void> deleteUserAcc(@PathVariable Long id) {
 		UserAccount userAcc = userAccService.findOne(id);
 

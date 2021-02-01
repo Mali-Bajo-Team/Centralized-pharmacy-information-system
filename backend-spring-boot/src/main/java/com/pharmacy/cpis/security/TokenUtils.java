@@ -23,8 +23,8 @@ public class TokenUtils {
     @Value("bajo-is-one-of-us")
     public String SECRET;
 
-    //Period of validity
-    @Value("300000")
+    // Period of validity
+    @Value("3000000")
     private int EXPIRES_IN;
 
     // The name of the header through which the JWT will be forwarded in the server-client communication
@@ -52,16 +52,6 @@ public class TokenUtils {
     }
 
     private String generateAudience() {
-//      The org.springframework.mobile.device.Device object can be used to determine the type of device from which the request came.
-
-//		String audience = AUDIENCE_UNKNOWN;
-//		if (device.isNormal()) {
-//			audience = AUDIENCE_WEB;
-//		} else if (device.isTablet()) {
-//			audience = AUDIENCE_TABLET;
-//		} else if (device.isMobile()) {
-//			audience = AUDIENCE_MOBILE;
-//		}
         return AUDIENCE_WEB;
     }
 
