@@ -204,6 +204,7 @@ export default {
 .s{
   max-height: 90px;
 background-color: #448aff;
+overflow-y:auto;
 }
 .vc-header {
   background-color: #a9c8e0;
