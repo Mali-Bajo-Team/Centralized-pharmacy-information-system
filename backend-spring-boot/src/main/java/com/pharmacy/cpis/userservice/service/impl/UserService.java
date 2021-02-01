@@ -1,0 +1,58 @@
+package com.pharmacy.cpis.userservice.service.impl;
+
+import com.pharmacy.cpis.userservice.model.users.UserAccount;
+import com.pharmacy.cpis.userservice.repository.IUserRepository;
+import com.pharmacy.cpis.userservice.service.IAuthorityService;
+import com.pharmacy.cpis.userservice.service.IUserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class UserService implements IUserService, UserDetailsService {
+    @Autowired
+    private IUserRepository userRepository;
+
+    @Autowired
+    private IAuthorityService authService;
+
+    @Override
+    public UserAccount findOne(Long id) {
+        return userRepository.findById(id).orElseGet(null);
+    }
+
+    @Override
+    public List<UserAccount> findAll() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public UserAccount save(UserAccount userRequest) {
+        return userRepository.save(userRequest);
+    }
+
+    @Override
+    public void remove(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    @Override
+    public UserAccount findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    // Username is unique identifier in UserDetailsService, in our system that is email !
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        UserAccount user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new UsernameNotFoundException(String.format("No user found with email '%s'.", email));
+        } else {
+            return user;
+        }
+    }
+}

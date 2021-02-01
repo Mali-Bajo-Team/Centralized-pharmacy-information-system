@@ -1,7 +1,6 @@
 package com.pharmacy.cpis.userservice.model.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.pharmacy.cpis.model.Authority;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

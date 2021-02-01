@@ -207,11 +207,11 @@ export default {
         })
         .then(function (response) {
           console.log(response);
-          alert("uspesno");
+          // alert("uspesno");
         })
         .catch(function (error) {
           console.log(error);
-          alert("error");
+          // alert("error");
         });
 
       // if (
