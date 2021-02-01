@@ -52,8 +52,6 @@ import { ModalBus } from "./eventBus";
 import ModalRoot from "./ModalRoot";
 
 import SignInForm from "./examples/SignInForm";
-import Alert from "./examples/Alert";
-import ClosableInside from "./examples/ClosableInside";
 
 import Vue from "vue";
 import axios from "axios";
@@ -67,29 +65,6 @@ export default {
     ModalRoot,
   },
   methods: {
-    openSuccessAlert() {
-      ModalBus.$emit("open", {
-        component: Alert,
-        props: { text: "Everything is working great!", type: "success" },
-      });
-    },
-    openDangerAlert() {
-      const props = {
-        type: "error",
-        text: "The server returned 500 again! omg!",
-      };
-      ModalBus.$emit("open", {
-        component: Alert,
-        title: "An error has occured",
-        props,
-      });
-    },
-    openClosableInside() {
-      ModalBus.$emit("open", {
-        component: ClosableInside,
-        title: "Close dialog from component",
-      });
-    },
     openSignIn() {
       ModalBus.$emit("open", {
         component: SignInForm,
