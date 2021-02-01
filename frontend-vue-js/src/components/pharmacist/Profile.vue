@@ -33,7 +33,7 @@
         >
           <template v-slot:day-content="{ day, attributes }">
             <div
-              class="flex flex-col h-full z-10 overflow-hidden md-elevation-24"
+              class="flex flex-col h-full z-10 overflow-hidden md-elevation-10"
             >
               <span class="day-label text-sm text-gray-900">{{ day.day }}</span>
               <div class="flex-grow overflow-y-auto overflow-x-auto s" >
@@ -56,8 +56,10 @@
 
     <div>
       <md-dialog :md-active.sync="showDialog">
-        <md-dialog-title>Change personal data</md-dialog-title>
-        <md-field>
+       
+        <md-tabs md-dynamic-height>
+        <md-tab md-label="Change personal data">
+        <md-field  class="dialogmd">
           <label>Name</label>
           <md-input v-model="name"></md-input>
         </md-field>
@@ -73,6 +75,8 @@
           <label>Location</label>
           <md-input v-model="location"></md-input>
         </md-field>
+         </md-tab>
+          </md-tabs>
         <md-dialog-actions>
           <md-button class="md-primary" @click="showDialog = false"
             >Close</md-button
