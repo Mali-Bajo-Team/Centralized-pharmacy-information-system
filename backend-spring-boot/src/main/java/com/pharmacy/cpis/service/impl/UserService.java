@@ -53,6 +53,11 @@ public class UserService implements IUserService, UserDetailsService {
         userRepository.deleteById(id);
     }
 
+    @Override
+    public UserAccount findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
     // Username is unique identifier in UserDetailsService, in our system that is email !
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

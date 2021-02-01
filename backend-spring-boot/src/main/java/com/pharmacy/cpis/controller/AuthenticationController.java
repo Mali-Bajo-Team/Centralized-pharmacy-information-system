@@ -83,12 +83,11 @@ public class AuthenticationController {
     @PostMapping("/signup")
     public ResponseEntity<UserAccount> addUser(@RequestBody UserRegisterDTO userRequest) {
 
-        // TODO: When we merge with security branch, make this exception & make better signup !! For now, it's harder, i will make just more conflicts...
-//        UserAcc existUser = userAccService.findByUsername(userRequest.getUsername());
-//        if (existUser != null) {
-//            System.out.println("User with that email, already exists");
-//            throw new ResourceConflictException(userRequest.getId(), "Username already exists");
-//        }
+        UserAccount existUser = userService.findByEmail(userRequest.getEmail());
+        if (existUser != null) {
+            System.out.println("\n\nUser with that email, already exists\n\n");
+            return new ResponseEntity<>(existUser,HttpStatus.CONFLICT);
+        }
 
         Person newPerson = new Person();
         newPerson.setAddress(userRequest.getAddress());
