@@ -45,7 +45,7 @@ export default {
         {
           key: 1,
           customData: {
-            title: "Lunch with mom.",
+            title: this.title,
             class: "bg-red-600 text-white",
           },
           dates: new Date(year, month, 1),

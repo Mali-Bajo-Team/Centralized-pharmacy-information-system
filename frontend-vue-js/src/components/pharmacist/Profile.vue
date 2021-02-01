@@ -22,7 +22,7 @@
         </md-button>
       </div>
 
-     <CalendarComponent title="My journey with Vue"></CalendarComponent>
+     <CalendarComponent :title="this.attributes"></CalendarComponent>
 
     </div>
 
@@ -75,6 +75,7 @@ export default {
     const month = new Date().getMonth();
     const year = new Date().getFullYear();
     return {
+      s: "jau",
       showDialog: false,
       url: process.env.VUE_APP_APIUSERSURL,
       list: undefined,
