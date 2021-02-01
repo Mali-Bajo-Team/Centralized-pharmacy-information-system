@@ -36,7 +36,8 @@
               class="flex flex-col h-full z-10 overflow-hidden md-elevation-24"
             >
               <span class="day-label text-sm text-gray-900">{{ day.day }}</span>
-              <div class="flex-grow overflow-y-auto overflow-x-auto">
+              <div class="flex-grow overflow-y-auto overflow-x-auto s" >
+       
                 <p
                   v-for="attr in attributes"
                   :key="attr.key"
@@ -45,6 +46,7 @@
                 >
                   {{ attr.customData.title }}
                 </p>
+ 
               </div>
             </div>
           </template>
@@ -199,15 +201,9 @@ export default {
 </script>
 
 <style>
-.custom-calendar.vc-container {
-  --day-border: 5px solid #000000;
-  --day-border-highlight: 1px solid #b8c2cc;
-  --day-width: 90px;
-  --day-height: 90px;
-  --weekday-bg: #114579;
-  --weekday-border: 1px solid #eaeaea;
-  border-radius: 0;
-  width: 100%;
+.s{
+  max-height: 90px;
+background-color: #448aff;
 }
 .vc-header {
   background-color: #a9c8e0;
@@ -235,14 +231,14 @@ export default {
 
 #calendar {
   width: 50%;
-  margin-left: 50%;
+  margin-left: 35%;
   margin-top: -22%;
 }
 #avatar {
   width: 80px;
   height: 80px;
   margin-top: 5%;
-  margin-right: 80%;
+  margin-right:90%;
 }
 .profiledata {
   color: white;
@@ -254,7 +250,7 @@ export default {
 #containerprofiledata {
   width: 400px;
   height: 300px;
-  margin-left: 12%;
+  margin-left: 5%;
   background-color: #448aff;
   border-radius: 5%;
 }
