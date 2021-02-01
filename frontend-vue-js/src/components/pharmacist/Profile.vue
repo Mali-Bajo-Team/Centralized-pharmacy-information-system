@@ -22,33 +22,42 @@
         </md-button>
       </div>
 
-     <CalendarComponent :attributes="this.attributes"></CalendarComponent>
-
+      <CalendarComponent :attributes="this.attributes"></CalendarComponent>
     </div>
 
     <div>
       <md-dialog :md-active.sync="showDialog">
-       
         <md-tabs md-dynamic-height>
-        <md-tab md-label="Change personal data">
-        <md-field  class="dialogmd">
-          <label>Name</label>
-          <md-input v-model="name"></md-input>
-        </md-field>
-        <md-field>
-          <label>Surname</label>
-          <md-input v-model="surname"></md-input>
-        </md-field>
-        <md-field>
-          <label>Phone number</label>
-          <md-input v-model="phoneNumber"></md-input>
-        </md-field>
-        <md-field>
-          <label>Location</label>
-          <md-input v-model="location"></md-input>
-        </md-field>
-         </md-tab>
-          </md-tabs>
+          <md-tab md-label="Change personal data">
+            <md-field class="dialogmd">
+              <label>Name</label>
+              <md-input v-model="name"></md-input>
+            </md-field>
+            <md-field>
+              <label>Surname</label>
+              <md-input v-model="surname"></md-input>
+            </md-field>
+            <md-field>
+              <label>Phone number</label>
+              <md-input v-model="phoneNumber"></md-input>
+            </md-field>
+            <md-field>
+              <label>Location</label>
+              <md-input v-model="location"></md-input>
+            </md-field>
+          </md-tab>
+
+          <md-tab md-label="Change password">
+            <md-field>
+              <label>New password</label>
+              <md-input v-model="password" type="password"></md-input>
+            </md-field>
+            <md-field>
+              <label>Repeat password</label>
+              <md-input v-model="password" type="password"></md-input>
+            </md-field>
+          </md-tab>
+        </md-tabs>
         <md-dialog-actions>
           <md-button class="md-primary" @click="showDialog = false"
             >Close</md-button
@@ -178,10 +187,10 @@ export default {
 </script>
 
 <style>
-.s{
+.s {
   max-height: 90px;
-background-color: #448aff;
-overflow-y:auto;
+  background-color: #448aff;
+  overflow-y: auto;
 }
 .vc-header {
   background-color: #a9c8e0;
@@ -216,7 +225,7 @@ overflow-y:auto;
   width: 80px;
   height: 80px;
   margin-top: 5%;
-  margin-right:90%;
+  margin-right: 90%;
 }
 .profiledata {
   color: white;
