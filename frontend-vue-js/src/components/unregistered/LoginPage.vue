@@ -121,10 +121,10 @@ export default {
           }else if(userRole == "PATIENT"){
             // this.$router.push({ name: 'patientLanding' })
             window.location.href = "http://localhost:8082/#/components/patient/Landingpage.vue";
-          }else if(userRole == "CONSULTANT_PHARMACIST"){
+          }else if(userRole == "PHARMACIST"){
             // this.$router.push({ name: 'pharmacistLanding' })
             window.location.href = "http://localhost:8082/#/components/pharmacist/Landingpage.vue";
-          }else if(userRole == "CONSULTANT_DERMATOLOGIST"){
+          }else if(userRole == "DERMATOLOGIST"){
             // this.$router.push({ name: 'dermatologistLanding' })
             window.location.href = "http://localhost:8082/#/components/dermatologist/Landingpage.vue";
           }else{
