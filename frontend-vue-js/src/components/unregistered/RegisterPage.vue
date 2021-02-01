@@ -125,6 +125,7 @@ import VueAxios from "vue-axios";
 
 Vue.use(VueAxios, axios);
 
+// TODO: Find way to move this in methods, however i move this to method and try to use, i get errors...
 function isMatchedPassword() {
   return this.form.password == this.form.repeatPassword;
 }
@@ -191,7 +192,7 @@ export default {
   },
   methods: {
     auth() {
-      // your code to register user
+      // TODO: Make this URL's configurable
 
       alert("cao");
       axios
@@ -213,40 +214,6 @@ export default {
           console.log(error);
           // alert("error");
         });
-
-      // if (
-      //   new String(this.form.email).valueOf() ==
-      //   new String("systemadmin@gmail.com").valueOf()
-      // ) {
-      //   this.$router.push({ name: "systemadminLanding" });
-      // } else if (
-      //   new String(this.form.email).valueOf() ==
-      //   new String("supplier@gmail.com").valueOf()
-      // ) {
-      //   this.$router.push({ name: "supplierLanding" });
-      // } else if (
-      //   new String(this.form.email).valueOf() ==
-      //   new String("pharmacyadmin@gmail.com").valueOf()
-      // ) {
-      //   this.$router.push({ name: "pharmacyadminLanding" });
-      // } else if (
-      //   new String(this.form.email).valueOf() ==
-      //   new String("pharmacist@gmail.com").valueOf()
-      // ) {
-      //   this.$router.push({ name: "pharmacistLanding" });
-      // } else if (
-      //   new String(this.form.email).valueOf() ==
-      //   new String("patient@gmail.com").valueOf()
-      // ) {
-      //   this.$router.push({ name: "patientLanding" });
-      // } else if (
-      //   new String(this.form.email).valueOf() ==
-      //   new String("dermatologist@gmail.com").valueOf()
-      // ) {
-      //   this.$router.push({ name: "dermatologistLanding" });
-      // } else {
-      //   console.log("eerro");
-      // }
     },
     getValidationClass(fieldName) {
       const field = this.$v.form[fieldName];

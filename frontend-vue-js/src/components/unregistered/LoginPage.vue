@@ -1,9 +1,8 @@
 <template>
   <div class="centered-container">
     <md-content class="md-elevation-3">
-
       <div class="title">
-        <img src="@/assets/loginIcon.png"/>
+        <img src="@/assets/loginIcon.png" />
         <div class="md-title">Login</div>
         <div class="md-body-1">Please fill the form</div>
       </div>
@@ -12,110 +11,156 @@
         <md-field :class="getValidationClass('email')">
           <label>E-mail</label>
           <md-input v-model="form.email" autofocus></md-input>
-            <span class="md-error" v-if="!$v.form.email.required">The email is required</span>
-            <span class="md-error" v-else-if="!$v.form.email.email">Invalid email</span>
+          <span class="md-error" v-if="!$v.form.email.required"
+            >The email is required</span
+          >
+          <span class="md-error" v-else-if="!$v.form.email.email"
+            >Invalid email</span
+          >
         </md-field>
 
         <md-field :class="getValidationClass('password')">
           <label>Password</label>
           <md-input v-model="form.password" type="password"></md-input>
-          <span class="md-error" v-if="!$v.form.password.required">The password is required</span>
-          <span class="md-error" v-else-if="!$v.form.password.minlength">Invalid password</span>
+          <span class="md-error" v-if="!$v.form.password.required"
+            >The password is required</span
+          >
+          <span class="md-error" v-else-if="!$v.form.password.minlength"
+            >Invalid password</span
+          >
         </md-field>
-      <div class="actions md-layout md-alignment-center-space-between">
-        <a href="/resetpassword">Reset password</a>
-        <md-button class="md-raised md-primary" type="submit">Log in</md-button>
-      </div>
-      
+        <div class="actions md-layout md-alignment-center-space-between">
+          <a href="/resetpassword">Reset password</a>
+          <md-button class="md-raised md-primary" type="submit"
+            >Log in</md-button
+          >
+        </div>
       </form>
 
       <div class="loading-overlay" v-if="loading">
-        <md-progress-spinner md-mode="indeterminate" :md-stroke="2"></md-progress-spinner>
+        <md-progress-spinner
+          md-mode="indeterminate"
+          :md-stroke="2"
+        ></md-progress-spinner>
       </div>
-
     </md-content>
     <div class="background" />
   </div>
 </template>
 
 <script>
-import { validationMixin } from 'vuelidate'
-  import {
-    required,
-    email,
-    minLength,
-    //maxLength
-  } from 'vuelidate/lib/validators'
+import { validationMixin } from "vuelidate";
+import {
+  required,
+  email,
+  minLength,
+  //maxLength
+} from "vuelidate/lib/validators";
+
+import Vue from "vue";
+import axios from "axios";
+import VueAxios from "vue-axios";
+
+Vue.use(VueAxios, axios);
+
+// TODO: Find way to move this in methods, however i move this to method and try to use, i get errors...
+function parseJwt(token) {
+  var base64Payload = token.split(".")[1];
+  var payload = Buffer.from(base64Payload, "base64");
+  return JSON.parse(payload.toString());
+}
 
 export default {
-  name: 'FormValidation',
+  name: "FormValidation",
   mixins: [validationMixin],
   data() {
     return {
       loading: false,
       form: {
         email: "",
-        password: ""
-      }
+        password: "",
+      },
     };
   },
   validations: {
-      form: {
-        password: {
-          required,
-          minLength: minLength(3)
-        },
-        email: {
-          required,
-          email
-        }
-      }
+    form: {
+      password: {
+        required,
+        minLength: minLength(3),
+      },
+      email: {
+        required,
+        email,
+      },
+    },
   },
   methods: {
     auth() {
-      // your code to login user
-      // this is only for example of loading
-      
-      this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
-      }, 5000);
+      // TODO: Make this URL's configurable
+      // TODO: Fix URL's redirection after login, i know this with only JS redirection
+      // is not optimal, but form me this with this.router.push does not work...
 
-      if(new String(this.form.email).valueOf() == new String("systemadmin@gmail.com").valueOf()){
-          this.$router.push({ name: 'systemadminLanding' })
-      }else if(new String(this.form.email).valueOf() == new String("supplier@gmail.com").valueOf()){
-          this.$router.push({ name: 'supplierLanding' }) 
-      }else if(new String(this.form.email).valueOf() == new String("pharmacyadmin@gmail.com").valueOf()){
-          this.$router.push({ name: 'pharmacyadminLanding' }) 
-      }else if(new String(this.form.email).valueOf() == new String("pharmacist@gmail.com").valueOf()){
-          this.$router.push({ name: 'pharmacistLanding' }) 
-      }else if(new String(this.form.email).valueOf() == new String("patient@gmail.com").valueOf()){
-          this.$router.push({ name: 'patientLanding' }) 
-      }else if(new String(this.form.email).valueOf() == new String("dermatologist@gmail.com").valueOf()){
-          this.$router.push({ name: 'dermatologistLanding' }) 
-      }else{
-        console.log("eerro")
-      }
+      axios
+        .post("http://localhost:8081/auth/login/", {
+          password: this.form.password,
+          email: this.form.email,
+        })
+        .then(function (response) {
+          // console.log(parseJwt(response.data.accessToken).role);
+          let userRole = parseJwt(response.data.accessToken).role;
+          console.log(userRole);
+          if(userRole == "ADMIN"){
+            // this.$router.push({ name: 'systemadminLanding' });
+            window.location.href = "http://localhost:8082/#/components/systemadmin/Landingpage.vue";
+          }else if(userRole == "SUPPLIER"){
+            // this.$router.push({ name: 'supplierLanding' })
+            window.location.href = "http://localhost:8082/#/components/supplier/Landingpage.vue";
+          }else if(userRole == "PHARMACY_ADMIN"){
+            // this.$router.push({ name: 'pharmacyadminLanding' })
+            window.location.href = "http://localhost:8082/#/components/pharmacyadmin/Landingpage.vue";
+          }else if(userRole == "PATIENT"){
+            // this.$router.push({ name: 'patientLanding' })
+            window.location.href = "http://localhost:8082/#/components/patient/Landingpage.vue";
+          }else if(userRole == "CONSULTANT_PHARMACIST"){
+            // this.$router.push({ name: 'pharmacistLanding' })
+            window.location.href = "http://localhost:8082/#/components/pharmacist/Landingpage.vue";
+          }else if(userRole == "CONSULTANT_DERMATOLOGIST"){
+            // this.$router.push({ name: 'dermatologistLanding' })
+            window.location.href = "http://localhost:8082/#/components/dermatologist/Landingpage.vue";
+          }else{
+            // TODO: Make some tost notification here
+            console.log("Error: Sorry, there is no your role");
+          }
+          
+
+          alert("uspesno");
+
+
+        })
+        .catch(function (error) {
+          console.log(error);
+          alert("error");
+        });
 
     },
-     getValidationClass (fieldName) {
-        const field = this.$v.form[fieldName]
+    getValidationClass(fieldName) {
+      const field = this.$v.form[fieldName];
 
-        if (field) {
-          return {
-            'md-invalid': field.$invalid && field.$dirty
-          }
-        }
-      },
-      validateUser () {
-        this.$v.$touch()
-
-        if (!this.$v.$invalid) {
-          //this.saveUser()
-          this.auth()
-        }
+      if (field) {
+        return {
+          "md-invalid": field.$invalid && field.$dirty,
+        };
       }
-  }
+    },
+    validateUser() {
+      this.$v.$touch();
+
+      if (!this.$v.$invalid) {
+        //this.saveUser()
+        this.auth();
+      }
+    },
+  },
 };
 </script>
 

@@ -1,4 +1,4 @@
-import unregisterLanding from './components/unregistered/Landingpage.vue';
+import login from './components/unregistered/LoginPage.vue';
 import systemadminLanding from './components/systemadmin/Landingpage.vue';
 import supplierLanding from './components/supplier/Landingpage.vue';
 import pharmacyadminLanding from './components/pharmacyadmin/Landingpage.vue';
@@ -8,7 +8,7 @@ import dermatologistLanding from './components/dermatologist/Landingpage.vue';
 import register from './components/unregistered/RegisterPage.vue';
 
 export default [
-    { path: '/', component: unregisterLanding },
+    { path: '/', component: login, name: 'loginPage' },
     { path: '/components/register', component: register, name:'registerPage' },
     { path: '/components/systemadmin/Landingpage.vue', component: systemadminLanding, name: 'systemadminLanding' },
     { path: '/components/supplier/Landingpage.vue', component: supplierLanding, name: 'supplierLanding' },
