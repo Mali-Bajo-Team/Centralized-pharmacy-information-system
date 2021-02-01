@@ -1,87 +1,43 @@
 <template>
-  <div>
-    <NavbarPharmacist></NavbarPharmacist>
-
-    <h1 id="pharmacistprofile">Pharmacist profile</h1>
-
-    <div class="separator"></div>
-    <md-avatar id="avatar" class="md-avatar-icon md-primary">P</md-avatar>
-
-    <div>
-      <div id="containerprofiledata">
-        <p class="profiledata profiledataName">{{ name }}</p>
-        <p class="profiledata">{{ surname }}</p>
-        <p class="profiledata">{{ phoneNumber }}</p>
-        <p class="profiledata">{{ location }}</p>
-        <md-button
-          id="editbutton"
-          @click="showDialog = true"
-          class="md-fab md-plain"
-        >
-          <md-icon id="editicon">edit</md-icon>
-        </md-button>
-      </div>
-
-     <CalendarComponent title="My journey with Vue"></CalendarComponent>
-
-    </div>
-
-    <div>
-      <md-dialog :md-active.sync="showDialog">
-       
-        <md-tabs md-dynamic-height>
-        <md-tab md-label="Change personal data">
-        <md-field  class="dialogmd">
-          <label>Name</label>
-          <md-input v-model="name"></md-input>
-        </md-field>
-        <md-field>
-          <label>Surname</label>
-          <md-input v-model="surname"></md-input>
-        </md-field>
-        <md-field>
-          <label>Phone number</label>
-          <md-input v-model="phoneNumber"></md-input>
-        </md-field>
-        <md-field>
-          <label>Location</label>
-          <md-input v-model="location"></md-input>
-        </md-field>
-         </md-tab>
-          </md-tabs>
-        <md-dialog-actions>
-          <md-button class="md-primary" @click="showDialog = false"
-            >Close</md-button
-          >
-          <md-button class="md-primary" @click="showDialog = false"
-            >Save</md-button
-          >
-        </md-dialog-actions>
-      </md-dialog>
-    </div>
+  <div class="text-center section" id="calendar">
+     
+    <v-calendar
+      class="custom-calendar max-w-full"
+      :masks="masks"
+      :attributes="attributes"
+      disable-page-swipe
+      is-expanded
+    >
+      <template v-slot:day-content="{ day, attributes }">
+        <div class="flex flex-col h-full z-10 overflow-hidden md-elevation-10">
+          <span class="day-label text-sm text-gray-900">{{ day.day }}</span>
+          <div class="flex-grow overflow-y-auto overflow-x-auto s">
+            <p
+              v-for="attr in attributes"
+              :key="attr.key"
+              class="text-xs leading-tight rounded-sm p-1 mt-0 mb-1"
+              :class="attr.customData.class"
+            >
+              {{ attr.customData.title }}
+            </p>
+          </div>
+        </div>
+      </template>
+    </v-calendar>
+    <h1>  {{ title }}</h1>
   </div>
 </template>
 
 <script>
-import Vue from "vue";
-import axios from "axios";
-import VueAxios from "vue-axios";
-
-Vue.use(VueAxios, axios);
-
 export default {
-  name: "PharmacistLanding",
+  name: "Calendar",
+    props:{
+    title: String,
+  },
   data() {
     const month = new Date().getMonth();
     const year = new Date().getFullYear();
     return {
-      showDialog: false,
-      url: process.env.VUE_APP_APIUSERSURL,
-      list: undefined,
-      name: "",
-      surname: "",
-      phoneNumber: "",
-      location: "",
       masks: {
         weekdays: "WWW",
       },
@@ -162,25 +118,14 @@ export default {
       ],
     };
   },
-  mounted() {
-    // Vue.axios.get(this.url).then((resp) => {
-    //   this.list = resp.data;
-    // });
-
-    //Use data from local storage not from API req
-    this.name = "Mark";
-    this.surname = "Ivancevic";
-    this.phoneNumber = "062 236 563 12";
-    this.location = "Novi Sad, Puskinova 13";
-  },
 };
 </script>
 
 <style>
-.s{
+.s {
   max-height: 90px;
-background-color: #448aff;
-overflow-y:auto;
+  background-color: #448aff;
+  overflow-y: auto;
 }
 .vc-header {
   background-color: #a9c8e0;
@@ -210,36 +155,6 @@ overflow-y:auto;
   width: 50%;
   margin-left: 35%;
   margin-top: -22%;
-}
-#avatar {
-  width: 80px;
-  height: 80px;
-  margin-top: 5%;
-  margin-right:90%;
-}
-.profiledata {
-  color: white;
-  font-size: 30px;
-}
-.profiledataName {
-  padding-top: 20px;
-}
-#containerprofiledata {
-  width: 400px;
-  height: 300px;
-  margin-left: 5%;
-  background-color: #448aff;
-  border-radius: 5%;
-}
-#editbutton {
-  background-color: white;
-}
-#editicon {
-  color: #448aff;
-}
-#pharmacistprofile {
-  color: #448aff;
-  font-size: 40px;
 }
 </style>
 <style lang="postcss" scoped>
