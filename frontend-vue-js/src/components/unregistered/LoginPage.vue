@@ -107,41 +107,45 @@ export default {
         })
         .then(function (response) {
           // console.log(parseJwt(response.data.accessToken).role);
-          let userRole = parseJwt(response.data.accessToken).role;
-          console.log(userRole);
-          if(userRole == "ADMIN"){
+          let token = response.data.accessToken;
+          localStorage.setItem("JWT-CPIS", token); // With this we save JWT on client side
+          let userRole = parseJwt(token).role;
+
+          if (userRole == "ADMIN") {
             // this.$router.push({ name: 'systemadminLanding' });
-            window.location.href = "http://localhost:8082/#/components/systemadmin/Landingpage.vue";
-          }else if(userRole == "SUPPLIER"){
+            window.location.href =
+              "http://localhost:8082/#/components/systemadmin/Landingpage.vue";
+          } else if (userRole == "SUPPLIER") {
             // this.$router.push({ name: 'supplierLanding' })
-            window.location.href = "http://localhost:8082/#/components/supplier/Landingpage.vue";
-          }else if(userRole == "PHARMACY_ADMIN"){
+            window.location.href =
+              "http://localhost:8082/#/components/supplier/Landingpage.vue";
+          } else if (userRole == "PHARMACY_ADMIN") {
             // this.$router.push({ name: 'pharmacyadminLanding' })
-            window.location.href = "http://localhost:8082/#/components/pharmacyadmin/Landingpage.vue";
-          }else if(userRole == "PATIENT"){
+            window.location.href =
+              "http://localhost:8082/#/components/pharmacyadmin/Landingpage.vue";
+          } else if (userRole == "PATIENT") {
             // this.$router.push({ name: 'patientLanding' })
-            window.location.href = "http://localhost:8082/#/components/patient/Landingpage.vue";
-          }else if(userRole == "PHARMACIST"){
+            window.location.href =
+              "http://localhost:8082/#/components/patient/Landingpage.vue";
+          } else if (userRole == "PHARMACIST") {
             // this.$router.push({ name: 'pharmacistLanding' })
-            window.location.href = "http://localhost:8082/#/components/pharmacist/Landingpage.vue";
-          }else if(userRole == "DERMATOLOGIST"){
+            window.location.href =
+              "http://localhost:8082/#/components/pharmacist/Landingpage.vue";
+          } else if (userRole == "DERMATOLOGIST") {
             // this.$router.push({ name: 'dermatologistLanding' })
-            window.location.href = "http://localhost:8082/#/components/dermatologist/Landingpage.vue";
-          }else{
+            window.location.href =
+              "http://localhost:8082/#/components/dermatologist/Landingpage.vue";
+          } else {
             // TODO: Make some tost notification here
             console.log("Error: Sorry, there is no your role");
           }
-          
 
           alert("uspesno");
-
-
         })
         .catch(function (error) {
           console.log(error);
           alert("error");
         });
-
     },
     getValidationClass(fieldName) {
       const field = this.$v.form[fieldName];

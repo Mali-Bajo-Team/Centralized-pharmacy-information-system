@@ -33,7 +33,11 @@ export default {
         }
     },
     mounted(){
-        Vue.axios.get(this.url)
+        Vue.axios.get(this.url,{
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("JWT-CPIS")
+            }
+        })
         .then((resp)=>{
            this.list = resp.data;
         })
