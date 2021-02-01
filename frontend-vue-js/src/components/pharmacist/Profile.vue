@@ -22,7 +22,7 @@
         </md-button>
       </div>
 
-     <CalendarComponent :title="this.attributes"></CalendarComponent>
+     <CalendarComponent :attributes="this.attributes"></CalendarComponent>
 
     </div>
 
