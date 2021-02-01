@@ -1,49 +1,44 @@
-package com.pharmacy.cpis.complaints.model;
-
-import java.util.Date;
+package com.pharmacy.cpis.consultations.model;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import org.hibernate.annotations.CreationTimestamp;
 
 import com.pharmacy.cpis.pharmacy.model.Pharmacy;
 import com.pharmacy.cpis.users.model.Consultant;
 import com.pharmacy.cpis.users.model.Patient;
+import com.pharmacy.cpis.util.DateRange;
 
 @Entity
-public class Complaint {
+public class Consultation {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false, length = 1000)
-	private String content;
+	@Column(nullable = false)
+	private ConsultationStatus status;
 
-	@Column(length = 1000)
-	private String response;
+	@Embedded
+	private DateRange time;
 
-	@CreationTimestamp
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column
-	private Date creationTimestamp;
-
-	@ManyToOne(optional = false)
-	private Patient creator;
+	@Column(nullable = false)
+	private Double price;
 
 	@ManyToOne(optional = false)
 	private Pharmacy pharmacy;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	private Consultant consultant;
 
-	public Complaint() {
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	private Patient patient;
+
+	public Consultation() {
 		super();
 	}
 
@@ -55,36 +50,28 @@ public class Complaint {
 		this.id = id;
 	}
 
-	public String getContent() {
-		return content;
+	public ConsultationStatus getStatus() {
+		return status;
 	}
 
-	public void setContent(String content) {
-		this.content = content;
+	public void setStatus(ConsultationStatus status) {
+		this.status = status;
 	}
 
-	public String getResponse() {
-		return response;
+	public DateRange getTime() {
+		return time;
 	}
 
-	public void setResponse(String response) {
-		this.response = response;
+	public void setTime(DateRange time) {
+		this.time = time;
 	}
 
-	public Date getCreationTimestamp() {
-		return creationTimestamp;
+	public Double getPrice() {
+		return price;
 	}
 
-	public void setCreationTimestamp(Date creationTimestamp) {
-		this.creationTimestamp = creationTimestamp;
-	}
-
-	public Patient getCreator() {
-		return creator;
-	}
-
-	public void setCreator(Patient creator) {
-		this.creator = creator;
+	public void setPrice(Double price) {
+		this.price = price;
 	}
 
 	public Pharmacy getPharmacy() {
@@ -103,6 +90,14 @@ public class Complaint {
 		this.consultant = consultant;
 	}
 
+	public Patient getPatient() {
+		return patient;
+	}
+
+	public void setPatient(Patient patient) {
+		this.patient = patient;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -119,7 +114,7 @@ public class Complaint {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Complaint other = (Complaint) obj;
+		Consultation other = (Consultation) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

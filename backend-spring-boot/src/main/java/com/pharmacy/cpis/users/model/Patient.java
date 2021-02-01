@@ -9,7 +9,9 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
+import com.pharmacy.cpis.consultations.model.Consultation;
 import com.pharmacy.cpis.drug.model.Drug;
 import com.pharmacy.cpis.pharmacy.model.Pharmacy;
 
@@ -29,6 +31,9 @@ public class Patient extends Person {
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "subscriptions", joinColumns = @JoinColumn(name = "patient_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "pharmacy_id", referencedColumnName = "id"))
 	private Set<Pharmacy> subscriptions;
+
+	@OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
+	private Set<Consultation> consultations;
 
 	public Patient() {
 		super();
@@ -64,6 +69,14 @@ public class Patient extends Person {
 
 	public void setSubscriptions(Set<Pharmacy> subscriptions) {
 		this.subscriptions = subscriptions;
+	}
+
+	public Set<Consultation> getConsultations() {
+		return consultations;
+	}
+
+	public void setConsultations(Set<Consultation> consultations) {
+		this.consultations = consultations;
 	}
 
 }
