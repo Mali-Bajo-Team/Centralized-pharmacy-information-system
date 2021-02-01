@@ -195,7 +195,7 @@ export default {
 
       alert("cao");
       axios
-        .post("http://localhost:8081/api/users/signup/", {
+        .post("http://localhost:8081/auth/signup/", {
           password: this.form.password,
           email: this.form.email,
           name: this.form.name,

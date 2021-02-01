@@ -7,33 +7,23 @@ public class UserRegisterDTO {
     private String name;
     private String surname;
     private String city;
+    private String address;
+    private String country;
+    private String mobile;
 
-    public UserRegisterDTO(String email, String password, String name, String surname, String city) {
+    public UserRegisterDTO(){
+
+    }
+
+    public UserRegisterDTO(String email, String password, String name, String surname, String city, String address, String country, String mobile) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.surname = surname;
         this.city = city;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public String getCity() {
-        return city;
+        this.address = address;
+        this.country = country;
+        this.mobile = mobile;
     }
 
     public void setEmail(String email) {
@@ -56,4 +46,47 @@ public class UserRegisterDTO {
         this.city = city;
     }
 
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
 }

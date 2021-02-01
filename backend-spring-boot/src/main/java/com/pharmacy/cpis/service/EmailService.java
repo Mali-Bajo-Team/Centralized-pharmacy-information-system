@@ -2,7 +2,6 @@ package com.pharmacy.cpis.service;
 
 import com.pharmacy.cpis.dto.UserActivationDTO;
 import com.pharmacy.cpis.dto.UserRegisterDTO;
-import com.pharmacy.cpis.model.UserAcc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.MailException;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EmailService {
+//TODO: Make IEmailService
 
     @Autowired
     private JavaMailSender javaMailSender;
@@ -29,7 +29,7 @@ public class EmailService {
     public void sendNotificaitionAsync(UserActivationDTO user) throws MailException, InterruptedException {
         System.out.println("Email sending...\n\n");
 
-        String endPointForAccountActivation = "/api/users/" + "activate/" + user.getId();
+        String endPointForAccountActivation = "/auth/" + "activate/" + user.getId();
 
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(user.getEmail());
