@@ -6,7 +6,21 @@
 
     <div class="separator"></div>
     <md-avatar id="avatar" class="md-avatar-icon md-primary">P</md-avatar>
-
+  <div class="content">
+      <Button @click="openSuccessAlert" class="mr-2">
+        Success alert
+      </Button>
+      <Button @click="openDangerAlert" class="mr-2">
+        Danger alert
+      </Button>
+      <Button @click="openClosableInside" class="mr-2">
+        Close from inside
+      </Button>
+      <Button @click="openSignIn" v-tooltip.bottom="'Cannot be closed by clicking outside'">
+        Sign in form
+      </Button>
+    </div>
+    <ModalRoot />
     <div>
       <div id="containerprofiledata">
         <p class="profiledata profiledataName">{{ name }}</p>
@@ -49,14 +63,48 @@
 </template>
 
 <script>
+
+import { ModalBus } from './eventBus';
+import ModalRoot from './ModalRoot'
+import Button from './common/Button'
+import SignInForm from './examples/SignInForm'
+import Alert from './examples/Alert';
+import ClosableInside from './examples/ClosableInside';
+
 import Vue from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
+
 
 Vue.use(VueAxios, axios);
 
 export default {
   name: "PharmacistLanding",
+  components: {
+    Button,
+    ModalRoot
+  },
+  methods: {
+    openSuccessAlert () {
+      ModalBus.$emit('open', {
+        component: Alert,
+        props: { text: 'Everything is working great!', type: 'success' }
+      })
+    },
+    openDangerAlert () {
+      const props = {
+        type: 'error',
+        text: 'The server returned 500 again! omg!'
+      }
+      ModalBus.$emit('open', { component: Alert, title: 'An error has occured', props })
+    },
+    openClosableInside () {
+      ModalBus.$emit('open', { component: ClosableInside, title: 'Close dialog from component' })
+    },
+    openSignIn () {
+      ModalBus.$emit('open', { component: SignInForm, title: 'New user', closeOnClick: false })
+    }
+  },
   data() {
     const month = new Date().getMonth();
     const year = new Date().getFullYear();
@@ -163,6 +211,14 @@ export default {
 </script>
 
 <style>
+.content {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center
+}
 #calendar {
   width: 40%;
   margin-left: 50%;
