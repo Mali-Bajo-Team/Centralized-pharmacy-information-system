@@ -22,6 +22,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.parameters.P;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -52,6 +53,9 @@ public class AuthenticationController {
 
     @Autowired
     private IAuthorityService authService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     // The first endpoint that affects the user when logging in.
     // Then he only knows his username and password and forwards it to the backend.
@@ -98,7 +102,7 @@ public class AuthenticationController {
 
         UserAccount newUserAccount = new UserAccount();
         newUserAccount.setEmail(userRequest.getEmail());
-        newUserAccount.setPassword(userRequest.getPassword()); //TODO: Implement ENCODER/DECODER for password
+        newUserAccount.setPassword( passwordEncoder.encode(userRequest.getPassword()));
         newUserAccount.setActive(false);
         List<Authority> auth = authService.findByName("ROLE_PATIENT");
         newUserAccount.setAuthorities(auth);
