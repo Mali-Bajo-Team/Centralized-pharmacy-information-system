@@ -10,8 +10,8 @@ import com.pharmacy.cpis.service.EmailService;
 import com.pharmacy.cpis.service.IAuthorityService;
 import com.pharmacy.cpis.service.IPersonService;
 import com.pharmacy.cpis.service.IUserService;
-import com.pharmacy.cpis.users.model.Person;
-import com.pharmacy.cpis.users.model.UserAccount;
+import com.pharmacy.cpis.userservice.model.users.Person;
+import com.pharmacy.cpis.userservice.model.users.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -79,7 +79,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
     }
 
-    // Endpoint za registraciju novog korisnika
+    // Endpoint to register a new user
     @PostMapping("/signup")
     public ResponseEntity<UserAccount> addUser(@RequestBody UserRegisterDTO userRequest) {
 

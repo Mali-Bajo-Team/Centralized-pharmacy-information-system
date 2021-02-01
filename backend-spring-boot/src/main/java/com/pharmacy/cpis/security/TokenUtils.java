@@ -1,6 +1,6 @@
 package com.pharmacy.cpis.security;
 
-import com.pharmacy.cpis.users.model.UserAccount;
+import com.pharmacy.cpis.userservice.model.users.UserAccount;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

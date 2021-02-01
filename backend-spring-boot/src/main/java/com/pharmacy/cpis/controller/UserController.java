@@ -1,21 +1,14 @@
 package com.pharmacy.cpis.controller;
 
 import com.pharmacy.cpis.dto.UserAccDTO;
-import com.pharmacy.cpis.dto.UserActivationDTO;
-import com.pharmacy.cpis.dto.UserRegisterDTO;
-import com.pharmacy.cpis.service.EmailService;
 import com.pharmacy.cpis.service.IUserService;
-import com.pharmacy.cpis.users.model.UserAccount;
+import com.pharmacy.cpis.userservice.model.users.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

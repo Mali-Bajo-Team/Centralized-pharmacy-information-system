@@ -1,9 +1,8 @@
 package com.pharmacy.cpis.service.impl;
 
-import com.pharmacy.cpis.dto.UserRegisterDTO;
 import com.pharmacy.cpis.repository.IPersonRepository;
 import com.pharmacy.cpis.service.IPersonService;
-import com.pharmacy.cpis.users.model.Person;
+import com.pharmacy.cpis.userservice.model.users.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

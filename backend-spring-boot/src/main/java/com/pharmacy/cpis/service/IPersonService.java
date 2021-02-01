@@ -1,7 +1,6 @@
 package com.pharmacy.cpis.service;
 
-import com.pharmacy.cpis.dto.UserRegisterDTO;
-import com.pharmacy.cpis.users.model.Person;
+import com.pharmacy.cpis.userservice.model.users.Person;
 
 import java.util.List;
 

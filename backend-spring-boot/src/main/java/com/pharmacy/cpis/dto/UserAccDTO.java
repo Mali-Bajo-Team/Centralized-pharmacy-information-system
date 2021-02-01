@@ -1,6 +1,6 @@
 package com.pharmacy.cpis.dto;
 
-import com.pharmacy.cpis.users.model.UserAccount;
+import com.pharmacy.cpis.userservice.model.users.UserAccount;
 
 public class UserAccDTO {
     private Long id;

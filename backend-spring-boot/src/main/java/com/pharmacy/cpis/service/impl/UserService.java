@@ -1,11 +1,9 @@
 package com.pharmacy.cpis.service.impl;
 
-import com.pharmacy.cpis.dto.UserRegisterDTO;
-import com.pharmacy.cpis.model.Authority;
 import com.pharmacy.cpis.repository.IUserRepository;
 import com.pharmacy.cpis.service.IAuthorityService;
 import com.pharmacy.cpis.service.IUserService;
-import com.pharmacy.cpis.users.model.UserAccount;
+import com.pharmacy.cpis.userservice.model.users.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
