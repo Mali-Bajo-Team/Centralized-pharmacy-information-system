@@ -68,7 +68,7 @@ export default {
     openSignIn() {
       ModalBus.$emit("open", {
         component: SignInForm,
-        title: "New user",
+        title: "Change personal info",
         closeOnClick: false,
       });
     },
@@ -216,6 +216,7 @@ export default {
   border-radius: 5%;
 }
 #editbutton {
+  z-index: 1;
   margin-top: 20px;
   background-color: white;
 }
