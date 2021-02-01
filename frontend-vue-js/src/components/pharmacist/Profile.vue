@@ -32,7 +32,9 @@
           is-expanded
         >
           <template v-slot:day-content="{ day, attributes }">
-            <md-content class="flex flex-col h-full z-10 overflow-hidden md-elevation-24">
+            <md-content
+              class="flex flex-col h-full z-10 overflow-hidden md-elevation-24"
+            >
               <span class="day-label text-sm text-gray-900">{{ day.day }}</span>
               <div class="flex-grow overflow-y-auto overflow-x-auto">
                 <p
@@ -53,9 +55,6 @@
     <div>
       <md-dialog :md-active.sync="showDialog">
         <md-dialog-title>Change personal data</md-dialog-title>
-
-      
-
 
         <md-dialog-actions>
           <md-button class="md-primary" @click="showDialog = false"
@@ -105,7 +104,8 @@ export default {
         {
           key: 2,
           customData: {
-            title: "Take Noah to basketball practice practice practice practice practice practice practice practice",
+            title:
+              "Take Noah to basketball practice practice practice practice practice practice practice practice",
             class: "bg-blue-500 text-white",
           },
           dates: new Date(year, month, 2),
@@ -186,7 +186,7 @@ export default {
 </script>
 
 <style>
-.s{
+.s {
   max-height: 20px;
 }
 #calendar {
@@ -224,7 +224,6 @@ export default {
   color: #448aff;
   font-size: 40px;
 }
-
 </style>
 <style lang="postcss" scoped>
 ::-webkit-scrollbar {
