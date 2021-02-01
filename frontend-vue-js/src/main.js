@@ -2,15 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import VueRouter from 'vue-router'
 import Routes from './routes'
-import VTooltip from 'v-tooltip'
 
-
-import '@/assets/css/tailwind.css'
-import '@/assets/css/tooltip.css'
-
-Vue.use(VTooltip)
-
-Vue.config.productionTip = false
 Vue.use(VueRouter);
 
 //Here we register or routes

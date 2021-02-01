@@ -31,7 +31,6 @@ export default {
     // Vue.axios.get(this.url).then((resp) => {
     //   this.list = resp.data;
     // });
-
     //set data to local storage
     //global idea is to set one time data and there is no reason to make evry time new api request
     localStorage.name = "Mark";

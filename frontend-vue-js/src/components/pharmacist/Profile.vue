@@ -1,6 +1,5 @@
 <template>
   <div>
-    <ModalRoot />
     <NavbarPharmacist></NavbarPharmacist>
 
     <h1 id="pharmacistprofile">Pharmacist profile</h1>
@@ -8,51 +7,70 @@
     <div class="separator"></div>
     <md-avatar id="avatar" class="md-avatar-icon md-primary">P</md-avatar>
 
-    <div id="containerprofiledata">
-      <p class="profiledata profiledataName">{{ name }}</p>
-      <p class="profiledata">{{ surname }}</p>
-      <p class="profiledata">{{ phoneNumber }}</p>
-      <p class="profiledata">{{ location }}</p>
-      <md-button id="editbutton" @click="openSignIn" class="md-fab md-plain">
-        <md-icon id="editicon">edit</md-icon>
-      </md-button>
+    <div>
+      <div id="containerprofiledata">
+        <p class="profiledata profiledataName">{{ name }}</p>
+        <p class="profiledata">{{ surname }}</p>
+        <p class="profiledata">{{ phoneNumber }}</p>
+        <p class="profiledata">{{ location }}</p>
+        <md-button
+          id="editbutton"
+          @click="showDialog = true"
+          class="md-fab md-plain"
+        >
+          <md-icon id="editicon">edit</md-icon>
+        </md-button>
+      </div>
+
+      <!--Same as before, just passing default value as second parameter-->
+      <div class="text-center section" id="calendar">
+        <v-calendar
+          class="custom-calendar max-w-full"
+          :masks="masks"
+          :attributes="attributes"
+          disable-page-swipe
+          is-expanded
+        >
+          <template v-slot:day-content="{ day, attributes }">
+            <md-content class="flex flex-col h-full z-10 overflow-hidden md-elevation-24">
+              <span class="day-label text-sm text-gray-900">{{ day.day }}</span>
+              <div class="flex-grow overflow-y-auto overflow-x-auto">
+                <p
+                  v-for="attr in attributes"
+                  :key="attr.key"
+                  class="text-xs leading-tight rounded-sm p-1 mt-0 mb-1"
+                  :class="attr.customData.class"
+                >
+                  {{ attr.customData.title }}
+                </p>
+              </div>
+            </md-content>
+          </template>
+        </v-calendar>
+      </div>
     </div>
 
-    <!--Same as before, just passing default value as second parameter-->
-    <div class="text-center section" id="calendar">
-      <v-calendar
-        class="custom-calendar max-w-full"
-        :masks="masks"
-        :attributes="attributes"
-        disable-page-swipe
-        is-expanded
-      >
-        <template v-slot:day-content="{ day, attributes }">
-          <div class="flex flex-col h-full z-10 overflow-hidden">
-            <span class="day-label text-sm text-gray-900">{{ day.day }}</span>
-            <div class="flex-grow overflow-y-auto overflow-x-auto">
-              <p
-                v-for="attr in attributes"
-                :key="attr.key"
-                class="text-xs leading-tight rounded-sm p-1 mt-0 mb-1"
-                :class="attr.customData.class"
-              >
-                {{ attr.customData.title }}
-              </p>
-            </div>
-          </div>
-        </template>
-      </v-calendar>
+    <div>
+      <md-dialog :md-active.sync="showDialog">
+        <md-dialog-title>Change personal data</md-dialog-title>
+
+      
+
+
+        <md-dialog-actions>
+          <md-button class="md-primary" @click="showDialog = false"
+            >Close</md-button
+          >
+          <md-button class="md-primary" @click="showDialog = false"
+            >Save</md-button
+          >
+        </md-dialog-actions>
+      </md-dialog>
     </div>
   </div>
 </template>
 
 <script>
-import { ModalBus } from "./eventBus";
-import ModalRoot from "./ModalRoot";
-
-import SignInForm from "./examples/SignInForm";
-
 import Vue from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
@@ -61,22 +79,11 @@ Vue.use(VueAxios, axios);
 
 export default {
   name: "PharmacistLanding",
-  components: {
-    ModalRoot,
-  },
-  methods: {
-    openSignIn() {
-      ModalBus.$emit("open", {
-        component: SignInForm,
-        title: "Change personal info",
-        closeOnClick: false,
-      });
-    },
-  },
   data() {
     const month = new Date().getMonth();
     const year = new Date().getFullYear();
     return {
+      showDialog: false,
       url: process.env.VUE_APP_APIUSERSURL,
       list: undefined,
       name: "",
@@ -98,7 +105,7 @@ export default {
         {
           key: 2,
           customData: {
-            title: "Take Noah to basketball practice",
+            title: "Take Noah to basketball practice practice practice practice practice practice practice practice",
             class: "bg-blue-500 text-white",
           },
           dates: new Date(year, month, 2),
@@ -179,22 +186,15 @@ export default {
 </script>
 
 <style>
-.content {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
+.s{
+  max-height: 20px;
 }
 #calendar {
-  z-index: 1;
   width: 40%;
   margin-left: 50%;
-  margin-top: -10%;
+  margin-top: -22%;
 }
 #avatar {
-  z-index: -1;
   width: 80px;
   height: 80px;
   margin-top: 5%;
@@ -203,7 +203,6 @@ export default {
 .profiledata {
   color: white;
   font-size: 30px;
-  padding-top: 20px;
 }
 .profiledataName {
   padding-top: 20px;
@@ -216,18 +215,16 @@ export default {
   border-radius: 5%;
 }
 #editbutton {
-  z-index: 1;
-  margin-top: 20px;
   background-color: white;
 }
 #editicon {
   color: #448aff;
 }
 #pharmacistprofile {
-  margin-top: 20px;
   color: #448aff;
   font-size: 40px;
 }
+
 </style>
 <style lang="postcss" scoped>
 ::-webkit-scrollbar {
@@ -244,7 +241,6 @@ export default {
   --weekday-bg: #f8fafc;
   --weekday-border: 1px solid #eaeaea;
   border-radius: 0;
-   z-index: -1;
   width: 100%;
   & .vc-header {
     background-color: #f1f5f8;
