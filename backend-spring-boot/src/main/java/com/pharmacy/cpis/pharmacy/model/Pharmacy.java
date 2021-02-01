@@ -4,6 +4,7 @@ import java.util.Set;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -12,8 +13,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
+import com.pharmacy.cpis.drugsales.model.AvailableDrug;
+import com.pharmacy.cpis.ratings.model.PharmacyRating;
 import com.pharmacy.cpis.users.model.Patient;
+import com.pharmacy.cpis.workschedule.model.WorkingTimes;
 
 @Entity
 public class Pharmacy {
@@ -37,9 +42,18 @@ public class Pharmacy {
 	@AttributeOverrides(value = { @AttributeOverride(name = "latitude", column = @Column(nullable = false)),
 			@AttributeOverride(name = "longitude", column = @Column(nullable = false)) })
 	private Location location;
-	
+
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "subscriptions")
 	private Set<Patient> subscribers;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "pharmacy", cascade = CascadeType.ALL)
+	private Set<AvailableDrug> availableDrugs;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "pharmacy")
+	private Set<WorkingTimes> consultants;
+
+	@OneToMany(mappedBy = "pharmacy", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<PharmacyRating> ratings;
 
 	public Pharmacy() {
 		super();
@@ -91,6 +105,38 @@ public class Pharmacy {
 
 	public void setLocation(Location location) {
 		this.location = location;
+	}
+
+	public Set<Patient> getSubscribers() {
+		return subscribers;
+	}
+
+	public void setSubscribers(Set<Patient> subscribers) {
+		this.subscribers = subscribers;
+	}
+
+	public Set<AvailableDrug> getAvailableDrugs() {
+		return availableDrugs;
+	}
+
+	public void setAvailableDrugs(Set<AvailableDrug> availableDrugs) {
+		this.availableDrugs = availableDrugs;
+	}
+
+	public Set<WorkingTimes> getConsultants() {
+		return consultants;
+	}
+
+	public void setConsultants(Set<WorkingTimes> consultants) {
+		this.consultants = consultants;
+	}
+
+	public Set<PharmacyRating> getRatings() {
+		return ratings;
+	}
+
+	public void setRatings(Set<PharmacyRating> ratings) {
+		this.ratings = ratings;
 	}
 
 	@Override

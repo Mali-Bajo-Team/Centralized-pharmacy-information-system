@@ -11,7 +11,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+
+import com.pharmacy.cpis.ratings.model.DrugRating;
 
 @Entity
 public class Drug {
@@ -36,6 +39,9 @@ public class Drug {
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "alternate_drugs", joinColumns = @JoinColumn(name = "drug_code", referencedColumnName = "code"), inverseJoinColumns = @JoinColumn(name = "alternate_drug_code", referencedColumnName = "code"))
 	private Set<Drug> alternateDrugs;
+
+	@OneToMany(mappedBy = "drug", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<DrugRating> ratings;
 
 	public Drug() {
 		super();
@@ -95,6 +101,14 @@ public class Drug {
 
 	public void setAlternateDrugs(Set<Drug> alternateDrugs) {
 		this.alternateDrugs = alternateDrugs;
+	}
+
+	public Set<DrugRating> getRatings() {
+		return ratings;
+	}
+
+	public void setRatings(Set<DrugRating> ratings) {
+		this.ratings = ratings;
 	}
 
 	@Override

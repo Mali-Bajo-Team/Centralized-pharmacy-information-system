@@ -1,4 +1,4 @@
-package com.pharmacy.cpis.complaints.model;
+package com.pharmacy.cpis.drugprocurement.model;
 
 import java.util.Date;
 
@@ -13,37 +13,31 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.pharmacy.cpis.drug.model.Drug;
 import com.pharmacy.cpis.pharmacy.model.Pharmacy;
 import com.pharmacy.cpis.users.model.Consultant;
-import com.pharmacy.cpis.users.model.Patient;
 
 @Entity
-public class Complaint {
+public class DrugRequest {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false, length = 1000)
-	private String content;
-
-	@Column(length = 1000)
-	private String response;
-
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column
-	private Date creationTimestamp;
+	@Column(nullable = false)
+	private Date timestamp;
 
 	@ManyToOne(optional = false)
-	private Patient creator;
+	private Drug drug;
 
 	@ManyToOne(optional = false)
 	private Pharmacy pharmacy;
 
 	@ManyToOne(optional = false)
-	private Consultant consultant;
+	private Consultant cosultant;
 
-	public Complaint() {
+	public DrugRequest() {
 		super();
 	}
 
@@ -55,36 +49,20 @@ public class Complaint {
 		this.id = id;
 	}
 
-	public String getContent() {
-		return content;
+	public Date getTimestamp() {
+		return timestamp;
 	}
 
-	public void setContent(String content) {
-		this.content = content;
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
 	}
 
-	public String getResponse() {
-		return response;
+	public Drug getDrug() {
+		return drug;
 	}
 
-	public void setResponse(String response) {
-		this.response = response;
-	}
-
-	public Date getCreationTimestamp() {
-		return creationTimestamp;
-	}
-
-	public void setCreationTimestamp(Date creationTimestamp) {
-		this.creationTimestamp = creationTimestamp;
-	}
-
-	public Patient getCreator() {
-		return creator;
-	}
-
-	public void setCreator(Patient creator) {
-		this.creator = creator;
+	public void setDrug(Drug drug) {
+		this.drug = drug;
 	}
 
 	public Pharmacy getPharmacy() {
@@ -95,12 +73,12 @@ public class Complaint {
 		this.pharmacy = pharmacy;
 	}
 
-	public Consultant getConsultant() {
-		return consultant;
+	public Consultant getCosultant() {
+		return cosultant;
 	}
 
-	public void setConsultant(Consultant consultant) {
-		this.consultant = consultant;
+	public void setCosultant(Consultant cosultant) {
+		this.cosultant = cosultant;
 	}
 
 	@Override
@@ -119,7 +97,7 @@ public class Complaint {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Complaint other = (Complaint) obj;
+		DrugRequest other = (DrugRequest) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

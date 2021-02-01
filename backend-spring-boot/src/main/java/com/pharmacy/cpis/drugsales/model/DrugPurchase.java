@@ -1,4 +1,4 @@
-package com.pharmacy.cpis.complaints.model;
+package com.pharmacy.cpis.drugsales.model;
 
 import java.util.Date;
 
@@ -13,37 +13,40 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.pharmacy.cpis.drug.model.Drug;
 import com.pharmacy.cpis.pharmacy.model.Pharmacy;
-import com.pharmacy.cpis.users.model.Consultant;
 import com.pharmacy.cpis.users.model.Patient;
 
 @Entity
-public class Complaint {
+public class DrugPurchase {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false, length = 1000)
-	private String content;
-
-	@Column(length = 1000)
-	private String response;
-
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column
-	private Date creationTimestamp;
+	@Column(nullable = false)
+	private Date timestamp;
+
+	@Column(nullable = false)
+	private Integer amount;
+
+	@Column(nullable = false)
+	private Double price;
+
+	@Column(nullable = false)
+	private DrugPurchaseType type;
 
 	@ManyToOne(optional = false)
-	private Patient creator;
+	private Patient patient;
+
+	@ManyToOne(optional = false)
+	private Drug drug;
 
 	@ManyToOne(optional = false)
 	private Pharmacy pharmacy;
 
-	@ManyToOne(optional = false)
-	private Consultant consultant;
-
-	public Complaint() {
+	public DrugPurchase() {
 		super();
 	}
 
@@ -55,36 +58,52 @@ public class Complaint {
 		this.id = id;
 	}
 
-	public String getContent() {
-		return content;
+	public Date getTimestamp() {
+		return timestamp;
 	}
 
-	public void setContent(String content) {
-		this.content = content;
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
 	}
 
-	public String getResponse() {
-		return response;
+	public Integer getAmount() {
+		return amount;
 	}
 
-	public void setResponse(String response) {
-		this.response = response;
+	public void setAmount(Integer amount) {
+		this.amount = amount;
 	}
 
-	public Date getCreationTimestamp() {
-		return creationTimestamp;
+	public Double getPrice() {
+		return price;
 	}
 
-	public void setCreationTimestamp(Date creationTimestamp) {
-		this.creationTimestamp = creationTimestamp;
+	public void setPrice(Double price) {
+		this.price = price;
 	}
 
-	public Patient getCreator() {
-		return creator;
+	public DrugPurchaseType getType() {
+		return type;
 	}
 
-	public void setCreator(Patient creator) {
-		this.creator = creator;
+	public void setType(DrugPurchaseType type) {
+		this.type = type;
+	}
+
+	public Patient getPatient() {
+		return patient;
+	}
+
+	public void setPatient(Patient patient) {
+		this.patient = patient;
+	}
+
+	public Drug getDrug() {
+		return drug;
+	}
+
+	public void setDrug(Drug drug) {
+		this.drug = drug;
 	}
 
 	public Pharmacy getPharmacy() {
@@ -93,14 +112,6 @@ public class Complaint {
 
 	public void setPharmacy(Pharmacy pharmacy) {
 		this.pharmacy = pharmacy;
-	}
-
-	public Consultant getConsultant() {
-		return consultant;
-	}
-
-	public void setConsultant(Consultant consultant) {
-		this.consultant = consultant;
 	}
 
 	@Override
@@ -119,7 +130,7 @@ public class Complaint {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Complaint other = (Complaint) obj;
+		DrugPurchase other = (DrugPurchase) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
