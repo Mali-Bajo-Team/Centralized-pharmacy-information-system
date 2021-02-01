@@ -1,109 +1,102 @@
 <template>
   <div>
+    <ModalRoot />
     <NavbarPharmacist></NavbarPharmacist>
 
     <h1 id="pharmacistprofile">Pharmacist profile</h1>
 
     <div class="separator"></div>
     <md-avatar id="avatar" class="md-avatar-icon md-primary">P</md-avatar>
-  <div class="content">
-      <Button @click="openSuccessAlert" class="mr-2">
-        Success alert
-      </Button>
-      <Button @click="openDangerAlert" class="mr-2">
-        Danger alert
-      </Button>
-      <Button @click="openClosableInside" class="mr-2">
-        Close from inside
-      </Button>
-      <Button @click="openSignIn" v-tooltip.bottom="'Cannot be closed by clicking outside'">
-        Sign in form
-      </Button>
-    </div>
-    <ModalRoot />
-    <div>
-      <div id="containerprofiledata">
-        <p class="profiledata profiledataName">{{ name }}</p>
-        <p class="profiledata">{{ surname }}</p>
-        <p class="profiledata">{{ phoneNumber }}</p>
-        <p class="profiledata">{{ location }}</p>
-        <md-button id="editbutton" class="md-fab md-plain">
-          <md-icon id="editicon">edit</md-icon>
-        </md-button>
-      </div>
 
-      <!--Same as before, just passing default value as second parameter-->
-      <div class="text-center section" id="calendar">
-        <v-calendar
-          class="custom-calendar max-w-full"
-          :masks="masks"
-          :attributes="attributes"
-          disable-page-swipe
-          is-expanded
-        >
-          <template v-slot:day-content="{ day, attributes }">
-            <div class="flex flex-col h-full z-10 overflow-hidden">
-              <span class="day-label text-sm text-gray-900">{{ day.day }}</span>
-              <div class="flex-grow overflow-y-auto overflow-x-auto">
-                <p
-                  v-for="attr in attributes"
-                  :key="attr.key"
-                  class="text-xs leading-tight rounded-sm p-1 mt-0 mb-1"
-                  :class="attr.customData.class"
-                >
-                  {{ attr.customData.title }}
-                </p>
-              </div>
+    <div id="containerprofiledata">
+      <p class="profiledata profiledataName">{{ name }}</p>
+      <p class="profiledata">{{ surname }}</p>
+      <p class="profiledata">{{ phoneNumber }}</p>
+      <p class="profiledata">{{ location }}</p>
+      <md-button id="editbutton" @click="openSignIn" class="md-fab md-plain">
+        <md-icon id="editicon">edit</md-icon>
+      </md-button>
+    </div>
+
+    <!--Same as before, just passing default value as second parameter-->
+    <div class="text-center section" id="calendar">
+      <v-calendar
+        class="custom-calendar max-w-full"
+        :masks="masks"
+        :attributes="attributes"
+        disable-page-swipe
+        is-expanded
+      >
+        <template v-slot:day-content="{ day, attributes }">
+          <div class="flex flex-col h-full z-10 overflow-hidden">
+            <span class="day-label text-sm text-gray-900">{{ day.day }}</span>
+            <div class="flex-grow overflow-y-auto overflow-x-auto">
+              <p
+                v-for="attr in attributes"
+                :key="attr.key"
+                class="text-xs leading-tight rounded-sm p-1 mt-0 mb-1"
+                :class="attr.customData.class"
+              >
+                {{ attr.customData.title }}
+              </p>
             </div>
-          </template>
-        </v-calendar>
-      </div>
+          </div>
+        </template>
+      </v-calendar>
     </div>
   </div>
 </template>
 
 <script>
+import { ModalBus } from "./eventBus";
+import ModalRoot from "./ModalRoot";
 
-import { ModalBus } from './eventBus';
-import ModalRoot from './ModalRoot'
-import Button from './common/Button'
-import SignInForm from './examples/SignInForm'
-import Alert from './examples/Alert';
-import ClosableInside from './examples/ClosableInside';
+import SignInForm from "./examples/SignInForm";
+import Alert from "./examples/Alert";
+import ClosableInside from "./examples/ClosableInside";
 
 import Vue from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
-
 
 Vue.use(VueAxios, axios);
 
 export default {
   name: "PharmacistLanding",
   components: {
-    Button,
-    ModalRoot
+    ModalRoot,
   },
   methods: {
-    openSuccessAlert () {
-      ModalBus.$emit('open', {
+    openSuccessAlert() {
+      ModalBus.$emit("open", {
         component: Alert,
-        props: { text: 'Everything is working great!', type: 'success' }
-      })
+        props: { text: "Everything is working great!", type: "success" },
+      });
     },
-    openDangerAlert () {
+    openDangerAlert() {
       const props = {
-        type: 'error',
-        text: 'The server returned 500 again! omg!'
-      }
-      ModalBus.$emit('open', { component: Alert, title: 'An error has occured', props })
+        type: "error",
+        text: "The server returned 500 again! omg!",
+      };
+      ModalBus.$emit("open", {
+        component: Alert,
+        title: "An error has occured",
+        props,
+      });
     },
-    openClosableInside () {
-      ModalBus.$emit('open', { component: ClosableInside, title: 'Close dialog from component' })
+    openClosableInside() {
+      ModalBus.$emit("open", {
+        component: ClosableInside,
+        title: "Close dialog from component",
+      });
     },
-    openSignIn () {
-      ModalBus.$emit('open', { component: SignInForm, title: 'New user', closeOnClick: false })
-    }
+    openSignIn() {
+      ModalBus.$emit("open", {
+        component: SignInForm,
+        title: "New user",
+        closeOnClick: false,
+      });
+    },
   },
   data() {
     const month = new Date().getMonth();
@@ -217,14 +210,16 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center
+  align-items: center;
 }
 #calendar {
+  z-index: 1;
   width: 40%;
   margin-left: 50%;
-  margin-top: -22%;
+  margin-top: -10%;
 }
 #avatar {
+  z-index: -1;
   width: 80px;
   height: 80px;
   margin-top: 5%;
@@ -233,6 +228,7 @@ export default {
 .profiledata {
   color: white;
   font-size: 30px;
+  padding-top: 20px;
 }
 .profiledataName {
   padding-top: 20px;
@@ -245,12 +241,14 @@ export default {
   border-radius: 5%;
 }
 #editbutton {
+  margin-top: 20px;
   background-color: white;
 }
 #editicon {
   color: #448aff;
 }
 #pharmacistprofile {
+  margin-top: 20px;
   color: #448aff;
   font-size: 40px;
 }
@@ -270,6 +268,7 @@ export default {
   --weekday-bg: #f8fafc;
   --weekday-border: 1px solid #eaeaea;
   border-radius: 0;
+   z-index: -1;
   width: 100%;
   & .vc-header {
     background-color: #f1f5f8;

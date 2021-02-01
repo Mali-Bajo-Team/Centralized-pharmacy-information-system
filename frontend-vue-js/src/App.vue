@@ -16,6 +16,7 @@ import 'vue-material/dist/theme/default.css'
 
 Vue.use(VueMaterial)
 
+
 export default {
   name: 'App',
  
