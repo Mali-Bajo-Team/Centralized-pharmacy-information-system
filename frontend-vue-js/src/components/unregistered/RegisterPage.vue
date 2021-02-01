@@ -8,69 +8,96 @@
       </div>
 
       <form class="form" @submit.prevent="validateUser">
-
         <md-field :class="getValidationClass('email')">
           <label>E-mail</label>
           <md-input v-model="form.email" autofocus></md-input>
-          <span class="md-error" v-if="!$v.form.email.required">The email is required</span>
-          <span class="md-error" v-else-if="!$v.form.email.email" >Invalid email</span>
+          <span class="md-error" v-if="!$v.form.email.required"
+            >The email is required</span
+          >
+          <span class="md-error" v-else-if="!$v.form.email.email"
+            >Invalid email</span
+          >
         </md-field>
 
         <md-field :class="getValidationClass('password')">
           <label>Password</label>
           <md-input v-model="form.password" type="password"></md-input>
-          <span class="md-error" v-if="!$v.form.password.required">The password is required</span>
-          <span class="md-error" v-else-if="!$v.form.password.minlength">Invalid password</span>
+          <span class="md-error" v-if="!$v.form.password.required"
+            >The password is required</span
+          >
+          <span class="md-error" v-else-if="!$v.form.password.minlength"
+            >Invalid password</span
+          >
         </md-field>
 
         <md-field :class="getValidationClass('repeatPassword')">
-            <label> Repeat Password </label>
-            <md-input v-model="form.repeatPassword" type="password"></md-input>
-            <span class="md-error" v-if="!$v.form.repeatPassword.required">The repeat password is required</span>
-            <span class="md-error" v-else-if="!$v.form.repeatPassword.isMatchedPassword"> Must be same as password field </span>
+          <label> Repeat Password </label>
+          <md-input v-model="form.repeatPassword" type="password"></md-input>
+          <span class="md-error" v-if="!$v.form.repeatPassword.required"
+            >The repeat password is required</span
+          >
+          <span
+            class="md-error"
+            v-else-if="!$v.form.repeatPassword.isMatchedPassword"
+          >
+            Must be same as password field
+          </span>
         </md-field>
 
         <md-field :class="getValidationClass('name')">
-            <label> Name </label>
-            <md-input v-model="form.name"></md-input>
-            <span class="md-error" v-if="!$v.form.name.required">The name is required</span>
+          <label> Name </label>
+          <md-input v-model="form.name"></md-input>
+          <span class="md-error" v-if="!$v.form.name.required"
+            >The name is required</span
+          >
         </md-field>
 
         <md-field :class="getValidationClass('surname')">
-            <label> Surname </label>
-            <md-input v-model="form.surname"></md-input>
-            <span class="md-error" v-if="!$v.form.surname.required">The surname is required</span>
+          <label> Surname </label>
+          <md-input v-model="form.surname"></md-input>
+          <span class="md-error" v-if="!$v.form.surname.required"
+            >The surname is required</span
+          >
         </md-field>
 
         <md-field :class="getValidationClass('address')">
-            <label> Residence address </label>
-            <md-input v-model="form.address"></md-input>
-            <span class="md-error" v-if="!$v.form.address.required">The address is required</span>
+          <label> Residence address </label>
+          <md-input v-model="form.address"></md-input>
+          <span class="md-error" v-if="!$v.form.address.required"
+            >The address is required</span
+          >
         </md-field>
 
         <md-field :class="getValidationClass('city')">
-            <label> City </label>
-            <md-input v-model="form.city"></md-input>
-            <span class="md-error" v-if="!$v.form.city.required">The city is required</span>
+          <label> City </label>
+          <md-input v-model="form.city"></md-input>
+          <span class="md-error" v-if="!$v.form.city.required"
+            >The city is required</span
+          >
         </md-field>
 
         <md-field :class="getValidationClass('country')">
-            <label> Country </label>
-            <md-input v-model="form.country"></md-input>
-            <span class="md-error" v-if="!$v.form.country.required">The country is required</span>
+          <label> Country </label>
+          <md-input v-model="form.country"></md-input>
+          <span class="md-error" v-if="!$v.form.country.required"
+            >The country is required</span
+          >
         </md-field>
 
         <md-field :class="getValidationClass('mobile')">
-            <label> Mobile </label>
-            <md-input v-model="form.mobile"></md-input>
-            <span class="md-error" v-if="!$v.form.mobile.required">The mobile is required</span>
+          <label> Mobile </label>
+          <md-input v-model="form.mobile"></md-input>
+          <span class="md-error" v-if="!$v.form.mobile.required"
+            >The mobile is required</span
+          >
         </md-field>
 
         <div class="actions md-layout md-alignment-center-space-between">
           <a href="/resetpassword">Reset password</a>
-          <md-button class="md-raised md-primary" type="submit">REGISTER</md-button>
+          <md-button class="md-raised md-primary" type="submit"
+            >REGISTER</md-button
+          >
         </div>
-         
       </form>
 
       <div class="loading-overlay" v-if="loading">
@@ -92,9 +119,14 @@ import {
   minLength,
   //maxLength
 } from "vuelidate/lib/validators";
+import Vue from "vue";
+import axios from "axios";
+import VueAxios from "vue-axios";
 
-function isMatchedPassword(){
-    return this.form.password == this.form.repeatPassword;
+Vue.use(VueAxios, axios);
+
+function isMatchedPassword() {
+  return this.form.password == this.form.repeatPassword;
 }
 
 export default {
@@ -102,15 +134,19 @@ export default {
   mixins: [validationMixin],
   data() {
     return {
+      backendUrl: process.env.BACKEND_APP_URL,
       loading: false,
       form: {
         email: "",
         password: "",
         repeatPassword: "",
-        name:"",
+        name: "",
         surname: "",
+        address: "",
         city: "",
-      }
+        country: "",
+        mobile: "",
+      },
     };
   },
   validations: {
@@ -119,7 +155,7 @@ export default {
         required,
         minLength: minLength(3),
       },
-      repeatPassword:{
+      repeatPassword: {
         required,
         isMatchedPassword,
       },
@@ -127,7 +163,7 @@ export default {
         required,
         email,
       },
-      name:{
+      name: {
         required,
         minLength: minLength(3),
       },
@@ -150,47 +186,67 @@ export default {
       mobile: {
         required,
         minLength: minLength(3),
-      }
+      },
     },
   },
   methods: {
-
     auth() {
       // your code to register user
 
-      if (
-        new String(this.form.email).valueOf() ==
-        new String("systemadmin@gmail.com").valueOf()
-      ) {
-        this.$router.push({ name: "systemadminLanding" });
-      } else if (
-        new String(this.form.email).valueOf() ==
-        new String("supplier@gmail.com").valueOf()
-      ) {
-        this.$router.push({ name: "supplierLanding" });
-      } else if (
-        new String(this.form.email).valueOf() ==
-        new String("pharmacyadmin@gmail.com").valueOf()
-      ) {
-        this.$router.push({ name: "pharmacyadminLanding" });
-      } else if (
-        new String(this.form.email).valueOf() ==
-        new String("pharmacist@gmail.com").valueOf()
-      ) {
-        this.$router.push({ name: "pharmacistLanding" });
-      } else if (
-        new String(this.form.email).valueOf() ==
-        new String("patient@gmail.com").valueOf()
-      ) {
-        this.$router.push({ name: "patientLanding" });
-      } else if (
-        new String(this.form.email).valueOf() ==
-        new String("dermatologist@gmail.com").valueOf()
-      ) {
-        this.$router.push({ name: "dermatologistLanding" });
-      } else {
-        console.log("eerro");
-      }
+      alert("cao");
+      axios
+        .post("http://localhost:8081/api/users/signup/", {
+          password: this.form.password,
+          email: this.form.email,
+          name: this.form.name,
+          surname: this.form.surname,
+          city: this.form.city,
+          address: this.form.address,
+          country: this.form.country,
+          mobile : this.form.mobile,
+        })
+        .then(function (response) {
+          console.log(response);
+          alert("uspesno");
+        })
+        .catch(function (error) {
+          console.log(error);
+          alert("error");
+        });
+
+      // if (
+      //   new String(this.form.email).valueOf() ==
+      //   new String("systemadmin@gmail.com").valueOf()
+      // ) {
+      //   this.$router.push({ name: "systemadminLanding" });
+      // } else if (
+      //   new String(this.form.email).valueOf() ==
+      //   new String("supplier@gmail.com").valueOf()
+      // ) {
+      //   this.$router.push({ name: "supplierLanding" });
+      // } else if (
+      //   new String(this.form.email).valueOf() ==
+      //   new String("pharmacyadmin@gmail.com").valueOf()
+      // ) {
+      //   this.$router.push({ name: "pharmacyadminLanding" });
+      // } else if (
+      //   new String(this.form.email).valueOf() ==
+      //   new String("pharmacist@gmail.com").valueOf()
+      // ) {
+      //   this.$router.push({ name: "pharmacistLanding" });
+      // } else if (
+      //   new String(this.form.email).valueOf() ==
+      //   new String("patient@gmail.com").valueOf()
+      // ) {
+      //   this.$router.push({ name: "patientLanding" });
+      // } else if (
+      //   new String(this.form.email).valueOf() ==
+      //   new String("dermatologist@gmail.com").valueOf()
+      // ) {
+      //   this.$router.push({ name: "dermatologistLanding" });
+      // } else {
+      //   console.log("eerro");
+      // }
     },
     getValidationClass(fieldName) {
       const field = this.$v.form[fieldName];
@@ -211,8 +267,6 @@ export default {
     },
   },
 };
-
-
 </script>
 
 

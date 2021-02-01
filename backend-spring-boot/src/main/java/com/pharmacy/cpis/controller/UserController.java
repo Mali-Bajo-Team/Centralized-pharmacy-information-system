@@ -72,6 +72,7 @@ public class UserController {
     }
 
     // Endpoint za registraciju novog korisnika
+    @CrossOrigin
     @PostMapping("/signup")
     public ResponseEntity<UserAcc> addUser(@RequestBody UserRegisterDTO userRequest) {
 
