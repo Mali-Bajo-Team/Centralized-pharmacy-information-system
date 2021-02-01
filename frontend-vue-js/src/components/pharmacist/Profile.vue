@@ -55,7 +55,22 @@
     <div>
       <md-dialog :md-active.sync="showDialog">
         <md-dialog-title>Change personal data</md-dialog-title>
-
+        <md-field>
+          <label>Name</label>
+          <md-input v-model="name"></md-input>
+        </md-field>
+        <md-field>
+          <label>Surname</label>
+          <md-input v-model="surname"></md-input>
+        </md-field>
+        <md-field>
+          <label>Phone number</label>
+          <md-input v-model="phoneNumber"></md-input>
+        </md-field>
+        <md-field>
+          <label>Location</label>
+          <md-input v-model="location"></md-input>
+        </md-field>
         <md-dialog-actions>
           <md-button class="md-primary" @click="showDialog = false"
             >Close</md-button
@@ -175,12 +190,10 @@ export default {
     // });
 
     //Use data from local storage not from API req
-    if (localStorage.name) {
-      this.name = localStorage.name;
-      this.surname = localStorage.surname;
-      this.phoneNumber = localStorage.phoneNumber;
-      this.location = localStorage.location;
-    } //else send req to APi
+    this.name = "Mark";
+    this.surname = "Ivancevic";
+    this.phoneNumber = "062 236 563 12";
+    this.location = "Novi Sad, Puskinova 13";
   },
 };
 </script>
