@@ -30,7 +30,7 @@
 export default {
   name: "Calendar",
   props: {
-    attributes: [],
+    attributes: Array,
   },
   data() {
     return {
@@ -73,9 +73,8 @@ export default {
 }
 
 #calendar {
-  width: 50%;
-  margin-left: 35%;
-  margin-top: -22%;
+  margin-left: 500px;
+  margin-top: -400px;
 }
 </style>
 <style lang="postcss" scoped>

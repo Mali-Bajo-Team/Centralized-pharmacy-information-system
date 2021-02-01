@@ -92,6 +92,7 @@ export default {
       surname: "",
       phoneNumber: "",
       location: "",
+      password:"",
       masks: {
         weekdays: "WWW",
       },
