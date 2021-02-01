@@ -1,34 +1,29 @@
 package com.pharmacy.cpis.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.pharmacy.cpis.dto.UserAccDTO;
+import com.pharmacy.cpis.service.IUserService;
+import com.pharmacy.cpis.users.model.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
-import com.pharmacy.cpis.dto.UserAccDTO;
-import com.pharmacy.cpis.service.UserService;
-import com.pharmacy.cpis.users.model.UserAccount;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "api/users")
 public class UserController {
-	@Autowired
-	private UserService userAccService;
 
-	@CrossOrigin
-	@GetMapping
-	public ResponseEntity<List<UserAccDTO>> getUsersAccs() {
+    @Autowired
+    private IUserService userAccService;
+
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<UserAccDTO>> getUsersAccs() {
 
 		List<UserAccount> usersACC = userAccService.findAll();
 
@@ -41,8 +36,9 @@ public class UserController {
 		return new ResponseEntity<>(usersAccDTO, HttpStatus.OK);
 	}
 
-	@GetMapping("userAcc/{id}")
-	public ResponseEntity<UserAccDTO> getUserAcc(@PathVariable Long id) {
+    @GetMapping("userAcc/{id}")
+    @PreAuthorize("hasRole('PATIENT')")
+    public ResponseEntity<UserAccDTO> getUserAcc(@PathVariable Long id) {
 
 		UserAccount userAcc = userAccService.findOne(id);
 
@@ -53,8 +49,9 @@ public class UserController {
 		return new ResponseEntity<>(new UserAccDTO(userAcc), HttpStatus.OK);
 	}
 
-	@PostMapping(consumes = "application/json")
-	public ResponseEntity<UserAccDTO> saveUserAcc(@RequestBody UserAccount userAcc) {
+    @PostMapping(consumes = "application/json")
+    @PreAuthorize("hasRole('PATIENT')")
+    public ResponseEntity<UserAccDTO> saveUserAcc(@RequestBody UserAccount userAcc) {
 
 		UserAccount userAccForSave = new UserAccount();
 		userAccForSave.setEmail(userAcc.getEmail());
@@ -65,9 +62,9 @@ public class UserController {
 		return new ResponseEntity<>(new UserAccDTO(userAcc), HttpStatus.CREATED);
 	}
 
-	@PutMapping(consumes = "application/json")
-	public ResponseEntity<UserAccDTO> updateUserAcc(@RequestBody UserAccount userAcc) {
-
+    @PutMapping(consumes = "application/json")
+    @PreAuthorize("hasRole('PATIENT')")
+    public ResponseEntity<UserAccDTO> updateUserAcc(@RequestBody UserAccount userAcc) {
 		// a userAcc must exist
 		UserAccount userAccForUpdate = userAccService.findOne(userAcc.getId());
 
@@ -83,8 +80,8 @@ public class UserController {
 	}
 
 	@DeleteMapping(value = "userAcc/{id}")
-	public ResponseEntity<Void> deleteUserAcc(@PathVariable Long id) {
-
+    @PreAuthorize("hasRole('PATIENT')")
+    public ResponseEntity<Void> deleteUserAcc(@PathVariable Long id) {
 		UserAccount userAcc = userAccService.findOne(id);
 
 		if (userAcc != null) {
@@ -94,5 +91,12 @@ public class UserController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
+
+    @GetMapping("/public")
+    public Map<String, String> getPublicApi() {
+        Map<String, String> fooObj = new HashMap<>();
+        fooObj.put("key", "value");
+        return fooObj;
+    }
 
 }
