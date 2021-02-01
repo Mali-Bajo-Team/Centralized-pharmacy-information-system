@@ -70,7 +70,7 @@ public class AuthenticationController {
 
         // Create a token for that user
         UserAccount user = (UserAccount) authentication.getPrincipal();
-        String jwt = tokenUtils.generateToken(user.getUsername());
+        String jwt = tokenUtils.generateToken(user.getUsername(),userService.getUserRole(user) );
         int expiresIn = tokenUtils.getExpiredIn();
 
         // Return the token in response to successful authentication

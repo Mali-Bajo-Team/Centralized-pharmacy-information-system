@@ -1,5 +1,6 @@
 package com.pharmacy.cpis.userservice.service.impl;
 
+import com.pharmacy.cpis.userservice.model.users.Authority;
 import com.pharmacy.cpis.userservice.model.users.UserAccount;
 import com.pharmacy.cpis.userservice.repository.IUserRepository;
 import com.pharmacy.cpis.userservice.service.IAuthorityService;
@@ -43,6 +44,15 @@ public class UserService implements IUserService, UserDetailsService {
     @Override
     public UserAccount findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public String getUserRole(UserAccount user) {
+        List<Authority> auth = (List<Authority>) user.getAuthorities();
+        Authority userAuthority = auth.get(0);      // take only first one or make some logic to choose needed one
+        String userRole = userAuthority.getAuthority();             // we have now for example "ROLE_ADMIN"
+        userRole = userRole.substring(5, userRole.length());    // to take "ADMIN" only, we substring "ROLE_"
+        return userRole;
     }
 
     // Username is unique identifier in UserDetailsService, in our system that is email !

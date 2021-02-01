@@ -15,4 +15,6 @@ public interface IUserService {
     void remove(Long id);
 
     UserAccount findByEmail(String email);
+
+    String getUserRole(UserAccount userAccount);
 }

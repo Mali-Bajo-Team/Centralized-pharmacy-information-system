@@ -40,13 +40,14 @@ public class TokenUtils {
     private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
 
     // Function to generate JWT token
-    public String generateToken(String username) {
+    public String generateToken(String username, String userAuthority) {
         return Jwts.builder()
                 .setIssuer(APP_NAME)
                 .setSubject(username)
                 .setAudience(generateAudience())
                 .setIssuedAt(new Date())
                 .setExpiration(generateExpirationDate())
+                .claim("role",userAuthority)
                 // .claim("key", value) // It's possible to place arbitrary data in the body of the JWT token
                 .signWith(SIGNATURE_ALGORITHM, SECRET).compact();
     }
