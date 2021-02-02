@@ -126,16 +126,7 @@ public class AuthenticationController {
     // GET is because of easy click-activate method
     @GetMapping("activate/{id}")
     public void activateAccount(@PathVariable Long id, HttpServletResponse httpServletResponse) {
-
-        // a userAcc must exist
-        UserAccount userAccForUpdate = userService.findOne(id);
-
-        if (userAccForUpdate == null) {
-            return;
-        }
-
-        userAccForUpdate.setActive(true);
-        userService.save(userAccForUpdate);
+        userService.activateUserAccount(id);
         redirectToLoginPage(httpServletResponse);
     }
 

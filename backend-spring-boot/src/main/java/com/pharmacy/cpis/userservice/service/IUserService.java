@@ -15,4 +15,6 @@ public interface IUserService {
     UserAccount findByEmail(String email);
 
     String getUserRole(UserAccount userAccount);
+
+    void activateUserAccount(Long userId);
 }

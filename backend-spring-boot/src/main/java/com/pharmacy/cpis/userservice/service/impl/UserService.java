@@ -41,6 +41,7 @@ public class UserService implements IUserService, UserDetailsService {
         return userRepository.findByEmail(email);
     }
 
+
     @Override
     public String getUserRole(UserAccount user) {
         List<Authority> auth = (List<Authority>) user.getAuthorities();
@@ -48,6 +49,19 @@ public class UserService implements IUserService, UserDetailsService {
         String userRole = userAuthority.getAuthority();             // we have now for example "ROLE_ADMIN"
         userRole = userRole.substring(5, userRole.length());    // to take "ADMIN" only, we substring "ROLE_"
         return userRole;
+    }
+
+    @Override
+    public void activateUserAccount(Long userId) {
+        // a userAcc must exist
+        UserAccount userAccForUpdate = this.findOne(userId);
+
+        if (userAccForUpdate == null) {
+            return;
+        }
+
+        userAccForUpdate.setActive(true);
+        this.save(userAccForUpdate);
     }
 
     // Username is unique identifier in UserDetailsService, in our system that is email !
