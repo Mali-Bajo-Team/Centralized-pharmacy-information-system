@@ -1,12 +1,10 @@
 package com.pharmacy.cpis.userservice.controller;
 
 import com.pharmacy.cpis.userservice.model.users.Authority;
+import com.pharmacy.cpis.userservice.model.users.Patient;
 import com.pharmacy.cpis.userservice.model.users.Person;
 import com.pharmacy.cpis.userservice.model.users.UserAccount;
-import com.pharmacy.cpis.userservice.service.EmailService;
-import com.pharmacy.cpis.userservice.service.IAuthorityService;
-import com.pharmacy.cpis.userservice.service.IPersonService;
-import com.pharmacy.cpis.userservice.service.IUserService;
+import com.pharmacy.cpis.userservice.service.*;
 import com.pharmacy.cpis.userservice.dto.JwtAuthenticationRequest;
 import com.pharmacy.cpis.userservice.dto.UserActivationDTO;
 import com.pharmacy.cpis.userservice.dto.UserRegisterDTO;
@@ -44,7 +42,7 @@ public class AuthenticationController {
     private IUserService userService;
 
     @Autowired
-    private IPersonService personService;
+    private IPatientService patientService;
 
     @Autowired
     private EmailService emailService;
@@ -84,43 +82,14 @@ public class AuthenticationController {
         UserAccount existUser = userService.findByEmail(userRequest.getEmail());
         if (existUser != null) {
             System.out.println("\n\nUser with that email, already exists\n\n");
-            return new ResponseEntity<>(existUser,HttpStatus.CONFLICT);
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
-        Person newPerson = new Person();
-        newPerson.setAddress(userRequest.getAddress());
-        newPerson.setCity(userRequest.getCity());
-        newPerson.setCountry(userRequest.getCountry());
-        newPerson.setName(userRequest.getName());
-        newPerson.setSurname(userRequest.getSurname());
-        newPerson.setPhoneNumber(userRequest.getMobile());
-        Person addedPerson = personService.save(newPerson);
+        Patient addedPatient = addNewPatient(userRequest);
+        UserAccount addedAccount = addNewAccount(userRequest, addedPatient);
+        sendActivationEmail(addedAccount);
 
-
-        UserAccount newUserAccount = new UserAccount();
-        newUserAccount.setEmail(userRequest.getEmail());
-        newUserAccount.setPassword( passwordEncoder.encode(userRequest.getPassword()));
-        newUserAccount.setActive(false);
-        List<Authority> auth = authService.findByName("ROLE_PATIENT");
-        newUserAccount.setAuthorities(auth);
-        newUserAccount.setPerson(addedPerson);
-
-        UserAccount addedUserAccount = userService.save(newUserAccount);
-
-        UserActivationDTO userActivationDTO = new UserActivationDTO();
-        userActivationDTO.setId(addedUserAccount.getId().toString());
-        userActivationDTO.setEmail(addedUserAccount.getEmail());
-        userActivationDTO.setName(addedUserAccount.getPerson().getName());
-
-        // email sending
-        try {
-            System.out.println("Sending mail in process ..");
-            emailService.sendActivationEmailAsync(userActivationDTO);
-        }catch( Exception e ){
-            System.out.println("Error during sending email: " + e.getMessage());
-        }
-
-        return new ResponseEntity<>(addedUserAccount, HttpStatus.CREATED);
+        return new ResponseEntity<>(addedAccount, HttpStatus.CREATED);
     }
 
     // GET is because of easy click-activate method
@@ -135,4 +104,45 @@ public class AuthenticationController {
         httpServletResponse.setHeader("Location", projectUrl);
         httpServletResponse.setStatus(302);
     }
+
+    private void sendActivationEmail(UserAccount addedAccount) {
+        UserActivationDTO userActivationDTO = new UserActivationDTO();
+        userActivationDTO.setId(addedAccount.getId().toString());
+        userActivationDTO.setEmail(addedAccount.getEmail());
+        userActivationDTO.setName(addedAccount.getPerson().getName());
+
+        // email sending
+        try {
+            System.out.println("Sending mail in process ..");
+            emailService.sendActivationEmailAsync(userActivationDTO);
+        }catch( Exception e ){
+            System.out.println("Error during sending email: " + e.getMessage());
+        }
+    }
+
+    private UserAccount addNewAccount(UserRegisterDTO userRequest, Patient addedPatient) {
+        UserAccount newUserAccount = new UserAccount();
+        newUserAccount.setEmail(userRequest.getEmail());
+        newUserAccount.setPassword( passwordEncoder.encode(userRequest.getPassword()));
+        newUserAccount.setActive(false);
+        List<Authority> auth = authService.findByName("ROLE_PATIENT");
+        newUserAccount.setAuthorities(auth);
+        newUserAccount.setPerson(addedPatient);
+
+        UserAccount addedAccount = userService.save(newUserAccount);
+        return addedAccount;
+    }
+
+    private Patient addNewPatient(UserRegisterDTO userRequest) {
+        Patient newPatient = new Patient();
+        newPatient.setAddress(userRequest.getAddress());
+        newPatient.setCity(userRequest.getCity());
+        newPatient.setCountry(userRequest.getCountry());
+        newPatient.setName(userRequest.getName());
+        newPatient.setSurname(userRequest.getSurname());
+        newPatient.setPhoneNumber(userRequest.getMobile());
+        Patient addedPatient = patientService.save(newPatient);
+        return addedPatient;
+    }
+
 }
