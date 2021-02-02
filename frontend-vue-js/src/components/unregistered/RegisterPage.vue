@@ -87,8 +87,9 @@
         <md-field :class="getValidationClass('mobile')">
           <label> Mobile </label>
           <md-input v-model="form.mobile"></md-input>
-          <span class="md-error" v-if="!$v.form.mobile.required"
-            >The mobile is required</span
+          <span class="md-error" v-if="!$v.form.mobile.required">The mobile is required</span>
+          <span class="md-error" v-else-if="!$v.form.mobile.isNumeric"
+            >Mobile must be a numeric</span
           >
         </md-field>
 
@@ -128,6 +129,10 @@ Vue.use(VueAxios, axios);
 // TODO: Find way to move this in methods, however i move this to method and try to use, i get errors...
 function isMatchedPassword() {
   return this.form.password == this.form.repeatPassword;
+}
+
+function isNumeric(){
+  return /^([0-9]+)$/.test(this.form.mobile);
 }
 
 export default {
@@ -187,6 +192,7 @@ export default {
       mobile: {
         required,
         minLength: minLength(3),
+        isNumeric,
       },
     },
   },
