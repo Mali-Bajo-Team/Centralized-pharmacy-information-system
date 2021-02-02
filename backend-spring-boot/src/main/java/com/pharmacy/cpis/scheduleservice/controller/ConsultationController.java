@@ -22,7 +22,6 @@ public class ConsultationController {
     @Autowired
     private IConsultationService consultationService;
 
-    @CrossOrigin
     @GetMapping
     @PreAuthorize("hasRole('PHARMACIST')")
     public ResponseEntity<List<ConsultationDTO>> getAllConsultations() {
