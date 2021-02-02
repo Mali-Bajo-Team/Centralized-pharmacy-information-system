@@ -24,17 +24,18 @@ export default {
     return {
       url: process.env.VUE_APP_APIUSERSURL,
       list: undefined,
-      name: ""
     };
   },
   mounted() {
-    // Vue.axios.get(this.url).then((resp) => {
-    //   this.list = resp.data;
-    // });
-    //set data to local storage
-    //global idea is to set one time data and there is no reason to make evry time new api request
-
-
+    Vue.axios
+      .get(this.url, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+        },
+      })
+      .then((resp) => {
+        this.list = resp.data;
+      });
   },
 };
 </script>
