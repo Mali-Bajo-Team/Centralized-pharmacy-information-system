@@ -16,6 +16,9 @@
 
 	<properties>
 		<java.version>11</java.version>
+                <sonar.projectKey>pufke_ISA</sonar.projectKey>
+                <sonar.organization>pufke</sonar.organization>
+                <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 
 	<dependencies>
