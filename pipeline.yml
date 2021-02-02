@@ -8,6 +8,11 @@ pool:
   vmImage: 'ubuntu-18.04'
 
 steps:
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'sonar'
+    organization: 'pufke'
+    scannerMode: 'Other'
 - task: Maven@3
   inputs:
     mavenPomFile: 'backend-spring-boot/pom.xml'
@@ -16,4 +21,6 @@ steps:
     jdkVersionOption: '1.11'
     jdkArchitectureOption: 'x64'
     publishJUnitResults: true
-    goals: 'clean compile org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
+    goals: 'clean compile'
+    sonarQubeRunAnalysis: true
+    sqMavenPluginVersionChoice: 'latest'
