@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "api/consulltations")
+@RequestMapping(value = "api/consultations")
 public class ConsultationController {
 
     @Autowired

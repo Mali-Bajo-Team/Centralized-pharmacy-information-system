@@ -22,7 +22,7 @@ export default {
   name: "PharmacistLanding",
   data() {
     return {
-      url: 'http://localhost:8081/api/consulltations',
+      url: 'http://localhost:8081/api/consultations',
       list: undefined,
     };
   },
