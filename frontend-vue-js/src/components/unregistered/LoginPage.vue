@@ -140,7 +140,6 @@ export default {
             console.log("Error: Sorry, there is no your role");
           }
 
-          alert("uspesno");
         })
         .catch(function (error) {
           console.log(error);

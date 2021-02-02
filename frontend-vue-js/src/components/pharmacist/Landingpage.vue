@@ -1,17 +1,13 @@
 <template>
   <div>
-    <h1>WELCOME PHARMACIST</h1>
-    <h3>Fetcing all Users from API</h3>
-    <table border="1px">
-      <tr>
-        <td>Id</td>
-        <td>Mail</td>
-      </tr>
-      <tr v-for="item in list" v-bind:key="item.id">
-        <td>{{ item.id }}</td>
-        <td>{{ item.email }}</td>
-      </tr>
-    </table>
+    <NavbarPharmacist></NavbarPharmacist>
+
+    <h1 id="welcomepharmacist">Welcome pharmacist</h1>
+
+    <div class="separator">
+ 
+    </div>
+   
   </div>
 </template>
 
@@ -23,7 +19,7 @@ import VueAxios from "vue-axios";
 Vue.use(VueAxios, axios);
 
 export default {
-  name: "allUsers",
+  name: "PharmacistLanding",
   data() {
     return {
       url: process.env.VUE_APP_APIUSERSURL,
@@ -43,3 +39,10 @@ export default {
   },
 };
 </script>
+
+<style>
+#welcomepharmacist{
+  color: #448aff;
+  font-size: 40px;
+}
+</style>
