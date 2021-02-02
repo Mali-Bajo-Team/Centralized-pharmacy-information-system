@@ -37,11 +37,6 @@ public class UserService implements IUserService, UserDetailsService {
     }
 
     @Override
-    public void remove(Long id) {
-        userRepository.deleteById(id);
-    }
-
-    @Override
     public UserAccount findByEmail(String email) {
         return userRepository.findByEmail(email);
     }

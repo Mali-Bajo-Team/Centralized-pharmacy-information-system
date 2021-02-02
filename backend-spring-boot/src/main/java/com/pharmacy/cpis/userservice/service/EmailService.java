@@ -25,7 +25,7 @@ public class EmailService {
      * More info on: https://docs.spring.io/spring/docs/current/spring-framework-reference/integration.html#scheduling
      */
     @Async
-    public void sendNotificaitionAsync(UserActivationDTO user) throws MailException, InterruptedException {
+    public void sendActivationEmailAsync(UserActivationDTO user) throws MailException, InterruptedException {
         System.out.println("Email sending...\n\n");
 
         String endPointForAccountActivation = "/auth/" + "activate/" + user.getId();

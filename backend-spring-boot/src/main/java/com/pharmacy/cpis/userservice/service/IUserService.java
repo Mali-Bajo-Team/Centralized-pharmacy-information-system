@@ -12,8 +12,6 @@ public interface IUserService {
 
     UserAccount save(UserAccount userRequest);
 
-    void remove(Long id);
-
     UserAccount findByEmail(String email);
 
     String getUserRole(UserAccount userAccount);

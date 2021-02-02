@@ -115,7 +115,7 @@ public class AuthenticationController {
         // email sending
         try {
             System.out.println("Sending mail in process ..");
-            emailService.sendNotificaitionAsync(userActivationDTO);
+            emailService.sendActivationEmailAsync(userActivationDTO);
         }catch( Exception e ){
             System.out.println("Error during sending email: " + e.getMessage());
         }

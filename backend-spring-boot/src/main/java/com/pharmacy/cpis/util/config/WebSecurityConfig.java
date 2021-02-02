@@ -69,7 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
-                .antMatchers("/api/users/public").permitAll() // Test some endpoint which is allowed
+                .antMatchers("/api/example/public").permitAll() // Test some endpoint which is allowed
 
                 // For every other request the user must be authenticated
                 .anyRequest().authenticated().and()
