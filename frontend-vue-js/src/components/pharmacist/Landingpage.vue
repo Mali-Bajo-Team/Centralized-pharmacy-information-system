@@ -5,7 +5,7 @@
     <h1 id="welcomepharmacist">Welcome pharmacist</h1>
 
     <div class="separator">
- 
+      <p>{{list}}</p>
     </div>
    
   </div>
@@ -22,7 +22,7 @@ export default {
   name: "PharmacistLanding",
   data() {
     return {
-      url: process.env.VUE_APP_APIUSERSURL,
+      url: 'http://localhost:8081/api/consulltations',
       list: undefined,
     };
   },
