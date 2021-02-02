@@ -193,8 +193,6 @@ export default {
   methods: {
     auth() {
       // TODO: Make this URL's configurable
-
-      alert("cao");
       axios
         .post("http://localhost:8081/auth/signup/", {
           password: this.form.password,

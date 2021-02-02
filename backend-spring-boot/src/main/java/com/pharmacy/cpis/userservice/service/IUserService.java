@@ -6,15 +6,9 @@ import java.util.List;
 
 public interface IUserService {
 
-    UserAccount findOne(Long id);
-
     List<UserAccount> findAll();
-
-    UserAccount save(UserAccount userRequest);
-
-    UserAccount findByEmail(String email);
 
     String getUserRole(UserAccount userAccount);
 
-    void activateUserAccount(Long userId);
+    void activatePatientAccount(Long userId);
 }

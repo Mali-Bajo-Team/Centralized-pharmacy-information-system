@@ -22,23 +22,8 @@ public class UserService implements IUserService, UserDetailsService {
     private IAuthorityService authService;
 
     @Override
-    public UserAccount findOne(Long id) {
-        return userRepository.findById(id).orElseGet(null);
-    }
-
-    @Override
     public List<UserAccount> findAll() {
         return userRepository.findAll();
-    }
-
-    @Override
-    public UserAccount save(UserAccount userRequest) {
-        return userRepository.save(userRequest);
-    }
-
-    @Override
-    public UserAccount findByEmail(String email) {
-        return userRepository.findByEmail(email);
     }
 
 
@@ -52,22 +37,24 @@ public class UserService implements IUserService, UserDetailsService {
     }
 
     @Override
-    public void activateUserAccount(Long userId) {
+    public void activatePatientAccount(Long userId) {
         // a userAcc must exist
-        UserAccount userAccForUpdate = this.findOne(userId);
+        UserAccount userAccForUpdate = userRepository.findById(userId).orElseGet(null);
 
         if (userAccForUpdate == null) {
+            //TODO: Throw exception
             return;
         }
 
         userAccForUpdate.setActive(true);
-        this.save(userAccForUpdate);
+        userRepository.save(userAccForUpdate);
     }
 
     // Username is unique identifier in UserDetailsService, in our system that is email !
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserAccount user = userRepository.findByEmail(email);
+
         if (user == null) {
             throw new UsernameNotFoundException(String.format("No user found with email '%s'.", email));
         } else {

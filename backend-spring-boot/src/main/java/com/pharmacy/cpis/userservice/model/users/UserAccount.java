@@ -1,6 +1,7 @@
 package com.pharmacy.cpis.userservice.model.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.pharmacy.cpis.util.exceptions.PSValidationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -62,6 +63,8 @@ public class UserAccount implements UserDetails {
 	}
 
 	public void setPassword(String password) {
+		if (password == null || password.isEmpty())
+			throw new PSValidationException("Password is required.");
 		Timestamp now = new Timestamp(new Date().getTime());
 		this.setLastPasswordResetDate(now);
 		this.password = password;
@@ -80,6 +83,8 @@ public class UserAccount implements UserDetails {
 	}
 
 	public void setId(Long id) {
+		if (id == null || id < 0)
+			throw new PSValidationException("Id is required.");
 		this.id = id;
 	}
 
@@ -88,6 +93,8 @@ public class UserAccount implements UserDetails {
 	}
 
 	public void setEmail(String email) {
+		if (email == null || email.isEmpty())
+			throw new PSValidationException("Email is required.");
 		this.email = email;
 	}
 

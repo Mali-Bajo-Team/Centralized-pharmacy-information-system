@@ -2,13 +2,13 @@ package com.pharmacy.cpis.userservice.controller;
 
 import com.pharmacy.cpis.userservice.model.users.Authority;
 import com.pharmacy.cpis.userservice.model.users.Patient;
-import com.pharmacy.cpis.userservice.model.users.Person;
 import com.pharmacy.cpis.userservice.model.users.UserAccount;
 import com.pharmacy.cpis.userservice.service.*;
 import com.pharmacy.cpis.userservice.dto.JwtAuthenticationRequest;
 import com.pharmacy.cpis.userservice.dto.UserActivationDTO;
 import com.pharmacy.cpis.userservice.dto.UserRegisterDTO;
 import com.pharmacy.cpis.userservice.dto.UserTokenState;
+import com.pharmacy.cpis.userservice.service.impl.PatientRegistrationService;
 import com.pharmacy.cpis.util.security.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -42,16 +42,7 @@ public class AuthenticationController {
     private IUserService userService;
 
     @Autowired
-    private IPatientService patientService;
-
-    @Autowired
-    private EmailService emailService;
-
-    @Autowired
-    private IAuthorityService authService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private IPatientRegistrationService patientRegistrationService;
 
     // The first endpoint that affects the user when logging in.
     // Then he only knows his username and password and forwards it to the backend.
@@ -68,7 +59,7 @@ public class AuthenticationController {
 
         // Create a token for that user
         UserAccount user = (UserAccount) authentication.getPrincipal();
-        String jwt = tokenUtils.generateToken(user.getUsername(),userService.getUserRole(user) );
+        String jwt = tokenUtils.generateToken(user.getUsername(), userService.getUserRole(user));
         int expiresIn = tokenUtils.getExpiredIn();
 
         // Return the token in response to successful authentication
@@ -78,24 +69,17 @@ public class AuthenticationController {
     // Endpoint to register a new user
     @PostMapping("/signup")
     public ResponseEntity<UserAccount> addUser(@RequestBody UserRegisterDTO userRequest) {
-
-        UserAccount existUser = userService.findByEmail(userRequest.getEmail());
-        if (existUser != null) {
-            System.out.println("\n\nUser with that email, already exists\n\n");
+        if (patientRegistrationService.existsByEmail(userRequest.getEmail()))
             return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
 
-        Patient addedPatient = addNewPatient(userRequest);
-        UserAccount addedAccount = addNewAccount(userRequest, addedPatient);
-        sendActivationEmail(addedAccount);
-
+        UserAccount addedAccount = patientRegistrationService.registerPatient(userRequest);
         return new ResponseEntity<>(addedAccount, HttpStatus.CREATED);
     }
 
     // GET is because of easy click-activate method
     @GetMapping("activate/{id}")
     public void activateAccount(@PathVariable Long id, HttpServletResponse httpServletResponse) {
-        userService.activateUserAccount(id);
+        userService.activatePatientAccount(id);
         redirectToLoginPage(httpServletResponse);
     }
 
@@ -103,46 +87,6 @@ public class AuthenticationController {
         String projectUrl = env.getProperty("APP_FRONT") + env.getProperty("FRONT_PORT") + "/";
         httpServletResponse.setHeader("Location", projectUrl);
         httpServletResponse.setStatus(302);
-    }
-
-    private void sendActivationEmail(UserAccount addedAccount) {
-        UserActivationDTO userActivationDTO = new UserActivationDTO();
-        userActivationDTO.setId(addedAccount.getId().toString());
-        userActivationDTO.setEmail(addedAccount.getEmail());
-        userActivationDTO.setName(addedAccount.getPerson().getName());
-
-        // email sending
-        try {
-            System.out.println("Sending mail in process ..");
-            emailService.sendActivationEmailAsync(userActivationDTO);
-        }catch( Exception e ){
-            System.out.println("Error during sending email: " + e.getMessage());
-        }
-    }
-
-    private UserAccount addNewAccount(UserRegisterDTO userRequest, Patient addedPatient) {
-        UserAccount newUserAccount = new UserAccount();
-        newUserAccount.setEmail(userRequest.getEmail());
-        newUserAccount.setPassword( passwordEncoder.encode(userRequest.getPassword()));
-        newUserAccount.setActive(false);
-        List<Authority> auth = authService.findByName("ROLE_PATIENT");
-        newUserAccount.setAuthorities(auth);
-        newUserAccount.setPerson(addedPatient);
-
-        UserAccount addedAccount = userService.save(newUserAccount);
-        return addedAccount;
-    }
-
-    private Patient addNewPatient(UserRegisterDTO userRequest) {
-        Patient newPatient = new Patient();
-        newPatient.setAddress(userRequest.getAddress());
-        newPatient.setCity(userRequest.getCity());
-        newPatient.setCountry(userRequest.getCountry());
-        newPatient.setName(userRequest.getName());
-        newPatient.setSurname(userRequest.getSurname());
-        newPatient.setPhoneNumber(userRequest.getMobile());
-        Patient addedPatient = patientService.save(newPatient);
-        return addedPatient;
     }
 
 }
