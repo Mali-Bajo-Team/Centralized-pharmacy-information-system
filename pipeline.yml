@@ -1,0 +1,19 @@
+trigger:
+- develop
+
+variables:
+  SONAR_TOKEN: '5c770b1887ddf62b505d292a8b9d29a94c98f202'
+
+pool:
+  vmImage: 'ubuntu-18.04'
+
+steps:
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'backend-spring-boot/pom.xml'
+    mavenOptions: '-Xmx3072m'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.11'
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: true
+    goals: 'clean compile org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
