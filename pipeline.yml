@@ -1,9 +1,6 @@
 trigger:
 - develop
 
-variables:
-  SONAR_TOKEN: '5c770b1887ddf62b505d292a8b9d29a94c98f202'
-
 pool:
   vmImage: 'ubuntu-18.04'
 
