@@ -2,6 +2,7 @@ package com.pharmacy.cpis.userservice.model.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pharmacy.cpis.util.exceptions.PSValidationException;
+import com.pharmacy.cpis.util.validators.StringValidator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -95,6 +96,8 @@ public class UserAccount implements UserDetails {
 	public void setEmail(String email) {
 		if (email == null || email.isEmpty())
 			throw new PSValidationException("Email is required.");
+		if(!StringValidator.isEmail(email))
+			throw new PSValidationException("Incorrect email format, Email is in format: example@gmail.com");
 		this.email = email;
 	}
 

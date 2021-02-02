@@ -1,6 +1,7 @@
 package com.pharmacy.cpis.userservice.model.users;
 
 import com.pharmacy.cpis.util.exceptions.PSValidationException;
+import com.pharmacy.cpis.util.validators.StringValidator;
 
 import javax.persistence.*;
 import javax.validation.ValidationException;
@@ -75,6 +76,8 @@ public class Person {
     public void setPhoneNumber(String phoneNumber) {
         if (phoneNumber == null || phoneNumber.isEmpty())
             throw new PSValidationException("Phone number is required.");
+        if(!StringValidator.isNumeric(phoneNumber))
+            throw new PSValidationException("Phone number must be a numeric.");
         this.phoneNumber = phoneNumber;
     }
 

@@ -1,14 +1,18 @@
 package com.pharmacy.cpis.util.validators;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class StringValidator {
 
-    static public Boolean isEmail(String email) {
-        // TODO: find Java regex email
-        return true;
+    public static final String VALID_EMAIL_ADDRESS_REGEX = "^(.+)@(\\S+)$";
+    public static final String VALID_NUMERIC_REGEX = "[0-9]+";
+
+    public static boolean isEmail(String emailStr) {
+        return emailStr.matches(VALID_EMAIL_ADDRESS_REGEX);
     }
 
-    static public Boolean isNumeric(String email) {
-        // TODO: Find java regex numeric
-        return true;
+    static public Boolean isNumeric(String inputValue) {
+        return inputValue.matches(VALID_NUMERIC_REGEX);
     }
 }
