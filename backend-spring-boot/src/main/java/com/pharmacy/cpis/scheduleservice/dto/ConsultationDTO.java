@@ -1,96 +1,33 @@
 package com.pharmacy.cpis.scheduleservice.dto;
-
-import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
 import com.pharmacy.cpis.scheduleservice.model.consultations.Consultation;
-import com.pharmacy.cpis.scheduleservice.model.consultations.ConsultationStatus;
-import com.pharmacy.cpis.userservice.model.users.Consultant;
-import com.pharmacy.cpis.userservice.model.users.Patient;
-import com.pharmacy.cpis.util.DateRange;
-
-import javax.persistence.*;
+import java.util.Date;
 
 public class ConsultationDTO {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
+    private Date startDate;
+    private Date endDate;
 
-    @Column(nullable = false)
-    private ConsultationStatus status;
+    public ConsultationDTO(Consultation consultation) {
+        this(consultation.getId(), consultation.getTime().getStart(), consultation.getTime().getEnd());
+    }
 
-    @Embedded
-    private DateRange time;
-
-    @Column(nullable = false)
-    private Double price;
-
-    @ManyToOne(optional = false)
-    private Pharmacy pharmacy;
-
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Consultant consultant;
-
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Patient patient;
-
-    public ConsultationDTO(Consultation c) {
+    public ConsultationDTO(Long id, Date startDate, Date endDate) {
         super();
+        this.id = id;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public ConsultationStatus getStatus() {
-        return status;
+    public Date getEndDate() {
+        return endDate;
     }
-
-    public void setStatus(ConsultationStatus status) {
-        this.status = status;
-    }
-
-    public DateRange getTime() {
-        return time;
-    }
-
-    public void setTime(DateRange time) {
-        this.time = time;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    public Pharmacy getPharmacy() {
-        return pharmacy;
-    }
-
-    public void setPharmacy(Pharmacy pharmacy) {
-        this.pharmacy = pharmacy;
-    }
-
-    public Consultant getConsultant() {
-        return consultant;
-    }
-
-    public void setConsultant(Consultant consultant) {
-        this.consultant = consultant;
-    }
-
-    public Patient getPatient() {
-        return patient;
-    }
-
-    public void setPatient(Patient patient) {
-        this.patient = patient;
-    }
-
-
 }
