@@ -43,8 +43,7 @@ insert into user_category (loyalty_program_id, name, minimum_points, reservation
 insert into user_category (loyalty_program_id, name, minimum_points, reservation_discount, consultation_discount) values (1, 'Gold', 60, 15, 15);
 insert into user_category (loyalty_program_id, name, minimum_points, reservation_discount, consultation_discount) values (1, 'Platinum', 90, 20, 20);
 
-
 insert into pharmacy (id,dermatologist_consultation_price,pharmacist_consultation_price,latitude,longitude,name) values (1,20,20,19.0,20.0,'Jankovic');
 
-insert into consultation (id,price,status,end_date, start_date,consultant_id,patient_id,pharmacy_id) values (1,20,1,'2020-05-05 10:23','2020-05-05 11:00',1,2,1);
+insert into consultation (id,price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (1,20,1,'2021-02-03 10:23','2021-02-03 11:00',1,2,1);
 
