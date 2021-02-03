@@ -71,8 +71,8 @@ const routes = [
             },
             {
                 component: PharmacistProfile,
-                name: 'pharmacistProfile',
-                path: '/pharmacistProfile'
+                name: 'profile',
+                path: '/pharmacist/profile'
             }
         ]
     },

@@ -24,7 +24,7 @@ export default {
             },
             {
                 title: "Profile",
-                to: "/pharmacistProfile"
+                to: "/pharmacist/profile"
             }
         ]
     })
