@@ -94,6 +94,7 @@ export default {
           },
         })
         .then((resp) => {
+            console.log(localStorage)
           this.consultants = resp.data;
           const events = [];
 
@@ -111,7 +112,13 @@ export default {
           }
         this.events = events;
         });
-    }
+    },
+     getEventColor(event) {
+      return event.color;
+    },
+    rnd(a, b) {
+      return Math.floor((b - a + 1) * Math.random()) + a;
+    },
   },
 };
 </script>
