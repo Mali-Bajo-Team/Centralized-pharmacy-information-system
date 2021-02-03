@@ -24,6 +24,12 @@ insert into user_account (email, password, is_active, person_id) values ('pharma
 -- Password for pharmacist account is: pharmacist
 insert into user_authority (user_id, authority_id) values (3, 4);
 
+-- INSERT ONE PATIENT
+insert into person (discriminator, address, city, country, name, surname, phone_number) values ('Patient', 'Pariskih komuna 13', 'Beograd', 'Srbija', 'Milunka', 'Pantic', '0614123355');
+insert into user_account (email, password, is_active, person_id) values ('milunka@gmail.com', '$2b$10$YYwcFgJrY3iDz1U3x62ymOUPS4meJv/LFRcuDQTulH5z5c0rSoYqW', true, 4);
+-- Password for patient account is: milunka
+insert into user_authority (user_id, authority_id) values (4, 1);
+
 insert into drug_form (name) values ('Capsule');
 insert into drug_form (name) values ('Tablet');
 insert into drug_form (name) values ('Injection');
@@ -45,5 +51,6 @@ insert into user_category (loyalty_program_id, name, minimum_points, reservation
 
 insert into pharmacy (id,dermatologist_consultation_price,pharmacist_consultation_price,latitude,longitude,name) values (1,20,20,19.0,20.0,'Jankovic');
 
-insert into consultation (id,price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (1,20,1,'2021-02-03 10:23','2021-02-03 11:00',1,2,1);
-
+insert into consultation (id,price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (1,20,1,'2021-02-03 10:23','2021-02-03 11:00',3,2,1);
+insert into consultation (id,price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (2,20,1,'2021-02-04 11:23','2021-02-04 13:20',3,2,1);
+insert into consultation (id,price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (3,20,1,'2021-02-05 13:23','2021-02-05 14:00',3,4,1);

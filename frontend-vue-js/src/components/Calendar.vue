@@ -1,6 +1,5 @@
 <template>
   <v-app>
-    <h1>{{ this.consultants }}</h1>
     <v-sheet tile height="54" class="d-flex">
       <v-btn icon class="ma-2" @click="$refs.calendar.prev()">
         <v-icon>mdi-chevron-left</v-icon>
@@ -56,7 +55,7 @@
 <script>
 export default {
   data: () => ({
-    consultants : [],
+    consultants: [],
     response: null,
     type: "month",
     types: ["month", "week", "day", "4day"],
@@ -83,12 +82,6 @@ export default {
     names: [
       "Pregled",
       "Holiday",
-      // 'PTO',
-      // 'Travel',
-      // 'Event',
-      // 'Birthday',
-      // 'Conference',
-      // 'Party'
     ],
   }),
   methods: {
@@ -102,36 +95,21 @@ export default {
         })
         .then((resp) => {
           this.consultants = resp.data;
-
           const events = [];
-        //   const min = new Date(`${start.date}T00:00:00`);
-        //   const max = new Date(`${end.date}T23:59:59`);
-        //   console.log(min, max)
-        //   const days = (max.getTime() - min.getTime()) / 86400000;
-        //   const eventCount = this.rnd(days, days + 20);
-        //   for (let i = 0; i < eventCount; i++) {
-        //     const allDay = this.rnd(0, 3) === 0;
-        //     const firstTimestamp = this.rnd(min.getTime(), max.getTime());
-        //     const first = new Date(firstTimestamp - (firstTimestamp % 900000));
-        //     const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000;
-        //     const second = new Date(first.getTime() + secondTimestamp);
-        //     events.push({
-        //       name: this.names[this.rnd(0, this.names.length - 1)],
-        //       start: first,
-        //       end: second,
-        //       color: this.colors[this.rnd(0, this.colors.length - 1)],
-        //       timed: !allDay,
-        //     });
-          
-        //   }
+
+          for (let i = 0; i < this.consultants.length; i++) {
             events.push({
-              name: this.consultants[0].patientName + ' ' +this.consultants[0].patientSurname,
-              start: this.consultants[0].startDate,
-              end: this.consultants[0].endDate,
+              name:
+                this.consultants[i].patientName +
+                " " +
+                this.consultants[i].patientSurname,
+              start: this.consultants[i].startDate,
+              end: this.consultants[i].endDate,
               color: "red",
               timed: 1,
             });
-          this.events = events;
+          }
+        this.events = events;
         });
     },
     getEventColor(event) {
