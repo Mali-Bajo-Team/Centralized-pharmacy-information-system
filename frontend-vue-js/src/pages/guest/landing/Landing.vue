@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <!--Left column-->
-      <v-col :cols="4">
+      <v-col xl="4" sm="12" md="4">
         <v-card>
           <!--Toolbar of the card-->
           <v-toolbar color="primary" dark dense flat>
@@ -78,7 +78,7 @@
       <!--End of left column-->
 
       <!--Right column-->
-      <v-col :cols="8">
+      <v-col xl="8" sm="12" md="8">
         <v-card
           elevation="4"
           class="pa-4 ml-10 mb-10"

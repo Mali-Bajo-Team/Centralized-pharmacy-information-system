@@ -10,7 +10,7 @@ public class PharmacyDTO {
 
     private String name;
     private String location;
-    private String rating;
+    private Double rating;
 
     public PharmacyDTO(){
 
@@ -24,16 +24,14 @@ public class PharmacyDTO {
         this.setRating(getAvgRatings(pharmacy));
     }
 
-    private String getAvgRatings(Pharmacy pharmacy) {
+    private Double getAvgRatings(Pharmacy pharmacy) {
         Set<PharmacyRating> ratings = pharmacy.getRatings();
         double avgRatings = 0;
-        for (PharmacyRating rating : ratings)
-        {
+        for (PharmacyRating rating : ratings) {
             avgRatings += rating.getRating().getRating();
         }
-        avgRatings = avgRatings / ratings.size();
-        String avgRate = Double.toString(avgRatings);
-        return avgRate;
+
+        return avgRatings / ratings.size();
     }
 
     private String getPharmacyLocation(Pharmacy pharmacy) {
@@ -44,7 +42,7 @@ public class PharmacyDTO {
         return location;
     }
 
-    public PharmacyDTO(String name, String location, String rating) {
+    public PharmacyDTO(String name, String location, Double rating) {
         this.name = name;
         this.location = location;
         this.rating = rating;
@@ -66,11 +64,11 @@ public class PharmacyDTO {
         this.location = location;
     }
 
-    public String getRating() {
+    public Double getRating() {
         return rating;
     }
 
-    public void setRating(String rating) {
+    public void setRating(Double rating) {
         this.rating = rating;
     }
 }
