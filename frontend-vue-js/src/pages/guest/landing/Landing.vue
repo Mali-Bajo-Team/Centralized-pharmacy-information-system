@@ -103,7 +103,7 @@
             <v-col>
               <v-card-title>
                 <v-rating
-                  v-model="pharmacy.mark"
+                  v-model="pharmacy.rating"
                   color="accent"
                   background-color="accent "
                   half-increments
@@ -123,28 +123,16 @@
 <script>
 export default {
   data: () => ({
-    pharmacies: [
-      {
-        name: "Pharmacy Jankovic",
-        location: "Janka Milosevica 10",
-        mark: 3,
-      },
-      {
-        name: "Pharmacy Maksimovic",
-        location: "Dr Sime Milosevica 10",
-        mark: 5,
-      },
-      {
-        name: "Pharmacy Jovic",
-        location: "Kulinova 5",
-        mark: 4.5,
-      },
-      {
-        name: "Pharmacy Drincic",
-        location: "Draginja 15",
-        mark: 1,
-      },
-    ],
+    pharmacies: [],
   }),
+  mounted() {
+    this.axios
+      .get(process.env.VUE_APP_BACKEND_URL + process.env.VUE_APP_PHARMACIES_ENDPOINT,)
+      .then((resp) => {
+        this.pharmacies = resp.data;
+      });
+  },
+
+
 };
 </script>
