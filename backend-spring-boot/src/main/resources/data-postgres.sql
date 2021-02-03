@@ -43,8 +43,12 @@ insert into user_category (loyalty_program_id, name, minimum_points, reservation
 insert into user_category (loyalty_program_id, name, minimum_points, reservation_discount, consultation_discount) values (1, 'Gold', 60, 15, 15);
 insert into user_category (loyalty_program_id, name, minimum_points, reservation_discount, consultation_discount) values (1, 'Platinum', 90, 20, 20);
 
+-- INSERT PHARMACIES
+insert into pharmacy (id,dermatologist_consultation_price,pharmacist_consultation_price,latitude,longitude,name,city,country,street, house_number)
+values (1,20,20,19.0,20.0,'Jankovic','Novi Sad','Serbia','Branka Jovica',16);
 
-insert into pharmacy (id,dermatologist_consultation_price,pharmacist_consultation_price,latitude,longitude,name) values (1,20,20,19.0,20.0,'Jankovic');
+-- INSERT PHARMACY RATINGS
+insert into pharmacy_rating(id, rating, patient_id,pharmacy_id) values (1,5,2,1);
 
 insert into consultation (id,price,status,end_date, start_date,consultant_id,patient_id,pharmacy_id) values (1,20,1,'2020-05-05 10:23','2020-05-05 11:00',1,2,1);
 
