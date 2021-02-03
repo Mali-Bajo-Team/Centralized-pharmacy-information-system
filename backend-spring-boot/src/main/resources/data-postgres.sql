@@ -18,6 +18,12 @@ insert into user_account (email, password, is_active, person_id) values ('dragan
 -- Password for patient account is: dragana
 insert into user_authority (user_id, authority_id) values (2, 1);
 
+-- INSERT ONE PHARMACIST
+insert into person (discriminator, address, city, country, name, surname, phone_number) values ('Consultant', 'Jovana Jovanovica 30', 'Novi Sad', 'Srbija', 'Pero', 'Ivanović', '0661352720');
+insert into user_account (email, password, is_active, person_id) values ('pharmacist@gmail.com', '$2a$10$UYKr0EAl1Hhzmg.3LutLeuczdzcdgEwXhuY0raFaNyRRspKTg0MCW', true, 3);
+-- Password for pharmacist account is: pharmacist
+insert into user_authority (user_id, authority_id) values (3, 4);
+
 insert into drug_form (name) values ('Capsule');
 insert into drug_form (name) values ('Tablet');
 insert into drug_form (name) values ('Injection');
@@ -36,3 +42,9 @@ insert into user_category (loyalty_program_id, name, minimum_points, reservation
 insert into user_category (loyalty_program_id, name, minimum_points, reservation_discount, consultation_discount) values (1, 'Silver', 30, 10, 10);
 insert into user_category (loyalty_program_id, name, minimum_points, reservation_discount, consultation_discount) values (1, 'Gold', 60, 15, 15);
 insert into user_category (loyalty_program_id, name, minimum_points, reservation_discount, consultation_discount) values (1, 'Platinum', 90, 20, 20);
+
+
+insert into pharmacy (id,dermatologist_consultation_price,pharmacist_consultation_price,latitude,longitude,name) values (1,20,20,19.0,20.0,'Jankovic');
+
+insert into consultation (id,price,status,end_date, start_date,consultant_id,patient_id,pharmacy_id) values (1,20,1,'2020-05-05 10:23','2020-05-05 11:00',1,2,1);
+
