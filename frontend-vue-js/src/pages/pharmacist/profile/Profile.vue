@@ -1,13 +1,175 @@
 <template>
-    <v-container>
-        <h3>Pharmacist profile</h3>
-    </v-container>
+    <v-app>
+        <v-row>
+            <v-col md="3" class="ml-10 mt-15">
+                <v-card elevation="3" class="pa-6 primary">
+                    <p class="font-weight-medium">Name : {{ name }}</p>
+                    <p class="font-weight-medium">Lastname : {{ lastname }}</p>
+                    <p class="font-weight-medium">
+                        Phone number : {{ phoneNumber }}
+                    </p>
+                    <p class="font-weight-medium">Location : {{ location }}</p>
+
+                    <v-dialog
+                        transition="dialog-bottom-transition"
+                        max-width="600"
+                    >
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                                class="rounded-circle"
+                                fab
+                                dark
+                                large
+                                color="blue"
+                                v-bind="attrs"
+                                v-on="on"
+                            >
+                                <v-icon dark> mdi-pencil </v-icon>
+                            </v-btn>
+                        </template>
+                        <template>
+                            <v-card>
+                                <v-card>
+                                    <v-toolbar flat color="primary" dark>
+                                        <v-toolbar-title>Edit</v-toolbar-title>
+                                    </v-toolbar>
+                                    <v-tabs vertical>
+                                        <v-tab>
+                                            <v-icon left> mdi-account </v-icon>
+                                            Personal info
+                                        </v-tab>
+                                        <v-tab>
+                                            <v-icon left> mdi-lock </v-icon>
+                                            Password
+                                        </v-tab>
+                                        <v-tab>
+                                            <v-icon left>
+                                                mdi-access-point
+                                            </v-icon>
+                                            Option 3
+                                        </v-tab>
+
+                                        <v-tab-item>
+                                            <v-card flat>
+                                                <v-text-field
+                                                    v-model="name"
+                                                    label="First Name"
+                                                    filled
+                                                ></v-text-field>
+                                                <v-text-field
+                                                    v-model="lastname"
+                                                    label="Last name"
+                                                    filled
+                                                ></v-text-field>
+                                                <v-text-field
+                                                    v-model="phoneNumber"
+                                                    label="Phone number"
+                                                    filled
+                                                ></v-text-field>
+                                                <v-text-field
+                                                    v-model="location"
+                                                    label="Location"
+                                                    filled
+                                                ></v-text-field>
+                                            </v-card>
+                                        </v-tab-item>
+                                        <v-tab-item>
+                                            <v-card flat>
+                                                <v-text-field
+                                                    :append-icon="
+                                                        show3
+                                                            ? 'mdi-eye'
+                                                            : 'mdi-eye-off'
+                                                    "
+                                                    :rules="[
+                                                        rules.required,
+                                                        rules.min
+                                                    ]"
+                                                    :type="
+                                                        show3
+                                                            ? 'text'
+                                                            : 'password'
+                                                    "
+                                                    name="input-10-2"
+                                                    label="Not visible"
+                                                    hint="At least 8 characters"
+                                                    value="wqfasds"
+                                                    class="input-group--focused"
+                                                    @click:append="
+                                                        show3 = !show3
+                                                    "
+                                                ></v-text-field>
+                                                <v-text-field
+                                                    :append-icon="
+                                                        show3
+                                                            ? 'mdi-eye'
+                                                            : 'mdi-eye-off'
+                                                    "
+                                                    :rules="[
+                                                        rules.required,
+                                                        rules.min
+                                                    ]"
+                                                    :type="
+                                                        show3
+                                                            ? 'text'
+                                                            : 'password'
+                                                    "
+                                                    name="input-10-2"
+                                                    label="Not visible"
+                                                    hint="At least 8 characters"
+                                                    value="wqfasds"
+                                                    class="input-group--focused"
+                                                    @click:append="
+                                                        show3 = !show3
+                                                    "
+                                                ></v-text-field>
+                                            </v-card>
+                                        </v-tab-item>
+                                        <v-tab-item>
+                                            <v-card flat> </v-card>
+                                        </v-tab-item>
+                                    </v-tabs>
+                                </v-card>
+                            </v-card>
+                        </template>
+                    </v-dialog>
+                </v-card>
+            </v-col>
+            <v-col md="6">
+                <div class="calendar pa-8">
+                      <calendar></calendar>
+                </div>
+            </v-col>
+        </v-row>
+    </v-app>
 </template>
 
 <script>
-export default {
-    data: () => ({
+import calendar from '../../../components/Calendar'
 
+export default {
+    components: {
+        calendar
+    },
+    data: () => ({
+        rules: {
+            required: value => !!value || 'Required.',
+            min: v => v.length >= 8 || 'Min 8 characters',
+            emailMatch: () => `The email and password you entered don't match`
+        },
+        show3: false,
+        password: 'Password',
+        name: 'Marko',
+        lastname: 'Markovic',
+        phoneNumber: '062 256 658 95',
+        location: 'Novi Sad Puskinova 13',
     })
 }
 </script>
+
+<style scoped>
+p {
+    color: white;
+}
+</style>
+
