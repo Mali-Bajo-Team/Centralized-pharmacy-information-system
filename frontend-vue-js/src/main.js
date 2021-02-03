@@ -4,7 +4,10 @@ import vuetify from './plugins/vuetify';
 import router from './plugins/router';
 import axios from "axios";
 import VueAxios from "vue-axios";
+import VueLayers from 'vuelayers'
+import 'vuelayers/lib/style.css' // needs css-loader
 
+Vue.use(VueLayers)
 Vue.use(VueAxios, axios);
 
 Vue.config.productionTip = false
