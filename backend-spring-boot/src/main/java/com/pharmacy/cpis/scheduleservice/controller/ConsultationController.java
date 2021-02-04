@@ -47,7 +47,7 @@ public class ConsultationController {
         UserAccount loggedPharmacist = userService.findByEmail(consultantDTO.getEmail());
 
         for (Consultation c : consultations) {
-            if(loggedPharmacist.getId() == c.getConsultant().getId()) {
+            if(loggedPharmacist.getId().equals(c.getConsultant().getId())) {
                 ConsultationDTOs.add(new ConsultationDTO(c));
             }
         }
