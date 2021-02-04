@@ -30,8 +30,6 @@ public class PharmacyController {
     @GetMapping("/all")
     public ResponseEntity<List<PharmacyDTO>> getAllPharmacies(){
 
-        System.out.println("\n\n\n POGODJEN GET ALL PHARMACIES \n\n");
-
         List<Pharmacy> pharmacies=pharmacyService.findAll();
 
         //convert pharmacies to DTOs
