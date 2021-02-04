@@ -1,19 +1,15 @@
 package com.pharmacy.cpis.pharmacyservice.controller;
 
 import com.pharmacy.cpis.pharmacyservice.dto.PharmacyDTO;
-import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Location;
+import com.pharmacy.cpis.pharmacyservice.dto.PharmacyRegisterDTO;
 import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
 import com.pharmacy.cpis.pharmacyservice.service.IPharmacyService;
-import com.pharmacy.cpis.userservice.dto.UserAccDTO;
-import com.pharmacy.cpis.userservice.model.ratings.PharmacyRating;
-import com.pharmacy.cpis.userservice.model.ratings.Rating;
+import com.pharmacy.cpis.userservice.dto.UserRegisterDTO;
 import com.pharmacy.cpis.userservice.model.users.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +20,6 @@ public class PharmacyController {
 
     @Autowired
     private IPharmacyService pharmacyService;
-
 
     // TODO: Decide how to name this type of routes
     @GetMapping("/all")
@@ -40,6 +35,12 @@ public class PharmacyController {
         }
 
         return new ResponseEntity<>(pharmaciesDTO,HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/register", consumes = "application/json")
+    public ResponseEntity<Pharmacy> addUser(@RequestBody PharmacyRegisterDTO pharmacyRegisterDTO) {
+        Pharmacy addedPharmacy = pharmacyService.registerPharmacy(pharmacyRegisterDTO);
+        return new ResponseEntity<>(addedPharmacy, HttpStatus.CREATED);
     }
 
 
