@@ -59,19 +59,17 @@ insert into user_category (loyalty_program_id, name, minimum_points, reservation
 
 
 -- INSERT PHARMACIES
-insert into pharmacy (id,dermatologist_consultation_price,pharmacist_consultation_price,latitude,longitude,name,city,country,street, house_number)
-values (1,20,20,19.0,20.0,'Pharmacy Jankovic','Novi Sad','Serbia','Branka Jovica',16);
-insert into pharmacy (id,dermatologist_consultation_price,pharmacist_consultation_price,latitude,longitude,name,city,country,street, house_number)
-values (2,40,50,19.0,20.0,'Pharmacy BENU Mercator','Novi Sad','Serbia','Bulevar Oslobodjenja',102);
-
-
+insert into pharmacy (dermatologist_consultation_price,pharmacist_consultation_price,latitude,longitude,name,city,country,street, house_number)
+values (20,20,19.0,20.0,'Pharmacy Jankovic','Novi Sad','Serbia','Branka Jovica',16);
+insert into pharmacy (dermatologist_consultation_price,pharmacist_consultation_price,latitude,longitude,name,city,country,street, house_number)
+values (40,50,19.0,20.0,'Pharmacy BENU Mercator','Novi Sad','Serbia','Bulevar Oslobodjenja',102);
 
 -- INSERT PHARMACY RATINGS
-insert into pharmacy_rating(id, rating, patient_id,pharmacy_id) values (1,5,2,1);
-insert into pharmacy_rating(id, rating, patient_id,pharmacy_id) values (2,3,2,2);
-insert into pharmacy_rating(id, rating, patient_id,pharmacy_id) values (3,4,1,2);
+insert into pharmacy_rating(rating, patient_id,pharmacy_id) values (5,2,1);
+insert into pharmacy_rating(rating, patient_id,pharmacy_id) values (3,2,2);
+insert into pharmacy_rating(rating, patient_id,pharmacy_id) values (4,1,2);
 
 
-insert into consultation (id,price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (1,20,1,'2021-02-03 10:23','2021-02-03 11:00',3,2,1);
-insert into consultation (id,price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (2,20,1,'2021-02-04 11:23','2021-02-04 13:20',3,2,1);
-insert into consultation (id,price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (3,20,1,'2021-02-05 13:23','2021-02-05 14:00',5,4,1);
+insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (20,1,'2021-02-03 10:23','2021-02-03 11:00',3,2,1);
+insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (20,1,'2021-02-04 11:23','2021-02-04 13:20',3,2,1);
+insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (20,1,'2021-02-05 13:23','2021-02-05 14:00',5,4,1);
