@@ -87,11 +87,7 @@ import {
   minLength
 } from "vuelidate/lib/validators";
 
-function parseJwt(token) {
-  var base64Payload = token.split(".")[1];
-  var payload = Buffer.from(base64Payload, "base64");
-  return JSON.parse(payload.toString());
-}
+import { saveToken } from "./../../../util/token"
 
 export default {
   mixins: [validationMixin],
@@ -144,21 +140,13 @@ export default {
         })
         .then(response => {
           let token = response.data.accessToken;
-          localStorage.setItem("JWT-CPIS", token);
-          let userRole = parseJwt(token).role;
+          saveToken(token)
 
-          if (userRole == "ADMIN") {
-            this.$router.push('/systemadmin')
-          } else if (userRole == "SUPPLIER") {
-            this.$router.push('/supplier')
-          } else if (userRole == "PHARMACY_ADMIN") {            
-            this.$router.push('/pharmacyadmin')
-          } else if (userRole == "PATIENT") {            
-            this.$router.push('/patient')
-          } else if (userRole == "PHARMACIST") {            
-            this.$router.push('/pharmacist')
-          } else if (userRole == "DERMATOLOGIST") {            
-            this.$router.push('/dermatologist')
+          if(this.$route.params.nextUrl != null){
+              this.$router.push(this.$route.params.nextUrl)
+          }
+          else {
+              this.$router.push('/')
           }
         })
         .catch(error => {

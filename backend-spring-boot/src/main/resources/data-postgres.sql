@@ -22,7 +22,7 @@ insert into user_authority (user_id, authority_id) values (2, 1);
 
 -- INSERT ONE PHARMACIST
 insert into person (discriminator, address, city, country, name, surname, phone_number) values ('Consultant', 'Jovana Jovanovica 30', 'Novi Sad', 'Srbija', 'Pero', 'Ivanović', '0661352720');
-insert into user_account (email, password, is_active, person_id, needs_password_change) values ('pharmacist@gmail.com', '$2a$10$UYKr0EAl1Hhzmg.3LutLeuczdzcdgEwXhuY0raFaNyRRspKTg0MCW', true, 3, false);
+insert into user_account (email, password, is_active, person_id, needs_password_change) values ('pharmacist@gmail.com', '$2a$10$UYKr0EAl1Hhzmg.3LutLeuczdzcdgEwXhuY0raFaNyRRspKTg0MCW', true, 3, true);
 -- Password for pharmacist account is: pharmacist
 insert into user_authority (user_id, authority_id) values (3, 4);
 
