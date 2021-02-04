@@ -146,6 +146,7 @@ export default {
               end: this.consultants[i].endDate,
               color: "red",
               timed: 1,
+              patientId:  this.consultants[i].patientId
             });
           }
           this.events = events;
