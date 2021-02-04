@@ -12,19 +12,18 @@ public class PatientDTO {
     private Long id;
     private String name;
     private String surname;
-    private Set<Consultation> consultations;
+//    private Set<Consultation> consultations;
     private Set<Drug> alergies;
     private Integer loyaltyPoints;
     private Set<Pharmacy> subscriptions;
 
-    public PatientDTO(Patient p) { this(p.getId(), p.getName(), p.getSurname(), p.getConsultations(), p.getAllergies(), p.getLoyaltyPoints(), p.getSubscriptions()); }
+    public PatientDTO(Patient p) { this(p.getId(), p.getName(), p.getSurname(), p.getAllergies(), p.getLoyaltyPoints(), p.getSubscriptions()); }
 
-    public PatientDTO(Long id, String name, String surname, Set<Consultation> consultations,Set<Drug> alergies,Integer loyaltyPoints,Set<Pharmacy> subscriptions) {
+    public PatientDTO(Long id, String name, String surname,Set<Drug> alergies,Integer loyaltyPoints,Set<Pharmacy> subscriptions) {
         super();
         this.id = id;
         this.name = name;
         this.surname = surname;
-        this.consultations = consultations;
         this.alergies = alergies;
         this.loyaltyPoints = loyaltyPoints;
         this.subscriptions = subscriptions;
@@ -52,14 +51,6 @@ public class PatientDTO {
 
     public void setSurname(String surname) {
         this.surname = surname;
-    }
-
-    public Set<Consultation> getConsultations() {
-        return consultations;
-    }
-
-    public void setConsultations(Set<Consultation> consultations) {
-        this.consultations = consultations;
     }
 
     public Set<Drug> getAlergies() {
