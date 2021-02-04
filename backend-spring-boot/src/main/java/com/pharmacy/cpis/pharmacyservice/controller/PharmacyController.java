@@ -38,7 +38,7 @@ public class PharmacyController {
     }
 
     @PostMapping(value = "/register", consumes = "application/json")
-    public ResponseEntity<Pharmacy> addUser(@RequestBody PharmacyRegisterDTO pharmacyRegisterDTO) {
+    public ResponseEntity<Pharmacy> addPharmacy(@RequestBody PharmacyRegisterDTO pharmacyRegisterDTO) {
         Pharmacy addedPharmacy = pharmacyService.registerPharmacy(pharmacyRegisterDTO);
         return new ResponseEntity<>(addedPharmacy, HttpStatus.CREATED);
     }

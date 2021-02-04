@@ -13,7 +13,7 @@ public class DrugSpecificationDTO {
     @NotEmpty(message = "Contraindications is required.")
     private String contraindications;
 
-    @NotEmpty(message = "Ingredients is required.")
+//    @NotEmpty(message = "Ingredients is required.")
     private List<Ingredient> ingredients;
 
     @NotEmpty(message = "Recommended daily dose is required.")
