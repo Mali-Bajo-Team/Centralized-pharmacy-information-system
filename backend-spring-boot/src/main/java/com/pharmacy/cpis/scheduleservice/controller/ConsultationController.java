@@ -38,7 +38,7 @@ public class ConsultationController {
         return new ResponseEntity<>(ConsultationDTOs, HttpStatus.OK);
     }
 
-    @PostMapping("/logedconsultant")
+    @PostMapping("/consultantexaminations")
     @PreAuthorize("hasRole('PHARMACIST')")
     public ResponseEntity<List<ConsultationDTO>> getAllConsultationsForConsultant(@RequestBody ConsultantDTO consultantDTO) {
 

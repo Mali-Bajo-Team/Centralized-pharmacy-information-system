@@ -88,7 +88,7 @@ export default {
 
       this.consultants = [];
       this.axios
-        .post("http://localhost:8081/api/consultations/logedconsultant", {email: email}, {
+        .post("http://localhost:8081/api/consultations/consultantexaminations", {email: email}, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("JWT-CPIS")
           }
