@@ -182,7 +182,7 @@ export default {
                 }
             })
         .then(() => {            
-            this.axios
+            setTimeout(() => this.axios
             .post(process.env.VUE_APP_BACKEND_URL + process.env.VUE_APP_LOGIN_ENDPOINT, {
             password: this.form.newPassword,
             email: getParsedToken().sub,
@@ -205,7 +205,7 @@ export default {
                 this.snackbarText = error.message
             this.loading = false
             this.snackbar = true
-            });          
+            }), 1000);          
         })
         .catch(error => {
           if (error.response && error.response.data)

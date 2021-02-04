@@ -41,7 +41,7 @@ public class PatientRegistrationService implements IPatientRegistrationService {
 		if (userRepository.existsByEmail(user.getEmail()))
 			throw new PSAlreadyExistsException("The email is already taken.");
 		Patient addedPatient = addNewPatient(user);
-		UserAccount addedAccount = addNewAccount(user, addedPatient);
+		UserAccount addedAccount = addNewPatientAccount(user, addedPatient);
 		sendActivationEmail(addedAccount);
 		return addedAccount;
 	}
@@ -61,16 +61,15 @@ public class PatientRegistrationService implements IPatientRegistrationService {
 		}
 	}
 
-	private UserAccount addNewAccount(UserRegisterDTO userRequest, Patient addedPatient) {
-		UserAccount newUserAccount = new UserAccount();
-		newUserAccount.setEmail(userRequest.getEmail());
-		newUserAccount.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-		newUserAccount.setActive(false);
-		newUserAccount.setNeedsPasswordChange(false);
-		List<Authority> auth = authService.findByName("ROLE_PATIENT");
-		newUserAccount.setAuthorities(auth);
-		newUserAccount.setPerson(addedPatient);
 
+    private UserAccount addNewPatientAccount(UserRegisterDTO userRequest, Patient addedPatient) {
+        UserAccount newUserAccount = new UserAccount();
+        newUserAccount.setEmail(userRequest.getEmail());
+        newUserAccount.setPassword( passwordEncoder.encode(userRequest.getPassword()));
+        newUserAccount.setActive(false);
+        List<Authority> auth = authService.findByName("ROLE_PATIENT");
+        newUserAccount.setAuthorities(auth);
+        newUserAccount.setPerson(addedPatient);
 		UserAccount addedAccount = userRepository.save(newUserAccount);
 		return addedAccount;
 	}

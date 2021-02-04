@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,9 +18,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pharmacy.cpis.userservice.dto.JwtAuthenticationRequest;
 import com.pharmacy.cpis.userservice.dto.UserRegisterDTO;
 import com.pharmacy.cpis.userservice.dto.UserTokenState;
+import com.pharmacy.cpis.userservice.model.users.Consultant;
+import com.pharmacy.cpis.userservice.model.users.Supplier;
+import com.pharmacy.cpis.userservice.model.users.SystemAdministrator;
 import com.pharmacy.cpis.userservice.model.users.UserAccount;
+import com.pharmacy.cpis.userservice.service.IConsultantService;
 import com.pharmacy.cpis.userservice.service.IPatientRegistrationService;
+import com.pharmacy.cpis.userservice.service.ISupplierService;
+import com.pharmacy.cpis.userservice.service.ISystemAdministratorService;
 import com.pharmacy.cpis.userservice.service.IUserService;
+import com.pharmacy.cpis.util.exceptions.PSAlreadyExistsException;
 
 // Controller in charge of user authentication
 @RestController
@@ -34,6 +42,15 @@ public class AuthenticationController {
 
 	@Autowired
 	private IPatientRegistrationService patientRegistrationService;
+	
+    @Autowired
+    private IConsultantService consultantService;
+
+    @Autowired
+    private ISupplierService supplierService;
+
+    @Autowired
+    private ISystemAdministratorService systemAdministratorService;
 
 	// The first endpoint that affects the user when logging in.
 	// Then he only knows his username and password and forwards it to the backend.
@@ -65,5 +82,35 @@ public class AuthenticationController {
 		httpServletResponse.setHeader("Location", projectUrl);
 		httpServletResponse.setStatus(302);
 	}
+
+    @PostMapping(value = "/signup/dermatologist", consumes = "application/json")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Consultant> addDermatologist(@RequestBody UserRegisterDTO dermatologist) {
+        if (consultantService.existsByEmail(dermatologist.getEmail()))
+            throw new PSAlreadyExistsException("The email is already taken.");
+
+        Consultant addedConsultant = consultantService.registerDermatologist(dermatologist);
+        return new ResponseEntity<>(addedConsultant, HttpStatus.CREATED);
+    }
+
+    @PostMapping(value = "/signup/supplier", consumes = "application/json")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Supplier> addSupplier(@RequestBody UserRegisterDTO supplier) {
+        if (supplierService.existsByEmail(supplier.getEmail()))
+            throw new PSAlreadyExistsException("The email is already taken.");
+
+        Supplier addedSupplier = supplierService.registerSupplier(supplier);
+        return new ResponseEntity<>(addedSupplier, HttpStatus.CREATED);
+    }
+
+    @PostMapping(value = "/signup/admin", consumes = "application/json")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<SystemAdministrator> addSystemAdministrator(@RequestBody UserRegisterDTO systemAdministrator) {
+        if (systemAdministratorService.existsByEmail(systemAdministrator.getEmail()))
+            throw new PSAlreadyExistsException("The email is already taken.");
+
+        SystemAdministrator addedSystemAdministrator = systemAdministratorService.registerSystemAdministrator(systemAdministrator);
+        return new ResponseEntity<>(addedSystemAdministrator, HttpStatus.CREATED);
+    }
 
 }
