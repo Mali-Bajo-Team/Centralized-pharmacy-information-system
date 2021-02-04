@@ -7,10 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +20,6 @@ import com.pharmacy.cpis.userservice.dto.UserTokenState;
 import com.pharmacy.cpis.userservice.model.users.UserAccount;
 import com.pharmacy.cpis.userservice.service.IPatientRegistrationService;
 import com.pharmacy.cpis.userservice.service.IUserService;
-import com.pharmacy.cpis.util.security.TokenUtils;
 
 // Controller in charge of user authentication
 @RestController
@@ -33,12 +28,6 @@ public class AuthenticationController {
 
 	@Autowired
 	private Environment env;
-
-	@Autowired
-	private TokenUtils tokenUtils;
-
-	@Autowired
-	private AuthenticationManager authenticationManager;
 
 	@Autowired
 	private IUserService userService;
@@ -52,19 +41,9 @@ public class AuthenticationController {
 	public ResponseEntity<UserTokenState> createAuthenticationToken(
 			@RequestBody @Valid JwtAuthenticationRequest authenticationRequest, HttpServletResponse response) {
 
-		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-				authenticationRequest.getEmail(), authenticationRequest.getPassword()));
+		UserTokenState token = userService.logIn(authenticationRequest.getEmail(), authenticationRequest.getPassword());
 
-		// Insert the user into the current security context
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-
-		// Create a token for that user
-		UserAccount user = (UserAccount) authentication.getPrincipal();
-		String jwt = tokenUtils.generateToken(user.getUsername(), userService.getUserRole(user));
-		int expiresIn = tokenUtils.getExpiredIn();
-
-		// Return the token in response to successful authentication
-		return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
+		return ResponseEntity.ok(token);
 	}
 
 	// Endpoint to register a new user

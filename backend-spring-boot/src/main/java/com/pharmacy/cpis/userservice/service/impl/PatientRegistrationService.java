@@ -66,6 +66,7 @@ public class PatientRegistrationService implements IPatientRegistrationService {
 		newUserAccount.setEmail(userRequest.getEmail());
 		newUserAccount.setPassword(passwordEncoder.encode(userRequest.getPassword()));
 		newUserAccount.setActive(false);
+		newUserAccount.setNeedsPasswordChange(false);
 		List<Authority> auth = authService.findByName("ROLE_PATIENT");
 		newUserAccount.setAuthorities(auth);
 		newUserAccount.setPerson(addedPatient);

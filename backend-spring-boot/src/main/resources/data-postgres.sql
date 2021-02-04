@@ -8,19 +8,19 @@ INSERT INTO AUTHORITY (name) VALUES ('ROLE_SUPPLIER');
 
 -- INSERT ONE ADMIN (system administrator)
 insert into person (discriminator, address, city, country, name, surname, phone_number) values ('SystemAdmin', 'Marka Miljanova 7', 'Novi Sad', 'Srbija', 'Milana', 'Todorović', '0601452700');
-insert into user_account (email, password, is_active, person_id) values ('admin@gmail.com', '$2a$10$L6kbgPYJlATi6.u/7HP3OOxvN.VrbwlMWhDemehBoQSP8BAGeUot.', true, 1);
+insert into user_account (email, password, is_active, person_id, needs_password_change) values ('admin@gmail.com', '$2a$10$L6kbgPYJlATi6.u/7HP3OOxvN.VrbwlMWhDemehBoQSP8BAGeUot.', true, 1, true);
 -- Password for admin account is: admin
 insert into user_authority (user_id, authority_id) values (1, 2);
 
 -- INSERT ONE PATIENT
 insert into person (discriminator, address, city, country, name, surname, phone_number) values ('Patient', 'Jovana Jovanovica 12', 'Novi Sad', 'Srbija', 'Dragna', 'Mororović', '0661352720');
-insert into user_account (email, password, is_active, person_id) values ('dragana@gmail.com', '$2a$10$Ys8dHFGzcjM.Rn2VbB.rhuSQc/Ye7rawUgWCxE7.kco.x9EE4eYUa', true, 2);
+insert into user_account (email, password, is_active, person_id, needs_password_change) values ('dragana@gmail.com', '$2a$10$Ys8dHFGzcjM.Rn2VbB.rhuSQc/Ye7rawUgWCxE7.kco.x9EE4eYUa', true, 2, false);
 -- Password for patient account is: dragana
 insert into user_authority (user_id, authority_id) values (2, 1);
 
 -- INSERT ONE PHARMACIST
 insert into person (discriminator, address, city, country, name, surname, phone_number) values ('Consultant', 'Jovana Jovanovica 30', 'Novi Sad', 'Srbija', 'Pero', 'Ivanović', '0661352720');
-insert into user_account (email, password, is_active, person_id) values ('pharmacist@gmail.com', '$2a$10$UYKr0EAl1Hhzmg.3LutLeuczdzcdgEwXhuY0raFaNyRRspKTg0MCW', true, 3);
+insert into user_account (email, password, is_active, person_id, needs_password_change) values ('pharmacist@gmail.com', '$2a$10$UYKr0EAl1Hhzmg.3LutLeuczdzcdgEwXhuY0raFaNyRRspKTg0MCW', true, 3, false);
 -- Password for pharmacist account is: pharmacist
 insert into user_authority (user_id, authority_id) values (3, 4);
 
