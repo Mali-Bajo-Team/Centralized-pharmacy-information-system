@@ -64,7 +64,7 @@
                                         <v-card-title
                                             class="subheading font-weight-bold"
                                         >
-                                            {{ item.name }}
+                                            {{ item.name + ' ' + item.surname }}
                                         </v-card-title>
 
                                         <v-divider></v-divider>
@@ -170,7 +170,7 @@
 export default {
     data() {
         return {
-            phatients: [],
+            patients: [],
             itemsPerPageArray: [4, 8, 12, 16, 20],
             search: '',
             filter: {},
@@ -179,62 +179,7 @@ export default {
             itemsPerPage: 12,
             sortBy: 'name',
             keys: ['Name'],
-            items: [
-                {
-                    name: 'Nemanja Pualić'
-                },
-                {
-                    name: 'Mirloslav Perić'
-                },
-                {
-                    name: 'Eric Tomphson'
-                },
-                {
-                    name: 'Varvick Velicki'
-                },
-                {
-                    name: 'Miodrag Mikic'
-                },
-                {
-                    name: 'Jelly Yipilin'
-                },
-                {
-                    name: 'Velimir Mikic'
-                },
-                {
-                    name: 'Nenad Nenadovic'
-                },
-                {
-                    name: 'Vladimir Velickovic'
-                },
-                {
-                    name: 'Vladislav Maksimovic'
-                },
-                {
-                    name: 'Ivana Miroslavovic'
-                },
-                {
-                    name: 'Federer Radoslavovic'
-                },
-                {
-                    name: 'Stanko Miroslavovic'
-                },
-                {
-                    name: 'Janko Radoslavovic'
-                },
-                {
-                    name: 'Federer Radoslavovi'
-                },
-                {
-                    name: 'Stanko Miroslavovi'
-                },
-                {
-                    name: 'Janko Radoslavovi'
-                },
-                {
-                    name: 'Janko Radoslavovi '
-                }
-            ]
+            items: []
         }
     },
     created(){
@@ -248,8 +193,7 @@ export default {
         }
       )
       .then((resp) => {
-        this.phatients = resp.data;
-        console.log(this.phatients);
+        this.items = resp.data;
       });
     },
     computed: {
