@@ -52,14 +52,6 @@ public class UserController {
 		return new ResponseEntity<>(usersAccDTO, HttpStatus.OK);
 	}
 
-	@CrossOrigin
-	@PutMapping(value = "/password", consumes = "application/json")
-	public ResponseEntity<Void> changePassword(@RequestBody @Valid PasswordChangeDTO password) {
-		userAccountService.changePassword(password.getOldPassword(), password.getNewPassword());
-
-		return ResponseEntity.noContent().build();
-	}
-
 	@GetMapping(value = "/patients")
 	@PreAuthorize("hasRole('PHARMACIST')")
 	@EmployeeAccountActive
