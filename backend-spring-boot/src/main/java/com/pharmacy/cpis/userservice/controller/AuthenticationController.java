@@ -1,9 +1,6 @@
 package com.pharmacy.cpis.userservice.controller;
 
-import com.pharmacy.cpis.userservice.model.users.Authority;
-import com.pharmacy.cpis.userservice.model.users.Consultant;
-import com.pharmacy.cpis.userservice.model.users.Patient;
-import com.pharmacy.cpis.userservice.model.users.UserAccount;
+import com.pharmacy.cpis.userservice.model.users.*;
 import com.pharmacy.cpis.userservice.service.*;
 import com.pharmacy.cpis.userservice.dto.JwtAuthenticationRequest;
 import com.pharmacy.cpis.userservice.dto.UserActivationDTO;
@@ -45,6 +42,9 @@ public class AuthenticationController {
 
     @Autowired
     private IConsultantService consultantService;
+
+    @Autowired
+    private ISupplierService supplierService;
 
     @Autowired
     private IPatientRegistrationService patientRegistrationService;
@@ -89,6 +89,16 @@ public class AuthenticationController {
 
         Consultant addedConsultant = consultantService.registerDermatologist(dermatologist);
         return new ResponseEntity<>(addedConsultant, HttpStatus.CREATED);
+    }
+
+    @PostMapping(value = "/signup/supplier", consumes = "application/json")
+//    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Supplier> addSupplier(@RequestBody UserRegisterDTO supplier) {
+        if (supplierService.existsByEmail(supplier.getEmail()))
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+
+        Supplier addedSupplier = supplierService.registerSupplier(supplier);
+        return new ResponseEntity<>(addedSupplier, HttpStatus.CREATED);
     }
 
     // GET is because of easy click-activate method
