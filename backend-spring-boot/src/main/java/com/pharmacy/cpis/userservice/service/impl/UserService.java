@@ -32,6 +32,11 @@ public class UserService implements IUserService {
 	private TokenUtils tokenUtils;
 
 	@Override
+	public UserAccount findByEmail(String email) {
+		return userRepository.findByEmail(email);
+	}
+
+	@Override
 	public List<UserAccount> findAll() {
 		return userRepository.findAll();
 	}
