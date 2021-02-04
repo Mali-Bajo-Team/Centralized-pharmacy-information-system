@@ -5,7 +5,6 @@ import com.pharmacy.cpis.userservice.model.users.UserAccount;
 
 public interface IPatientRegistrationService {
 
-    UserAccount registerPatient(UserRegisterDTO user);
+	UserAccount registerPatient(UserRegisterDTO user);
 
-    Boolean existsByEmail(String email);
 }

@@ -1,9 +1,13 @@
 package com.pharmacy.cpis.userservice.dto;
 
+import javax.validation.constraints.NotEmpty;
+
 // DTO for login
 public class JwtAuthenticationRequest {
 
+	@NotEmpty(message = "Email is required.")
     private String email;
+	@NotEmpty(message = "Password is required.")
     private String password;
 
     public JwtAuthenticationRequest() {
