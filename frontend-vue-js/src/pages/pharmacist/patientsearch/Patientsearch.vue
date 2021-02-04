@@ -64,7 +64,7 @@
                                         <v-card-title
                                             class="subheading font-weight-bold"
                                         >
-                                            {{ item.name + ' ' + item.surname }}
+                                            {{ item.id + '. ' + item.name + ' ' + item.surname }}
                                         </v-card-title>
 
                                         <v-divider></v-divider>
