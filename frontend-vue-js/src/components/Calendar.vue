@@ -59,17 +59,22 @@
         </v-card-title>
         <v-card-text>
           <v-container>
-            <v-row>
-               </v-row>
+            <v-row> </v-row>
           </v-container>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="primary" text @click="questionDialog = false">
-            
-The patient did not show up 
+            The patient did not show up
           </v-btn>
-          <v-btn color="primary" text @click="questionDialog = false; reportDialog = true">
+          <v-btn
+            color="primary"
+            text
+            @click="
+              questionDialog = false;
+              reportDialog = true;
+            "
+          >
             Start examination
           </v-btn>
         </v-card-actions>
@@ -77,7 +82,7 @@ The patient did not show up
     </v-dialog>
     <!-- End QUESTION DIALOG-->
 
-      <!-- Start REPORT DIALOG-->
+    <!-- Start REPORT DIALOG-->
     <v-dialog v-model="reportDialog" persistent max-width="600px">
       <v-card>
         <v-card-title>
@@ -86,7 +91,12 @@ The patient did not show up
         <v-card-text>
           <v-container>
             <v-row>
-               </v-row>
+              <v-textarea v-model="report" color="teal">
+                <template v-slot:label>
+                  <div>Report <small>(optional)</small></div>
+                </template>
+              </v-textarea>
+            </v-row>
           </v-container>
         </v-card-text>
         <v-card-actions>
@@ -104,6 +114,7 @@ The patient did not show up
 <script>
 export default {
   data: () => ({
+    report: '',
     dragEvent: null,
 
     name: "",
@@ -173,7 +184,7 @@ export default {
               end: this.consultants[i].endDate,
               color: "red",
               timed: 1,
-              patientId:  this.consultants[i].patientId
+              patientId: this.consultants[i].patientId,
             });
           }
           this.events = events;
