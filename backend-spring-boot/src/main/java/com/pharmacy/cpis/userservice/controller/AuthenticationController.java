@@ -49,7 +49,6 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<UserTokenState> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest,
                                                                     HttpServletResponse response) {
-        System.out.println("\n\n\n DOSAOOOO 1 \n\n");
 
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(),
@@ -62,8 +61,6 @@ public class AuthenticationController {
         UserAccount user = (UserAccount) authentication.getPrincipal();
         String jwt = tokenUtils.generateToken(user.getUsername(), userService.getUserRole(user));
         int expiresIn = tokenUtils.getExpiredIn();
-
-        System.out.println("\n\n\n DOSAOOOO 2\n\n");
 
         // Return the token in response to successful authentication
         return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
