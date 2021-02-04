@@ -10,7 +10,7 @@
           </p>
           <p class="font-weight-medium">Location : {{ pharmacist.location }}</p>
 
-          <v-dialog transition="dialog-bottom-transition" max-width="600">
+          <v-dialog v-model="dialog" transition="dialog-bottom-transition" max-width="600">
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 class="rounded-circle"
@@ -66,7 +66,7 @@
                           label="Location"
                           filled
                         ></v-text-field>
-                        <v-btn depressed class="mr-4 mb-5"> Cancel </v-btn>
+                        <v-btn depressed class="mr-4 mb-5" @click="dialog = false"> Cancel </v-btn>
                         <v-btn depressed class="mr-4 mb-5"   @click="changePersonalData" color="primary">
                           Submit
                         </v-btn>
@@ -139,6 +139,7 @@ export default {
       min: (v) => v.length >= 8 || "Min 8 characters",
       emailMatch: () => `The email and password you entered don't match`,
     },
+     dialog: false,
     show3: false,
     password: "Password",
     pharmacist: [],
@@ -164,7 +165,6 @@ export default {
   },
   methods: {
     changePersonalData() {
-       console.log( this.pharmacist);
       this.axios
         .put(
           process.env.VUE_APP_BACKEND_URL +
@@ -184,6 +184,8 @@ export default {
         )
         .then((resp) => {
           this.pharmacist = resp.data;
+          this.dialog= false;
+          this.$router.go();
         });
     },
   }
