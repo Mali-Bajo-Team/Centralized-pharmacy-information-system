@@ -82,7 +82,7 @@ public class AuthenticationController {
     }
 
     @PostMapping(value = "/signup/dermatologist", consumes = "application/json")
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Consultant> addDermatologist(@RequestBody UserRegisterDTO dermatologist) {
         if (consultantService.existsByEmail(dermatologist.getEmail()))
             return new ResponseEntity<>(HttpStatus.CONFLICT);

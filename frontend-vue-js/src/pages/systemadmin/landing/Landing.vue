@@ -222,7 +222,10 @@
                 Are you sure you want add a dermatologist with this informations
                 ?
               </p>
-              <v-btn color="primary" @click="confirmDermatologistRegistration()">
+              <v-btn
+                color="primary"
+                @click="confirmDermatologistRegistration()"
+              >
                 Confirm
               </v-btn>
               <v-btn text @click="stepper.dermatologistRegStep = 1">
@@ -647,6 +650,11 @@ export default {
             address: this.dermatologistForm.address,
             country: this.dermatologistForm.country,
             mobile: this.dermatologistForm.phone,
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
           }
         )
         .then(() => {
