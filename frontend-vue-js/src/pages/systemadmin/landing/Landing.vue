@@ -8,7 +8,11 @@
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <!-- Pharmacy registration -->
-          <v-stepper style="margin: 3%" v-model="stepper.pharmacyRegStep" vertical>
+          <v-stepper
+            style="margin: 3%"
+            v-model="stepper.pharmacyRegStep"
+            vertical
+          >
             <!-- Register a pharmacy -->
             <v-stepper-step :complete="stepper.pharmacyRegStep > 1" step="1">
               Register a pharmacy
@@ -106,9 +110,16 @@
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <!-- Register a dermatologist stepper -->
-          <v-stepper style="margin: 3%" v-model="stepper.dermatologistRegStep" vertical>
+          <v-stepper
+            style="margin: 3%"
+            v-model="stepper.dermatologistRegStep"
+            vertical
+          >
             <!-- Register a dermatologist -->
-            <v-stepper-step :complete="stepper.dermatologistRegStep > 1" step="1">
+            <v-stepper-step
+              :complete="stepper.dermatologistRegStep > 1"
+              step="1"
+            >
               Register a dermatologist
             </v-stepper-step>
             <v-stepper-content step="1">
@@ -121,17 +132,73 @@
               >
                 <v-row>
                   <v-col>
-                    <v-text-field label="Name"></v-text-field>
-                    <v-text-field label="Surname"></v-text-field>
-                    <v-text-field label="Phone number"></v-text-field>
-                    <v-text-field label="Address"></v-text-field>
+                    <v-text-field
+                      v-model="dermatologistForm.name"
+                      :error-messages="nameErrors"
+                      label="Name"
+                      @blur="$v.dermatologistForm.name.$touch()"
+                      @input="$v.dermatologistForm.name.$touch()"
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="dermatologistForm.surname"
+                      :error-messages="surnameErrors"
+                      label="Surname"
+                      @blur="$v.dermatologistForm.surname.$touch()"
+                      @input="$v.dermatologistForm.surname.$touch()"
+                    ></v-text-field>
+                    <v-text-field
+                      label="Phone number"
+                      v-model="dermatologistForm.phone"
+                    ></v-text-field>
+                    <v-text-field
+                      :error-messages="addressErrors"
+                      label="Home address"
+                      @blur="$v.dermatologistForm.address.$touch()"
+                      @input="$v.dermatologistForm.address.$touch()"
+                      v-model="dermatologistForm.address"
+                    ></v-text-field>
                   </v-col>
 
                   <v-col>
-                    <v-text-field label="City"></v-text-field>
-                    <v-text-field label="Country"></v-text-field>
-                    <v-text-field label="Email"></v-text-field>
-                    <v-text-field label="Password"></v-text-field>
+                    <v-text-field
+                      :error-messages="cityErrors"
+                      label="City"
+                      @blur="$v.dermatologistForm.city.$touch()"
+                      @input="$v.dermatologistForm.city.$touch()"
+                      v-model="dermatologistForm.city"
+                    ></v-text-field>
+                    <v-text-field
+                      :error-messages="countryErrors"
+                      label="Country"
+                      @blur="$v.dermatologistForm.country.$touch()"
+                      @input="$v.dermatologistForm.country.$touch()"
+                      v-model="dermatologistForm.country"
+                    ></v-text-field>
+                    <v-text-field
+                      :error-messages="emailErrors"
+                      label="Email"
+                      @blur="$v.dermatologistForm.email.$touch()"
+                      @input="$v.dermatologistForm.email.$touch()"
+                      v-model="dermatologistForm.email"
+                    ></v-text-field>
+                    <v-text-field
+                      :append-icon="
+                        dermatologistForm.showPassword
+                          ? 'mdi-eye'
+                          : 'mdi-eye-off'
+                      "
+                      :errorMessages="passwordErrors"
+                      :type="
+                        dermatologistForm.showPassword ? 'text' : 'password'
+                      "
+                      label="Password"
+                      @click:append="
+                        dermatologistForm.showPassword = !dermatologistForm.showPassword
+                      "
+                      @blur="$v.dermatologistForm.password.$touch()"
+                      @input="$v.dermatologistForm.password.$touch()"
+                      v-model="dermatologistForm.password"
+                    ></v-text-field>
                   </v-col>
                 </v-row>
               </v-card>
@@ -155,10 +222,12 @@
                 Are you sure you want add a dermatologist with this informations
                 ?
               </p>
-              <v-btn color="primary" @click="stepper.dermatologistRegStep = 1">
+              <v-btn color="primary" @click="confirmDermatologistRegistration()">
                 Confirm
               </v-btn>
-              <v-btn text @click="stepper.dermatologistRegStep = 1"> Back </v-btn>
+              <v-btn text @click="stepper.dermatologistRegStep = 1">
+                Back
+              </v-btn>
             </v-stepper-content>
             <!-- End of the confirmation of the dermatologist registration -->
           </v-stepper>
@@ -174,7 +243,11 @@
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <!-- Register a supplier stepper -->
-          <v-stepper style="margin: 3%" v-model="stepper.supplierRegStep" vertical>
+          <v-stepper
+            style="margin: 3%"
+            v-model="stepper.supplierRegStep"
+            vertical
+          >
             <!-- Register a supplier -->
             <v-stepper-step :complete="stepper.supplierRegStep > 1" step="1">
               Register a supplier
@@ -247,7 +320,10 @@
             vertical
           >
             <!-- Register a system administrator -->
-            <v-stepper-step :complete="stepper.systemAdministratorRegStep > 1" step="1">
+            <v-stepper-step
+              :complete="stepper.systemAdministratorRegStep > 1"
+              step="1"
+            >
               Register a system administrator
             </v-stepper-step>
             <v-stepper-content step="1">
@@ -277,7 +353,10 @@
               <!-- End of the form for system administrator -->
 
               <!-- Buttons -->
-              <v-btn color="primary" @click="stepper.systemAdministratorRegStep = 2">
+              <v-btn
+                color="primary"
+                @click="stepper.systemAdministratorRegStep = 2"
+              >
                 Continue
               </v-btn>
               <v-btn text> Cancel </v-btn>
@@ -294,10 +373,15 @@
                 Are you sure you want add a system administrator with this
                 informations ?
               </p>
-              <v-btn color="primary" @click="stepper.systemAdministratorRegStep = 1">
+              <v-btn
+                color="primary"
+                @click="stepper.systemAdministratorRegStep = 1"
+              >
                 Confirm
               </v-btn>
-              <v-btn text @click="stepper.systemAdministratorRegStep = 1"> Back </v-btn>
+              <v-btn text @click="stepper.systemAdministratorRegStep = 1">
+                Back
+              </v-btn>
             </v-stepper-content>
             <!-- End of the confirmation of the system administrator registration -->
           </v-stepper>
@@ -336,7 +420,9 @@
               <!-- End of the content -->
 
               <!-- Buttons -->
-              <v-btn color="primary" @click="stepper.drugRegStep = 2"> Continue </v-btn>
+              <v-btn color="primary" @click="stepper.drugRegStep = 2">
+                Continue
+              </v-btn>
               <v-btn text> Cancel </v-btn>
               <!-- End of the buttons -->
             </v-stepper-content>
@@ -364,7 +450,9 @@
                 </v-row>
               </v-card>
               <!-- End of the form -->
-              <v-btn color="primary" @click="stepper.drugRegStep = 3"> Continue </v-btn>
+              <v-btn color="primary" @click="stepper.drugRegStep = 3">
+                Continue
+              </v-btn>
               <v-btn text @click="stepper.drugRegStep = 1"> Back </v-btn>
             </v-stepper-content>
             <!-- End of the register a drug specification -->
@@ -378,7 +466,9 @@
                 Are you sure you want add drug with this information and this
                 specification ?
               </p>
-              <v-btn color="primary" @click="stepper.drugRegStep = 1"> Confirm </v-btn>
+              <v-btn color="primary" @click="stepper.drugRegStep = 1">
+                Confirm
+              </v-btn>
               <v-btn text @click="stepper.drugRegStep = 2"> Back </v-btn>
             </v-stepper-content>
             <!-- End of the confirmation of the drug registration -->
@@ -395,7 +485,11 @@
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <!-- Define a loyalty program -->
-          <v-stepper style="margin: 3%" v-model="stepper.loyaltyRegStep" vertical>
+          <v-stepper
+            style="margin: 3%"
+            v-model="stepper.loyaltyRegStep"
+            vertical
+          >
             <!-- Register a loyalty program -->
             <v-stepper-step :complete="stepper.loyaltyRegStep > 1" step="1">
               Define a loyalty program
@@ -473,7 +567,11 @@
 </template>
 
 <script>
+import { validationMixin } from "vuelidate";
+import { required, email, minLength, numeric } from "vuelidate/lib/validators";
+
 export default {
+  mixins: [validationMixin],
   data: () => ({
     stepper: {
       pharmacyRegStep: 1,
@@ -484,6 +582,147 @@ export default {
       loyaltyRegStep: 1,
     },
     typesOfDrug: ["Antibiotik", "Anestetik"],
+    dermatologistForm: {
+      email: "",
+      password: "",
+      showPassword: false,
+      name: "",
+      surname: "",
+      address: "",
+      city: "",
+      country: "",
+      phone: "",
+    },
   }),
+  validations: {
+    dermatologistForm: {
+      password: {
+        required,
+        minLength: minLength(6),
+      },
+      email: {
+        required,
+        email,
+      },
+      name: {
+        required,
+      },
+      surname: {
+        required,
+      },
+      address: {
+        required,
+      },
+      city: {
+        required,
+      },
+      country: {
+        required,
+      },
+      phone: {
+        required,
+        numeric,
+      },
+    },
+  },
+  methods: {
+    confirmDermatologistRegistration() {
+      this.$v.$touch();
+
+      if (!this.$v.$invalid) {
+        this.registerDermatologist();
+      }
+    },
+    registerDermatologist() {
+      this.axios
+        .post(
+          process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_DERMATOLOGIST_REGISTRATION_ENDPOINT,
+          {
+            password: this.dermatologistForm.password,
+            email: this.dermatologistForm.email,
+            name: this.dermatologistForm.name,
+            surname: this.dermatologistForm.surname,
+            city: this.dermatologistForm.city,
+            address: this.dermatologistForm.address,
+            country: this.dermatologistForm.country,
+            mobile: this.dermatologistForm.phone,
+          }
+        )
+        .then(() => {
+          // TODO: Make some notification here
+          alert("Successfuly added new dermatologist");
+        })
+        .catch((error) => {
+          // TODO: Make some tost notifications here
+          alert("Error during dermatologist registration: " + error);
+        });
+    },
+  },
+  computed: {
+    // TODO: Find how to encapsulate those methods, because they are same as in register
+    passwordErrors() {
+      const errors = [];
+      if (!this.$v.dermatologistForm.password.$dirty) return errors;
+      !this.$v.dermatologistForm.password.required &&
+        errors.push("Password is required.");
+      !this.$v.dermatologistForm.password.minLength &&
+        errors.push("Password is too short.");
+      return errors;
+    },
+    emailErrors() {
+      const errors = [];
+      if (!this.$v.dermatologistForm.email.$dirty) return errors;
+      !this.$v.dermatologistForm.email.required &&
+        errors.push("Email is required.");
+      !this.$v.dermatologistForm.email.email &&
+        errors.push("Email is not valid.");
+      return errors;
+    },
+    nameErrors() {
+      const errors = [];
+      if (!this.$v.dermatologistForm.name.$dirty) return errors;
+      !this.$v.dermatologistForm.name.required &&
+        errors.push("Name is required.");
+      return errors;
+    },
+    surnameErrors() {
+      const errors = [];
+      if (!this.$v.dermatologistForm.surname.$dirty) return errors;
+      !this.$v.dermatologistForm.surname.required &&
+        errors.push("Surname is required.");
+      return errors;
+    },
+    cityErrors() {
+      const errors = [];
+      if (!this.$v.dermatologistForm.city.$dirty) return errors;
+      !this.$v.dermatologistForm.city.required &&
+        errors.push("City is required.");
+      return errors;
+    },
+    countryErrors() {
+      const errors = [];
+      if (!this.$v.dermatologistForm.country.$dirty) return errors;
+      !this.$v.dermatologistForm.country.required &&
+        errors.push("Country is required.");
+      return errors;
+    },
+    addressErrors() {
+      const errors = [];
+      if (!this.$v.dermatologistForm.address.$dirty) return errors;
+      !this.$v.dermatologistForm.address.required &&
+        errors.push("Home address is required.");
+      return errors;
+    },
+    phoneErrors() {
+      const errors = [];
+      if (!this.$v.dermatologistForm.phone.$dirty) return errors;
+      !this.$v.dermatologistForm.phone.required &&
+        errors.push("Phone number is required.");
+      !this.$v.dermatologistForm.phone.numeric &&
+        errors.push("Phone number should only contain numbers.");
+      return errors;
+    },
+  },
 };
 </script>
