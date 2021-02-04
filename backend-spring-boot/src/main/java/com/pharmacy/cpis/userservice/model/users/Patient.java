@@ -29,6 +29,8 @@ public class Patient extends Person {
 
 	public Patient() {
 		super();
+		this.loyaltyPoints = 0;
+		this.penalties = 0;
 	}
 
 	public Integer getLoyaltyPoints() {
