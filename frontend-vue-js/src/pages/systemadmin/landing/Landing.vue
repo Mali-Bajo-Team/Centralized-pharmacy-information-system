@@ -147,7 +147,10 @@
                       @input="$v.dermatologistForm.surname.$touch()"
                     ></v-text-field>
                     <v-text-field
+                      :error-messages="phoneErrors"
                       label="Phone number"
+                      @blur="$v.dermatologistForm.phone.$touch()"
+                      @input="$v.dermatologistForm.phone.$touch()"
                       v-model="dermatologistForm.phone"
                     ></v-text-field>
                     <v-text-field
@@ -205,7 +208,7 @@
               <!-- End of the form for dermatologist -->
 
               <!-- Buttons -->
-              <v-btn color="primary" @click="stepper.dermatologistRegStep = 2">
+              <v-btn color="primary" @click="preConfirmationForDermatologist()">
                 Continue
               </v-btn>
               <v-btn text> Cancel </v-btn>
@@ -629,6 +632,11 @@ export default {
     },
   },
   methods: {
+    preConfirmationForDermatologist() {
+      if (!this.$v.$invalid) {
+        this.stepper.dermatologistRegStep = 2;
+      }
+    },
     confirmDermatologistRegistration() {
       this.$v.$touch();
 
