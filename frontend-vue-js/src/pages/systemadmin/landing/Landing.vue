@@ -397,17 +397,70 @@
               >
                 <v-row>
                   <v-col>
-                    <v-text-field label="Name"></v-text-field>
-                    <v-text-field label="Surname"></v-text-field>
-                    <v-text-field label="Phone number"></v-text-field>
-                    <v-text-field label="Address"></v-text-field>
+                    <v-text-field
+                      v-model="systemAdministratorForm.name"
+                      :error-messages="nameErrorsSystemAdministrator"
+                      label="Name"
+                      @blur="$v.systemAdministratorForm.name.$touch()"
+                      @input="$v.systemAdministratorForm.name.$touch()"
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="systemAdministratorForm.surname"
+                      :error-messages="surnameErrorsSystemAdministrator"
+                      label="Surname"
+                      @blur="$v.systemAdministratorForm.surname.$touch()"
+                      @input="$v.systemAdministratorForm.surname.$touch()"
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="systemAdministratorForm.phone"
+                      :error-messages="phoneErrorsSystemAdministrator"
+                      label="Phone number"
+                      @blur="$v.systemAdministratorForm.phone.$touch()"
+                      @input="$v.systemAdministratorForm.phone.$touch()"
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="systemAdministratorForm.address"
+                      :error-messages="addressErrorsSystemAdministrator"
+                      label="Home address"
+                      @blur="$v.systemAdministratorForm.address.$touch()"
+                      @input="$v.systemAdministratorForm.address.$touch()"
+                    ></v-text-field>
                   </v-col>
 
                   <v-col>
-                    <v-text-field label="City"></v-text-field>
-                    <v-text-field label="Country"></v-text-field>
-                    <v-text-field label="Email"></v-text-field>
-                    <v-text-field label="Password"></v-text-field>
+                    <v-text-field
+                      v-model="systemAdministratorForm.city"
+                      :error-messages="cityErrorsSystemAdministrator"
+                      label="City"
+                      @blur="$v.systemAdministratorForm.city.$touch()"
+                      @input="$v.systemAdministratorForm.city.$touch()"
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="systemAdministratorForm.country"
+                      :error-messages="countryErrorsSystemAdministrator"
+                      label="Country"
+                      @blur="$v.systemAdministratorForm.country.$touch()"
+                      @input="$v.systemAdministratorForm.country.$touch()"
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="systemAdministratorForm.email"
+                      :error-messages="emailErrorsSystemAdministrator"
+                      label="Email"
+                      @blur="$v.systemAdministratorForm.email.$touch()"
+                      @input="$v.systemAdministratorForm.email.$touch()"
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="systemAdministratorForm.password"
+                      :append-icon="
+                        systemAdministratorForm.showPassword ? 'mdi-eye' : 'mdi-eye-off'
+                      "
+                      :errorMessages="passwordErrorsSystemAdministrator"
+                      :type="systemAdministratorForm.showPassword ? 'text' : 'password'"
+                      label="Password"
+                      @click:append="systemAdministratorForm.showPassword = !systemAdministratorForm.showPassword"
+                      @blur="$v.systemAdministratorForm.password.$touch()"
+                      @input="$v.systemAdministratorForm.password.$touch()"
+                    ></v-text-field>
                   </v-col>
                 </v-row>
               </v-card>
@@ -436,7 +489,7 @@
               </p>
               <v-btn
                 color="primary"
-                @click="stepper.systemAdministratorRegStep = 1"
+                @click="confirmSystemAdministratorRegistration()"
               >
                 Confirm
               </v-btn>
@@ -775,6 +828,10 @@ export default {
       // TODO: Make some check if is all validation okey
       this.registerSupplier();
     },
+    confirmSystemAdministratorRegistration() {
+      // TODO: Make some check if is all validation okey
+      this.registerSystemAdministrator();
+    },
     registerDermatologist() {
       this.axios
         .post(
@@ -833,6 +890,36 @@ export default {
         .catch((error) => {
           // TODO: Make some tost notifications here
           alert("Error during supplier registration: " + error);
+        });
+    },
+    registerSystemAdministrator() {
+      this.axios
+        .post(
+          process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_SYSTEM_ADMINISTRATOR_REGISTRATION_ENDPOINT,
+          {
+            password: this.systemAdministratorForm.password,
+            email: this.systemAdministratorForm.email,
+            name: this.systemAdministratorForm.name,
+            surname: this.systemAdministratorForm.surname,
+            city: this.systemAdministratorForm.city,
+            address: this.systemAdministratorForm.address,
+            country: this.systemAdministratorForm.country,
+            mobile: this.systemAdministratorForm.phone,
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then(() => {
+          // TODO: Make some notification here
+          alert("Successfuly added new system administrator");
+        })
+        .catch((error) => {
+          // TODO: Make some tost notifications here
+          alert("Error during system administrator registration: " + error);
         });
     },
   },
