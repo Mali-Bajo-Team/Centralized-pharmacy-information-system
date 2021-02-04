@@ -104,7 +104,16 @@
                   </v-textarea>
                 </v-card>
                 <v-btn color="primary" @click="e6 = 2"> Continue </v-btn>
-                <v-btn text> Cancel </v-btn>
+                <v-btn
+                  text
+                  @click="
+                    questionDialog = true;
+                    reportDialog = false;
+                    e6 = 1;
+                  "
+                >
+                  Cancel
+                </v-btn>
               </v-stepper-content>
 
               <v-stepper-step :complete="e6 > 2" step="2">
@@ -118,7 +127,16 @@
                   height="200px"
                 ></v-card>
                 <v-btn color="primary" @click="e6 = 3"> Continue </v-btn>
-                <v-btn text> Cancel </v-btn>
+                <v-btn
+                  text
+                  @click="
+                    questionDialog = true;
+                    reportDialog = false;
+                    e6 = 1;
+                  "
+                >
+                  Cancel
+                </v-btn>
               </v-stepper-content>
 
               <v-stepper-step :complete="e6 > 3" step="3">
@@ -132,7 +150,16 @@
                   height="200px"
                 ></v-card>
                 <v-btn color="primary" @click="e6 = 4"> Continue </v-btn>
-                <v-btn text> Cancel </v-btn>
+                <v-btn
+                  text
+                  @click="
+                    questionDialog = true;
+                    reportDialog = false;
+                    e6 = 1;
+                  "
+                >
+                  Cancel
+                </v-btn>
               </v-stepper-content>
 
               <v-stepper-step step="4"> Submit </v-stepper-step>
@@ -143,7 +170,16 @@
                   height="200px"
                 ></v-card>
                 <v-btn color="primary" @click="e6 = 1"> Continue </v-btn>
-                <v-btn text> Cancel </v-btn>
+                <v-btn
+                  text
+                  @click="
+                    questionDialog = true;
+                    reportDialog = false;
+                    e6 = 1;
+                  "
+                >
+                  Submit
+                </v-btn>
               </v-stepper-content>
             </v-stepper>
           </v-container>
