@@ -7,7 +7,7 @@
         class="pa-5"
         >
 
-        <v-card-title>Log in</v-card-title>
+        <v-card-title>Register</v-card-title>
 
         <v-form>
             <v-text-field

@@ -7,6 +7,8 @@ import Guest from './../pages/guest/Container';
 import GuestLanding from './../pages/guest/landing/Landing';
 import Login from './../pages/guest/login/Login';
 import Registration from './../pages/guest/registration/Registration';
+import Drugs from './../pages/guest/drugs/Drugs';
+import Pharmacies from './../pages/guest/pharmacies/Pharmacies';
 
 import Patient from './../pages/patient/Container';
 import PatientLanding from './../pages/patient/landing/Landing';
@@ -47,6 +49,16 @@ const routes = [
                 component: Registration,
                 name: 'registration',
                 path: 'register'
+            },
+            {
+                component:Drugs,
+                name:'drugs',
+                path:'drugs'
+            },
+            {
+                component:Pharmacies,
+                name:'pharmacies',
+                path:'pharmacies'
             }
         ]
     },
