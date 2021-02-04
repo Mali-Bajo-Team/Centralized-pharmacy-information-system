@@ -62,8 +62,10 @@ public class ConsultationController {
 	@PreAuthorize("hasRole('PHARMACIST')")
 	public ResponseEntity<ConsultantDTO> getLoggedConsultant(@RequestBody ConsultantDTO consultantDTO) {
 
-		UserAccount loggedPharmacist = (UserAccount) SecurityContextHolder.getContext().getAuthentication()
+		UserAccount loggedUser = (UserAccount) SecurityContextHolder.getContext().getAuthentication()
 				.getPrincipal();
+
+		UserAccount loggedPharmacist = userService.findByEmail(loggedUser.getEmail());
 
 		consultantDTO.setName(loggedPharmacist.getPerson().getName());
 		consultantDTO.setLastName(loggedPharmacist.getPerson().getSurname());
