@@ -47,7 +47,7 @@
         :event-overlap-threshold="30"
         :event-color="getEventColor"
         @change="getEvents"
-        @click:event="myTime"
+        @click:event="showExaminationDialog"
       ></v-calendar>
     </v-sheet>
 
@@ -55,7 +55,7 @@
     <v-dialog v-model="dialog" persistent max-width="600px">
       <v-card>
         <v-card-title>
-          <span class="headline">User Profile {{ name }}</span>
+          <span class="headline">Examination report for {{ name }}</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -64,11 +64,12 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialog = false">
-            Close
+          <v-btn color="primary" text @click="dialog = false">
+            
+The patient did not show up 
           </v-btn>
-          <v-btn color="blue darken-1" text @click="dialog = false">
-            Save
+          <v-btn color="primary" text @click="dialog = false">
+            Start examination
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -83,6 +84,7 @@ export default {
     dragEvent: null,
 
     name: "",
+    patientId: null,
     dialog: false,
     consultants: [],
     response: null,
@@ -111,8 +113,9 @@ export default {
     names: ["Pregled", "Holiday"],
   }),
   methods: {
-    myTime(event) {
+    showExaminationDialog(event) {
       this.name = event.event.name;
+      this.patientId = event.event.patientId;
       this.dialog = true;
       console.log(event);
     },
