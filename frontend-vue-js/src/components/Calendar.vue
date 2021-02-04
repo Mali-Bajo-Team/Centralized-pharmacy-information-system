@@ -77,6 +77,9 @@
           >
             Start examination
           </v-btn>
+          <v-btn color="primary" text @click="questionDialog = false">
+            Cancel
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -169,7 +172,16 @@
                   class="mb-12"
                   height="200px"
                 ></v-card>
-                <v-btn color="primary" @click="e6 = 1"> Continue </v-btn>
+                <v-btn
+                  color="primary"
+                  @click="
+                    e6 = 1;
+                    questionDialog = true;
+                    reportDialog = false;
+                  "
+                >
+                  Submit
+                </v-btn>
                 <v-btn
                   text
                   @click="
@@ -178,7 +190,7 @@
                     e6 = 1;
                   "
                 >
-                  Submit
+                  Cancel
                 </v-btn>
               </v-stepper-content>
             </v-stepper>
