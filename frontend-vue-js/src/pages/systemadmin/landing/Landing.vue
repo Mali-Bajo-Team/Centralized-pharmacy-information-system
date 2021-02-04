@@ -530,9 +530,27 @@
                 class="mb-12"
                 height="400px"
               >
-                <v-text-field label="Name of the drug"></v-text-field>
-                <v-text-field label="Code of the drug"></v-text-field>
-                <v-text-field label="Loyalty points"></v-text-field>
+                <v-text-field
+                  v-model="drugForm.drug.name"
+                  :error-messages="drugNameErrors"
+                  label="Name of the drug"
+                  @blur="$v.drugForm.drug.name.$touch()"
+                  @input="$v.drugForm.drug.name.$touch()"
+                ></v-text-field>
+                <v-text-field
+                  v-model="drugForm.drug.code"
+                  :error-messages="drugCodeErrors"
+                  @blur="$v.drugForm.drug.code.$touch()"
+                  @input="$v.drugForm.drug.code.$touch()"
+                  label="Code of the drug"
+                ></v-text-field>
+                <v-text-field
+                  v-model="drugForm.drug.loyaltyPoints"
+                  :error-messages="drugLoyaltyPointsErrors"
+                  @blur="$v.drugForm.drug.loyaltyPoints.$touch()"
+                  @input="$v.drugForm.drug.loyaltyPoints.$touch()"
+                  label="Loyalty points"
+                ></v-text-field>
                 <v-select
                   :items="typesOfDrug"
                   label="Alternate drugs"
@@ -569,18 +587,64 @@
               >
                 <v-row>
                   <v-col>
-                    <v-text-field label="Manufacturer"></v-text-field>
-                    <v-text-field label="Contraindications"></v-text-field>
+                    <v-text-field
+                      v-model="drugForm.specification.manufacturer"
+                      :error-messages="manufacturerErrors"
+                      @blur="$v.drugForm.specification.manufacturer.$touch()"
+                      @input="$v.drugForm.specification.manufacturer.$touch()"
+                      label="Manufacturer"
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="drugForm.specification.contraindications"
+                      :error-messages="contraindicationsErrors"
+                      @blur="
+                        $v.drugForm.specification.contraindications.$touch()
+                      "
+                      @input="
+                        $v.drugForm.specification.contraindications.$touch()
+                      "
+                      label="Contraindications"
+                    ></v-text-field>
                     <v-row>
                       <v-col>
-                        <v-text-field label="Ingredient name"></v-text-field>
+                        <v-text-field
+                          v-model="drugForm.specification.ingredients.name"
+                          :error-messages="ingredientsNameErrors"
+                          @blur="
+                            $v.drugForm.specification.ingredients.name.$touch()
+                          "
+                          @input="
+                            $v.drugForm.specification.ingredients.name.$touch()
+                          "
+                          label="Ingredient name"
+                        ></v-text-field>
                       </v-col>
 
                       <v-col>
-                        <v-text-field label="Amount"></v-text-field>
+                        <v-text-field
+                          v-model="drugForm.specification.ingredients.amount"
+                          :error-messages="ingredientsAmountErrors"
+                          @blur="
+                            $v.drugForm.specification.ingredients.amount.$touch()
+                          "
+                          @input="
+                            $v.drugForm.specification.ingredients.amount.$touch()
+                          "
+                          label="Amount"
+                        ></v-text-field>
                       </v-col>
                     </v-row>
-                    <v-text-field label="Recommended daily dose"></v-text-field>
+                    <v-text-field
+                      v-model="drugForm.specification.recommendedDailyDose"
+                      :error-messages="recommendedDailyDoseErrors"
+                      @blur="
+                        $v.drugForm.specification.recommendedDailyDose.$touch()
+                      "
+                      @input="
+                        $v.drugForm.specification.recommendedDailyDose.$touch()
+                      "
+                      label="Recommended daily dose"
+                    ></v-text-field>
                   </v-col>
                 </v-row>
               </v-card>
@@ -856,6 +920,41 @@ export default {
         numeric,
       },
     },
+    drugForm: {
+      drug: {
+        name: {
+          required,
+        },
+        code: {
+          required,
+        },
+        loyaltyPoints: {
+          required,
+          numeric,
+        },
+      },
+      specification: {
+        manufacturer: {
+          required,
+        },
+        contraindications: {
+          required,
+        },
+        ingredients: {
+          name: {
+            required,
+          },
+          amount: {
+            required,
+            numeric,
+          },
+        },
+        recommendedDailyDose: {
+          required,
+          numeric,
+        },
+      },
+    },
   },
   methods: {
     confirmDermatologistRegistration() {
@@ -963,6 +1062,70 @@ export default {
   },
   computed: {
     // TODO: Find how to encapsulate those methods, because they are same as in register
+    drugLoyaltyPointsErrors() {
+      const errors = [];
+      if (!this.$v.drugForm.drug.loyaltyPoints.$dirty) return errors;
+      !this.$v.drugForm.drug.loyaltyPoints.required &&
+        errors.push("Drug loyalty points is required.");
+      return errors;
+    },
+    drugCodeErrors() {
+      const errors = [];
+      if (!this.$v.drugForm.drug.code.$dirty) return errors;
+      !this.$v.drugForm.drug.code.required &&
+        errors.push("Drug code is required.");
+      return errors;
+    },
+    drugNameErrors() {
+      const errors = [];
+      if (!this.$v.drugForm.drug.name.$dirty) return errors;
+      !this.$v.drugForm.drug.name.required &&
+        errors.push("Drug name is required.");
+      return errors;
+    },
+    recommendedDailyDoseErrors() {
+      const errors = [];
+      if (!this.$v.drugForm.specification.recommendedDailyDose.$dirty)
+        return errors;
+      !this.$v.drugForm.specification.recommendedDailyDose.required &&
+        errors.push("Recommended daily dose is required.");
+      !this.$v.drugForm.specification.recommendedDailyDose.numeric &&
+        errors.push("Recommended daily dose should only contain numbers.");
+      return errors;
+    },
+    ingredientsAmountErrors() {
+      const errors = [];
+      if (!this.$v.drugForm.specification.ingredients.amount.$dirty)
+        return errors;
+      !this.$v.drugForm.specification.ingredients.amount.required &&
+        errors.push("Ingredient amount is required.");
+      !this.$v.drugForm.specification.ingredients.amount.numeric &&
+        errors.push("Ingredient amount should only contain numbers.");
+      return errors;
+    },
+    ingredientsNameErrors() {
+      const errors = [];
+      if (!this.$v.drugForm.specification.ingredients.name.$dirty)
+        return errors;
+      !this.$v.drugForm.specification.ingredients.name.required &&
+        errors.push("Ingredient name is required.");
+      return errors;
+    },
+    contraindicationsErrors() {
+      const errors = [];
+      if (!this.$v.drugForm.specification.contraindications.$dirty)
+        return errors;
+      !this.$v.drugForm.specification.contraindications.required &&
+        errors.push("Contraindications is required.");
+      return errors;
+    },
+    manufacturerErrors() {
+      const errors = [];
+      if (!this.$v.drugForm.specification.manufacturer.$dirty) return errors;
+      !this.$v.drugForm.specification.manufacturer.required &&
+        errors.push("Manufacturer is required.");
+      return errors;
+    },
     passwordErrorsDermatologist() {
       const errors = [];
       if (!this.$v.dermatologistForm.password.$dirty) return errors;
