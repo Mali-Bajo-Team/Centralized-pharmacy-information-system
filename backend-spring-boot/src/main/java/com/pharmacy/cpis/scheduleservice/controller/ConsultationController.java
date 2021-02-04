@@ -54,4 +54,18 @@ public class ConsultationController {
 
         return new ResponseEntity<>(ConsultationDTOs, HttpStatus.OK);
     }
+
+    @PostMapping("/loggedconsultant")
+    @PreAuthorize("hasRole('PHARMACIST')")
+    public ResponseEntity<ConsultantDTO> getLoggedConsultant(@RequestBody ConsultantDTO consultantDTO) {
+
+        UserAccount loggedPharmacist = userService.findByEmail(consultantDTO.getEmail());
+
+        consultantDTO.setName(loggedPharmacist.getPerson().getName());
+        consultantDTO.setLastName(loggedPharmacist.getPerson().getSurname());
+        consultantDTO.setPhoneNumber(loggedPharmacist.getPerson().getPhoneNumber());
+        consultantDTO.setLocation(loggedPharmacist.getPerson().getAddress());
+
+        return new ResponseEntity<ConsultantDTO>(consultantDTO, HttpStatus.OK);
+    }
 }

@@ -1,5 +1,6 @@
 <template>
   <v-app>
+
     <v-sheet tile height="54" class="d-flex">
       <v-btn icon class="ma-2" @click="$refs.calendar.prev()">
         <v-icon>mdi-chevron-left</v-icon>
@@ -88,11 +89,15 @@ export default {
 
       this.consultants = [];
       this.axios
-        .post("http://localhost:8081/api/consultations/consultantexaminations", {email: email}, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("JWT-CPIS")
+        .post(
+          "http://localhost:8081/api/consultations/consultantexaminations",
+          { email: email },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
           }
-        })
+        )
         .then((resp) => {
           this.consultants = resp.data;
           const events = [];
