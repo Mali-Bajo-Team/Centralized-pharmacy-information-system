@@ -17,8 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pharmacy.cpis.userservice.dto.PasswordChangeDTO;
+import com.pharmacy.cpis.userservice.dto.PatientDTO;
 import com.pharmacy.cpis.userservice.dto.UserAccDTO;
+import com.pharmacy.cpis.userservice.model.users.Patient;
 import com.pharmacy.cpis.userservice.model.users.UserAccount;
+import com.pharmacy.cpis.userservice.service.IPatientService;
 import com.pharmacy.cpis.userservice.service.IUserService;
 import com.pharmacy.cpis.util.aspects.EmployeeAccountActive;
 
@@ -28,6 +31,9 @@ public class UserController {
 
 	@Autowired
 	private IUserService userAccountService;
+
+	@Autowired
+	private IPatientService patientService;
 
 	@CrossOrigin
 	@GetMapping
@@ -52,5 +58,21 @@ public class UserController {
 		userAccountService.changePassword(password.getOldPassword(), password.getNewPassword());
 
 		return ResponseEntity.noContent().build();
+	}
+
+	@GetMapping(value = "/patients")
+	@PreAuthorize("hasRole('PHARMACIST')")
+	@EmployeeAccountActive
+	public ResponseEntity<List<PatientDTO>> getAllPatient() {
+
+		List<Patient> patients = patientService.findAllPatient();
+
+		// convert patients to DTOs
+		List<PatientDTO> patientDTO = new ArrayList<>();
+		for (Patient p : patients) {
+			patientDTO.add(new PatientDTO(p));
+		}
+
+		return new ResponseEntity<>(patientDTO, HttpStatus.OK);
 	}
 }
