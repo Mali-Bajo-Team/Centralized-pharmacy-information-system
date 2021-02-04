@@ -86,7 +86,7 @@
 export default {
   data: () => ({
     dragEvent: null,
-    
+
     event: null,
     dialog: false,
     consultants: [],
@@ -116,13 +116,6 @@ export default {
     names: ["Pregled", "Holiday"],
   }),
   methods: {
-     startDrag ({ event, timed }) {
-        if (event && timed) {
-          this.dragEvent = event
-          this.dragTime = null
-          this.extendOriginal = null
-        }
-      },
     myTime(event) {
       this.dialog = true;
       console.log(event);
