@@ -23,20 +23,20 @@ export default {
                 to: "/"
             },
             {
-                title: "Log in",
-                to: "login"
-            },
-            {
-                title: "Register",
-                to: "register"
-            },
-            {
                 title:"Drugs",
                 to:"drugs"
             },
             {
                 title:"Pharmacies",
                 to:"pharmacies"
+            },
+            {
+                title: "Log in",
+                to: "login"
+            },
+            {
+                title: "Register",
+                to: "register"
             }
         ]
     })
