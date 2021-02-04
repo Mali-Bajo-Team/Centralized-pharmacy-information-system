@@ -79,22 +79,21 @@ export default {
       // 'orange',
       // 'grey darken-1'
     ],
-    names: [
-      "Pregled",
-      "Holiday",
-    ],
+    names: ["Pregled", "Holiday"],
   }),
   methods: {
     getEvents() {
+      var token = parseJwt(localStorage.getItem("JWT-CPIS"));
+      var email = token.sub;
+
       this.consultants = [];
       this.axios
-        .get("http://localhost:8081/api/consultations", {
+        .post("http://localhost:8081/api/consultations/logedconsultant", {email: email}, {
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
-          },
+            Authorization: "Bearer " + localStorage.getItem("JWT-CPIS")
+          }
         })
         .then((resp) => {
-            console.log(localStorage)
           this.consultants = resp.data;
           const events = [];
 
@@ -110,10 +109,10 @@ export default {
               timed: 1,
             });
           }
-        this.events = events;
+          this.events = events;
         });
     },
-     getEventColor(event) {
+    getEventColor(event) {
       return event.color;
     },
     rnd(a, b) {
@@ -121,6 +120,12 @@ export default {
     },
   },
 };
+
+function parseJwt(token) {
+  var base64Payload = token.split(".")[1];
+  var payload = Buffer.from(base64Payload, "base64");
+  return JSON.parse(payload.toString());
+}
 </script>
 
 
