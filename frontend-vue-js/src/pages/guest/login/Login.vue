@@ -3,7 +3,7 @@
     <v-spacer></v-spacer>
     <v-col sm="8" md="6" lg="4" xl="4" cols="12">
       <v-card elevation="4" class="pa-5">
-        <v-card-title>Register</v-card-title>
+        <v-card-title>Log in</v-card-title>
 
         <v-form>
           <v-text-field
