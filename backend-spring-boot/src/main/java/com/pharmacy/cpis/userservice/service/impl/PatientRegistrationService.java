@@ -37,7 +37,7 @@ public class PatientRegistrationService implements IPatientRegistrationService {
     @Override
     public UserAccount registerPatient(UserRegisterDTO user) {
         Patient addedPatient = addNewPatient(user);
-        UserAccount addedAccount = addNewAccount(user, addedPatient);
+        UserAccount addedAccount = addNewPatientAccount(user, addedPatient);
         sendActivationEmail(addedAccount);
         return addedAccount;
     }
@@ -62,7 +62,7 @@ public class PatientRegistrationService implements IPatientRegistrationService {
         }
     }
 
-    private UserAccount addNewAccount(UserRegisterDTO userRequest, Patient addedPatient) {
+    private UserAccount addNewPatientAccount(UserRegisterDTO userRequest, Patient addedPatient) {
         UserAccount newUserAccount = new UserAccount();
         newUserAccount.setEmail(userRequest.getEmail());
         newUserAccount.setPassword( passwordEncoder.encode(userRequest.getPassword()));

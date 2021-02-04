@@ -1,6 +1,7 @@
 package com.pharmacy.cpis.userservice.controller;
 
 import com.pharmacy.cpis.userservice.model.users.Authority;
+import com.pharmacy.cpis.userservice.model.users.Consultant;
 import com.pharmacy.cpis.userservice.model.users.Patient;
 import com.pharmacy.cpis.userservice.model.users.UserAccount;
 import com.pharmacy.cpis.userservice.service.*;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -40,6 +42,9 @@ public class AuthenticationController {
 
     @Autowired
     private IUserService userService;
+
+    @Autowired
+    private IConsultantService consultantService;
 
     @Autowired
     private IPatientRegistrationService patientRegistrationService;
@@ -76,12 +81,23 @@ public class AuthenticationController {
         return new ResponseEntity<>(addedAccount, HttpStatus.CREATED);
     }
 
+    @PostMapping(value = "/signup/dermatologist", consumes = "application/json")
+//    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Consultant> addDermatologist(@RequestBody UserRegisterDTO dermatologist) {
+        if (consultantService.existsByEmail(dermatologist.getEmail()))
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+
+        Consultant addedConsultant = consultantService.registerDermatologist(dermatologist);
+        return new ResponseEntity<>(addedConsultant, HttpStatus.CREATED);
+    }
+
     // GET is because of easy click-activate method
     @GetMapping("activate/{id}")
     public void activateAccount(@PathVariable Long id, HttpServletResponse httpServletResponse) {
         userService.activatePatientAccount(id);
         redirectToLoginPage(httpServletResponse);
     }
+
 
     private void redirectToLoginPage(HttpServletResponse httpServletResponse) {
         String projectUrl = env.getProperty("APP_FRONT") + env.getProperty("FRONT_PORT") + "/";
