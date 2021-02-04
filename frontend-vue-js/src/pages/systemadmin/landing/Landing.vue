@@ -665,7 +665,7 @@
                 Are you sure you want add drug with this information and this
                 specification ?
               </p>
-              <v-btn color="primary" @click="stepper.drugRegStep = 1">
+              <v-btn color="primary" @click="confirmDrugRegistration()">
                 Confirm
               </v-btn>
               <v-btn text @click="stepper.drugRegStep = 2"> Back </v-btn>
@@ -676,91 +676,6 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <!-- End of register a drug panel -->
-
-      <!-- Define a loyalty program panel -->
-      <v-expansion-panel>
-        <v-expansion-panel-header>
-          Define a loyalty program
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
-          <!-- Define a loyalty program -->
-          <v-stepper
-            style="margin: 3%"
-            v-model="stepper.loyaltyRegStep"
-            vertical
-          >
-            <!-- Register a loyalty program -->
-            <v-stepper-step :complete="stepper.loyaltyRegStep > 1" step="1">
-              Define a loyalty program
-            </v-stepper-step>
-            <v-stepper-content step="1">
-              <!-- Content -->
-              <v-card
-                style="padding: 2%"
-                color="grey lighten-5"
-                class="mb-12"
-                height="100px"
-              >
-                <v-text-field label="Points per consultation"></v-text-field>
-              </v-card>
-              <!-- End of the content -->
-
-              <!-- Buttons -->
-              <v-btn color="primary" @click="stepper.loyaltyRegStep = 2">
-                Continue
-              </v-btn>
-              <v-btn text> Cancel </v-btn>
-              <!-- End of the buttons -->
-            </v-stepper-content>
-            <!-- End of loyalty program definition -->
-
-            <!-- Scale of the loyalty program  -->
-            <v-stepper-step :complete="stepper.loyaltyRegStep > 2" step="2">
-              Loyalty program scale
-            </v-stepper-step>
-            <v-stepper-content step="2">
-              <!-- Form, or like like one -->
-              <v-card
-                style="padding: 2%"
-                color="grey lighten-5"
-                class="mb-12"
-                height="150px"
-              >
-                <v-row>
-                  <v-col>
-                    <v-text-field label="From range"></v-text-field>
-                    <v-text-field label="To range"></v-text-field>
-                  </v-col>
-                </v-row>
-              </v-card>
-              <!-- End of the form -->
-              <v-btn color="primary" @click="stepper.loyaltyRegStep = 3">
-                Continue
-              </v-btn>
-              <v-btn text @click="stepper.loyaltyRegStep = 1"> Back </v-btn>
-            </v-stepper-content>
-            <!-- End of the scale of loyalty program definition -->
-
-            <!-- Confirmation of the loyalty program -->
-            <v-stepper-step step="3">
-              Confirm definition of loyalty program
-            </v-stepper-step>
-            <v-stepper-content step="3">
-              <p>
-                Are you sure you want to define new loyalty program with this
-                informations ?
-              </p>
-              <v-btn color="primary" @click="stepper.loyaltyRegStep = 1">
-                Confirm
-              </v-btn>
-              <v-btn text @click="stepper.loyaltyRegStep = 2"> Back </v-btn>
-            </v-stepper-content>
-            <!-- End of the confirmation of the loyalty program -->
-          </v-stepper>
-          <!-- End of the define a loyalty program -->
-        </v-expansion-panel-content>
-      </v-expansion-panel>
-      <!-- End of loyalty program define -->
     </v-expansion-panels>
   </v-container>
 </template>
@@ -957,6 +872,10 @@ export default {
     },
   },
   methods: {
+    confirmDrugRegistration() {
+      // TODO: Make some check if is all validation okey
+      this.registerDrug();
+    },
     confirmDermatologistRegistration() {
       // TODO: Make some check if is all validation okey
       this.registerDermatologist();
@@ -968,6 +887,41 @@ export default {
     confirmSystemAdministratorRegistration() {
       // TODO: Make some check if is all validation okey
       this.registerSystemAdministrator();
+    },
+    registerDrug() {
+      this.axios
+        .post(
+          process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_DRUG_REGISTRATION_ENDPOINT,
+          {
+            drug: {
+              name: this.drugForm.drug.name,
+              code: this.drugForm.drug.code,
+              loyaltyPoints: this.drugForm.drug.loyaltyPoints,
+              typeOfDrug: "Antibiotic",
+              alternateDrugs: null,
+            },
+            specification: {
+              manufacturer: this.drugForm.specification.manufacturer,
+              contraindications: this.drugForm.specification.contraindications,
+              recommendedDailyDose: this.drugForm.specification.recommendedDailyDose,
+              ingredients: null,
+            },
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then(() => {
+          // TODO: Make some notification here
+          alert("Successfuly added new drug");
+        })
+        .catch((error) => {
+          // TODO: Make some tost notifications here
+          alert("Error during drug registration: " + error);
+        });
     },
     registerDermatologist() {
       this.axios
