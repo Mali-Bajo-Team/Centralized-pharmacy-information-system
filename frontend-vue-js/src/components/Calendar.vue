@@ -176,7 +176,6 @@
                   color="primary"
                   @click="
                     e6 = 1;
-                    questionDialog = true;
                     reportDialog = false;
                   "
                 >
