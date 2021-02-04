@@ -32,7 +32,7 @@ insert into user_authority (user_id, authority_id) values (4, 1);
 
 -- INSERT ONE PHARMACIST
 insert into person (discriminator, address, city, country, name, surname, phone_number) values ('Consultant', 'Milana Rakica 20', 'Beograd', 'Srbija', 'Vlado', 'Perkic', '06123654523');
-insert into user_account (email, password, is_active, person_id) values ('pharmacist2@gmail.com', '$2b$10$HREroKFzQCwpjvj4op6RjejkyX0luU5zx2WtgXJ86Q8GOUjl7zLMW', true, 5);
+insert into user_account (email, password, is_active, person_id) values ('pharmacist2@gmail.com', '$2b$10$gNc5a8idHoZG37A055NgyePGxSnC7B7wFNdyY03kVcBbKRgVKqCTe', true, 5);
 -- Password for pharmacist account is: pharmacist2
 insert into user_authority (user_id, authority_id) values (5, 4);
 
