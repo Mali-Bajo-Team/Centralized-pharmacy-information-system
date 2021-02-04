@@ -90,21 +90,64 @@
         </v-card-title>
         <v-card-text>
           <v-container>
-            <v-row>
-              <v-textarea v-model="report" color="teal">
-                <template v-slot:label>
-                  <div>Report <small>(optional)</small></div>
-                </template>
-              </v-textarea>
-            </v-row>
+            <v-stepper v-model="e6" vertical>
+              <v-stepper-step :complete="e6 > 1" step="1">
+                Examination report
+              </v-stepper-step>
+
+              <v-stepper-content step="1">
+                <v-card color="grey lighten-1" class="mb-12" height="200px">
+                  <v-textarea v-model="report" color="teal">
+                    <template v-slot:label>
+                      <div>Report</div>
+                    </template>
+                  </v-textarea>
+                </v-card>
+                <v-btn color="primary" @click="e6 = 2"> Continue </v-btn>
+                <v-btn text> Cancel </v-btn>
+              </v-stepper-content>
+
+              <v-stepper-step :complete="e6 > 2" step="2">
+                Prescribe medicine
+              </v-stepper-step>
+
+              <v-stepper-content step="2">
+                <v-card
+                  color="grey lighten-1"
+                  class="mb-12"
+                  height="200px"
+                ></v-card>
+                <v-btn color="primary" @click="e6 = 3"> Continue </v-btn>
+                <v-btn text> Cancel </v-btn>
+              </v-stepper-content>
+
+              <v-stepper-step :complete="e6 > 3" step="3">
+                Schedule an additional examination
+              </v-stepper-step>
+
+              <v-stepper-content step="3">
+                <v-card
+                  color="grey lighten-1"
+                  class="mb-12"
+                  height="200px"
+                ></v-card>
+                <v-btn color="primary" @click="e6 = 4"> Continue </v-btn>
+                <v-btn text> Cancel </v-btn>
+              </v-stepper-content>
+
+              <v-stepper-step step="4"> Submit </v-stepper-step>
+              <v-stepper-content step="4">
+                <v-card
+                  color="grey lighten-1"
+                  class="mb-12"
+                  height="200px"
+                ></v-card>
+                <v-btn color="primary" @click="e6 = 1"> Continue </v-btn>
+                <v-btn text> Cancel </v-btn>
+              </v-stepper-content>
+            </v-stepper>
           </v-container>
         </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="primary" text @click="reportDialog = false">
-            Submit
-          </v-btn>
-        </v-card-actions>
       </v-card>
     </v-dialog>
     <!-- End REPORT DIALOG-->
@@ -114,7 +157,8 @@
 <script>
 export default {
   data: () => ({
-    report: '',
+    e6: 1,
+    report: "",
     dragEvent: null,
 
     name: "",
