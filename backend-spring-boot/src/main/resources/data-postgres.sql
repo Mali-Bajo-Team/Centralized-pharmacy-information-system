@@ -1,3 +1,5 @@
+--https://www.bcryptcalculator.com/encode
+
 -- All roles need to have prefix ROLE_ !!
 INSERT INTO AUTHORITY (name) VALUES ('ROLE_PATIENT');
 INSERT INTO AUTHORITY (name) VALUES ('ROLE_ADMIN'); -- system administrator
@@ -26,13 +28,13 @@ insert into user_authority (user_id, authority_id) values (3, 4);
 
 -- INSERT ONE PATIENT
 insert into person (discriminator, address, city, country, name, surname, phone_number) values ('Patient', 'Pariskih komuna 13', 'Beograd', 'Srbija', 'Milunka', 'Pantic', '0614123355');
-insert into user_account (email, password, is_active, person_id) values ('milunka@gmail.com', '$2b$10$YYwcFgJrY3iDz1U3x62ymOUPS4meJv/LFRcuDQTulH5z5c0rSoYqW', true, 4);
+insert into user_account (email, password, is_active, person_id) values ('milunka@gmail.com', '$2a$10$VN1ORM/2CKQmuFkHTVQEvejLxi9wBl03/RWekn84APbzu31o0LAfa', true, 4);
 -- Password for patient account is: milunka
 insert into user_authority (user_id, authority_id) values (4, 1);
 
 -- INSERT ONE PHARMACIST
 insert into person (discriminator, address, city, country, name, surname, phone_number) values ('Consultant', 'Milana Rakica 20', 'Beograd', 'Srbija', 'Vlado', 'Perkic', '06123654523');
-insert into user_account (email, password, is_active, person_id) values ('pharmacist2@gmail.com', '$2b$10$gNc5a8idHoZG37A055NgyePGxSnC7B7wFNdyY03kVcBbKRgVKqCTe', true, 5);
+insert into user_account (email, password, is_active, person_id) values ('pharmacist2@gmail.com', '$2a$10$JTbQjDeRv57Hlb/zKRjCUuq348rfmAdoV/Q5KM8ZQ/5LSaCJVJaPW', true, 5);
 -- Password for pharmacist account is: pharmacist2
 insert into user_authority (user_id, authority_id) values (5, 4);
 
