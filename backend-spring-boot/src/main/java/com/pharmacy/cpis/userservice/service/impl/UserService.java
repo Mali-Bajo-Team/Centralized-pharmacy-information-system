@@ -100,7 +100,7 @@ public class UserService implements IUserService, UserDetailsService {
 
 		// Create a token for that user
 		UserAccount user = (UserAccount) authentication.getPrincipal();
-		String jwt = tokenUtils.generateToken(user.getUsername(), getUserRole(user));
+		String jwt = tokenUtils.generateToken(user);
 		int expiresIn = tokenUtils.getExpiredIn();
 
 		return new UserTokenState(jwt, expiresIn);

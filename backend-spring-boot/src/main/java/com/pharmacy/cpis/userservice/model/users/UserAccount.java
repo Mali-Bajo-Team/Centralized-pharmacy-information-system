@@ -179,4 +179,12 @@ public class UserAccount implements UserDetails {
 	public boolean isCredentialsNonExpired() {
 		return true;
 	}
+
+	public String getRole() {
+		if (authorities.isEmpty())
+			return null;
+		Authority authority = authorities.get(0);
+		String role = authority.getAuthority(); // we have now for example "ROLE_ADMIN"
+		return role.substring(5); // to take "ADMIN" only, we substring "ROLE_"
+	}
 }
