@@ -69,6 +69,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
+                //TODO: Remove this !!!
+                .antMatchers("/api/users/**").permitAll()
+
 
                 // For every other request the user must be authenticated
                 .anyRequest().authenticated().and()

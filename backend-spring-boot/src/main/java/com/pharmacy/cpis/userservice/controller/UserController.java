@@ -1,7 +1,9 @@
 package com.pharmacy.cpis.userservice.controller;
 
 import com.pharmacy.cpis.userservice.dto.UserAccDTO;
+import com.pharmacy.cpis.userservice.model.users.Patient;
 import com.pharmacy.cpis.userservice.model.users.UserAccount;
+import com.pharmacy.cpis.userservice.service.IPatientService;
 import com.pharmacy.cpis.userservice.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,9 @@ public class UserController {
     @Autowired
     private IUserService userAccService;
 
+    @Autowired
+    private IPatientService patientService;
+
     @CrossOrigin
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -36,6 +41,15 @@ public class UserController {
         }
 
         return new ResponseEntity<>(usersAccDTO, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "patients")
+    @PreAuthorize("hasRole('PHARMACIST')")
+    public ResponseEntity<List<Patient>> getAllPatient() {
+
+        List<Patient> patients = patientService.findAllPatient();
+
+        return new ResponseEntity<>(patients, HttpStatus.OK);
     }
 
 
