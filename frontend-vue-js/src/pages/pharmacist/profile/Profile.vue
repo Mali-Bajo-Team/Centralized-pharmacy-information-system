@@ -134,7 +134,7 @@ export default {
 
     this.axios
       .post(
-        "http://localhost:8081/api/consultations/loggedconsultant",
+        process.env.VUE_APP_BACKEND_URL + process.env.VUE_APP_LOGEDPHARMACIST_ENDPOINT,
         { email: email },
         {
           headers: {

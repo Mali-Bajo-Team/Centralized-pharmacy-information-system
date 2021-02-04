@@ -90,7 +90,7 @@ export default {
       this.consultants = [];
       this.axios
         .post(
-          "http://localhost:8081/api/consultations/consultantexaminations",
+          process.env.VUE_APP_BACKEND_URL + process.env.VUE_APP_CONSULTANTEXAMINATIONS_ENDPOINT,
           { email: email },
           {
             headers: {
