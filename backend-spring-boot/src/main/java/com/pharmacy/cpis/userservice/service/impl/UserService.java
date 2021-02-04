@@ -7,9 +7,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +18,7 @@ import com.pharmacy.cpis.userservice.service.IUserService;
 import com.pharmacy.cpis.util.security.TokenUtils;
 
 @Service
-public class UserService implements IUserService, UserDetailsService {
+public class UserService implements IUserService {
 	@Autowired
 	private IUserRepository userRepository;
 
@@ -60,19 +57,6 @@ public class UserService implements IUserService, UserDetailsService {
 
 		userAccForUpdate.setActive(true);
 		userRepository.save(userAccForUpdate);
-	}
-
-	// Username is unique identifier in UserDetailsService, in our system that is
-	// email !
-	@Override
-	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		UserAccount user = userRepository.findByEmail(email);
-
-		if (user == null) {
-			throw new UsernameNotFoundException(String.format("No user found with email '%s'.", email));
-		} else {
-			return user;
-		}
 	}
 
 	@Override
