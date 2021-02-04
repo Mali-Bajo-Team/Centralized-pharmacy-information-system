@@ -21,6 +21,10 @@ export default {
             {
                 title: "Home",
                 to: "/pharmacist"
+            },
+            {
+                title: "Profile",
+                to: "/pharmacist/profile"
             }
         ]
     })

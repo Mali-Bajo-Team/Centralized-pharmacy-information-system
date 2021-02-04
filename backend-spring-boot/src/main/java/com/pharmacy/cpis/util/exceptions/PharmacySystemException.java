@@ -2,7 +2,9 @@ package com.pharmacy.cpis.util.exceptions;
 
 public class PharmacySystemException extends RuntimeException {
 
-    public PharmacySystemException() {
+	private static final long serialVersionUID = 604445251879335961L;
+
+	public PharmacySystemException() {
     }
 
     public PharmacySystemException(String message) {

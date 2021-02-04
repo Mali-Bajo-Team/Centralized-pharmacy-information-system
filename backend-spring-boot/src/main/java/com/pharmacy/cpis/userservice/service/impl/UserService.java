@@ -22,6 +22,11 @@ public class UserService implements IUserService, UserDetailsService {
     private IAuthorityService authService;
 
     @Override
+    public UserAccount findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
     public List<UserAccount> findAll() {
         return userRepository.findAll();
     }
