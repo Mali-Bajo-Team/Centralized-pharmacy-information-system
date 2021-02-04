@@ -452,12 +452,20 @@
                     <v-text-field
                       v-model="systemAdministratorForm.password"
                       :append-icon="
-                        systemAdministratorForm.showPassword ? 'mdi-eye' : 'mdi-eye-off'
+                        systemAdministratorForm.showPassword
+                          ? 'mdi-eye'
+                          : 'mdi-eye-off'
                       "
                       :errorMessages="passwordErrorsSystemAdministrator"
-                      :type="systemAdministratorForm.showPassword ? 'text' : 'password'"
+                      :type="
+                        systemAdministratorForm.showPassword
+                          ? 'text'
+                          : 'password'
+                      "
                       label="Password"
-                      @click:append="systemAdministratorForm.showPassword = !systemAdministratorForm.showPassword"
+                      @click:append="
+                        systemAdministratorForm.showPassword = !systemAdministratorForm.showPassword
+                      "
                       @blur="$v.systemAdministratorForm.password.$touch()"
                       @input="$v.systemAdministratorForm.password.$touch()"
                     ></v-text-field>
@@ -520,11 +528,16 @@
                 style="padding: 2%"
                 color="grey lighten-5"
                 class="mb-12"
-                height="300px"
+                height="400px"
               >
                 <v-text-field label="Name of the drug"></v-text-field>
                 <v-text-field label="Code of the drug"></v-text-field>
                 <v-text-field label="Loyalty points"></v-text-field>
+                <v-select
+                  :items="typesOfDrug"
+                  label="Alternate drugs"
+                  outlined
+                ></v-select>
                 <v-select
                   :items="typesOfDrug"
                   label="Type of the drug"
@@ -556,10 +569,18 @@
               >
                 <v-row>
                   <v-col>
+                    <v-text-field label="Manufacturer"></v-text-field>
                     <v-text-field label="Contraindications"></v-text-field>
-                    <v-text-field label="Drug composition"></v-text-field>
+                    <v-row>
+                      <v-col>
+                        <v-text-field label="Ingredient name"></v-text-field>
+                      </v-col>
+
+                      <v-col>
+                        <v-text-field label="Amount"></v-text-field>
+                      </v-col>
+                    </v-row>
                     <v-text-field label="Recommended daily dose"></v-text-field>
-                    <v-text-field label="Alternate drugs"></v-text-field>
                   </v-col>
                 </v-row>
               </v-card>
@@ -696,6 +717,7 @@ export default {
       loyaltyRegStep: 1,
     },
     typesOfDrug: ["Antibiotik", "Anestetik"],
+    alternateDrugs: ["Hors", "Celik"],
     dermatologistForm: {
       email: "",
       password: "",
@@ -728,6 +750,22 @@ export default {
       city: "",
       country: "",
       phone: "",
+    },
+    drugForm: {
+      drug: {
+        name: "",
+        code: "",
+        loyaltyPoints: "",
+      },
+      specification: {
+        manufacturer: "",
+        contraindications: "",
+        ingredients: {
+          name: "",
+          amount: 0.0,
+        },
+        recommendedDailyDose: 0,
+      },
     },
   }),
   validations: {
