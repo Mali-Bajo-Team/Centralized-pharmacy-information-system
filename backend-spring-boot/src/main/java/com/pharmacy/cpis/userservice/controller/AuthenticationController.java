@@ -49,6 +49,9 @@ public class AuthenticationController {
     @Autowired
     private IPatientRegistrationService patientRegistrationService;
 
+    @Autowired
+    private ISystemAdministratorService systemAdministratorService;
+
     // The first endpoint that affects the user when logging in.
     // Then he only knows his username and password and forwards it to the backend.
     @PostMapping("/login")
@@ -92,13 +95,23 @@ public class AuthenticationController {
     }
 
     @PostMapping(value = "/signup/supplier", consumes = "application/json")
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Supplier> addSupplier(@RequestBody UserRegisterDTO supplier) {
         if (supplierService.existsByEmail(supplier.getEmail()))
             return new ResponseEntity<>(HttpStatus.CONFLICT);
 
         Supplier addedSupplier = supplierService.registerSupplier(supplier);
         return new ResponseEntity<>(addedSupplier, HttpStatus.CREATED);
+    }
+
+    @PostMapping(value = "/signup/admin", consumes = "application/json")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<SystemAdministrator> addSystemAdministrator(@RequestBody UserRegisterDTO systemAdministrator) {
+        if (systemAdministratorService.existsByEmail(systemAdministrator.getEmail()))
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+
+        SystemAdministrator addedSystemAdministrator = systemAdministratorService.registerSystemAdministrator(systemAdministrator);
+        return new ResponseEntity<>(addedSystemAdministrator, HttpStatus.CREATED);
     }
 
     // GET is because of easy click-activate method

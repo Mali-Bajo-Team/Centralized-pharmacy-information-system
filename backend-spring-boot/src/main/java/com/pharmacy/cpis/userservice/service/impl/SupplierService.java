@@ -43,14 +43,14 @@ public class SupplierService implements ISupplierService {
         return userRepository.existsByEmail(email);
     }
 
-    private UserAccount addNewSupplierAccount(UserRegisterDTO userRequest, Supplier addedConsultant) {
+    private UserAccount addNewSupplierAccount(UserRegisterDTO userRequest, Supplier addedSupplier) {
         UserAccount newUserAccount = new UserAccount();
         newUserAccount.setEmail(userRequest.getEmail());
         newUserAccount.setPassword( passwordEncoder.encode(userRequest.getPassword()));
         newUserAccount.setActive(false);
         List<Authority> auth = authService.findByName("ROLE_SUPPLIER");
         newUserAccount.setAuthorities(auth);
-        newUserAccount.setPerson(addedConsultant);
+        newUserAccount.setPerson(addedSupplier);
 
         UserAccount addedAccount = userRepository.save(newUserAccount);
         return addedAccount;
