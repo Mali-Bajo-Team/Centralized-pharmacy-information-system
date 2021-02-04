@@ -23,6 +23,14 @@ export default {
                 to: "/"
             },
             {
+                title:"Drugs",
+                to:"drugs"
+            },
+            {
+                title:"Pharmacies",
+                to:"pharmacies"
+            },
+            {
                 title: "Log in",
                 to: "login"
             },

@@ -7,6 +7,8 @@ import com.pharmacy.cpis.pharmacyservice.service.IPharmacyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PharmacyService implements IPharmacyService {
 
@@ -16,5 +18,10 @@ public class PharmacyService implements IPharmacyService {
     @Override
     public Pharmacy registerPharmacy(PharmacyRegisterDTO pharmacy) {
         return null;
+    }
+
+    @Override
+    public List<Pharmacy> findAll() {
+        return pharmacyRepository.findAll();
     }
 }
