@@ -1,8 +1,5 @@
 package com.pharmacy.cpis.util.exceptions.handler;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +12,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.pharmacy.cpis.util.exceptions.PSAlreadyExistsException;
 import com.pharmacy.cpis.util.exceptions.PSBadRequestException;
+import com.pharmacy.cpis.util.exceptions.PSForbiddenException;
 import com.pharmacy.cpis.util.exceptions.PSNotFoundException;
 
 @ControllerAdvice
@@ -23,36 +21,38 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
-		List<String> details = new ArrayList<>();
+		StringBuilder details = new StringBuilder();
 		for (ObjectError error : ex.getBindingResult().getAllErrors()) {
-			details.add(error.getDefaultMessage());
+			details.append(error.getDefaultMessage());
+			details.append(" ");
 		}
-		ErrorResponse error = new ErrorResponse("Request parameters are not valid.", details);
+		ErrorResponse error = new ErrorResponse("Request parameters are not valid.", details.toString());
 		return new ResponseEntity<Object>(error, HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(PSNotFoundException.class)
 	public ResponseEntity<Object> notFound(PSNotFoundException ex) {
-		List<String> details = new ArrayList<>();
-		details.add(ex.getMessage());
-		ErrorResponse response = new ErrorResponse("The requested resource does not exist.", details);
+		ErrorResponse response = new ErrorResponse("The requested resource does not exist.", ex.getMessage());
 		return new ResponseEntity<Object>(response, HttpStatus.NOT_FOUND);
 	}
 
 	@ExceptionHandler(PSBadRequestException.class)
 	public ResponseEntity<Object> badRequest(PSBadRequestException ex) {
-		List<String> details = new ArrayList<>();
-		details.add(ex.getMessage());
-		ErrorResponse response = new ErrorResponse("Bad request.", details);
+		ErrorResponse response = new ErrorResponse("Bad request.", ex.getMessage());
 		return new ResponseEntity<Object>(response, HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(PSAlreadyExistsException.class)
 	public ResponseEntity<Object> alreadyExists(PSAlreadyExistsException ex) {
-		List<String> details = new ArrayList<>();
-		details.add(ex.getMessage());
-		ErrorResponse response = new ErrorResponse("The resource you tried to create already exists.", details);
+		ErrorResponse response = new ErrorResponse("The resource you tried to create already exists.", ex.getMessage());
 		return new ResponseEntity<Object>(response, HttpStatus.CONFLICT);
+	}
+
+	@ExceptionHandler(PSForbiddenException.class)
+	public ResponseEntity<Object> alreadyExists(PSForbiddenException ex) {
+		ErrorResponse response = new ErrorResponse("You do not have permission to access the requested resource.",
+				ex.getMessage());
+		return new ResponseEntity<Object>(response, HttpStatus.FORBIDDEN);
 	}
 
 }

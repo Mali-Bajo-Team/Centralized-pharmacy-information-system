@@ -1,9 +1,5 @@
 package com.pharmacy.cpis.util.config;
 
-import com.pharmacy.cpis.userservice.service.impl.UserService;
-import com.pharmacy.cpis.util.security.TokenUtils;
-import com.pharmacy.cpis.util.security.auth.RestAuthenticationEntryPoint;
-import com.pharmacy.cpis.util.security.auth.TokenAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -18,6 +14,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+import com.pharmacy.cpis.util.security.TokenUtils;
+import com.pharmacy.cpis.util.security.auth.RestAuthenticationEntryPoint;
+import com.pharmacy.cpis.util.security.auth.TokenAuthenticationFilter;
+import com.pharmacy.cpis.util.security.auth.UserAccountDetailsService;
+
 // Enable annotation "@Pre*" & "@Post*" which will check authorization for every method access (with that annotation ofc)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -31,7 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     // Service which is used for reading data about application users
     @Autowired
-    private UserService jwtUserDetailsService;
+    private UserAccountDetailsService jwtUserDetailsService;
 
     // Handler for returning 401, when client with an incorrect username and password tries to access a resource
     @Autowired
