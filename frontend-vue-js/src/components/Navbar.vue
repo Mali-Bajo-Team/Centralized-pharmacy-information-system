@@ -16,12 +16,15 @@
       <template v-slot:extension>
         <v-tabs align-with-title>
           <v-tab v-for="item in items" :key="item.title" :to="item.to">{{item.title}}</v-tab>
+          <v-tab v-if="logout" @click="doLogout">Log out</v-tab>
         </v-tabs>
       </template>
     </v-app-bar>
 </template>
 
 <script>
+import { removeToken } from './../util/token'
+
 export default {
     props: {
         items: {
@@ -29,7 +32,17 @@ export default {
             default: function () {
                 return []
             }
+        },
+        logout: {
+          type: Boolean,
+          default: true
         }
+    },
+    methods:{
+      doLogout: function() {
+        removeToken()
+        this.$router.push('/')
+      }
     }
 }
 </script>

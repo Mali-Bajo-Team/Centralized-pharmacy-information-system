@@ -61,6 +61,7 @@ public class PatientRegistrationService implements IPatientRegistrationService {
 		}
 	}
 
+
     private UserAccount addNewPatientAccount(UserRegisterDTO userRequest, Patient addedPatient) {
         UserAccount newUserAccount = new UserAccount();
         newUserAccount.setEmail(userRequest.getEmail());

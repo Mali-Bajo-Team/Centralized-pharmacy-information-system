@@ -6,7 +6,8 @@ import java.util.Set;
 @Entity
 public class DrugSpecification {
 	@Id
-	private Integer id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	@Column(nullable = false)
 	private String manufacturer;
@@ -34,11 +35,11 @@ public class DrugSpecification {
 		super();
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

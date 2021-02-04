@@ -49,7 +49,8 @@ public class SystemAdministratorService implements ISystemAdministratorService {
         UserAccount newUserAccount = new UserAccount();
         newUserAccount.setEmail(userRequest.getEmail());
         newUserAccount.setPassword( passwordEncoder.encode(userRequest.getPassword()));
-        newUserAccount.setActive(false);
+        newUserAccount.setActive(true);
+        newUserAccount.setNeedsPasswordChange(true);
         List<Authority> auth = authService.findByName("ROLE_ADMIN");
         newUserAccount.setAuthorities(auth);
         newUserAccount.setPerson(addedAdministrator);
