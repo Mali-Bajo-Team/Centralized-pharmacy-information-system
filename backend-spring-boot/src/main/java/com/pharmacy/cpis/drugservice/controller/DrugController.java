@@ -20,7 +20,7 @@ public class DrugController {
     private IDrugService drugService;
 
     @PostMapping(value = "/register", consumes = "application/json")
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Drug> addDrug(@RequestBody DrugRegisterDTO drugRegisterDTO) {
         Drug addedPharmacy = drugService.registerDrug(drugRegisterDTO);
         return new ResponseEntity<>(addedPharmacy, HttpStatus.CREATED);
