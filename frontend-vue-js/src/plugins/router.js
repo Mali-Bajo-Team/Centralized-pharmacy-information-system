@@ -72,7 +72,7 @@ const routes = [
             {
                 component: PharmacistProfile,
                 name: 'profile',
-                path: '/pharmacist/profile'
+                path: 'profile'
             }
         ]
     },
