@@ -12,6 +12,7 @@ import Pharmacies from './../pages/guest/pharmacies/Pharmacies';
 
 import Patient from './../pages/patient/Container';
 import PatientLanding from './../pages/patient/landing/Landing';
+import PatientProfile from './../pages/patient/profile/Profile';
 
 import Pharmacist from './../pages/pharmacist/Container';
 import PharmacistLanding from './../pages/pharmacist/landing/Landing';
@@ -70,6 +71,11 @@ const routes = [
                 component: PatientLanding,
                 name: 'patient',
                 path: ''
+            },
+            {
+                component: PatientProfile,
+                name: 'profile',
+                path:'profile'
             }
         ]
     },
