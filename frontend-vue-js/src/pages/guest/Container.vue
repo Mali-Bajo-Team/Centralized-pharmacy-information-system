@@ -29,6 +29,14 @@ export default {
             {
                 title: "Register",
                 to: "register"
+            },
+            {
+                title:"Drugs",
+                to:"drugs"
+            },
+            {
+                title:"Pharmacies",
+                to:"pharmacies"
             }
         ]
     })

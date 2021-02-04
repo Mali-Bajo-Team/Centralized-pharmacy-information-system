@@ -14,6 +14,8 @@ insert into user_authority (user_id, authority_id) values (1, 2);
 
 -- INSERT ONE PATIENT
 insert into person (discriminator, address, city, country, name, surname, phone_number) values ('Patient', 'Jovana Jovanovica 12', 'Novi Sad', 'Srbija', 'Dragna', 'Mororović', '0661352720');
+insert into person (discriminator, address, city, country, name, surname, phone_number) values ('Patient', 'Dr Sime Milosevica 12', 'Novi Sad', 'Srbija', 'Ivana', 'Ivanovic', '0665352728');
+
 insert into user_account (email, password, is_active, person_id) values ('dragana@gmail.com', '$2a$10$Ys8dHFGzcjM.Rn2VbB.rhuSQc/Ye7rawUgWCxE7.kco.x9EE4eYUa', true, 2);
 -- Password for patient account is: dragana
 insert into user_authority (user_id, authority_id) values (2, 1);
@@ -45,10 +47,16 @@ insert into user_category (loyalty_program_id, name, minimum_points, reservation
 
 -- INSERT PHARMACIES
 insert into pharmacy (id,dermatologist_consultation_price,pharmacist_consultation_price,latitude,longitude,name,city,country,street, house_number)
-values (1,20,20,19.0,20.0,'Jankovic','Novi Sad','Serbia','Branka Jovica',16);
+values (1,20,20,19.0,20.0,'Pharmacy Jankovic','Novi Sad','Serbia','Branka Jovica',16);
+insert into pharmacy (id,dermatologist_consultation_price,pharmacist_consultation_price,latitude,longitude,name,city,country,street, house_number)
+values (2,40,50,19.0,20.0,'Pharmacy BENU Mercator','Novi Sad','Serbia','Bulevar Oslobodjenja',102);
+
+
 
 -- INSERT PHARMACY RATINGS
 insert into pharmacy_rating(id, rating, patient_id,pharmacy_id) values (1,5,2,1);
+insert into pharmacy_rating(id, rating, patient_id,pharmacy_id) values (2,3,2,2);
+insert into pharmacy_rating(id, rating, patient_id,pharmacy_id) values (3,4,1,2);
 
 insert into consultation (id,price,status,end_date, start_date,consultant_id,patient_id,pharmacy_id) values (1,20,1,'2020-05-05 10:23','2020-05-05 11:00',1,2,1);
 
