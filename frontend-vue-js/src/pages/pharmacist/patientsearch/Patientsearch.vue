@@ -170,6 +170,7 @@
 export default {
     data() {
         return {
+            phatients: [],
             itemsPerPageArray: [4, 8, 12, 16, 20],
             search: '',
             filter: {},
@@ -235,6 +236,21 @@ export default {
                 }
             ]
         }
+    },
+    created(){
+         this.axios
+            .get(
+        'http://localhost:8081/api/users/patients',
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+          },
+        }
+      )
+      .then((resp) => {
+        this.phatients = resp.data;
+        console.log(this.phatients);
+      });
     },
     computed: {
         numberOfPages() {
