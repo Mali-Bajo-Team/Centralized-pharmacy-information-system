@@ -4,9 +4,11 @@
       <v-col md="3" class="ml-10 mt-15">
         <v-card elevation="3" class="pa-6 primary">
           <p class="font-weight-medium">Name : {{ pharmacist.name }}</p>
-          <p class="font-weight-medium">Lastname : {{  pharmacist.lastName }}</p>
-          <p class="font-weight-medium">Phone number : {{  pharmacist.phoneNumber }}</p>
-          <p class="font-weight-medium">Location : {{  pharmacist.location }}</p>
+          <p class="font-weight-medium">Lastname : {{ pharmacist.lastName }}</p>
+          <p class="font-weight-medium">
+            Phone number : {{ pharmacist.phoneNumber }}
+          </p>
+          <p class="font-weight-medium">Location : {{ pharmacist.location }}</p>
 
           <v-dialog transition="dialog-bottom-transition" max-width="600">
             <template v-slot:activator="{ on, attrs }">
@@ -15,7 +17,7 @@
                 fab
                 dark
                 large
-                color="blue"
+                color="secondary"
                 v-bind="attrs"
                 v-on="on"
               >
@@ -64,6 +66,10 @@
                           label="Location"
                           filled
                         ></v-text-field>
+                        <v-btn depressed class="mr-4 mb-5"> Cancel </v-btn>
+                        <v-btn depressed class="mr-4 mb-5" color="primary">
+                          Submit
+                        </v-btn>
                       </v-card>
                     </v-tab-item>
                     <v-tab-item>
@@ -90,6 +96,10 @@
                           class="input-group--focused"
                           @click:append="show3 = !show3"
                         ></v-text-field>
+                        <v-btn depressed class="mr-4 mb-5"> Cancel </v-btn>
+                        <v-btn depressed class="mr-4 mb-5" color="primary">
+                          Submit
+                        </v-btn>
                       </v-card>
                     </v-tab-item>
                     <v-tab-item>
@@ -134,7 +144,8 @@ export default {
 
     this.axios
       .post(
-        process.env.VUE_APP_BACKEND_URL + process.env.VUE_APP_LOGEDPHARMACIST_ENDPOINT,
+        process.env.VUE_APP_BACKEND_URL +
+          process.env.VUE_APP_LOGEDPHARMACIST_ENDPOINT,
         { email: email },
         {
           headers: {
