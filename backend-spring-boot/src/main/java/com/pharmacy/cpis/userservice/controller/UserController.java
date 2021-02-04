@@ -1,5 +1,6 @@
 package com.pharmacy.cpis.userservice.controller;
 
+import com.pharmacy.cpis.userservice.dto.PatientDTO;
 import com.pharmacy.cpis.userservice.dto.UserAccDTO;
 import com.pharmacy.cpis.userservice.model.users.Patient;
 import com.pharmacy.cpis.userservice.model.users.UserAccount;
@@ -45,11 +46,17 @@ public class UserController {
 
     @GetMapping(value = "patients")
     @PreAuthorize("hasRole('PHARMACIST')")
-    public ResponseEntity<List<Patient>> getAllPatient() {
+    public ResponseEntity<List<PatientDTO>> getAllPatient() {
 
         List<Patient> patients = patientService.findAllPatient();
 
-        return new ResponseEntity<>(patients, HttpStatus.OK);
+        // convert patients to DTOs
+        List<PatientDTO> patientDTO = new ArrayList<>();
+        for (Patient p : patients) {
+            patientDTO.add(new PatientDTO(p));
+        }
+
+        return new ResponseEntity<>(patientDTO, HttpStatus.OK);
     }
 
 
