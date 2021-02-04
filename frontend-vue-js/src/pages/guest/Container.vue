@@ -1,6 +1,6 @@
 <template>
     <v-app>        
-        <navbar v-bind:items="links"></navbar>
+        <navbar v-bind:items="links" v-bind:logout="false"></navbar>
         <v-main>
             <v-container fluid>
                 <router-view></router-view>
