@@ -15,6 +15,7 @@ import PatientLanding from './../pages/patient/landing/Landing';
 
 import Pharmacist from './../pages/pharmacist/Container';
 import PharmacistLanding from './../pages/pharmacist/landing/Landing';
+import PharmacistProfile from './../pages/pharmacist/profile/Profile';
 
 import Dermatologist from './../pages/dermatologist/Container';
 import DermatologistLanding from './../pages/dermatologist/landing/Landing';
@@ -79,6 +80,11 @@ const routes = [
                 component: PharmacistLanding,
                 name: 'pharmacist',
                 path: ''
+            },
+            {
+                component: PharmacistProfile,
+                name: 'profile',
+                path: 'profile'
             }
         ]
     },

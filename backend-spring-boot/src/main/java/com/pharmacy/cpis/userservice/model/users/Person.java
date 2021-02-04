@@ -1,10 +1,17 @@
 package com.pharmacy.cpis.userservice.model.users;
 
-import com.pharmacy.cpis.util.exceptions.PSValidationException;
-import com.pharmacy.cpis.util.validators.StringValidator;
-
-import javax.persistence.*;
-import javax.validation.ValidationException;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.OneToOne;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -44,8 +51,6 @@ public class Person {
     }
 
     public void setId(Long id) {
-        if (id == null || id < 0)
-            throw new PSValidationException("Id is required.");
         this.id = id;
     }
 
@@ -54,8 +59,6 @@ public class Person {
     }
 
     public void setName(String name) {
-        if (name == null || name.isEmpty())
-            throw new PSValidationException("Name is required.");
         this.name = name;
     }
 
@@ -64,8 +67,6 @@ public class Person {
     }
 
     public void setSurname(String surname) {
-        if (surname == null || surname.isEmpty())
-            throw new PSValidationException("Surname is required.");
         this.surname = surname;
     }
 
@@ -74,10 +75,6 @@ public class Person {
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        if (phoneNumber == null || phoneNumber.isEmpty())
-            throw new PSValidationException("Phone number is required.");
-        if(!StringValidator.isNumeric(phoneNumber))
-            throw new PSValidationException("Phone number must be a numeric.");
         this.phoneNumber = phoneNumber;
     }
 
@@ -86,8 +83,6 @@ public class Person {
     }
 
     public void setAddress(String address) {
-        if (address == null || address.isEmpty())
-            throw new PSValidationException("Address is required.");
         this.address = address;
     }
 
@@ -96,8 +91,6 @@ public class Person {
     }
 
     public void setCity(String city) {
-        if (city == null || city.isEmpty())
-            throw new PSValidationException("City is required.");
         this.city = city;
     }
 
@@ -106,8 +99,6 @@ public class Person {
     }
 
     public void setCountry(String country) {
-        if (country == null || country.isEmpty())
-            throw new PSValidationException("Country is required.");
         this.country = country;
     }
 
@@ -116,8 +107,6 @@ public class Person {
     }
 
     public void setAccount(UserAccount account) {
-        if (account == null )
-            throw new PSValidationException("Account must exist.");
         this.account = account;
     }
 
