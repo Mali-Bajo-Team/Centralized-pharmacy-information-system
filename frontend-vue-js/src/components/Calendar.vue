@@ -53,14 +53,9 @@
 
     <!-- Start DIALOG-->
     <v-dialog v-model="dialog" persistent max-width="600px">
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn color="primary" dark v-bind="attrs" v-on="on">
-          Open Dialog 
-        </v-btn>
-      </template>
       <v-card>
         <v-card-title>
-          <span class="headline">User Profile {{name}}</span>
+          <span class="headline">User Profile {{ name }}</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -87,7 +82,7 @@ export default {
   data: () => ({
     dragEvent: null,
 
-    name: '',
+    name: "",
     dialog: false,
     consultants: [],
     response: null,
@@ -118,9 +113,8 @@ export default {
   methods: {
     myTime(event) {
       this.name = event.event.name;
-     this.dialog = true;
+      this.dialog = true;
       console.log(event);
-     
     },
     getEvents() {
       var token = parseJwt(localStorage.getItem("JWT-CPIS"));
