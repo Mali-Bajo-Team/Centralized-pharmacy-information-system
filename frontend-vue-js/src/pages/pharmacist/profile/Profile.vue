@@ -67,7 +67,7 @@
                           filled
                         ></v-text-field>
                         <v-btn depressed class="mr-4 mb-5"> Cancel </v-btn>
-                        <v-btn depressed class="mr-4 mb-5" color="primary">
+                        <v-btn depressed class="mr-4 mb-5"   @click="changePersonalData" color="primary">
                           Submit
                         </v-btn>
                       </v-card>
@@ -97,7 +97,12 @@
                           @click:append="show3 = !show3"
                         ></v-text-field>
                         <v-btn depressed class="mr-4 mb-5"> Cancel </v-btn>
-                        <v-btn depressed class="mr-4 mb-5" color="primary">
+                        <v-btn
+                          depressed
+                          class="mr-4 mb-5"
+                          color="primary"
+                        
+                        >
                           Submit
                         </v-btn>
                       </v-card>
@@ -157,6 +162,31 @@ export default {
         this.pharmacist = resp.data;
       });
   },
+  methods: {
+    changePersonalData() {
+       console.log( this.pharmacist);
+      this.axios
+        .put(
+          process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_PROFILE_ENDPOINT,
+          { name: this.pharmacist.name,
+            surname: this.pharmacist.lastName,
+            city: 'Novi Sad',
+            address:  this.pharmacist.location,
+            country: 'Serbia',
+            phone: this.pharmacist.phoneNumber
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then((resp) => {
+          this.pharmacist = resp.data;
+        });
+    },
+  }
 };
 
 function parseJwt(token) {
