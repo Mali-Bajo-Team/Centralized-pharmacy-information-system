@@ -51,30 +51,53 @@
       ></v-calendar>
     </v-sheet>
 
-    <!-- Start DIALOG-->
-    <v-dialog v-model="dialog" persistent max-width="600px">
+    <!-- Start QUESTION DIALOG -->
+    <v-dialog v-model="questionDialog" persistent max-width="600px">
       <v-card>
         <v-card-title>
           <span class="headline">Examination report for {{ name }}</span>
         </v-card-title>
         <v-card-text>
           <v-container>
-            <v-row> </v-row>
+            <v-row>
+               </v-row>
           </v-container>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" text @click="dialog = false">
+          <v-btn color="primary" text @click="questionDialog = false">
             
 The patient did not show up 
           </v-btn>
-          <v-btn color="primary" text @click="dialog = false">
+          <v-btn color="primary" text @click="questionDialog = false; reportDialog = true">
             Start examination
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <!-- End DIALOG-->
+    <!-- End QUESTION DIALOG-->
+
+      <!-- Start REPORT DIALOG-->
+    <v-dialog v-model="reportDialog" persistent max-width="600px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">Examination report for {{ name }}</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+               </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" text @click="reportDialog = false">
+            Submit
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- End REPORT DIALOG-->
   </v-app>
 </template>
 
@@ -85,7 +108,8 @@ export default {
 
     name: "",
     patientId: null,
-    dialog: false,
+    questionDialog: false,
+    reportDialog: false,
     consultants: [],
     response: null,
     type: "month",
@@ -116,7 +140,7 @@ export default {
     showExaminationDialog(event) {
       this.name = event.event.name;
       this.patientId = event.event.patientId;
-      this.dialog = true;
+      this.questionDialog = true;
       console.log(event);
     },
     getEvents() {
