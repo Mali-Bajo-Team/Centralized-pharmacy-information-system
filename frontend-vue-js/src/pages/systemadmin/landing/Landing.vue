@@ -134,27 +134,27 @@
                   <v-col>
                     <v-text-field
                       v-model="dermatologistForm.name"
-                      :error-messages="nameErrors"
+                      :error-messages="nameErrorsDermatologist"
                       label="Name"
                       @blur="$v.dermatologistForm.name.$touch()"
                       @input="$v.dermatologistForm.name.$touch()"
                     ></v-text-field>
                     <v-text-field
                       v-model="dermatologistForm.surname"
-                      :error-messages="surnameErrors"
+                      :error-messages="surnameErrorsDermatologist"
                       label="Surname"
                       @blur="$v.dermatologistForm.surname.$touch()"
                       @input="$v.dermatologistForm.surname.$touch()"
                     ></v-text-field>
                     <v-text-field
-                      :error-messages="phoneErrors"
+                      :error-messages="phoneErrorsDermatologist"
                       label="Phone number"
                       @blur="$v.dermatologistForm.phone.$touch()"
                       @input="$v.dermatologistForm.phone.$touch()"
                       v-model="dermatologistForm.phone"
                     ></v-text-field>
                     <v-text-field
-                      :error-messages="addressErrors"
+                      :error-messages="addressErrorsDermatologist"
                       label="Home address"
                       @blur="$v.dermatologistForm.address.$touch()"
                       @input="$v.dermatologistForm.address.$touch()"
@@ -164,21 +164,21 @@
 
                   <v-col>
                     <v-text-field
-                      :error-messages="cityErrors"
+                      :error-messages="cityErrorsDermatologist"
                       label="City"
                       @blur="$v.dermatologistForm.city.$touch()"
                       @input="$v.dermatologistForm.city.$touch()"
                       v-model="dermatologistForm.city"
                     ></v-text-field>
                     <v-text-field
-                      :error-messages="countryErrors"
+                      :error-messages="countryErrorsDermatologist"
                       label="Country"
                       @blur="$v.dermatologistForm.country.$touch()"
                       @input="$v.dermatologistForm.country.$touch()"
                       v-model="dermatologistForm.country"
                     ></v-text-field>
                     <v-text-field
-                      :error-messages="emailErrors"
+                      :error-messages="emailErrorsDermatologist"
                       label="Email"
                       @blur="$v.dermatologistForm.email.$touch()"
                       @input="$v.dermatologistForm.email.$touch()"
@@ -190,7 +190,7 @@
                           ? 'mdi-eye'
                           : 'mdi-eye-off'
                       "
-                      :errorMessages="passwordErrors"
+                      :errorMessages="passwordErrorsDermatologist"
                       :type="
                         dermatologistForm.showPassword ? 'text' : 'password'
                       "
@@ -208,7 +208,7 @@
               <!-- End of the form for dermatologist -->
 
               <!-- Buttons -->
-              <v-btn color="primary" @click="preConfirmationForDermatologist()">
+              <v-btn color="primary" @click="stepper.dermatologistRegStep = 2">
                 Continue
               </v-btn>
               <v-btn text> Cancel </v-btn>
@@ -268,17 +268,72 @@
               >
                 <v-row>
                   <v-col>
-                    <v-text-field label="Name"></v-text-field>
-                    <v-text-field label="Surname"></v-text-field>
-                    <v-text-field label="Phone number"></v-text-field>
-                    <v-text-field label="Address"></v-text-field>
+                    <v-text-field
+                      v-model="supplierForm.name"
+                      :error-messages="nameErrorsSupplier"
+                      label="Name"
+                      @blur="$v.supplierForm.name.$touch()"
+                      @input="$v.supplierForm.name.$touch()"
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="supplierForm.surname"
+                      :error-messages="surnameErrorsSupplier"
+                      label="Surname"
+                      @blur="$v.supplierForm.surname.$touch()"
+                      @input="$v.supplierForm.surname.$touch()"
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="supplierForm.phone"
+                      :error-messages="phoneErrorsSupplier"
+                      label="Phone number"
+                      @blur="$v.supplierForm.phone.$touch()"
+                      @input="$v.supplierForm.phone.$touch()"
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="supplierForm.address"
+                      :error-messages="addressErrorsSupplier"
+                      label="Home address"
+                      @blur="$v.supplierForm.address.$touch()"
+                      @input="$v.supplierForm.address.$touch()"
+                    ></v-text-field>
                   </v-col>
 
                   <v-col>
-                    <v-text-field label="City"></v-text-field>
-                    <v-text-field label="Country"></v-text-field>
-                    <v-text-field label="Email"></v-text-field>
-                    <v-text-field label="Password"></v-text-field>
+                    <v-text-field
+                      v-model="supplierForm.city"
+                      :error-messages="cityErrorsSupplier"
+                      label="City"
+                      @blur="$v.supplierForm.city.$touch()"
+                      @input="$v.supplierForm.city.$touch()"
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="supplierForm.country"
+                      :error-messages="countryErrorsSupplier"
+                      label="Country"
+                      @blur="$v.supplierForm.country.$touch()"
+                      @input="$v.supplierForm.country.$touch()"
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="supplierForm.email"
+                      :error-messages="emailErrorsSupplier"
+                      label="Email"
+                      @blur="$v.supplierForm.email.$touch()"
+                      @input="$v.supplierForm.email.$touch()"
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="supplierForm.password"
+                      :append-icon="
+                        supplierForm.showPassword ? 'mdi-eye' : 'mdi-eye-off'
+                      "
+                      :errorMessages="passwordErrorsSupplier"
+                      :type="supplierForm.showPassword ? 'text' : 'password'"
+                      label="Password"
+                      @click:append="
+                        supplierForm.showPassword = !supplierForm.showPassword
+                      "
+                      @blur="$v.supplierForm.password.$touch()"
+                      @input="$v.supplierForm.password.$touch()"
+                    ></v-text-field>
                   </v-col>
                 </v-row>
               </v-card>
@@ -301,7 +356,7 @@
               <p>
                 Are you sure you want add a supplier with this informations ?
               </p>
-              <v-btn color="primary" @click="stepper.supplierRegStep = 1">
+              <v-btn color="primary" @click="confirmSupplierRegistration()">
                 Confirm
               </v-btn>
               <v-btn text @click="stepper.supplierRegStep = 1"> Back </v-btn>
@@ -599,6 +654,28 @@ export default {
       country: "",
       phone: "",
     },
+    supplierForm: {
+      email: "",
+      password: "",
+      showPassword: false,
+      name: "",
+      surname: "",
+      address: "",
+      city: "",
+      country: "",
+      phone: "",
+    },
+    systemAdministratorForm: {
+      email: "",
+      password: "",
+      showPassword: false,
+      name: "",
+      surname: "",
+      address: "",
+      city: "",
+      country: "",
+      phone: "",
+    },
   }),
   validations: {
     dermatologistForm: {
@@ -630,19 +707,73 @@ export default {
         numeric,
       },
     },
+    supplierForm: {
+      password: {
+        required,
+        minLength: minLength(6),
+      },
+      email: {
+        required,
+        email,
+      },
+      name: {
+        required,
+      },
+      surname: {
+        required,
+      },
+      address: {
+        required,
+      },
+      city: {
+        required,
+      },
+      country: {
+        required,
+      },
+      phone: {
+        required,
+        numeric,
+      },
+    },
+    systemAdministratorForm: {
+      password: {
+        required,
+        minLength: minLength(6),
+      },
+      email: {
+        required,
+        email,
+      },
+      name: {
+        required,
+      },
+      surname: {
+        required,
+      },
+      address: {
+        required,
+      },
+      city: {
+        required,
+      },
+      country: {
+        required,
+      },
+      phone: {
+        required,
+        numeric,
+      },
+    },
   },
   methods: {
-    preConfirmationForDermatologist() {
-      if (!this.$v.$invalid) {
-        this.stepper.dermatologistRegStep = 2;
-      }
-    },
     confirmDermatologistRegistration() {
-      this.$v.$touch();
-
-      if (!this.$v.$invalid) {
-        this.registerDermatologist();
-      }
+      // TODO: Make some check if is all validation okey
+      this.registerDermatologist();
+    },
+    confirmSupplierRegistration() {
+      // TODO: Make some check if is all validation okey
+      this.registerSupplier();
     },
     registerDermatologist() {
       this.axios
@@ -674,10 +805,40 @@ export default {
           alert("Error during dermatologist registration: " + error);
         });
     },
+    registerSupplier() {
+      this.axios
+        .post(
+          process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_SUPPLIER_REGISTRATION_ENDPOINT,
+          {
+            password: this.supplierForm.password,
+            email: this.supplierForm.email,
+            name: this.supplierForm.name,
+            surname: this.supplierForm.surname,
+            city: this.supplierForm.city,
+            address: this.supplierForm.address,
+            country: this.supplierForm.country,
+            mobile: this.supplierForm.phone,
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then(() => {
+          // TODO: Make some notification here
+          alert("Successfuly added new supplier");
+        })
+        .catch((error) => {
+          // TODO: Make some tost notifications here
+          alert("Error during supplier registration: " + error);
+        });
+    },
   },
   computed: {
     // TODO: Find how to encapsulate those methods, because they are same as in register
-    passwordErrors() {
+    passwordErrorsDermatologist() {
       const errors = [];
       if (!this.$v.dermatologistForm.password.$dirty) return errors;
       !this.$v.dermatologistForm.password.required &&
@@ -686,7 +847,7 @@ export default {
         errors.push("Password is too short.");
       return errors;
     },
-    emailErrors() {
+    emailErrorsDermatologist() {
       const errors = [];
       if (!this.$v.dermatologistForm.email.$dirty) return errors;
       !this.$v.dermatologistForm.email.required &&
@@ -695,47 +856,167 @@ export default {
         errors.push("Email is not valid.");
       return errors;
     },
-    nameErrors() {
+    nameErrorsDermatologist() {
       const errors = [];
       if (!this.$v.dermatologistForm.name.$dirty) return errors;
       !this.$v.dermatologistForm.name.required &&
         errors.push("Name is required.");
       return errors;
     },
-    surnameErrors() {
+    surnameErrorsDermatologist() {
       const errors = [];
       if (!this.$v.dermatologistForm.surname.$dirty) return errors;
       !this.$v.dermatologistForm.surname.required &&
         errors.push("Surname is required.");
       return errors;
     },
-    cityErrors() {
+    cityErrorsDermatologist() {
       const errors = [];
       if (!this.$v.dermatologistForm.city.$dirty) return errors;
       !this.$v.dermatologistForm.city.required &&
         errors.push("City is required.");
       return errors;
     },
-    countryErrors() {
+    countryErrorsDermatologist() {
       const errors = [];
       if (!this.$v.dermatologistForm.country.$dirty) return errors;
       !this.$v.dermatologistForm.country.required &&
         errors.push("Country is required.");
       return errors;
     },
-    addressErrors() {
+    addressErrorsDermatologist() {
       const errors = [];
       if (!this.$v.dermatologistForm.address.$dirty) return errors;
       !this.$v.dermatologistForm.address.required &&
         errors.push("Home address is required.");
       return errors;
     },
-    phoneErrors() {
+    phoneErrorsDermatologist() {
       const errors = [];
       if (!this.$v.dermatologistForm.phone.$dirty) return errors;
       !this.$v.dermatologistForm.phone.required &&
         errors.push("Phone number is required.");
       !this.$v.dermatologistForm.phone.numeric &&
+        errors.push("Phone number should only contain numbers.");
+      return errors;
+    },
+    passwordErrorsSupplier() {
+      const errors = [];
+      if (!this.$v.supplierForm.password.$dirty) return errors;
+      !this.$v.supplierForm.password.required &&
+        errors.push("Password is required.");
+      !this.$v.supplierForm.password.minLength &&
+        errors.push("Password is too short.");
+      return errors;
+    },
+    emailErrorsSupplier() {
+      const errors = [];
+      if (!this.$v.supplierForm.email.$dirty) return errors;
+      !this.$v.supplierForm.email.required && errors.push("Email is required.");
+      !this.$v.supplierForm.email.email && errors.push("Email is not valid.");
+      return errors;
+    },
+    nameErrorsSupplier() {
+      const errors = [];
+      if (!this.$v.supplierForm.name.$dirty) return errors;
+      !this.$v.supplierForm.name.required && errors.push("Name is required.");
+      return errors;
+    },
+    surnameErrorsSupplier() {
+      const errors = [];
+      if (!this.$v.supplierForm.surname.$dirty) return errors;
+      !this.$v.supplierForm.surname.required &&
+        errors.push("Surname is required.");
+      return errors;
+    },
+    cityErrorsSupplier() {
+      const errors = [];
+      if (!this.$v.supplierForm.city.$dirty) return errors;
+      !this.$v.supplierForm.city.required && errors.push("City is required.");
+      return errors;
+    },
+    countryErrorsSupplier() {
+      const errors = [];
+      if (!this.$v.supplierForm.country.$dirty) return errors;
+      !this.$v.supplierForm.country.required &&
+        errors.push("Country is required.");
+      return errors;
+    },
+    addressErrorsSupplier() {
+      const errors = [];
+      if (!this.$v.supplierForm.address.$dirty) return errors;
+      !this.$v.supplierForm.address.required &&
+        errors.push("Home address is required.");
+      return errors;
+    },
+    phoneErrorsSupplier() {
+      const errors = [];
+      if (!this.$v.supplierForm.phone.$dirty) return errors;
+      !this.$v.supplierForm.phone.required &&
+        errors.push("Phone number is required.");
+      !this.$v.supplierForm.phone.numeric &&
+        errors.push("Phone number should only contain numbers.");
+      return errors;
+    },
+    passwordErrorsSystemAdministrator() {
+      const errors = [];
+      if (!this.$v.systemAdministratorForm.password.$dirty) return errors;
+      !this.$v.systemAdministratorForm.password.required &&
+        errors.push("Password is required.");
+      !this.$v.systemAdministratorForm.password.minLength &&
+        errors.push("Password is too short.");
+      return errors;
+    },
+    emailErrorsSystemAdministrator() {
+      const errors = [];
+      if (!this.$v.systemAdministratorForm.email.$dirty) return errors;
+      !this.$v.systemAdministratorForm.email.required &&
+        errors.push("Email is required.");
+      !this.$v.systemAdministratorForm.email.email &&
+        errors.push("Email is not valid.");
+      return errors;
+    },
+    nameErrorsSystemAdministrator() {
+      const errors = [];
+      if (!this.$v.systemAdministratorForm.name.$dirty) return errors;
+      !this.$v.systemAdministratorForm.name.required &&
+        errors.push("Name is required.");
+      return errors;
+    },
+    surnameErrorsSystemAdministrator() {
+      const errors = [];
+      if (!this.$v.systemAdministratorForm.surname.$dirty) return errors;
+      !this.$v.systemAdministratorForm.surname.required &&
+        errors.push("Surname is required.");
+      return errors;
+    },
+    cityErrorsSystemAdministrator() {
+      const errors = [];
+      if (!this.$v.systemAdministratorForm.city.$dirty) return errors;
+      !this.$v.systemAdministratorForm.city.required &&
+        errors.push("City is required.");
+      return errors;
+    },
+    countryErrorsSystemAdministrator() {
+      const errors = [];
+      if (!this.$v.systemAdministratorForm.country.$dirty) return errors;
+      !this.$v.systemAdministratorForm.country.required &&
+        errors.push("Country is required.");
+      return errors;
+    },
+    addressErrorsSystemAdministrator() {
+      const errors = [];
+      if (!this.$v.systemAdministratorForm.address.$dirty) return errors;
+      !this.$v.systemAdministratorForm.address.required &&
+        errors.push("Home address is required.");
+      return errors;
+    },
+    phoneErrorsSystemAdministrator() {
+      const errors = [];
+      if (!this.$v.systemAdministratorForm.phone.$dirty) return errors;
+      !this.$v.systemAdministratorForm.phone.required &&
+        errors.push("Phone number is required.");
+      !this.$v.systemAdministratorForm.phone.numeric &&
         errors.push("Phone number should only contain numbers.");
       return errors;
     },
