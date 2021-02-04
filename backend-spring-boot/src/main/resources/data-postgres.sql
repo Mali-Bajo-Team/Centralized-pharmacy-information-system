@@ -10,8 +10,8 @@ INSERT INTO AUTHORITY (name) VALUES ('ROLE_SUPPLIER');
 
 -- INSERT ONE ADMIN (system administrator)
 insert into person (discriminator, address, city, country, name, surname, phone_number) values ('SystemAdmin', 'Marka Miljanova 7', 'Novi Sad', 'Srbija', 'Milana', 'Todorović', '0601452700');
-insert into user_account (email, password, is_active, person_id) values ('admin@gmail.com', '$2a$10$L6kbgPYJlATi6.u/7HP3OOxvN.VrbwlMWhDemehBoQSP8BAGeUot.', true, 1);
--- Password for admin account is: admin
+insert into user_account (email, password, is_active, person_id) values ('admin@gmail.com', '$2a$10$nshjokILtTylR5sz//j/3OowjgJOtRLk0Z8gI4E2/2QP.VtlDSeEa', true, 1);
+-- Password for admin account is: administrator
 insert into user_authority (user_id, authority_id) values (1, 2);
 
 -- INSERT ONE PATIENT
