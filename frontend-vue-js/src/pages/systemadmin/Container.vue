@@ -21,7 +21,12 @@ export default {
             {
                 title: "Home",
                 to: "/systemadmin"
+            },
+            {
+                title: "Loyalty Program",
+                to: "/systemadmin/loyaltyprogram"
             }
+
         ]
     })
 }
