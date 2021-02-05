@@ -1,5 +1,7 @@
 package com.pharmacy.cpis.scheduleservice.controller;
 
+import com.pharmacy.cpis.scheduleservice.dto.ScheduleExaminationDTO;
+import com.pharmacy.cpis.scheduleservice.service.IWorkingTimesService;
 import com.pharmacy.cpis.userservice.dto.ConsultantDTO;
 import com.pharmacy.cpis.scheduleservice.dto.ConsultationDTO;
 import com.pharmacy.cpis.scheduleservice.model.consultations.Consultation;
@@ -13,7 +15,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -22,6 +27,8 @@ public class ConsultationController {
 
 	@Autowired
 	private IConsultationService consultationService;
+	@Autowired
+	private IWorkingTimesService workingTimesService;
 	@Autowired
 	private IUserService userService;
 
@@ -75,5 +82,27 @@ public class ConsultationController {
 		consultantDTO.setCountry(loggedPharmacist.getPerson().getCountry());
 
 		return new ResponseEntity<ConsultantDTO>(consultantDTO, HttpStatus.OK);
+	}
+
+	@PostMapping("/scheduleconsultation")
+	@PreAuthorize("hasRole('PHARMACIST')")
+	public ResponseEntity<ScheduleExaminationDTO> scheduleConsultation(@RequestBody ScheduleExaminationDTO scheduleExaminationDTO) {
+		System.out.println("USAO VREMEWEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+		Date javaDate = null;
+		try {
+			javaDate=new SimpleDateFormat("yy-MM-dd HH:mm:ss").parse(scheduleExaminationDTO.getStartDate());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+
+		Boolean isConsultantWorkingTime = workingTimesService.isConsultantWorkingTime(scheduleExaminationDTO.getConsultantId(), javaDate);
+		System.out.println("JAVAAA VREME: " + javaDate);
+		if(isConsultantWorkingTime){
+			System.out.println("DOBRO VREMEWEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+			return new ResponseEntity<ScheduleExaminationDTO>(scheduleExaminationDTO, HttpStatus.OK);
+		}
+		System.out.println("LoSE VREMEWEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+		return new ResponseEntity<ScheduleExaminationDTO>(scheduleExaminationDTO, HttpStatus.FORBIDDEN);
 	}
 }

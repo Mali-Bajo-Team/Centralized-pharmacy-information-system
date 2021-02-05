@@ -21,7 +21,7 @@ public class WorkingTimesController {
 
     @GetMapping
     @PreAuthorize("hasRole('PHARMACIST')")
-    public ResponseEntity<List<WorkingTimesDTO>> getAllWorkingTimes() {
+    public ResponseEntity<List<WorkingTimes>> getAllWorkingTimes() {
 
         List<WorkingTimes> workingTimes = workingTimesService.findAll();
 
@@ -30,6 +30,6 @@ public class WorkingTimesController {
             workingTimesDTOSs.add(new WorkingTimesDTO(wt));
         }
 
-        return new ResponseEntity<>(workingTimesDTOSs, HttpStatus.OK);
+        return new ResponseEntity<>(workingTimes, HttpStatus.OK);
     }
 }
