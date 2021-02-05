@@ -3,13 +3,21 @@
     <v-row>
       <!-- Left column -->
       <v-col xl="4" sm="12" md="4">
-        <h1>Left</h1>
+        <v-card height="300">
+          <!--Toolbar of the card-->
+          <v-toolbar color="primary" dark dense flat>
+            <v-toolbar-title class="body-2">
+              Loyalty Program
+            </v-toolbar-title>
+          </v-toolbar>
+        </v-card>
       </v-col>
       <!-- End of the left column -->
 
       <!-- Right column -->
       <v-col xl="8" sm="12" md="8">
         <v-card
+        height="130"
           outlined
           shaped
           elevation="4"
@@ -53,7 +61,7 @@
 <script>
 export default {
   data: () => ({
-    loyaltyProgram: null,
+    loyaltyProgram: {},
   }),
   mounted() {
     this.axios
