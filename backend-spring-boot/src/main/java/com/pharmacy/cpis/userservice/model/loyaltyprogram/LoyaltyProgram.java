@@ -22,7 +22,7 @@ public class LoyaltyProgram {
 	@Column(nullable = false)
 	private Integer pointsPerConsultation;
 
-	@OneToMany(mappedBy = "loyaltyProgram", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "loyaltyProgram", fetch = FetchType.EAGER)
 	private Set<UserCategory> categories;
 
 	public LoyaltyProgram() {
