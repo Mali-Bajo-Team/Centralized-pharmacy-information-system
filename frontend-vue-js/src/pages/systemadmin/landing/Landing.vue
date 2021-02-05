@@ -23,16 +23,53 @@
                 style="padding: 2%"
                 color="grey lighten-5"
                 class="mb-12"
-                height="400px"
+                height="450px"
               >
-                <v-text-field label="Name of the pharmacy"></v-text-field>
-                <v-text-field label="Location of the pharmacy"></v-text-field>
-                <v-text-field label="Description about pharmacy"></v-text-field>
                 <v-text-field
-                  label="Dermatologist price per consultation"
+                  v-model="pharmacyForm.name"
+                  :error-messages="pharmacyNameErrors"
+                  @blur="$v.pharmacyForm.name.$touch()"
+                  @input="$v.pharmacyForm.name.$touch()"
+                  label="Name"
                 ></v-text-field>
                 <v-text-field
-                  label="Pharmacist price per consultation"
+                  v-model="pharmacyForm.city"
+                  :error-messages="pharmacyCityErrors"
+                  @blur="$v.pharmacyForm.city.$touch()"
+                  @input="$v.pharmacyForm.city.$touch()"
+                  label="City"
+                ></v-text-field>
+                <v-text-field
+                  v-model="pharmacyForm.country"
+                  :error-messages="pharmacyCountryErrors"
+                  @blur="$v.pharmacyForm.country.$touch()"
+                  @input="$v.pharmacyForm.country.$touch()"
+                  label="Country"
+                ></v-text-field>
+                <v-text-field
+                  v-model="pharmacyForm.description"
+                  :error-messages="pharmacyDescriptionErrors"
+                  @blur="$v.pharmacyForm.description.$touch()"
+                  @input="$v.pharmacyForm.description.$touch()"
+                  label="Description about pharmacy"
+                ></v-text-field>
+                <v-text-field
+                  v-model="pharmacyForm.dermatologistConsultationPrice"
+                  :error-messages="dermatologistConsultationPriceErrors"
+                  @blur="
+                    $v.pharmacyForm.dermatologistConsultationPrice.$touch()
+                  "
+                  @input="
+                    $v.pharmacyForm.dermatologistConsultationPrice.$touch()
+                  "
+                  label="Dermatologist price per consultation [ € ]"
+                ></v-text-field>
+                <v-text-field
+                  v-model="pharmacyForm.pharmacistConsultationPrice"
+                  :error-messages="pharmacistConsultationPriceErrors"
+                  @blur="$v.pharmacyForm.pharmacistConsultationPrice.$touch()"
+                  @input="$v.pharmacyForm.pharmacistConsultationPrice.$touch()"
+                  label="Pharmacist price per consultation [ € ]"
                 ></v-text-field>
               </v-card>
               <!-- End of the content -->
@@ -60,17 +97,111 @@
               >
                 <v-row>
                   <v-col>
-                    <v-text-field label="Name"></v-text-field>
-                    <v-text-field label="Surname"></v-text-field>
-                    <v-text-field label="Phone number"></v-text-field>
-                    <v-text-field label="Address"></v-text-field>
+                    <v-text-field
+                      v-model="pharmacyForm.pharmacyAdministrator.name"
+                      :error-messages="nameErrorsPharmacyAdministrator"
+                      label="Name"
+                      @blur="
+                        $v.pharmacyForm.pharmacyAdministrator.name.$touch()
+                      "
+                      @input="
+                        $v.pharmacyForm.pharmacyAdministrator.name.$touch()
+                      "
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="pharmacyForm.pharmacyAdministrator.surname"
+                      :error-messages="surnameErrorsPharmacyAdministrator"
+                      label="Surname"
+                      @blur="
+                        $v.pharmacyForm.pharmacyAdministrator.surname.$touch()
+                      "
+                      @input="
+                        $v.pharmacyForm.pharmacyAdministrator.surname.$touch()
+                      "
+                    ></v-text-field>
+                    <v-text-field
+                      :error-messages="phoneErrorsPharmacyAdministrator"
+                      label="Phone number"
+                      @blur="
+                        $v.pharmacyForm.pharmacyAdministrator.phone.$touch()
+                      "
+                      @input="
+                        $v.pharmacyForm.pharmacyAdministrator.phone.$touch()
+                      "
+                      v-model="pharmacyForm.pharmacyAdministrator.phone"
+                    ></v-text-field>
+                    <v-text-field
+                      :error-messages="addressErrorsPharmacyAdministrator"
+                      label="Home address"
+                      @blur="
+                        $v.pharmacyForm.pharmacyAdministrator.address.$touch()
+                      "
+                      @input="
+                        $v.pharmacyForm.pharmacyAdministrator.address.$touch()
+                      "
+                      v-model="pharmacyForm.pharmacyAdministrator.address"
+                    ></v-text-field>
                   </v-col>
 
                   <v-col>
-                    <v-text-field label="City"></v-text-field>
-                    <v-text-field label="Country"></v-text-field>
-                    <v-text-field label="Email"></v-text-field>
-                    <v-text-field label="Password"></v-text-field>
+                    <v-text-field
+                      :error-messages="cityErrorsPharmacyAdministrator"
+                      label="City"
+                      @blur="
+                        $v.pharmacyForm.pharmacyAdministrator.city.$touch()
+                      "
+                      @input="
+                        $v.pharmacyForm.pharmacyAdministrator.city.$touch()
+                      "
+                      v-model="pharmacyForm.pharmacyAdministrator.city"
+                    ></v-text-field>
+                    <v-text-field
+                      :error-messages="countryErrorsPharmacyAdministrator"
+                      label="Country"
+                      @blur="
+                        $v.pharmacyForm.pharmacyAdministrator.country.$touch()
+                      "
+                      @input="
+                        $v.pharmacyForm.pharmacyAdministrator.country.$touch()
+                      "
+                      v-model="pharmacyForm.pharmacyAdministrator.country"
+                    ></v-text-field>
+                    <v-text-field
+                      :error-messages="emailErrorsPharmacyAdministrator"
+                      label="Email"
+                      @blur="
+                        $v.pharmacyForm.pharmacyAdministrator.email.$touch()
+                      "
+                      @input="
+                        $v.pharmacyForm.pharmacyAdministrator.email.$touch()
+                      "
+                      v-model="pharmacyForm.pharmacyAdministrator.email"
+                    ></v-text-field>
+                    <v-text-field
+                      :append-icon="
+                        dermatologistForm.showPassword
+                          ? 'mdi-eye'
+                          : 'mdi-eye-off'
+                      "
+                      :errorMessages="passwordErrorsPharmacyAdministrator"
+                      :type="
+                        pharmacyForm.pharmacyAdministrator.showPassword
+                          ? 'text'
+                          : 'password'
+                      "
+                      label="Password"
+                      @click:append="
+                        pharmacyForm.pharmacyAdministrator.showPassword = !pharmacyForm
+                          .pharmacyAdministrator.showPassword
+                      "
+                      @blur="
+                        $v.pharmacyForm.pharmacyAdministrator.password.$touch()
+                      "
+                      @input="
+                        $v.pharmacyForm.pharmacyAdministrator.password.$touch()
+                      "
+                      v-model="pharmacyForm.pharmacyAdministrator.password"
+                    ></v-text-field>
                   </v-col>
                 </v-row>
               </v-card>
@@ -699,6 +830,25 @@ export default {
       drugRegStep: 1,
       loyaltyRegStep: 1,
     },
+    pharmacyForm: {
+      name: "",
+      city: "",
+      country: "",
+      description: "",
+      dermatologistConsultationPrice: 0,
+      pharmacistConsultationPrice: 0,
+      pharmacyAdministrator: {
+        password: "",
+        showPassword: false,
+        email: "",
+        name: "",
+        surname: "",
+        city: "",
+        address: "",
+        country: "",
+        phone: "",
+      },
+    },
     alternateDrug: "",
     typesOfDrug: [],
     alternateDrugs: [],
@@ -870,6 +1020,55 @@ export default {
           },
         },
         recommendedDailyDose: {
+          required,
+          numeric,
+        },
+      },
+    },
+    pharmacyForm: {
+      name: {
+        required,
+      },
+      city: {
+        required,
+      },
+      country: {
+        required,
+      },
+      description: {
+        required,
+      },
+      dermatologistConsultationPrice: {
+        required,
+        numeric,
+      },
+      pharmacistConsultationPrice: {
+        required,
+        numeric,
+      },
+      pharmacyAdministrator: {
+        password: {
+          required,
+        },
+        email: {
+          required,
+        },
+        name: {
+          required,
+        },
+        surname: {
+          required,
+        },
+        city: {
+          required,
+        },
+        address: {
+          required,
+        },
+        country: {
+          required,
+        },
+        phone: {
           required,
           numeric,
         },
@@ -1069,6 +1268,126 @@ export default {
   },
   computed: {
     // TODO: Find how to encapsulate those methods, because they are same as in register
+    passwordErrorsPharmacyAdministrator() {
+      const errors = [];
+      if (!this.$v.pharmacyForm.pharmacyAdministrator.password.$dirty)
+        return errors;
+      !this.$v.pharmacyForm.pharmacyAdministrator.password.required &&
+        errors.push("Password is required.");
+      !this.$v.pharmacyForm.pharmacyAdministrator.password.minLength &&
+        errors.push("Password is too short.");
+      return errors;
+    },
+    emailErrorsPharmacyAdministrator() {
+      const errors = [];
+      if (!this.$v.pharmacyForm.pharmacyAdministrator.email.$dirty)
+        return errors;
+      !this.$v.pharmacyForm.pharmacyAdministrator.email.required &&
+        errors.push("Email is required.");
+      !this.$v.pharmacyForm.pharmacyAdministrator.email.email &&
+        errors.push("Email is not valid.");
+      return errors;
+    },
+    nameErrorsPharmacyAdministrator() {
+      const errors = [];
+      if (!this.$v.pharmacyForm.pharmacyAdministrator.name.$dirty)
+        return errors;
+      !this.$v.pharmacyForm.pharmacyAdministrator.name.required &&
+        errors.push("Name is required.");
+      return errors;
+    },
+    surnameErrorsPharmacyAdministrator() {
+      const errors = [];
+      if (!this.$v.pharmacyForm.pharmacyAdministrator.surname.$dirty)
+        return errors;
+      !this.$v.pharmacyForm.pharmacyAdministrator.surname.required &&
+        errors.push("Surname is required.");
+      return errors;
+    },
+    cityErrorsPharmacyAdministrator() {
+      const errors = [];
+      if (!this.$v.pharmacyForm.pharmacyAdministrator.city.$dirty)
+        return errors;
+      !this.$v.pharmacyForm.pharmacyAdministrator.city.required &&
+        errors.push("City is required.");
+      return errors;
+    },
+    countryErrorsPharmacyAdministrator() {
+      const errors = [];
+      if (!this.$v.pharmacyForm.pharmacyAdministrator.country.$dirty)
+        return errors;
+      !this.$v.pharmacyForm.pharmacyAdministrator.country.required &&
+        errors.push("Country is required.");
+      return errors;
+    },
+    addressErrorsPharmacyAdministrator() {
+      const errors = [];
+      if (!this.$v.pharmacyForm.pharmacyAdministrator.address.$dirty)
+        return errors;
+      !this.$v.pharmacyForm.pharmacyAdministrator.address.required &&
+        errors.push("Home address is required.");
+      return errors;
+    },
+    phoneErrorsPharmacyAdministrator() {
+      const errors = [];
+      if (!this.$v.pharmacyForm.pharmacyAdministrator.phone.$dirty)
+        return errors;
+      !this.$v.pharmacyForm.pharmacyAdministrator.phone.required &&
+        errors.push("Phone number is required.");
+      !this.$v.pharmacyForm.pharmacyAdministrator.phone.numeric &&
+        errors.push("Phone number should only contain numbers.");
+      return errors;
+    },
+    pharmacistConsultationPriceErrors() {
+      const errors = [];
+      if (!this.$v.pharmacyForm.pharmacistConsultationPrice.$dirty)
+        return errors;
+      !this.$v.pharmacyForm.pharmacistConsultationPrice.required &&
+        errors.push("Pharmacist consultation price is required.");
+      !this.$v.pharmacyForm.pharmacistConsultationPrice.numeric &&
+        errors.push(
+          "Pharmacist consultation price should only contain numbers."
+        );
+      return errors;
+    },
+    dermatologistConsultationPriceErrors() {
+      const errors = [];
+      if (!this.$v.pharmacyForm.dermatologistConsultationPrice.$dirty)
+        return errors;
+      !this.$v.pharmacyForm.dermatologistConsultationPrice.required &&
+        errors.push("Dermatologist consultation price is required.");
+      !this.$v.pharmacyForm.dermatologistConsultationPrice.numeric &&
+        errors.push(
+          "Dermatologist consultation price should only contain numbers."
+        );
+      return errors;
+    },
+    pharmacyDescriptionErrors() {
+      const errors = [];
+      if (!this.$v.pharmacyForm.description.$dirty) return errors;
+      !this.$v.pharmacyForm.description.required &&
+        errors.push("Description is required.");
+      return errors;
+    },
+    pharmacyCountryErrors() {
+      const errors = [];
+      if (!this.$v.pharmacyForm.country.$dirty) return errors;
+      !this.$v.pharmacyForm.country.required &&
+        errors.push("Country is required.");
+      return errors;
+    },
+    pharmacyCityErrors() {
+      const errors = [];
+      if (!this.$v.pharmacyForm.city.$dirty) return errors;
+      !this.$v.pharmacyForm.city.required && errors.push("City is required.");
+      return errors;
+    },
+    pharmacyNameErrors() {
+      const errors = [];
+      if (!this.$v.pharmacyForm.name.$dirty) return errors;
+      !this.$v.pharmacyForm.name.required && errors.push("Name is required.");
+      return errors;
+    },
     drugLoyaltyPointsErrors() {
       const errors = [];
       if (!this.$v.drugForm.drug.loyaltyPoints.$dirty) return errors;
