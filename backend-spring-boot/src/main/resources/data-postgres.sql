@@ -67,7 +67,7 @@ values (40,50,19.0,20.0,'Pharmacy BENU Mercator','Novi Sad','Serbia','Bulevar Os
 -- INSERT PHARMACY RATINGS
 insert into pharmacy_rating(rating, patient_id,pharmacy_id) values (5,2,1);
 insert into pharmacy_rating(rating, patient_id,pharmacy_id) values (3,2,2);
-insert into pharmacy_rating(rating, patient_id,pharmacy_id) values (4,1,2);
+insert into pharmacy_rating(rating, patient_id,pharmacy_id) values (4,4,2);
 
 
 insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (20,1,'2021-02-03 10:23','2021-02-03 11:00',3,2,1);
