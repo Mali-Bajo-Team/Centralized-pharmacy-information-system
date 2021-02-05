@@ -35,8 +35,9 @@
         </v-card-text>
       </v-col>
 
+      <!--Dialog form-->
       <v-col xl="4" md="4" sm="12">
-        <v-dialog  width="500">
+        <v-dialog width="500">
           <template v-slot:activator="{ on, attrs }">
             <v-btn fab dark large color="primary" v-bind="attrs" v-on="on">
               <v-icon dark> mdi-pencil </v-icon>
@@ -51,11 +52,15 @@
             </v-toolbar>
             <v-card-text>
               <v-form>
-                <v-text-field label="Change your name"></v-text-field>
+                <v-text-field 
+                     :rules="[rules.min]"
+                     label="Change your name"></v-text-field>
                 <v-text-field label="Change your surname"></v-text-field>
                 <v-text-field label="Change your address"></v-text-field>
                 <v-text-field label="Change your phone number"></v-text-field>
-                <v-text-field label="Add drugs which cause you allergic reactions"></v-text-field>
+                <v-text-field
+                  label="Add drugs which cause you allergic reactions"
+                ></v-text-field>
               </v-form>
             </v-card-text>
 
@@ -73,3 +78,15 @@
     </v-row>
   </v-card>
 </template>
+<script>
+export default {
+  data: () => ({
+    rules: {
+      required: (value) => !!value || "Required.",
+      min: (v) => v.length >= 8 || "Min 8 characters",
+    
+    }
+  })
+
+};
+</script>
