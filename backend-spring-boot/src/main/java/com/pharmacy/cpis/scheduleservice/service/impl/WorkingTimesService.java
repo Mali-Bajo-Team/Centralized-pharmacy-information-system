@@ -17,4 +17,19 @@ public class WorkingTimesService implements IWorkingTimesService {
     public List<WorkingTimes> findAll() {
        return workingTimesRepository.findAll();
     }
+
+    @Override
+    public WorkingTimes consultantWorkingTime(Long consultantID) {
+        WorkingTimes consultantWorkingTime = new WorkingTimes();
+        List<WorkingTimes> workingTimes = workingTimesRepository.findAll();
+
+        for (WorkingTimes wt : workingTimes) {
+            if(wt.getConsultant().getId().equals(consultantID)){
+                consultantWorkingTime = wt;
+                return  consultantWorkingTime;
+            }
+        }
+        return  consultantWorkingTime;
+    }
 }
+

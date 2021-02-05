@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface IWorkingTimesService {
     List<WorkingTimes> findAll();
+
+    WorkingTimes consultantWorkingTime(Long consultantID);
 }
