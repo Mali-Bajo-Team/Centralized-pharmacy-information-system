@@ -17,4 +17,11 @@ public class ConsultationService implements IConsultationService {
     public List<Consultation> findAll() {
         return consultationRepository.findAll();
     }
+
+//. Satnica mora da se poklapa sa radnim vremenom farmaceuta. Moram prvo da dobavim radno vreme tog farmaceuta
+    @Override
+    public Consultation scheduleConsultation(Consultation consultation) {
+
+        return consultation;
+    }
 }

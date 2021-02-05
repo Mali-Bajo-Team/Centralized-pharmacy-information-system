@@ -6,4 +6,7 @@ import java.util.List;
 
 public interface IConsultationService {
     List<Consultation> findAll();
+
+
+    Consultation scheduleConsultation(Consultation consultation);
 }
