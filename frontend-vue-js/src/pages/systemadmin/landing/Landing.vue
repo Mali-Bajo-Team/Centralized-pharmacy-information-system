@@ -552,7 +552,7 @@
                   label="Loyalty points"
                 ></v-text-field>
                 <v-select
-                  :items="typesOfDrug"
+                  :items="alternateDrugs"
                   label="Alternate drugs"
                   outlined
                 ></v-select>
