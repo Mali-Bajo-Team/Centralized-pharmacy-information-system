@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.Set;
 
 @Entity
-@Check(constraints = "(active_until is null and is_active) or (active_until is not null and not is_active)")
+@Check(constraints = "(active_until is not null and is_active) or (active_until is null and not is_active)")
 public class LoyaltyProgram {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
