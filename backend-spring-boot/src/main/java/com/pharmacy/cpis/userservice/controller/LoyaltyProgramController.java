@@ -1,7 +1,9 @@
 package com.pharmacy.cpis.userservice.controller;
 
 import com.pharmacy.cpis.userservice.dto.LoyaltyProgramDTO;
+import com.pharmacy.cpis.userservice.dto.UserCategoryDTO;
 import com.pharmacy.cpis.userservice.model.loyaltyprogram.LoyaltyProgram;
+import com.pharmacy.cpis.userservice.model.loyaltyprogram.UserCategory;
 import com.pharmacy.cpis.userservice.service.ILoyaltyProgramService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,5 +44,13 @@ public class LoyaltyProgramController {
     public ResponseEntity<LoyaltyProgramDTO> updateLoyaltyProgram(@RequestBody LoyaltyProgramDTO loyaltyProgramDTO){
         LoyaltyProgram loyaltyProgram = loyaltyProgramService.update(loyaltyProgramDTO);
         return new ResponseEntity<>(new LoyaltyProgramDTO(loyaltyProgram),HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/categories", consumes = "application/json")
+    // TODO: Add this after finished with postman testing
+    //@PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserCategoryDTO> addUserCategory(@RequestBody UserCategoryDTO userCategoryDTO){
+        UserCategory userCategory = loyaltyProgramService.saveCategory(userCategoryDTO);
+        return new ResponseEntity<>(new UserCategoryDTO(userCategory) ,HttpStatus.OK);
     }
 }
