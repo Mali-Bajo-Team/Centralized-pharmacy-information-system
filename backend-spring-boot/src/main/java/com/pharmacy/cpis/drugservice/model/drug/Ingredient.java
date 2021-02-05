@@ -45,6 +45,14 @@ public class Ingredient {
 		this.amount = amount;
 	}
 
+	public DrugSpecification getSpecification() {
+		return specification;
+	}
+
+	public void setSpecification(DrugSpecification specification) {
+		this.specification = specification;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

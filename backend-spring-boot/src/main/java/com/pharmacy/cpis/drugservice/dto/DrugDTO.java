@@ -3,6 +3,7 @@ package com.pharmacy.cpis.drugservice.dto;
 import com.pharmacy.cpis.drugservice.model.drug.Drug;
 
 import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -29,6 +30,26 @@ public class DrugDTO {
         this.loyaltyPoints = loyaltyPoints;
         this.typeOfDrug = typeOfDrug;
         this.alternateDrugs = alternateDrugs;
+    }
+
+    public DrugDTO(Drug drug){
+        this.setName(drug.getName());
+        this.setCode(drug.getCode());
+        this.setAlternateDrugs(getAlternateDrugs(drug.getAlternateDrugs()));
+        this.setLoyaltyPoints(drug.getLoyaltyPoints().toString());
+        this.setTypeOfDrug(drug.getDrugClass().getName());
+    }
+
+    /**
+     * Convert algernate drugs in Hash to List form
+     * @param alternateDrugs
+     * @return
+     */
+    private List<Drug> getAlternateDrugs(Set<Drug> alternateDrugs){
+        List<Drug> drugList = new ArrayList<>();
+        for(Drug drug : alternateDrugs)
+            drugList.add(drug);
+        return drugList;
     }
 
     public String getName() {
