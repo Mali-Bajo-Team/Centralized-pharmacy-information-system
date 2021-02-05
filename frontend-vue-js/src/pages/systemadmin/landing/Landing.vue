@@ -905,7 +905,9 @@ export default {
               manufacturer: this.drugForm.specification.manufacturer,
               contraindications: this.drugForm.specification.contraindications,
               recommendedDailyDose: this.drugForm.specification.recommendedDailyDose,
-              ingredients: null,
+              ingredients: [
+                this.drugForm.specification.ingredients
+              ],
             },
           },
           {
