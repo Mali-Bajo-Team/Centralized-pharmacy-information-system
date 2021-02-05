@@ -34,7 +34,7 @@ public class WorkingTimesService implements IWorkingTimesService {
     }
 
     @Override
-    public Boolean isConsultantWorkingTime(Long consultantID, Date examinationTime) {
+    public Boolean isConsultationTimeFitsIntoConsultantWorkingTime(Long consultantID, Date examinationTime) {
         WorkingTimes consultantWorkingTime = consultantWorkingTime(consultantID);
 
         //number ranges from 1 (Sunday) to 7 (Saturday).

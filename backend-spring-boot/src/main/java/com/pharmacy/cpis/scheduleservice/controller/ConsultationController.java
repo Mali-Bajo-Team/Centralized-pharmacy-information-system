@@ -88,21 +88,20 @@ public class ConsultationController {
 	@PreAuthorize("hasRole('PHARMACIST')")
 	public ResponseEntity<ScheduleExaminationDTO> scheduleConsultation(@RequestBody ScheduleExaminationDTO scheduleExaminationDTO) {
 
-		Date javaDate = null;
+		// Convert date format to Data.Util
+		Date examinationStartDate = null;
 		try {
-			javaDate=new SimpleDateFormat("yy-MM-dd HH:mm:ss").parse(scheduleExaminationDTO.getStartDate());
+			examinationStartDate=new SimpleDateFormat("yy-MM-dd HH:mm:ss").parse(scheduleExaminationDTO.getStartDate());
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 
 		UserAccount loggedPharmacist = userService.findByEmail(scheduleExaminationDTO.getConsultantEmail());
-		Boolean isConsultantWorkingTime = workingTimesService.isConsultantWorkingTime(loggedPharmacist.getId(), javaDate);
+		Boolean isConsultationTimeFitsIntoConsultantWorkingTime = workingTimesService.isConsultationTimeFitsIntoConsultantWorkingTime(loggedPharmacist.getId(), examinationStartDate);
 
-		if(isConsultantWorkingTime){
-			System.out.println("DOBRO VREMEWEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+		if(isConsultationTimeFitsIntoConsultantWorkingTime){
 			return new ResponseEntity<ScheduleExaminationDTO>(scheduleExaminationDTO, HttpStatus.OK);
 		}
-		System.out.println("LoSE VREMEWEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 		return new ResponseEntity<ScheduleExaminationDTO>(scheduleExaminationDTO, HttpStatus.FORBIDDEN);
 	}
 }

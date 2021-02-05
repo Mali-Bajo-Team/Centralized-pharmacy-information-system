@@ -10,5 +10,5 @@ public interface IWorkingTimesService {
 
     WorkingTimes consultantWorkingTime(Long consultantID);
 
-    Boolean isConsultantWorkingTime(Long consultantID, Date examinationTime);
+    Boolean isConsultationTimeFitsIntoConsultantWorkingTime(Long consultantID, Date examinationTime);
 }
