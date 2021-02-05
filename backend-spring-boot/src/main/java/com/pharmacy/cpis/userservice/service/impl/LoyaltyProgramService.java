@@ -40,7 +40,6 @@ public class LoyaltyProgramService implements ILoyaltyProgramService {
 
     @Override
     public UserCategory saveCategory(UserCategoryDTO userCategoryDTO) {
-        // TODO: MAKE EXCEPTIONS FOR UNIQUE CONSTRAINTS
         UserCategory userCategory = new UserCategory();
         userCategory.setLoyaltyProgram(getLoyaltyProgram());
         if(userCategoryRepository.existsByMinimumPoints(userCategoryDTO.getMinimumPoints()))
@@ -58,7 +57,7 @@ public class LoyaltyProgramService implements ILoyaltyProgramService {
     public UserCategory updateCategory(UserCategoryDTO userCategoryDTO) {
         UserCategory updatedUserCategory = userCategoryRepository.findByName(userCategoryDTO.getName());
         if(updatedUserCategory == null) throw new PSNotFoundException("User category with this name does not exist");
-        if(updatedUserCategory.getMinimumPoints() != userCategoryDTO.getMinimumPoints() && userCategoryRepository.existsByMinimumPoints(userCategoryDTO.getMinimumPoints()))
+        if(!updatedUserCategory.getMinimumPoints().equals(userCategoryDTO.getMinimumPoints()) && userCategoryRepository.existsByMinimumPoints(userCategoryDTO.getMinimumPoints()))
             throw new PSAlreadyExistsException("User category with this amount of minimum points already exist");
         updatedUserCategory.setMinimumPoints(userCategoryDTO.getMinimumPoints());
         updatedUserCategory.setReservationDiscount(userCategoryDTO.getReservationDiscount());
