@@ -72,6 +72,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/api/pharmacies/all").permitAll()
                 .antMatchers("/api/loyaltyprograms").permitAll() // TODO: DELETE THIS
+                .antMatchers("/api/patient").permitAll() // TODO: DELETE THIS
 
 
                 // For every other request the user must be authenticated

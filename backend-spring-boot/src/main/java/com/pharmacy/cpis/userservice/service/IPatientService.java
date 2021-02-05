@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface IPatientService {
     List<Patient> findAllPatient();
+
+    Patient findByEmail(String email);
 }
