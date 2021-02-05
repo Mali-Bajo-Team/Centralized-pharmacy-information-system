@@ -65,6 +65,13 @@ public class LoyaltyProgramService implements ILoyaltyProgramService {
         return userCategoryRepository.save(updatedUserCategory);
     }
 
+    @Override
+    public void removeCategory(UserCategoryDTO userCategoryDTO) {
+        UserCategory userCategory = userCategoryRepository.findByName(userCategoryDTO.getName());
+        if(userCategory == null) throw new PSNotFoundException("User category with this name was not found");
+        userCategoryRepository.deleteById(userCategory.getId());
+    }
+
     /**
      * Our logic is such that we assume that we have one loyalty program in the system and that we always change it
      */

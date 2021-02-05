@@ -60,4 +60,12 @@ public class LoyaltyProgramController {
         UserCategory userCategory = loyaltyProgramService.updateCategory(userCategoryDTO);
         return new ResponseEntity<>(new UserCategoryDTO(userCategory) ,HttpStatus.OK);
     }
+
+    @DeleteMapping(value = "/categories", consumes = "application/json")
+    // TODO: Add this after finished with postman testing
+    //@PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteUserCategory(@RequestBody UserCategoryDTO userCategoryDTO){
+        loyaltyProgramService.removeCategory(userCategoryDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

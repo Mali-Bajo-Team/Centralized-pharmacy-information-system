@@ -15,4 +15,6 @@ public interface ILoyaltyProgramService {
     UserCategory saveCategory(UserCategoryDTO userCategoryDTO);
 
     UserCategory updateCategory(UserCategoryDTO userCategoryDTO);
+
+    void removeCategory(UserCategoryDTO userCategoryDTO);
 }
