@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h3>Pharmacist</h3>
+    <h3>Pharmacist {{selectedPatient}}</h3>
     <v-autocomplete
       v-model="model"
       :items="items"
@@ -12,7 +12,7 @@
       hide-selected
       item-text="name"
       item-value="symbol"
-      label="Search for a coin..."
+      label="Search for a patient..."
       solo
     >
       <template v-slot:no-data>
@@ -32,7 +32,7 @@
           v-on="on"
         >
           <v-icon left> mdi-account </v-icon>
-          <span v-text="item.name"></span>
+          <span  v-text="item.name"></span>
         </v-chip>
       </template>
       <template v-slot:item="{ item }">
@@ -42,7 +42,7 @@
         >
           {{ item.name.charAt(0) }}
         </v-list-item-avatar>
-        <v-list-item-content>
+        <v-list-item-content  @click="handleSelectItem(item)">
           <v-list-item-title v-text="item.name"></v-list-item-title>
           <v-list-item-subtitle v-text="item.symbol"></v-list-item-subtitle>
         </v-list-item-content>
@@ -82,8 +82,12 @@ export default {
     model: null,
     search: null,
     tab: null,
+    selectedPatient: null
   }),
   methods: {
+       handleSelectItem(item){
+       this.selectedPatient = item.id;
+     },
     onInput(value) {
       this.$emit("input", value);
       this.examinationTime = value;
@@ -125,7 +129,6 @@ export default {
       // Items have already been loaded
       console.log(val);
       if (this.items.length > 0) return;
-
       this.isLoading = true;
 
       // Lazily load input items
