@@ -94,8 +94,9 @@ public class ConsultationController {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
-		Boolean isConsultantWorkingTime = workingTimesService.isConsultantWorkingTime(scheduleExaminationDTO.getConsultantId(), javaDate);
+
+		UserAccount loggedPharmacist = userService.findByEmail(scheduleExaminationDTO.getConsultantEmail());
+		Boolean isConsultantWorkingTime = workingTimesService.isConsultantWorkingTime(loggedPharmacist.getId(), javaDate);
 
 		if(isConsultantWorkingTime){
 			System.out.println("DOBRO VREMEWEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");

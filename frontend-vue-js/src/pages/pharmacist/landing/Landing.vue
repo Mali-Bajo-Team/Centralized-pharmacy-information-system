@@ -108,6 +108,7 @@ export default {
           {
             consultantEmail: email,
             startDate: this.valueDate + " " + this.examinationTime + ":00",
+            patientId: this.selectedPatient
           },
           {
             headers: {
