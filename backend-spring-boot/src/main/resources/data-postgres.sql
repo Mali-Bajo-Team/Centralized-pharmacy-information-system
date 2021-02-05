@@ -51,7 +51,10 @@ insert into drug_class (name) values ('Anticoagulant');
 insert into drug_class (name) values ('Antiviral');
 insert into drug_class (name) values ('Cardiovascular');
 
-insert into loyalty_program (is_active, points_per_consultation) values (true, 5);
+-- INSERT LOYALTY PROGRAM
+insert into loyalty_program(active_until, is_active, points_per_consultation) values('2021-02-03', true, 15);
+
+-- INSERT USER CATEGORY
 insert into user_category (loyalty_program_id, name, minimum_points, reservation_discount, consultation_discount) values (1, 'Bronze', 15, 5, 5);
 insert into user_category (loyalty_program_id, name, minimum_points, reservation_discount, consultation_discount) values (1, 'Silver', 30, 10, 10);
 insert into user_category (loyalty_program_id, name, minimum_points, reservation_discount, consultation_discount) values (1, 'Gold', 60, 15, 15);
@@ -73,3 +76,5 @@ insert into pharmacy_rating(rating, patient_id,pharmacy_id) values (4,4,2);
 insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (20,1,'2021-02-03 10:23','2021-02-03 11:00',3,2,1);
 insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (20,1,'2021-02-04 11:23','2021-02-04 13:20',3,2,1);
 insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (20,1,'2021-02-05 13:23','2021-02-05 14:00',5,4,1);
+
+
