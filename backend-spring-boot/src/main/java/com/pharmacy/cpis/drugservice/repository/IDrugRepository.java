@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface IDrugRepository extends JpaRepository<Drug, String> {
     Boolean existsByCode(String code);
+
+    Drug findByCode(String code);
 }
