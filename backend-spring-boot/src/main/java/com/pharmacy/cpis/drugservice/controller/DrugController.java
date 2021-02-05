@@ -3,6 +3,7 @@ package com.pharmacy.cpis.drugservice.controller;
 import com.pharmacy.cpis.drugservice.dto.DrugDTO;
 import com.pharmacy.cpis.drugservice.dto.DrugRegisterDTO;
 import com.pharmacy.cpis.drugservice.model.drug.Drug;
+import com.pharmacy.cpis.drugservice.model.drug.DrugClass;
 import com.pharmacy.cpis.drugservice.service.IDrugService;
 import com.pharmacy.cpis.userservice.dto.PatientDTO;
 import com.pharmacy.cpis.userservice.model.users.Patient;
@@ -34,6 +35,13 @@ public class DrugController {
         }
 
         return new ResponseEntity<>(drugsDTO,HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/types")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<DrugClass>> getAllDrugsTypes() {
+        List<DrugClass> drugsTypes = drugService.findAllDrugClass();
+        return new ResponseEntity<>(drugsTypes,HttpStatus.OK);
     }
 
     @PostMapping(value = "/register", consumes = "application/json")

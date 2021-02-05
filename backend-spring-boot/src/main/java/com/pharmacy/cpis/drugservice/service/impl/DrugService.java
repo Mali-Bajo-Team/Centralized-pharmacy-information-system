@@ -47,6 +47,11 @@ public class DrugService implements IDrugService {
         return drugRepository.findAll();
     }
 
+    @Override
+    public List<DrugClass> findAllDrugClass() {
+        return drugClassRepository.findAll();
+    }
+
     private DrugSpecification addNewDrugSpecification(DrugSpecificationDTO specification, Drug addedDrug) {
         DrugSpecification newDrugSpecification = new DrugSpecification();
         newDrugSpecification.setManufacturer(specification.getManufacturer());
