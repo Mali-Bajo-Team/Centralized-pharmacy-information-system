@@ -43,10 +43,7 @@
                       <v-icon left> mdi-lock </v-icon>
                       Password
                     </v-tab>
-                    <v-tab>
-                      <v-icon left> mdi-access-point </v-icon>
-                      Option 3
-                    </v-tab>
+  
 
                     <v-tab-item>
                       <v-card flat>
@@ -91,7 +88,7 @@
                       <v-container fluid>
                         <v-card elevation="4" class="pa-5">
                           <v-card-title
-                            >Change password to proceed</v-card-title
+                            >Change password</v-card-title
                           >
                           <v-form>
                             <v-text-field
