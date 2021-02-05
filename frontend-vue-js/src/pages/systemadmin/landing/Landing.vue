@@ -1049,9 +1049,11 @@ export default {
       pharmacyAdministrator: {
         password: {
           required,
+          minLength: minLength(6),
         },
         email: {
           required,
+          email,
         },
         name: {
           required,
@@ -1103,21 +1105,21 @@ export default {
           process.env.VUE_APP_BACKEND_URL +
             process.env.VUE_APP_PHARMACIES_REGISTER_ENDPOINT,
           {
-            name: "BENU",
-            city: "Novi Sad",
-            country: "Serbia",
-            description: "Very nice & cheap one",
-            dermatologistConsultationPrice: 20,
-            pharmacistConsultationPrice: 30,
+            name: this.pharmacyForm.name,
+            city: this.pharmacyForm.city,
+            country: this.pharmacyForm.country,
+            description: this.pharmacyForm.description,
+            dermatologistConsultationPrice: this.pharmacyForm.dermatologistConsultationPrice,
+            pharmacistConsultationPrice: this.pharmacyForm.pharmacistConsultationPrice,
             pharmacyAdministrator: {
-              password: "pero",
-              email: "perox.mirko@gmail.com",
-              name: "pero",
-              surname: "jovic",
-              city: "Njujork",
-              address: "Glavna 12",
-              country: "SAD",
-              mobile: "21",
+              password: this.pharmacyForm.pharmacyAdministrator.password,
+              email: this.pharmacyForm.pharmacyAdministrator.email,
+              name: this.pharmacyForm.pharmacyAdministrator.name,
+              surname: this.pharmacyForm.pharmacyAdministrator.surname,
+              city: this.pharmacyForm.pharmacyAdministrator.city,
+              address: this.pharmacyForm.pharmacyAdministrator.address,
+              country: this.pharmacyForm.pharmacyAdministrator.country,
+              mobile: this.pharmacyForm.pharmacyAdministrator.phone,
             },
           },
           {
