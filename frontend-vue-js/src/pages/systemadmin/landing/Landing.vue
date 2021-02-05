@@ -552,7 +552,10 @@
                   label="Loyalty points"
                 ></v-text-field>
                 <v-select
+                  v-model="alternateDrug"
                   :items="alternateDrugs"
+                  item-text="name"
+                  item-value="code"
                   label="Alternate drugs"
                   outlined
                 ></v-select>
@@ -696,7 +699,8 @@ export default {
       drugRegStep: 1,
       loyaltyRegStep: 1,
     },
-    typesOfDrug: ["Antibiotik", "Anestetik"],
+    alternateDrug: "",
+    typesOfDrug: [],
     alternateDrugs: [],
     dermatologistForm: {
       email: "",
@@ -900,7 +904,11 @@ export default {
               code: this.drugForm.drug.code,
               loyaltyPoints: this.drugForm.drug.loyaltyPoints,
               typeOfDrug: this.drugForm.drug.typeOfDrug,
-              alternateDrugs: null,
+              alternateDrugs: [
+                {
+                  code: this.alternateDrug
+                }
+              ],
             },
             specification: {
               manufacturer: this.drugForm.specification.manufacturer,
@@ -1279,7 +1287,7 @@ export default {
       .then((resp) => {
         this.alternateDrugs = [];
         for (let drug of resp.data) {
-          this.alternateDrugs.push(drug.name);
+          this.alternateDrugs.push(drug);
         }
       });
 
