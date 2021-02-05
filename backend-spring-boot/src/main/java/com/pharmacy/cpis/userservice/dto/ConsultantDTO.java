@@ -6,6 +6,8 @@ public class ConsultantDTO {
     private String lastName;
     private String phoneNumber;
     private String location;
+    private String city;
+    private String country;
 
     public String getName() {
         return name;
@@ -43,18 +45,36 @@ public class ConsultantDTO {
 
     }
 
-    public ConsultantDTO(String email) {
-        this.email = email;
+    public ConsultantDTO(String email,String name,String lastName,String phoneNumber,String location,String city,String country) {
+        this.email = email;this.name = name;this.lastName = lastName;this.phoneNumber = phoneNumber;this.location = location;  this.city = city;this.country = country;
     }
-    public void setEmail(String email) {
+    public void setEmail(String email,String name,String lastName,String phoneNumber,String location,String city,String country) {
         this.email = email;
         this.name = name;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.location = location;
+        this.city = city;
+        this.country = country;
     }
 
     public String getEmail() {
         return email;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 }

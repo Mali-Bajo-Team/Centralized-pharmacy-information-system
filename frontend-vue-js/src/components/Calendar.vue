@@ -47,15 +47,15 @@
         :event-overlap-threshold="30"
         :event-color="getEventColor"
         @change="getEvents"
-        @click:event="myTime"
+        @click:event="showExaminationDialog"
       ></v-calendar>
     </v-sheet>
 
-    <!-- Start DIALOG-->
-    <v-dialog v-model="dialog" persistent max-width="600px">
+    <!-- Start QUESTION DIALOG -->
+    <v-dialog v-model="questionDialog" persistent max-width="600px">
       <v-card>
         <v-card-title>
-          <span class="headline">User Profile {{ name }}</span>
+          <span class="headline">Examination report for {{ name }}</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -64,26 +64,154 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialog = false">
-            Close
+          <v-btn color="primary" text @click="questionDialog = false">
+            The patient did not show up
           </v-btn>
-          <v-btn color="blue darken-1" text @click="dialog = false">
-            Save
+          <v-btn
+            color="primary"
+            text
+            @click="
+              questionDialog = false;
+              reportDialog = true;
+            "
+          >
+            Start examination
+          </v-btn>
+          <v-btn color="primary" text @click="questionDialog = false">
+            Cancel
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <!-- End DIALOG-->
+    <!-- End QUESTION DIALOG-->
+
+    <!-- Start REPORT DIALOG-->
+    <v-dialog v-model="reportDialog" persistent max-width="600px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">Examination report for {{ name }}</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-stepper v-model="e6" vertical>
+              <v-stepper-step :complete="e6 > 1" step="1">
+                Examination report
+              </v-stepper-step>
+
+              <v-stepper-content step="1">
+                <v-card color="grey lighten-1" class="mb-12" height="200px">
+                  <v-textarea v-model="report" color="teal">
+                    <template v-slot:label>
+                      <div>Report</div>
+                    </template>
+                  </v-textarea>
+                </v-card>
+                <v-btn color="primary" @click="e6 = 2"> Continue </v-btn>
+                <v-btn
+                  text
+                  @click="
+                    questionDialog = true;
+                    reportDialog = false;
+                    e6 = 1;
+                  "
+                >
+                  Cancel
+                </v-btn>
+              </v-stepper-content>
+
+              <v-stepper-step :complete="e6 > 2" step="2">
+                Prescribe medicine
+              </v-stepper-step>
+
+              <v-stepper-content step="2">
+                <v-card
+                  color="grey lighten-1"
+                  class="mb-12"
+                  height="200px"
+                ></v-card>
+                <v-btn color="primary" @click="e6 = 3"> Continue </v-btn>
+                <v-btn
+                  text
+                  @click="
+                    questionDialog = true;
+                    reportDialog = false;
+                    e6 = 1;
+                  "
+                >
+                  Cancel
+                </v-btn>
+              </v-stepper-content>
+
+              <v-stepper-step :complete="e6 > 3" step="3">
+                Schedule an additional examination
+              </v-stepper-step>
+
+              <v-stepper-content step="3">
+                <v-card
+                  color="grey lighten-1"
+                  class="mb-12"
+                  height="200px"
+                ></v-card>
+                <v-btn color="primary" @click="e6 = 4"> Continue </v-btn>
+                <v-btn
+                  text
+                  @click="
+                    questionDialog = true;
+                    reportDialog = false;
+                    e6 = 1;
+                  "
+                >
+                  Cancel
+                </v-btn>
+              </v-stepper-content>
+
+              <v-stepper-step step="4"> Submit </v-stepper-step>
+              <v-stepper-content step="4">
+                <v-card
+                  color="grey lighten-1"
+                  class="mb-12"
+                  height="200px"
+                ></v-card>
+                <v-btn
+                  color="primary"
+                  @click="
+                    e6 = 1;
+                    reportDialog = false;
+                  "
+                >
+                  Submit
+                </v-btn>
+                <v-btn
+                  text
+                  @click="
+                    questionDialog = true;
+                    reportDialog = false;
+                    e6 = 1;
+                  "
+                >
+                  Cancel
+                </v-btn>
+              </v-stepper-content>
+            </v-stepper>
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    <!-- End REPORT DIALOG-->
   </v-app>
 </template>
 
 <script>
 export default {
   data: () => ({
+    e6: 1,
+    report: "",
     dragEvent: null,
 
     name: "",
-    dialog: false,
+    patientId: null,
+    questionDialog: false,
+    reportDialog: false,
     consultants: [],
     response: null,
     type: "month",
@@ -111,9 +239,10 @@ export default {
     names: ["Pregled", "Holiday"],
   }),
   methods: {
-    myTime(event) {
+    showExaminationDialog(event) {
       this.name = event.event.name;
-      this.dialog = true;
+      this.patientId = event.event.patientId;
+      this.questionDialog = true;
       console.log(event);
     },
     getEvents() {
@@ -146,7 +275,7 @@ export default {
               end: this.consultants[i].endDate,
               color: "red",
               timed: 1,
-              patientId:  this.consultants[i].patientId
+              patientId: this.consultants[i].patientId,
             });
           }
           this.events = events;
