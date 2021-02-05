@@ -24,11 +24,9 @@ public class WorkingTimesService implements IWorkingTimesService {
     public WorkingTimes consultantWorkingTime(Long consultantID) {
         WorkingTimes consultantWorkingTime = new WorkingTimes();
         List<WorkingTimes> workingTimes = workingTimesRepository.findAll();
-        System.out.println("NIJE NASAOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOAAAAAAAAAAAAAAAAAAAA");
         for (WorkingTimes wt : workingTimes) {
             if(wt.getConsultant().getId() == consultantID){
                 consultantWorkingTime = wt;
-                System.out.println("NASAOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOAAAAAAAAAAAAAAAAAAAA");
                 return  consultantWorkingTime;
             }
         }
@@ -62,15 +60,11 @@ public class WorkingTimesService implements IWorkingTimesService {
                 return true;
             }
         }else if(numberOfWeekDay == 6){
-            System.out.println("PETAK JE");
-            System.out.println("examinationTime.getTime()" + examinationTime.getTime());
-            System.out.println("consultantWorkingTime.getFriday().getStart().getTime()" + consultantWorkingTime.getFriday().getStart().getTime());
-            System.out.println("consultantWorkingTime.getFriday().getEnd().getTime()" + consultantWorkingTime.getFriday().getEnd().getTime());
             if(compareTimes(examinationTime, consultantWorkingTime.getFriday().getStart()) >=0 && compareTimes(examinationTime, consultantWorkingTime.getFriday().getEnd()) < 0){
                 return true;
             }
         }else if(numberOfWeekDay == 7){
-            if(examinationTime.getTime() > consultantWorkingTime.getSaturday().getStart().getTime() && examinationTime.getTime() < consultantWorkingTime.getSaturday().getEnd().getTime()){
+            if(compareTimes(examinationTime, consultantWorkingTime.getSaturday().getStart()) >=0 && compareTimes(examinationTime, consultantWorkingTime.getSaturday().getEnd()) < 0){
                 return true;
             }
         }

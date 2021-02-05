@@ -87,17 +87,16 @@ public class ConsultationController {
 	@PostMapping("/scheduleconsultation")
 	@PreAuthorize("hasRole('PHARMACIST')")
 	public ResponseEntity<ScheduleExaminationDTO> scheduleConsultation(@RequestBody ScheduleExaminationDTO scheduleExaminationDTO) {
-		System.out.println("USAO VREMEWEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+
 		Date javaDate = null;
 		try {
 			javaDate=new SimpleDateFormat("yy-MM-dd HH:mm:ss").parse(scheduleExaminationDTO.getStartDate());
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-
-
+		
 		Boolean isConsultantWorkingTime = workingTimesService.isConsultantWorkingTime(scheduleExaminationDTO.getConsultantId(), javaDate);
-		System.out.println("JAVAAA VREME: " + javaDate);
+
 		if(isConsultantWorkingTime){
 			System.out.println("DOBRO VREMEWEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 			return new ResponseEntity<ScheduleExaminationDTO>(scheduleExaminationDTO, HttpStatus.OK);
