@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +41,7 @@ public class LoyaltyProgramController {
     // TODO: Add this after finished with postman testing
     //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<LoyaltyProgramDTO> updateLoyaltyProgram(@RequestBody LoyaltyProgramDTO loyaltyProgramDTO){
-        LoyaltyProgram loyaltyProgram = loyaltyProgramService.update(loyaltyProgramDTO);
+        LoyaltyProgram loyaltyProgram = loyaltyProgramService.updateLoyaltyProgram(loyaltyProgramDTO);
         return new ResponseEntity<>(new LoyaltyProgramDTO(loyaltyProgram),HttpStatus.OK);
     }
 
@@ -51,6 +50,14 @@ public class LoyaltyProgramController {
     //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserCategoryDTO> addUserCategory(@RequestBody UserCategoryDTO userCategoryDTO){
         UserCategory userCategory = loyaltyProgramService.saveCategory(userCategoryDTO);
+        return new ResponseEntity<>(new UserCategoryDTO(userCategory) ,HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/categories", consumes = "application/json")
+    // TODO: Add this after finished with postman testing
+    //@PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserCategoryDTO> updateUserCategory(@RequestBody UserCategoryDTO userCategoryDTO){
+        UserCategory userCategory = loyaltyProgramService.updateCategory(userCategoryDTO);
         return new ResponseEntity<>(new UserCategoryDTO(userCategory) ,HttpStatus.OK);
     }
 }

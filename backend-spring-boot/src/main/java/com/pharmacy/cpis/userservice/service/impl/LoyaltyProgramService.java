@@ -7,6 +7,8 @@ import com.pharmacy.cpis.userservice.model.loyaltyprogram.UserCategory;
 import com.pharmacy.cpis.userservice.repository.ILoyaltyProgramRepository;
 import com.pharmacy.cpis.userservice.repository.IUserCategoryRepository;
 import com.pharmacy.cpis.userservice.service.ILoyaltyProgramService;
+import com.pharmacy.cpis.util.exceptions.PSAlreadyExistsException;
+import com.pharmacy.cpis.util.exceptions.PSNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +29,7 @@ public class LoyaltyProgramService implements ILoyaltyProgramService {
     }
 
     @Override
-    public LoyaltyProgram update(LoyaltyProgramDTO loyaltyProgramDTO) {
+    public LoyaltyProgram updateLoyaltyProgram(LoyaltyProgramDTO loyaltyProgramDTO) {
         LoyaltyProgram loyaltyProgram = getLoyaltyProgram();
 
         loyaltyProgram.setActiveUntil(loyaltyProgramDTO.getActiveUntil());
@@ -38,13 +40,30 @@ public class LoyaltyProgramService implements ILoyaltyProgramService {
 
     @Override
     public UserCategory saveCategory(UserCategoryDTO userCategoryDTO) {
+        // TODO: MAKE EXCEPTIONS FOR UNIQUE CONSTRAINTS
         UserCategory userCategory = new UserCategory();
         userCategory.setLoyaltyProgram(getLoyaltyProgram());
+        if(userCategoryRepository.existsByMinimumPoints(userCategoryDTO.getMinimumPoints()))
+            throw new PSAlreadyExistsException("User category with this amount of minimum points already exist");
+        if(userCategoryRepository.existsByName(userCategoryDTO.getName()))
+            throw new PSAlreadyExistsException("User category with this name already exist");
         userCategory.setName(userCategoryDTO.getName());
         userCategory.setMinimumPoints(userCategoryDTO.getMinimumPoints());
         userCategory.setReservationDiscount(userCategoryDTO.getReservationDiscount());
         userCategory.setConsultationDiscount(userCategoryDTO.getConsultationDiscount());
         return userCategoryRepository.save(userCategory);
+    }
+
+    @Override
+    public UserCategory updateCategory(UserCategoryDTO userCategoryDTO) {
+        UserCategory updatedUserCategory = userCategoryRepository.findByName(userCategoryDTO.getName());
+        if(updatedUserCategory == null) throw new PSNotFoundException("User category with this name does not exist");
+        if(updatedUserCategory.getMinimumPoints() != userCategoryDTO.getMinimumPoints() && userCategoryRepository.existsByMinimumPoints(userCategoryDTO.getMinimumPoints()))
+            throw new PSAlreadyExistsException("User category with this amount of minimum points already exist");
+        updatedUserCategory.setMinimumPoints(userCategoryDTO.getMinimumPoints());
+        updatedUserCategory.setReservationDiscount(userCategoryDTO.getReservationDiscount());
+        updatedUserCategory.setConsultationDiscount(userCategoryDTO.getConsultationDiscount());
+        return userCategoryRepository.save(updatedUserCategory);
     }
 
     /**

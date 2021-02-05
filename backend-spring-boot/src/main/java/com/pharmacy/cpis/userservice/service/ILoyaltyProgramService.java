@@ -10,7 +10,9 @@ import java.util.List;
 public interface ILoyaltyProgramService {
     List<LoyaltyProgram> findAll();
 
-    LoyaltyProgram update(LoyaltyProgramDTO loyaltyProgramDTO);
+    LoyaltyProgram updateLoyaltyProgram(LoyaltyProgramDTO loyaltyProgramDTO);
 
     UserCategory saveCategory(UserCategoryDTO userCategoryDTO);
+
+    UserCategory updateCategory(UserCategoryDTO userCategoryDTO);
 }
