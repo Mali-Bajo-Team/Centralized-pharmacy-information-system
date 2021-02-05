@@ -22,7 +22,7 @@ public class DrugController {
     @Autowired
     private IDrugService drugService;
 
-    @GetMapping(consumes = "application/json")
+    @GetMapping()
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<DrugDTO>> getAllDrugs() {
         List<Drug> drugs = drugService.findAll();

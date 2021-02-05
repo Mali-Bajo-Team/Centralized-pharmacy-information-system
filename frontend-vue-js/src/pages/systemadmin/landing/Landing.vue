@@ -696,7 +696,7 @@ export default {
       loyaltyRegStep: 1,
     },
     typesOfDrug: ["Antibiotik", "Anestetik"],
-    alternateDrugs: ["Hors", "Celik"],
+    alternateDrugs: [],
     dermatologistForm: {
       email: "",
       password: "",
@@ -904,10 +904,9 @@ export default {
             specification: {
               manufacturer: this.drugForm.specification.manufacturer,
               contraindications: this.drugForm.specification.contraindications,
-              recommendedDailyDose: this.drugForm.specification.recommendedDailyDose,
-              ingredients: [
-                this.drugForm.specification.ingredients
-              ],
+              recommendedDailyDose: this.drugForm.specification
+                .recommendedDailyDose,
+              ingredients: [this.drugForm.specification.ingredients],
             },
           },
           {
@@ -1264,6 +1263,26 @@ export default {
         errors.push("Phone number should only contain numbers.");
       return errors;
     },
+  },
+  mounted() {
+
+    this.axios
+      .get(
+        process.env.VUE_APP_BACKEND_URL +
+          process.env.VUE_APP_ALL_DRUGS_ENDPOINT,
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+          },
+        }
+      )
+      .then((resp) => {
+        this.alternateDrugs = [];
+        for (let drug of resp.data) {
+          console.log(drug);
+          this.alternateDrugs.push(drug.name);
+        }
+      });
   },
 };
 </script>
