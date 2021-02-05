@@ -21,6 +21,10 @@ export default {
             {
                 title: "Home",
                 to: "/patient"
+            },
+            {
+                title:"Profile",
+                to:"/patient/profile"
             }
         ]
     })
