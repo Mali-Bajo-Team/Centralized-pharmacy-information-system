@@ -1279,10 +1279,28 @@ export default {
       .then((resp) => {
         this.alternateDrugs = [];
         for (let drug of resp.data) {
-          console.log(drug);
           this.alternateDrugs.push(drug.name);
         }
       });
+    
+      this.axios
+      .get(
+        process.env.VUE_APP_BACKEND_URL +
+          process.env.VUE_APP_ALL_DRUGS_TYPES_ENDPOINT,
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+          },
+        }
+      )
+      .then((resp) => {
+        this.typesOfDrug = [];
+        for (let drugType of resp.data) {
+          this.typesOfDrug.push(drugType.name);
+        }
+      });
+
+
   },
 };
 </script>
