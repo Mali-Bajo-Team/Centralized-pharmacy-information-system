@@ -71,6 +71,8 @@ public class ConsultationController {
 		consultantDTO.setLastName(loggedPharmacist.getPerson().getSurname());
 		consultantDTO.setPhoneNumber(loggedPharmacist.getPerson().getPhoneNumber());
 		consultantDTO.setLocation(loggedPharmacist.getPerson().getAddress());
+		consultantDTO.setCity(loggedPharmacist.getPerson().getCity());
+		consultantDTO.setCountry(loggedPharmacist.getPerson().getCountry());
 
 		return new ResponseEntity<ConsultantDTO>(consultantDTO, HttpStatus.OK);
 	}

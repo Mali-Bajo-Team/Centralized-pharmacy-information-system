@@ -8,7 +8,9 @@
           <p class="font-weight-medium">
             Phone number : {{ pharmacist.phoneNumber }}
           </p>
-          <p class="font-weight-medium">Location : {{ pharmacist.location }}</p>
+          <p class="font-weight-medium">Address : {{ pharmacist.location }}</p>
+          <p class="font-weight-medium">City : {{ pharmacist.city }}</p>
+          <p class="font-weight-medium">Country : {{ pharmacist.country }}</p>
 
           <v-dialog
             v-model="dialog"
@@ -43,7 +45,6 @@
                       <v-icon left> mdi-lock </v-icon>
                       Password
                     </v-tab>
-  
 
                     <v-tab-item>
                       <v-card flat>
@@ -64,7 +65,17 @@
                         ></v-text-field>
                         <v-text-field
                           v-model="pharmacist.location"
-                          label="Location"
+                          label="Address"
+                          filled
+                        ></v-text-field>
+                        <v-text-field
+                          v-model="pharmacist.city"
+                          label="City"
+                          filled
+                        ></v-text-field>
+                        <v-text-field
+                          v-model="pharmacist.country"
+                          label="Country"
                           filled
                         ></v-text-field>
                         <v-btn
@@ -87,9 +98,7 @@
                     <v-tab-item>
                       <v-container fluid>
                         <v-card elevation="4" class="pa-5">
-                          <v-card-title
-                            >Change password</v-card-title
-                          >
+                          <v-card-title>Change password</v-card-title>
                           <v-form>
                             <v-text-field
                               v-model="form.oldPassword"
@@ -315,9 +324,9 @@ export default {
           {
             name: this.pharmacist.name,
             surname: this.pharmacist.lastName,
-            city: "Novi Sad",
+            city: this.pharmacist.city,
             address: this.pharmacist.location,
-            country: "Serbia",
+            country: this.pharmacist.country,
             phone: this.pharmacist.phoneNumber,
           },
           {
@@ -326,8 +335,7 @@ export default {
             },
           }
         )
-        .then((resp) => {
-          this.pharmacist = resp.data;
+        .then(() => {
           this.dialog = false;
           this.$router.go();
         });
