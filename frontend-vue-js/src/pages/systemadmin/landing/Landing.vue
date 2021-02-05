@@ -91,7 +91,7 @@
                 Are you sure you want add pharmacy with this pharmacy
                 administrator ?
               </p>
-              <v-btn color="primary" @click="stepper.pharmacyRegStep = 1">
+              <v-btn color="primary" @click="confirmPharmacyRegistration()">
                 Confirm
               </v-btn>
               <v-btn text @click="stepper.pharmacyRegStep = 2"> Back </v-btn>
@@ -877,6 +877,10 @@ export default {
     },
   },
   methods: {
+    confirmPharmacyRegistration() {
+      // TODO: Make some check if is all validation okey
+      this.registerPharmacy();
+    },
     confirmDrugRegistration() {
       // TODO: Make some check if is all validation okey
       this.registerDrug();
@@ -893,6 +897,45 @@ export default {
       // TODO: Make some check if is all validation okey
       this.registerSystemAdministrator();
     },
+    registerPharmacy() {
+      alert("bam");
+      this.axios
+        .post(
+          process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_PHARMACIES_REGISTER_ENDPOINT,
+          {
+            name: "BENU",
+            city: "Novi Sad",
+            country: "Serbia",
+            description: "Very nice & cheap one",
+            dermatologistConsultationPrice: 20,
+            pharmacistConsultationPrice: 30,
+            pharmacyAdministrator: {
+              password: "pero",
+              email: "perox.mirko@gmail.com",
+              name: "pero",
+              surname: "jovic",
+              city: "Njujork",
+              address: "Glavna 12",
+              country: "SAD",
+              mobile: "21",
+            },
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then(() => {
+          // TODO: Make some notification here
+          alert("Successfuly added new pharmacy");
+        })
+        .catch((error) => {
+          // TODO: Make some tost notifications here
+          alert("Error during pharmacy registration: " + error);
+        });
+    },
     registerDrug() {
       this.axios
         .post(
@@ -906,8 +949,8 @@ export default {
               typeOfDrug: this.drugForm.drug.typeOfDrug,
               alternateDrugs: [
                 {
-                  code: this.alternateDrug
-                }
+                  code: this.alternateDrug,
+                },
               ],
             },
             specification: {
