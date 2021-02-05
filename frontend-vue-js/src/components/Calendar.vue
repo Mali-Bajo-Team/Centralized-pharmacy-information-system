@@ -1,6 +1,5 @@
 <template>
   <v-app>
-
     <v-sheet tile height="54" class="d-flex">
       <v-btn icon class="ma-2" @click="$refs.calendar.prev()">
         <v-icon>mdi-chevron-left</v-icon>
@@ -48,14 +47,171 @@
         :event-overlap-threshold="30"
         :event-color="getEventColor"
         @change="getEvents"
+        @click:event="showExaminationDialog"
       ></v-calendar>
     </v-sheet>
+
+    <!-- Start QUESTION DIALOG -->
+    <v-dialog v-model="questionDialog" persistent max-width="600px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">Examination report for {{ name }}</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row> </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" text @click="questionDialog = false">
+            The patient did not show up
+          </v-btn>
+          <v-btn
+            color="primary"
+            text
+            @click="
+              questionDialog = false;
+              reportDialog = true;
+            "
+          >
+            Start examination
+          </v-btn>
+          <v-btn color="primary" text @click="questionDialog = false">
+            Cancel
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- End QUESTION DIALOG-->
+
+    <!-- Start REPORT DIALOG-->
+    <v-dialog v-model="reportDialog" persistent max-width="600px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">Examination report for {{ name }}</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-stepper v-model="e6" vertical>
+              <v-stepper-step :complete="e6 > 1" step="1">
+                Examination report
+              </v-stepper-step>
+
+              <v-stepper-content step="1">
+                <v-card color="grey lighten-1" class="mb-12" height="200px">
+                  <v-textarea v-model="report" color="teal">
+                    <template v-slot:label>
+                      <div>Report</div>
+                    </template>
+                  </v-textarea>
+                </v-card>
+                <v-btn color="primary" @click="e6 = 2"> Continue </v-btn>
+                <v-btn
+                  text
+                  @click="
+                    questionDialog = true;
+                    reportDialog = false;
+                    e6 = 1;
+                  "
+                >
+                  Cancel
+                </v-btn>
+              </v-stepper-content>
+
+              <v-stepper-step :complete="e6 > 2" step="2">
+                Prescribe medicine
+              </v-stepper-step>
+
+              <v-stepper-content step="2">
+                <v-card
+                  color="grey lighten-1"
+                  class="mb-12"
+                  height="200px"
+                ></v-card>
+                <v-btn color="primary" @click="e6 = 3"> Continue </v-btn>
+                <v-btn
+                  text
+                  @click="
+                    questionDialog = true;
+                    reportDialog = false;
+                    e6 = 1;
+                  "
+                >
+                  Cancel
+                </v-btn>
+              </v-stepper-content>
+
+              <v-stepper-step :complete="e6 > 3" step="3">
+                Schedule an additional examination
+              </v-stepper-step>
+
+              <v-stepper-content step="3">
+                <v-card
+                  color="grey lighten-1"
+                  class="mb-12"
+                  height="200px"
+                ></v-card>
+                <v-btn color="primary" @click="e6 = 4"> Continue </v-btn>
+                <v-btn
+                  text
+                  @click="
+                    questionDialog = true;
+                    reportDialog = false;
+                    e6 = 1;
+                  "
+                >
+                  Cancel
+                </v-btn>
+              </v-stepper-content>
+
+              <v-stepper-step step="4"> Submit </v-stepper-step>
+              <v-stepper-content step="4">
+                <v-card
+                  color="grey lighten-1"
+                  class="mb-12"
+                  height="200px"
+                ></v-card>
+                <v-btn
+                  color="primary"
+                  @click="
+                    e6 = 1;
+                    reportDialog = false;
+                  "
+                >
+                  Submit
+                </v-btn>
+                <v-btn
+                  text
+                  @click="
+                    questionDialog = true;
+                    reportDialog = false;
+                    e6 = 1;
+                  "
+                >
+                  Cancel
+                </v-btn>
+              </v-stepper-content>
+            </v-stepper>
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    <!-- End REPORT DIALOG-->
   </v-app>
 </template>
 
 <script>
 export default {
   data: () => ({
+    e6: 1,
+    report: "",
+    dragEvent: null,
+
+    name: "",
+    patientId: null,
+    questionDialog: false,
+    reportDialog: false,
     consultants: [],
     response: null,
     type: "month",
@@ -83,6 +239,12 @@ export default {
     names: ["Pregled", "Holiday"],
   }),
   methods: {
+    showExaminationDialog(event) {
+      this.name = event.event.name;
+      this.patientId = event.event.patientId;
+      this.questionDialog = true;
+      console.log(event);
+    },
     getEvents() {
       var token = parseJwt(localStorage.getItem("JWT-CPIS"));
       var email = token.sub;
@@ -90,7 +252,8 @@ export default {
       this.consultants = [];
       this.axios
         .post(
-          process.env.VUE_APP_BACKEND_URL + process.env.VUE_APP_CONSULTANTEXAMINATIONS_ENDPOINT,
+          process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_CONSULTANTEXAMINATIONS_ENDPOINT,
           { email: email },
           {
             headers: {
@@ -112,6 +275,7 @@ export default {
               end: this.consultants[i].endDate,
               color: "red",
               timed: 1,
+              patientId: this.consultants[i].patientId,
             });
           }
           this.events = events;

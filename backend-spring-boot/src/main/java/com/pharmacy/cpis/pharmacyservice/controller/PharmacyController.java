@@ -9,6 +9,7 @@ import com.pharmacy.cpis.userservice.model.users.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -38,7 +39,8 @@ public class PharmacyController {
     }
 
     @PostMapping(value = "/register", consumes = "application/json")
-    public ResponseEntity<Pharmacy> addUser(@RequestBody PharmacyRegisterDTO pharmacyRegisterDTO) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Pharmacy> addPharmacy(@RequestBody PharmacyRegisterDTO pharmacyRegisterDTO) {
         Pharmacy addedPharmacy = pharmacyService.registerPharmacy(pharmacyRegisterDTO);
         return new ResponseEntity<>(addedPharmacy, HttpStatus.CREATED);
     }

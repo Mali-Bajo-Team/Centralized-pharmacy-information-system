@@ -1,15 +1,20 @@
 package com.pharmacy.cpis.userservice.service;
 
-import com.pharmacy.cpis.userservice.model.users.UserAccount;
-
 import java.util.List;
 
+import com.pharmacy.cpis.userservice.dto.UserTokenState;
+import com.pharmacy.cpis.userservice.model.users.UserAccount;
+
 public interface IUserService {
-    UserAccount findByEmail(String email );
+	UserAccount findByEmail(String email );
 
-    List<UserAccount> findAll();
+	List<UserAccount> findAll();
 
-    String getUserRole(UserAccount userAccount);
+	String getUserRole(UserAccount userAccount);
 
-    void activatePatientAccount(Long userId);
+	void activatePatientAccount(Long userId);
+
+	UserAccount changePassword(String oldPassword, String newPassword);
+	
+	UserTokenState logIn(String email, String password);
 }

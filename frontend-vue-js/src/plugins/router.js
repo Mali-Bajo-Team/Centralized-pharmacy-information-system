@@ -24,6 +24,7 @@ import DermatologistLanding from './../pages/dermatologist/landing/Landing';
 
 import SystemAdmin from './../pages/systemadmin/Container';
 import SystemAdminLanding from './../pages/systemadmin/landing/Landing';
+import SystemAdminLoyaltyProgram from './../pages/systemadmin/loyaltyprogram/LoyaltyProgram';
 
 import PharmacyAdmin from './../pages/pharmacyadmin/Container';
 import PharmacyAdminLanding from './../pages/pharmacyadmin/landing/Landing';
@@ -31,10 +32,17 @@ import PharmacyAdminLanding from './../pages/pharmacyadmin/landing/Landing';
 import Supplier from './../pages/supplier/Container';
 import SupplierLanding from './../pages/supplier/landing/Landing';
 
+import MandatoryPasswordChange from './../pages/mandatoryPasswordChange/Page'
+
+import { getParsedToken, getToken } from '../util/token';
+
 const routes = [
     {
         component: Guest,
         path: '/',
+        meta: {
+            guest: true
+        }, 
         children: [
             {
                 component: GuestLanding,
@@ -66,6 +74,10 @@ const routes = [
     {
         component: Patient,
         path: '/patient',
+        meta: {
+            requiresAuth: true,
+            role: 'PATIENT'
+        }, 
         children: [
             {
                 component: PatientLanding,
@@ -82,6 +94,10 @@ const routes = [
     {
         component: Pharmacist,
         path: '/pharmacist',
+        meta: {
+            requiresAuth: true,
+            role: 'PHARMACIST'
+        }, 
         children: [
             {
                 component: PharmacistLanding,
@@ -103,6 +119,10 @@ const routes = [
     {
         component: Dermatologist,
         path: '/dermatologist',
+        meta: {
+            requiresAuth: true,
+            role: 'DERMATOLOGIST'
+        }, 
         children: [
             {
                 component: DermatologistLanding,
@@ -114,17 +134,30 @@ const routes = [
     {
         component: SystemAdmin,
         path: '/systemadmin',
+        meta: {
+            requiresAuth: true,
+            role: 'ADMIN'
+        }, 
         children: [
             {
                 component: SystemAdminLanding,
                 name: 'systemadmin',
                 path: ''
+            },
+            {
+                component: SystemAdminLoyaltyProgram,
+                name: 'loyaltyprogram',
+                path: 'loyaltyprogram'
             }
         ]
     },
     {
         component: PharmacyAdmin,
         path: '/pharmacyadmin',
+        meta: {
+            requiresAuth: true,
+            role: 'PHARMACY_ADMIN'
+        }, 
         children: [
             {
                 component: PharmacyAdminLanding,
@@ -136,6 +169,10 @@ const routes = [
     {
         component: Supplier,
         path: '/supplier',
+        meta: {
+            requiresAuth: true,
+            role: 'SUPPLIER'
+        }, 
         children: [
             {
                 component: SupplierLanding,
@@ -143,9 +180,77 @@ const routes = [
                 path: ''
             }
         ]
+    },
+    {
+        component: MandatoryPasswordChange,
+        path: '/activate',
+        meta: {
+            requiresAuth: true,
+            npc: true
+        }
     }
 ]
 
-export default new VueRouter({
+let router = new VueRouter({
     routes
 });
+
+function getHomePage(role) {
+    if (role == 'PATIENT')
+        return '/patient'
+    else if (role == 'ADMIN')
+        return '/systemadmin'
+    else if (role == 'PHARMACY_ADMIN')
+        return '/pharmacyadmin'
+    else if (role == 'PHARMACIST')
+        return '/pharmacist'
+    else if (role == 'DERMATOLOGIST')
+        return '/dermatologist'
+    else if (role == 'SUPPLIER')
+        return '/supplier'
+    else
+        return '/'
+}
+
+router.beforeEach((to, from, next) => {
+    let token = getToken();
+
+    if(to.matched.some(record => record.meta.requiresAuth)) {
+        if (token == null) {
+            next({
+                path: '/login',
+                params: { nextUrl: to.fullPath }
+            })
+        } else {
+            let parsedToken = getParsedToken()
+
+            if (to.matched.some(record => record.meta.npc)) {
+                if (parsedToken.npc)
+                    next()
+                else
+                    next(getHomePage(parsedToken.role))
+            }
+            
+            if (to.matched.some(record => record.meta.role && record.meta.role == parsedToken.role)) {
+                if (!parsedToken.npc)
+                    next()
+                else
+                    next('/activate')
+            } else {
+                next(getHomePage(parsedToken.role))
+            }
+        }
+    } else if(to.matched.some(record => record.meta.guest)) {
+        if(token == null){
+            next()
+        }
+        else{            
+            let parsedToken = getParsedToken()
+            next(getHomePage(parsedToken.role))
+        }
+    }else {
+        next()
+    }
+})
+
+export default router

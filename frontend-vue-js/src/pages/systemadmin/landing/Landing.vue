@@ -452,12 +452,20 @@
                     <v-text-field
                       v-model="systemAdministratorForm.password"
                       :append-icon="
-                        systemAdministratorForm.showPassword ? 'mdi-eye' : 'mdi-eye-off'
+                        systemAdministratorForm.showPassword
+                          ? 'mdi-eye'
+                          : 'mdi-eye-off'
                       "
                       :errorMessages="passwordErrorsSystemAdministrator"
-                      :type="systemAdministratorForm.showPassword ? 'text' : 'password'"
+                      :type="
+                        systemAdministratorForm.showPassword
+                          ? 'text'
+                          : 'password'
+                      "
                       label="Password"
-                      @click:append="systemAdministratorForm.showPassword = !systemAdministratorForm.showPassword"
+                      @click:append="
+                        systemAdministratorForm.showPassword = !systemAdministratorForm.showPassword
+                      "
                       @blur="$v.systemAdministratorForm.password.$touch()"
                       @input="$v.systemAdministratorForm.password.$touch()"
                     ></v-text-field>
@@ -520,12 +528,39 @@
                 style="padding: 2%"
                 color="grey lighten-5"
                 class="mb-12"
-                height="300px"
+                height="400px"
               >
-                <v-text-field label="Name of the drug"></v-text-field>
-                <v-text-field label="Code of the drug"></v-text-field>
-                <v-text-field label="Loyalty points"></v-text-field>
+                <v-text-field
+                  v-model="drugForm.drug.name"
+                  :error-messages="drugNameErrors"
+                  label="Name of the drug"
+                  @blur="$v.drugForm.drug.name.$touch()"
+                  @input="$v.drugForm.drug.name.$touch()"
+                ></v-text-field>
+                <v-text-field
+                  v-model="drugForm.drug.code"
+                  :error-messages="drugCodeErrors"
+                  @blur="$v.drugForm.drug.code.$touch()"
+                  @input="$v.drugForm.drug.code.$touch()"
+                  label="Code of the drug"
+                ></v-text-field>
+                <v-text-field
+                  v-model="drugForm.drug.loyaltyPoints"
+                  :error-messages="drugLoyaltyPointsErrors"
+                  @blur="$v.drugForm.drug.loyaltyPoints.$touch()"
+                  @input="$v.drugForm.drug.loyaltyPoints.$touch()"
+                  label="Loyalty points"
+                ></v-text-field>
                 <v-select
+                  v-model="alternateDrug"
+                  :items="alternateDrugs"
+                  item-text="name"
+                  item-value="code"
+                  label="Alternate drugs"
+                  outlined
+                ></v-select>
+                <v-select
+                  v-model="drugForm.drug.typeOfDrug"
                   :items="typesOfDrug"
                   label="Type of the drug"
                   outlined
@@ -556,10 +591,64 @@
               >
                 <v-row>
                   <v-col>
-                    <v-text-field label="Contraindications"></v-text-field>
-                    <v-text-field label="Drug composition"></v-text-field>
-                    <v-text-field label="Recommended daily dose"></v-text-field>
-                    <v-text-field label="Alternate drugs"></v-text-field>
+                    <v-text-field
+                      v-model="drugForm.specification.manufacturer"
+                      :error-messages="manufacturerErrors"
+                      @blur="$v.drugForm.specification.manufacturer.$touch()"
+                      @input="$v.drugForm.specification.manufacturer.$touch()"
+                      label="Manufacturer"
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="drugForm.specification.contraindications"
+                      :error-messages="contraindicationsErrors"
+                      @blur="
+                        $v.drugForm.specification.contraindications.$touch()
+                      "
+                      @input="
+                        $v.drugForm.specification.contraindications.$touch()
+                      "
+                      label="Contraindications"
+                    ></v-text-field>
+                    <v-row>
+                      <v-col>
+                        <v-text-field
+                          v-model="drugForm.specification.ingredients.name"
+                          :error-messages="ingredientsNameErrors"
+                          @blur="
+                            $v.drugForm.specification.ingredients.name.$touch()
+                          "
+                          @input="
+                            $v.drugForm.specification.ingredients.name.$touch()
+                          "
+                          label="Ingredient name"
+                        ></v-text-field>
+                      </v-col>
+
+                      <v-col>
+                        <v-text-field
+                          v-model="drugForm.specification.ingredients.amount"
+                          :error-messages="ingredientsAmountErrors"
+                          @blur="
+                            $v.drugForm.specification.ingredients.amount.$touch()
+                          "
+                          @input="
+                            $v.drugForm.specification.ingredients.amount.$touch()
+                          "
+                          label="Amount"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-text-field
+                      v-model="drugForm.specification.recommendedDailyDose"
+                      :error-messages="recommendedDailyDoseErrors"
+                      @blur="
+                        $v.drugForm.specification.recommendedDailyDose.$touch()
+                      "
+                      @input="
+                        $v.drugForm.specification.recommendedDailyDose.$touch()
+                      "
+                      label="Recommended daily dose"
+                    ></v-text-field>
                   </v-col>
                 </v-row>
               </v-card>
@@ -580,7 +669,7 @@
                 Are you sure you want add drug with this information and this
                 specification ?
               </p>
-              <v-btn color="primary" @click="stepper.drugRegStep = 1">
+              <v-btn color="primary" @click="confirmDrugRegistration()">
                 Confirm
               </v-btn>
               <v-btn text @click="stepper.drugRegStep = 2"> Back </v-btn>
@@ -591,91 +680,6 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <!-- End of register a drug panel -->
-
-      <!-- Define a loyalty program panel -->
-      <v-expansion-panel>
-        <v-expansion-panel-header>
-          Define a loyalty program
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
-          <!-- Define a loyalty program -->
-          <v-stepper
-            style="margin: 3%"
-            v-model="stepper.loyaltyRegStep"
-            vertical
-          >
-            <!-- Register a loyalty program -->
-            <v-stepper-step :complete="stepper.loyaltyRegStep > 1" step="1">
-              Define a loyalty program
-            </v-stepper-step>
-            <v-stepper-content step="1">
-              <!-- Content -->
-              <v-card
-                style="padding: 2%"
-                color="grey lighten-5"
-                class="mb-12"
-                height="100px"
-              >
-                <v-text-field label="Points per consultation"></v-text-field>
-              </v-card>
-              <!-- End of the content -->
-
-              <!-- Buttons -->
-              <v-btn color="primary" @click="stepper.loyaltyRegStep = 2">
-                Continue
-              </v-btn>
-              <v-btn text> Cancel </v-btn>
-              <!-- End of the buttons -->
-            </v-stepper-content>
-            <!-- End of loyalty program definition -->
-
-            <!-- Scale of the loyalty program  -->
-            <v-stepper-step :complete="stepper.loyaltyRegStep > 2" step="2">
-              Loyalty program scale
-            </v-stepper-step>
-            <v-stepper-content step="2">
-              <!-- Form, or like like one -->
-              <v-card
-                style="padding: 2%"
-                color="grey lighten-5"
-                class="mb-12"
-                height="150px"
-              >
-                <v-row>
-                  <v-col>
-                    <v-text-field label="From range"></v-text-field>
-                    <v-text-field label="To range"></v-text-field>
-                  </v-col>
-                </v-row>
-              </v-card>
-              <!-- End of the form -->
-              <v-btn color="primary" @click="stepper.loyaltyRegStep = 3">
-                Continue
-              </v-btn>
-              <v-btn text @click="stepper.loyaltyRegStep = 1"> Back </v-btn>
-            </v-stepper-content>
-            <!-- End of the scale of loyalty program definition -->
-
-            <!-- Confirmation of the loyalty program -->
-            <v-stepper-step step="3">
-              Confirm definition of loyalty program
-            </v-stepper-step>
-            <v-stepper-content step="3">
-              <p>
-                Are you sure you want to define new loyalty program with this
-                informations ?
-              </p>
-              <v-btn color="primary" @click="stepper.loyaltyRegStep = 1">
-                Confirm
-              </v-btn>
-              <v-btn text @click="stepper.loyaltyRegStep = 2"> Back </v-btn>
-            </v-stepper-content>
-            <!-- End of the confirmation of the loyalty program -->
-          </v-stepper>
-          <!-- End of the define a loyalty program -->
-        </v-expansion-panel-content>
-      </v-expansion-panel>
-      <!-- End of loyalty program define -->
     </v-expansion-panels>
   </v-container>
 </template>
@@ -695,7 +699,9 @@ export default {
       drugRegStep: 1,
       loyaltyRegStep: 1,
     },
-    typesOfDrug: ["Antibiotik", "Anestetik"],
+    alternateDrug: "",
+    typesOfDrug: [],
+    alternateDrugs: [],
     dermatologistForm: {
       email: "",
       password: "",
@@ -728,6 +734,22 @@ export default {
       city: "",
       country: "",
       phone: "",
+    },
+    drugForm: {
+      drug: {
+        name: "",
+        code: "",
+        loyaltyPoints: "",
+      },
+      specification: {
+        manufacturer: "",
+        contraindications: "",
+        ingredients: {
+          name: "",
+          amount: 0.0,
+        },
+        recommendedDailyDose: 0,
+      },
     },
   }),
   validations: {
@@ -818,8 +840,47 @@ export default {
         numeric,
       },
     },
+    drugForm: {
+      drug: {
+        name: {
+          required,
+        },
+        code: {
+          required,
+        },
+        loyaltyPoints: {
+          required,
+          numeric,
+        },
+      },
+      specification: {
+        manufacturer: {
+          required,
+        },
+        contraindications: {
+          required,
+        },
+        ingredients: {
+          name: {
+            required,
+          },
+          amount: {
+            required,
+            numeric,
+          },
+        },
+        recommendedDailyDose: {
+          required,
+          numeric,
+        },
+      },
+    },
   },
   methods: {
+    confirmDrugRegistration() {
+      // TODO: Make some check if is all validation okey
+      this.registerDrug();
+    },
     confirmDermatologistRegistration() {
       // TODO: Make some check if is all validation okey
       this.registerDermatologist();
@@ -831,6 +892,46 @@ export default {
     confirmSystemAdministratorRegistration() {
       // TODO: Make some check if is all validation okey
       this.registerSystemAdministrator();
+    },
+    registerDrug() {
+      this.axios
+        .post(
+          process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_DRUG_REGISTRATION_ENDPOINT,
+          {
+            drug: {
+              name: this.drugForm.drug.name,
+              code: this.drugForm.drug.code,
+              loyaltyPoints: this.drugForm.drug.loyaltyPoints,
+              typeOfDrug: this.drugForm.drug.typeOfDrug,
+              alternateDrugs: [
+                {
+                  code: this.alternateDrug
+                }
+              ],
+            },
+            specification: {
+              manufacturer: this.drugForm.specification.manufacturer,
+              contraindications: this.drugForm.specification.contraindications,
+              recommendedDailyDose: this.drugForm.specification
+                .recommendedDailyDose,
+              ingredients: [this.drugForm.specification.ingredients],
+            },
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then(() => {
+          // TODO: Make some notification here
+          alert("Successfuly added new drug");
+        })
+        .catch((error) => {
+          // TODO: Make some tost notifications here
+          alert("Error during drug registration: " + error);
+        });
     },
     registerDermatologist() {
       this.axios
@@ -925,6 +1026,70 @@ export default {
   },
   computed: {
     // TODO: Find how to encapsulate those methods, because they are same as in register
+    drugLoyaltyPointsErrors() {
+      const errors = [];
+      if (!this.$v.drugForm.drug.loyaltyPoints.$dirty) return errors;
+      !this.$v.drugForm.drug.loyaltyPoints.required &&
+        errors.push("Drug loyalty points is required.");
+      return errors;
+    },
+    drugCodeErrors() {
+      const errors = [];
+      if (!this.$v.drugForm.drug.code.$dirty) return errors;
+      !this.$v.drugForm.drug.code.required &&
+        errors.push("Drug code is required.");
+      return errors;
+    },
+    drugNameErrors() {
+      const errors = [];
+      if (!this.$v.drugForm.drug.name.$dirty) return errors;
+      !this.$v.drugForm.drug.name.required &&
+        errors.push("Drug name is required.");
+      return errors;
+    },
+    recommendedDailyDoseErrors() {
+      const errors = [];
+      if (!this.$v.drugForm.specification.recommendedDailyDose.$dirty)
+        return errors;
+      !this.$v.drugForm.specification.recommendedDailyDose.required &&
+        errors.push("Recommended daily dose is required.");
+      !this.$v.drugForm.specification.recommendedDailyDose.numeric &&
+        errors.push("Recommended daily dose should only contain numbers.");
+      return errors;
+    },
+    ingredientsAmountErrors() {
+      const errors = [];
+      if (!this.$v.drugForm.specification.ingredients.amount.$dirty)
+        return errors;
+      !this.$v.drugForm.specification.ingredients.amount.required &&
+        errors.push("Ingredient amount is required.");
+      !this.$v.drugForm.specification.ingredients.amount.numeric &&
+        errors.push("Ingredient amount should only contain numbers.");
+      return errors;
+    },
+    ingredientsNameErrors() {
+      const errors = [];
+      if (!this.$v.drugForm.specification.ingredients.name.$dirty)
+        return errors;
+      !this.$v.drugForm.specification.ingredients.name.required &&
+        errors.push("Ingredient name is required.");
+      return errors;
+    },
+    contraindicationsErrors() {
+      const errors = [];
+      if (!this.$v.drugForm.specification.contraindications.$dirty)
+        return errors;
+      !this.$v.drugForm.specification.contraindications.required &&
+        errors.push("Contraindications is required.");
+      return errors;
+    },
+    manufacturerErrors() {
+      const errors = [];
+      if (!this.$v.drugForm.specification.manufacturer.$dirty) return errors;
+      !this.$v.drugForm.specification.manufacturer.required &&
+        errors.push("Manufacturer is required.");
+      return errors;
+    },
     passwordErrorsDermatologist() {
       const errors = [];
       if (!this.$v.dermatologistForm.password.$dirty) return errors;
@@ -1107,6 +1272,41 @@ export default {
         errors.push("Phone number should only contain numbers.");
       return errors;
     },
+  },
+  mounted() {
+    this.axios
+      .get(
+        process.env.VUE_APP_BACKEND_URL +
+          process.env.VUE_APP_ALL_DRUGS_ENDPOINT,
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+          },
+        }
+      )
+      .then((resp) => {
+        this.alternateDrugs = [];
+        for (let drug of resp.data) {
+          this.alternateDrugs.push(drug);
+        }
+      });
+
+    this.axios
+      .get(
+        process.env.VUE_APP_BACKEND_URL +
+          process.env.VUE_APP_ALL_DRUGS_TYPES_ENDPOINT,
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+          },
+        }
+      )
+      .then((resp) => {
+        this.typesOfDrug = [];
+        for (let drugType of resp.data) {
+          this.typesOfDrug.push(drugType.name);
+        }
+      });
   },
 };
 </script>

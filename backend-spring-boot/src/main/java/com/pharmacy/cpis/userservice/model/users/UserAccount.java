@@ -38,8 +38,11 @@ public class UserAccount implements UserDetails {
 	@Column(name = "password", nullable = false)
 	String password;
 
-	@Column(name = "isActive", nullable = false)
+	@Column(name = "is_active", nullable = false)
 	boolean isActive;
+
+	@Column(nullable = false)
+	boolean needsPasswordChange;
 
 	@Column(name = "last_password_reset_date")
 	private Timestamp lastPasswordResetDate;
@@ -49,9 +52,7 @@ public class UserAccount implements UserDetails {
 	private Person person;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "user_authority",
-			joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-			inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
+	@JoinTable(name = "user_authority", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
 	private List<Authority> authorities;
 
 	public void setAuthorities(List<Authority> authorities) {
@@ -65,7 +66,7 @@ public class UserAccount implements UserDetails {
 
 	@Override
 	public String getUsername() {
-		return email;       // Spring security model username is in our case email !! (unique identifier)
+		return email; // Spring security model username is in our case email !! (unique identifier)
 	}
 
 	@Override
@@ -119,6 +120,14 @@ public class UserAccount implements UserDetails {
 		isActive = active;
 	}
 
+	public boolean isNeedsPasswordChange() {
+		return needsPasswordChange;
+	}
+
+	public void setNeedsPasswordChange(boolean needsPasswordChange) {
+		this.needsPasswordChange = needsPasswordChange;
+	}
+
 	public Person getPerson() {
 		return person;
 	}
@@ -169,5 +178,13 @@ public class UserAccount implements UserDetails {
 	@Override
 	public boolean isCredentialsNonExpired() {
 		return true;
+	}
+
+	public String getRole() {
+		if (authorities.isEmpty())
+			return null;
+		Authority authority = authorities.get(0);
+		String role = authority.getAuthority(); // we have now for example "ROLE_ADMIN"
+		return role.substring(5); // to take "ADMIN" only, we substring "ROLE_"
 	}
 }
