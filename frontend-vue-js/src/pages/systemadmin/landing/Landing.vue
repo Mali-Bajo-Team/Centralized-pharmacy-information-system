@@ -557,6 +557,7 @@
                   outlined
                 ></v-select>
                 <v-select
+                  v-model="drugForm.drug.typeOfDrug"
                   :items="typesOfDrug"
                   label="Type of the drug"
                   outlined
@@ -898,7 +899,7 @@ export default {
               name: this.drugForm.drug.name,
               code: this.drugForm.drug.code,
               loyaltyPoints: this.drugForm.drug.loyaltyPoints,
-              typeOfDrug: "Antibiotic",
+              typeOfDrug: this.drugForm.drug.typeOfDrug,
               alternateDrugs: null,
             },
             specification: {
@@ -1265,7 +1266,6 @@ export default {
     },
   },
   mounted() {
-
     this.axios
       .get(
         process.env.VUE_APP_BACKEND_URL +
@@ -1282,8 +1282,8 @@ export default {
           this.alternateDrugs.push(drug.name);
         }
       });
-    
-      this.axios
+
+    this.axios
       .get(
         process.env.VUE_APP_BACKEND_URL +
           process.env.VUE_APP_ALL_DRUGS_TYPES_ENDPOINT,
@@ -1299,8 +1299,6 @@ export default {
           this.typesOfDrug.push(drugType.name);
         }
       });
-
-
   },
 };
 </script>
