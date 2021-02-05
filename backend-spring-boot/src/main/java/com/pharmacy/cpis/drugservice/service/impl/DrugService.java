@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -39,6 +40,11 @@ public class DrugService implements IDrugService {
         DrugSpecification addedSpecification = addNewDrugSpecification(drug.getSpecification(), addedDrug);
 
         return addedDrug;
+    }
+
+    @Override
+    public List<Drug> findAll() {
+        return drugRepository.findAll();
     }
 
     private DrugSpecification addNewDrugSpecification(DrugSpecificationDTO specification, Drug addedDrug) {
