@@ -57,6 +57,8 @@ public class WorkingTimesService implements IWorkingTimesService {
         return false;
     }
 
+//TODO REFAKTORISATI
+
     private boolean checkSunday(Date examinationStartDate, Date examinationEndDate, WorkingTimes consultantWorkingTime) {
         if(compareTimes(examinationStartDate, consultantWorkingTime.getSunday().getStart()) >=0
                 && compareTimes(examinationStartDate, consultantWorkingTime.getSunday().getEnd()) < 0
