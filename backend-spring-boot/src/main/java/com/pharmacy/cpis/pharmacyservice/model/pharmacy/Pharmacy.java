@@ -152,4 +152,16 @@ public class Pharmacy {
 		return true;
 	}
 
+	public Double getAverageRating() {
+		if (ratings.isEmpty())
+			return 0.0;
+
+		double sum = 0;
+		for (PharmacyRating rating : ratings) {
+			sum = sum + rating.getRating().getRating();
+		}
+
+		return sum / ratings.size();
+	}
+
 }
