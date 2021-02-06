@@ -63,7 +63,7 @@
                         <br />
                         <v-form class="ma-5">
                           <v-text-field
-                          type="number"
+                            type="number"
                             v-model="changeLoyaltyProgram.pointsPerConsultation"
                             label="Points per consultation"
                           >
@@ -86,7 +86,10 @@
 
                         <v-card-actions>
                           <v-spacer></v-spacer>
-                          <v-btn color="primary" @click="confirmChangesToLoyaltyProgram()">
+                          <v-btn
+                            color="primary"
+                            @click="confirmChangesToLoyaltyProgram()"
+                          >
                             Confirm changes
                           </v-btn>
                         </v-card-actions>
@@ -151,7 +154,7 @@
 export default {
   data: () => ({
     selectedData: "",
-    changeLoyaltyProgram:{
+    changeLoyaltyProgram: {
       active: false,
       activeUntil: "",
       pointsPerConsultation: 0,
@@ -160,18 +163,42 @@ export default {
     dialog: false,
   }),
   methods: {
-    setChangeLoyaltyProgram(){
+    setChangeLoyaltyProgram() {
       this.changeLoyaltyProgram.active = this.loyaltyProgram.active;
-      // TODO: Find how to map date to something 
+      // TODO: Find how to map date to something
       // this.changeLoyaltyProgram.activeUntil =  new Date(this.loyaltyProgram.activeUntil).toLocaleDateString("en-UE");
       this.changeLoyaltyProgram.pointsPerConsultation = this.loyaltyProgram.pointsPerConsultation;
     },
-    confirmChangesToLoyaltyProgram(){
+    confirmChangesToLoyaltyProgram() {
       // TODO: Make ajax call to make these changes
       this.dialog = false;
       this.loyaltyProgram.active = this.changeLoyaltyProgram.active;
       this.loyaltyProgram.activeUntil = this.changeLoyaltyProgram.activeUntil;
       this.loyaltyProgram.pointsPerConsultation = this.changeLoyaltyProgram.pointsPerConsultation;
+
+      this.axios
+        .put(
+          process.env.VUE_APP_BACKEND_URL + process.env.VUE_APP_LOYALTY_PROGRAM,
+          {
+            activeUntil: this.loyaltyProgram.activeUntil,
+            pointsPerConsultation: this.loyaltyProgram.pointsPerConsultation,
+            categories: null,
+            active: this.loyaltyProgram.active,
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then(() => {
+          // TODO: Make some notification here
+          alert("Successfuly");
+        })
+        .catch((error) => {
+          // TODO: Make some tost notifications here
+          alert("Error: " + error);
+        });
     },
   },
   mounted() {
