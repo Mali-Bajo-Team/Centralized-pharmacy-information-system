@@ -1,6 +1,5 @@
 package com.pharmacy.cpis.pharmacyservice.model.promotions;
 
-
 import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
 import com.pharmacy.cpis.util.DateRange;
 
@@ -58,6 +57,14 @@ public class Promotion {
 
 	public void setPharmacy(Pharmacy pharmacy) {
 		this.pharmacy = pharmacy;
+	}
+
+	public DateRange getValidityPeriod() {
+		return validityPeriod;
+	}
+
+	public void setValidityPeriod(DateRange validityPeriod) {
+		this.validityPeriod = validityPeriod;
 	}
 
 	@Override
