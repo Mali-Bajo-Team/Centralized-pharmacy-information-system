@@ -41,7 +41,7 @@
               {{ drug.typeOfDrug }}
             </v-chip>
             <!-- Drug specification -->
-            <v-dialog v-model="show" width="500" :retain-focus="false">
+            <v-dialog v-model="drug.showSpecification" width="500" :retain-focus="false">
               <template #activator="{ on: dialog }">
                 <v-tooltip bottom>
                   <template #activator="{ on: tooltip }">
@@ -89,16 +89,15 @@
                   >
                   </v-text-field>
                   <v-select
-                  :items="drug.drugSpecificationDTO.ingredients"
-                  item-text="name"
-                  label="Ingredients"
+                    :items="drug.drugSpecificationDTO.ingredients"
+                    item-text="name"
+                    label="Ingredients"
                   >
-                      
                   </v-select>
                 </v-form>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="primary" @click="show = !show"> Close </v-btn>
+                  <v-btn color="primary" @click="drug.showSpecification = !drug.showSpecification"> Close </v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -180,6 +179,7 @@ export default {
             mark: drug.mark,
             typeOfDrug: drug.typeOfDrug,
             show: false,
+            showSpecification:false,
             drugSpecificationDTO: {
               manufacturer: drug.drugSpecificationDTO.manufacturer,
               contraindications: drug.drugSpecificationDTO.contraindications,
