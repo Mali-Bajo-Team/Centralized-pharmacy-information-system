@@ -1,25 +1,24 @@
 package com.pharmacy.cpis.scheduleservice.dto;
+
 import com.pharmacy.cpis.scheduleservice.model.consultations.Consultation;
+
 import java.util.Date;
 
-public class ConsultationDTO {
+public class ScheduleExaminationDTO {
     private String consultantEmail;
     private Long id;
-    private Date startDate;
-    private Date endDate;
+    private String startDate;
+    private String endDate;
     private String patientName;
     private String patientSurname;
     private Long patientId;
     private Long consultantId;
 
-    public ConsultationDTO() {
+    public ScheduleExaminationDTO() {
     }
 
-    public ConsultationDTO(Consultation consultation) {
-        this(consultation.getConsultant().getAccount().getEmail() , consultation.getId(), consultation.getTime().getStart(), consultation.getTime().getEnd(), consultation.getPatient().getName(), consultation.getPatient().getSurname(), consultation.getPatient().getId(), consultation.getConsultant().getId());
-    }
 
-    public ConsultationDTO(String consultantEmail, Long id, Date startDate, Date endDate, String patientName, String patientSurname, Long patientId, Long consultantId) {
+    public ScheduleExaminationDTO(String consultantEmail, Long id, String startDate, String endDate, String patientName, String patientSurname, Long patientId, Long consultantId) {
         super();
         this.id = id;
         this.startDate = startDate;
@@ -59,11 +58,11 @@ public class ConsultationDTO {
         return id;
     }
 
-    public Date getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public Date getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
@@ -71,11 +70,11 @@ public class ConsultationDTO {
         this.id = id;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 
