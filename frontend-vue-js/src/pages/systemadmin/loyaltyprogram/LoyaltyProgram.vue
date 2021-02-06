@@ -198,7 +198,7 @@
           v-for="category in loyaltyProgram.categories"
           :key="category.name"
         >
-          <!-- Row for title -->
+          <!-- Row for title & edit, delete buttons -->
           <v-row>
             <v-card-title>
               <h2>{{ category.name }} category</h2>
@@ -288,7 +288,7 @@
             </v-btn>
             <!-- End of buttons for editing & deleting categories -->
           </v-row>
-          <!-- End of row for title -->
+          <!-- End of row for title & edit, delete buttons -->
           <!-- Row with chips-categories -->
           <v-row justify="end">
             <v-chip class="ma-2" color="primary" outlined pill>
