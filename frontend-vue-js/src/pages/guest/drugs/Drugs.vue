@@ -140,6 +140,12 @@ export default {
             mark: drug.mark,
             typeOfDrug: drug.typeOfDrug,
             show: false,
+            drugSpecificationDTO: {
+              manufacturer: drug.drugSpecificationDTO.manufacturer,
+              contraindications: drug.drugSpecificationDTO.contraindications,
+              ingredients: drug.drugSpecificationDTO.ingredients,
+              recommendedDailyDose: drug.drugSpecificationDTO.recommendedDailyDose,
+            },
           };
           this.drugs.push(tempDrug);
         }
