@@ -34,43 +34,94 @@ public class WorkingTimesService implements IWorkingTimesService {
     }
 
     @Override
-    public Boolean isConsultationTimeFitsIntoConsultantWorkingTime(Long consultantID, Date examinationTime) {
+    public Boolean isConsultationTimeFitsIntoConsultantWorkingTime(Long consultantID, Date examinationStartDate, Date examinationEndDate) {
         WorkingTimes consultantWorkingTime = consultantWorkingTime(consultantID);
 
         //number ranges from 1 (Sunday) to 7 (Saturday).
-        Integer numberOfWeekDay = getDayNumberOld(examinationTime);
+        Integer numberOfWeekDay = getDayNumberOld(examinationStartDate);
         if(numberOfWeekDay == 1){
-            if(compareTimes(examinationTime, consultantWorkingTime.getSunday().getStart()) >=0 && compareTimes(examinationTime, consultantWorkingTime.getSunday().getEnd()) < 0){
-                return true;
-            }
+            return checkSunday(examinationStartDate, examinationEndDate, consultantWorkingTime);
         }else if(numberOfWeekDay == 2){
-            if(compareTimes(examinationTime, consultantWorkingTime.getMonday().getStart()) >=0 && compareTimes(examinationTime, consultantWorkingTime.getMonday().getEnd()) < 0){
-                return true;
-            }
+            return checkMonday(examinationStartDate, examinationEndDate, consultantWorkingTime);
         }else if(numberOfWeekDay == 3){
-            if(compareTimes(examinationTime, consultantWorkingTime.getTuesday().getStart()) >=0 && compareTimes(examinationTime, consultantWorkingTime.getTuesday().getEnd()) < 0){
-                return true;
-            }
+            return checkTuesday(examinationStartDate, examinationEndDate, consultantWorkingTime);
         }else if(numberOfWeekDay == 4){
-            if(compareTimes(examinationTime, consultantWorkingTime.getWednesday().getStart()) >=0 && compareTimes(examinationTime, consultantWorkingTime.getWednesday().getEnd()) < 0){
-                return true;
-            }
+            return checkWednesday(examinationStartDate, examinationEndDate, consultantWorkingTime);
         }else if(numberOfWeekDay == 5){
-            if(compareTimes(examinationTime, consultantWorkingTime.getThursday().getStart()) >=0 && compareTimes(examinationTime, consultantWorkingTime.getThursday().getEnd()) < 0){
-                return true;
-            }
+            return checkThursday(examinationStartDate, examinationEndDate, consultantWorkingTime);
         }else if(numberOfWeekDay == 6){
-            if(compareTimes(examinationTime, consultantWorkingTime.getFriday().getStart()) >=0 && compareTimes(examinationTime, consultantWorkingTime.getFriday().getEnd()) < 0){
-                return true;
-            }
+            return checkFriday(examinationStartDate, examinationEndDate, consultantWorkingTime);
         }else if(numberOfWeekDay == 7){
-            if(compareTimes(examinationTime, consultantWorkingTime.getSaturday().getStart()) >=0 && compareTimes(examinationTime, consultantWorkingTime.getSaturday().getEnd()) < 0){
-                return true;
-            }
+            return checkSaturday(examinationStartDate, examinationEndDate, consultantWorkingTime);
         }
         return false;
     }
 
+    private boolean checkSunday(Date examinationStartDate, Date examinationEndDate, WorkingTimes consultantWorkingTime) {
+        if(compareTimes(examinationStartDate, consultantWorkingTime.getSunday().getStart()) >=0
+                && compareTimes(examinationStartDate, consultantWorkingTime.getSunday().getEnd()) < 0
+                && compareTimes(examinationEndDate, examinationStartDate) > 0
+                && compareTimes(examinationEndDate, consultantWorkingTime.getSunday().getEnd()) < 0){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkMonday(Date examinationStartDate, Date examinationEndDate, WorkingTimes consultantWorkingTime) {
+        if(compareTimes(examinationStartDate, consultantWorkingTime.getMonday().getStart()) >=0
+                && compareTimes(examinationStartDate, consultantWorkingTime.getMonday().getEnd()) < 0
+                && compareTimes(examinationEndDate, examinationStartDate) > 0
+                && compareTimes(examinationEndDate, consultantWorkingTime.getMonday().getEnd()) < 0){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkTuesday(Date examinationStartDate, Date examinationEndDate, WorkingTimes consultantWorkingTime) {
+        if(compareTimes(examinationStartDate, consultantWorkingTime.getTuesday().getStart()) >=0
+                && compareTimes(examinationStartDate, consultantWorkingTime.getTuesday().getEnd()) < 0
+                && compareTimes(examinationEndDate, examinationStartDate) > 0
+                && compareTimes(examinationEndDate, consultantWorkingTime.getTuesday().getEnd()) < 0){
+            return true;
+        }
+        return false;
+    }
+    private boolean checkWednesday(Date examinationStartDate, Date examinationEndDate, WorkingTimes consultantWorkingTime) {
+        if(compareTimes(examinationStartDate, consultantWorkingTime.getWednesday().getStart()) >=0
+                && compareTimes(examinationStartDate, consultantWorkingTime.getWednesday().getEnd()) < 0
+                && compareTimes(examinationEndDate, examinationStartDate) > 0
+                && compareTimes(examinationEndDate, consultantWorkingTime.getWednesday().getEnd()) < 0){
+            return true;
+        }
+        return false;
+    }
+    private boolean checkThursday(Date examinationStartDate, Date examinationEndDate, WorkingTimes consultantWorkingTime) {
+        if(compareTimes(examinationStartDate, consultantWorkingTime.getThursday().getStart()) >=0
+                && compareTimes(examinationStartDate, consultantWorkingTime.getThursday().getEnd()) < 0
+                && compareTimes(examinationEndDate, examinationStartDate) > 0
+                && compareTimes(examinationEndDate, consultantWorkingTime.getThursday().getEnd()) < 0){
+            return true;
+        }
+        return false;
+    }
+    private boolean checkFriday(Date examinationStartDate, Date examinationEndDate, WorkingTimes consultantWorkingTime) {
+        if(compareTimes(examinationStartDate, consultantWorkingTime.getFriday().getStart()) >=0
+                && compareTimes(examinationStartDate, consultantWorkingTime.getFriday().getEnd()) < 0
+                && compareTimes(examinationEndDate, examinationStartDate) > 0
+                && compareTimes(examinationEndDate, consultantWorkingTime.getFriday().getEnd()) < 0){
+            return true;
+        }
+        return false;
+    }
+    private boolean checkSaturday(Date examinationStartDate, Date examinationEndDate, WorkingTimes consultantWorkingTime) {
+        if(compareTimes(examinationStartDate, consultantWorkingTime.getSaturday().getStart()) >=0
+                && compareTimes(examinationStartDate, consultantWorkingTime.getSaturday().getEnd()) < 0
+                && compareTimes(examinationEndDate, examinationStartDate) > 0
+                && compareTimes(examinationEndDate, consultantWorkingTime.getSaturday().getEnd()) < 0){
+            return true;
+        }
+        return false;
+    }
     public static int getDayNumberOld(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);

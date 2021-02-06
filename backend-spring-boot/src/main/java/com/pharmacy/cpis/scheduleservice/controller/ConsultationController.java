@@ -93,7 +93,7 @@ public class ConsultationController {
 		Date examinationEndDate = getUtilDate(scheduleExaminationDTO.getEndDate());
 
 		UserAccount loggedPharmacist = userService.findByEmail(scheduleExaminationDTO.getConsultantEmail());
-		Boolean isConsultationTimeFitsIntoConsultantWorkingTime = workingTimesService.isConsultationTimeFitsIntoConsultantWorkingTime(loggedPharmacist.getId(), examinationStartDate);
+		Boolean isConsultationTimeFitsIntoConsultantWorkingTime = workingTimesService.isConsultationTimeFitsIntoConsultantWorkingTime(loggedPharmacist.getId(), examinationStartDate, examinationEndDate);
 
 //		Boolean isPhatientHaveConsultation = consultationService.isPhatientHaveConsultation(scheduleExaminationDTO.getPatientId(), examinationStartDate);
 
