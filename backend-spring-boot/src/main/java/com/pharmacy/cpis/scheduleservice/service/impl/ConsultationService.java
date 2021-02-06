@@ -39,17 +39,18 @@ public class ConsultationService implements IConsultationService {
     }
 
     @Override
-    public Boolean isPhatientHaveConsultation(Long patientId, Date examinationStartDate, Date examinationEndDate) {
+    public Boolean isPhatientFreeForConsultation(Long patientId, Date examinationStartDate, Date examinationEndDate) {
         Patient patient = patientRepository.getOne(patientId);
 
         for (Consultation c: patient.getConsultations()) {
             //ESD izmedju CSD i CED
-            if(DateConversionsAndComparisons.compareDates(c.getTime().getStart(), examinationStartDate) <=0 && DateConversionsAndComparisons.compareDates(c.getTime().getEnd(), examinationStartDate) >=0 ){ return true; }
             //EED izmedju CSD i CED
-            if(DateConversionsAndComparisons.compareDates(c.getTime().getEnd(),examinationEndDate) >=0 && DateConversionsAndComparisons.compareDates(c.getTime().getStart(), examinationEndDate) <=0){ return true; }
+            if(DateConversionsAndComparisons.compareDates(c.getTime().getStart(), examinationStartDate) <=0 &&
+                    DateConversionsAndComparisons.compareDates(c.getTime().getEnd(), examinationStartDate) >=0 && DateConversionsAndComparisons.compareDates(c.getTime().getEnd(),examinationEndDate) >=0 &&
+                    DateConversionsAndComparisons.compareDates(c.getTime().getStart(), examinationEndDate) <=0){ return false; }
         }
 
-        return false;
+        return true;
     }
 
     @Override

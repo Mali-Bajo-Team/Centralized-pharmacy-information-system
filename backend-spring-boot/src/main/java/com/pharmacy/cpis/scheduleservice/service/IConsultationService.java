@@ -10,7 +10,8 @@ import java.util.List;
 public interface IConsultationService {
     List<Consultation> findAll();
 
+    Boolean isPhatientFreeForConsultation(Long patientId, Date examinationStartDate, Date examinationEndDate);
+
     Consultation scheduleConsultation(ScheduleExaminationDTO consultation);
 
-    Boolean isPhatientHaveConsultation(Long patientId, Date examinationStartDate, Date examinationEndDate);
 }
