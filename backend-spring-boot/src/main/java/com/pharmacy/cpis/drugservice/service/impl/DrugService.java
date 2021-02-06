@@ -117,7 +117,7 @@ public class DrugService implements IDrugService {
 
     private Set<Drug> getAlternateDrugs(DrugDTO drug) {
         Set<Drug> drugAlternateDrugs = new HashSet<Drug>();
-        for(Drug alternateDrug : drug.getAlternateDrugs()){
+        for(DrugDTO alternateDrug : drug.getAlternateDrugs()){
             Drug realDrug = drugRepository.findByCode(alternateDrug.getCode());
             if(realDrug != null)
                 drugAlternateDrugs.add(realDrug);
