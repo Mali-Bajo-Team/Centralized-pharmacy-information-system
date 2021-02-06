@@ -204,10 +204,77 @@
               <h2>{{ category.name }} category</h2>
             </v-card-title>
             <v-spacer></v-spacer>
+            <!-- Buttons for editing & deleting categories -->
+            <v-dialog v-model="dialogForEditingCategory" width="500">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  class="mx-2"
+                  fab
+                  dark
+                  elevation="0"
+                  x-small
+                  color="primary"
+                  @click="editUserCategory(category)"
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  <v-icon dark> mdi-pencil-outline </v-icon>
+                </v-btn>
+              </template>
 
-            <v-btn class="mx-2" fab dark elevation="0" x-small color="primary">
-              <v-icon dark> mdi-pencil-outline </v-icon>
-            </v-btn>
+              <!-- Content inside dialog -->
+              <v-card>
+                <!--Toolbar of the card-->
+                <v-toolbar color="primary" dark dense flat>
+                  <v-toolbar-title class="body-2">
+                    <h3>Edit user category</h3>
+                  </v-toolbar-title>
+                </v-toolbar>
+                <!-- End of toolbar of the card -->
+                <br />
+                <v-form class="ma-5">
+                  <v-text-field
+                    v-model="newUserCategory.name"
+                    label="Category name"
+                    disabled
+                  >
+                  </v-text-field>
+                  <v-text-field
+                    type="number"
+                    v-model="newUserCategory.minimumPoints"
+                    label="Minimum points"
+                  >
+                  </v-text-field>
+
+                  <v-text-field
+                    type="number"
+                    v-model="newUserCategory.reservationDiscount"
+                    label="Reservation discount"
+                  >
+                  </v-text-field>
+
+                  <v-text-field
+                    type="number"
+                    v-model="newUserCategory.consultationDiscount"
+                    label="Consultation discount"
+                  >
+                  </v-text-field>
+                </v-form>
+                <v-divider></v-divider>
+
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    color="primary"
+                    @click="confirmAddingNewUserCategory()"
+                  >
+                    Confirm changes
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+              <!-- End of the content inside dialog -->
+            </v-dialog>
+
             <v-btn
               class="mx-2"
               fab
@@ -219,6 +286,7 @@
             >
               <v-icon> mdi-minus </v-icon>
             </v-btn>
+            <!-- End of buttons for editing & deleting categories -->
           </v-row>
           <!-- End of row for title -->
           <!-- Row with chips-categories -->
@@ -265,8 +333,12 @@ export default {
     loyaltyProgram: {},
     dialogForEditingLoyaltyProgram: false,
     dialogForAddingCategory: false,
+    dialogForEditingCategory: false,
   }),
   methods: {
+    editUserCategory(category) {
+      alert("edit: " + category.name);
+    },
     deleteCategory(category) {
       this.axios
         .delete(
