@@ -102,9 +102,9 @@ public class ConsultationController {
 
 		Boolean isConsultationTimeFitsIntoConsultantWorkingTime = workingTimesService.isConsultationTimeFitsIntoConsultantWorkingTime(loggedPharmacist.getId(), examinationStartDate, examinationEndDate);
 
-		Boolean isPhatientHaveConsultation = consultationService.isPhatientHaveConsultation(scheduleExaminationDTO.getPatientId(), examinationStartDate, examinationEndDate);
+		Boolean isPhatientFreeForConsultation = consultationService.isPhatientFreeForConsultation(scheduleExaminationDTO.getPatientId(), examinationStartDate, examinationEndDate);
 
-		if(isConsultationTimeFitsIntoConsultantWorkingTime && !isPhatientHaveConsultation){
+		if(isConsultationTimeFitsIntoConsultantWorkingTime && isPhatientFreeForConsultation){
 			consultationService.scheduleConsultation(scheduleExaminationDTO);
 
 				Patient patient = patientRepository.getOne(scheduleExaminationDTO.getPatientId());
