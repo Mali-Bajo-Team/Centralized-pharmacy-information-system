@@ -92,7 +92,7 @@ public class ConsultationController {
 
 	@PostMapping("/scheduleconsultation")
 	@PreAuthorize("hasRole('PHARMACIST')")
-	public ResponseEntity<ScheduleExaminationDTO> scheduleConsultation(@RequestBody ScheduleExaminationDTO scheduleExaminationDTO) {
+	public ResponseEntity<ScheduleExaminationDTO> scheduleConsultation(@RequestBody ScheduleExaminationDTO scheduleExaminationDTO) throws InterruptedException {
 
 		Date examinationStartDate = DateConversionsAndComparisons.getUtilDate(scheduleExaminationDTO.getStartDate());
 		Date examinationEndDate = DateConversionsAndComparisons.getUtilDate(scheduleExaminationDTO.getEndDate());
@@ -106,12 +106,10 @@ public class ConsultationController {
 
 		if(isConsultationTimeFitsIntoConsultantWorkingTime && !isPhatientHaveConsultation){
 			consultationService.scheduleConsultation(scheduleExaminationDTO);
-			try {
+
 				Patient patient = patientRepository.getOne(scheduleExaminationDTO.getPatientId());
 				emailService.sendConfirmConsultationEmailAsync(patient.getAccount().getUsername(), patient.getAccount().getEmail(), scheduleExaminationDTO);
-			} catch (InterruptedException e) {
-				System.out.println("Error while sending Confirmation mail");
-			}
+
 			return new ResponseEntity<ScheduleExaminationDTO>(scheduleExaminationDTO, HttpStatus.OK);
 		}
 

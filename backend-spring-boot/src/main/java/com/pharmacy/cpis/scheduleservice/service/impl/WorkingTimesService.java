@@ -28,7 +28,7 @@ public class WorkingTimesService implements IWorkingTimesService {
         WorkingTimes consultantWorkingTime = new WorkingTimes();
         List<WorkingTimes> workingTimes = workingTimesRepository.findAll();
         for (WorkingTimes wt : workingTimes) {
-            if(wt.getConsultant().getId() == consultantID){
+            if(wt.getConsultant().getId().equals(consultantID)){
                 consultantWorkingTime = wt;
                 return  consultantWorkingTime;
             }
@@ -41,7 +41,7 @@ public class WorkingTimesService implements IWorkingTimesService {
         Pharmacy consultantWorkingPharmacy = new Pharmacy();
         List<WorkingTimes> workingTimes = workingTimesRepository.findAll();
         for (WorkingTimes wt : workingTimes) {
-            if(wt.getConsultant().getId() == consultantID){
+            if(wt.getConsultant().getId().equals(consultantID)){
                 consultantWorkingPharmacy = wt.getPharmacy();
                 return  consultantWorkingPharmacy;
             }
