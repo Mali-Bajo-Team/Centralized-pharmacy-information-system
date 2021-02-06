@@ -136,27 +136,27 @@
                         <br />
                         <v-form class="ma-5">
                           <v-text-field
-                            v-model="newUserCategory.name"
+                            v-model="userCategoryDTO.name"
                             label="Category name"
                           >
                           </v-text-field>
                           <v-text-field
                             type="number"
-                            v-model="newUserCategory.minimumPoints"
+                            v-model="userCategoryDTO.minimumPoints"
                             label="Minimum points"
                           >
                           </v-text-field>
 
                           <v-text-field
                             type="number"
-                            v-model="newUserCategory.reservationDiscount"
+                            v-model="userCategoryDTO.reservationDiscount"
                             label="Reservation discount"
                           >
                           </v-text-field>
 
                           <v-text-field
                             type="number"
-                            v-model="newUserCategory.consultationDiscount"
+                            v-model="userCategoryDTO.consultationDiscount"
                             label="Consultation discount"
                           >
                           </v-text-field>
@@ -167,7 +167,7 @@
                           <v-spacer></v-spacer>
                           <v-btn
                             color="primary"
-                            @click="confirmAddingNewUserCategory()"
+                            @click="confirmAddinguserCategoryDTO()"
                           >
                             Confirm changes
                           </v-btn>
@@ -234,28 +234,28 @@
                 <br />
                 <v-form class="ma-5">
                   <v-text-field
-                    v-model="newUserCategory.name"
+                    v-model="userCategoryDTO.name"
                     label="Category name"
                     disabled
                   >
                   </v-text-field>
                   <v-text-field
                     type="number"
-                    v-model="newUserCategory.minimumPoints"
+                    v-model="userCategoryDTO.minimumPoints"
                     label="Minimum points"
                   >
                   </v-text-field>
 
                   <v-text-field
                     type="number"
-                    v-model="newUserCategory.reservationDiscount"
+                    v-model="userCategoryDTO.reservationDiscount"
                     label="Reservation discount"
                   >
                   </v-text-field>
 
                   <v-text-field
                     type="number"
-                    v-model="newUserCategory.consultationDiscount"
+                    v-model="userCategoryDTO.consultationDiscount"
                     label="Consultation discount"
                   >
                   </v-text-field>
@@ -266,7 +266,7 @@
                   <v-spacer></v-spacer>
                   <v-btn
                     color="primary"
-                    @click="confirmAddingNewUserCategory()"
+                    @click="confirmEditingCategoryDTO()"
                   >
                     Confirm changes
                   </v-btn>
@@ -324,7 +324,7 @@ export default {
       activeUntil: "",
       pointsPerConsultation: 0,
     },
-    newUserCategory: {
+    userCategoryDTO: {
       name: "",
       minimumPoints: 0,
       reservationDiscount: 0.0,
@@ -337,7 +337,10 @@ export default {
   }),
   methods: {
     editUserCategory(category) {
-      alert("edit: " + category.name);
+      this.userCategoryDTO.name = category.name;
+      this.userCategoryDTO.minimumPoints = category.minimumPoints;
+      this.userCategoryDTO.reservationDiscount = category.reservationDiscount;
+      this.userCategoryDTO.consultationDiscount = category.consultationDiscount;
     },
     deleteCategory(category) {
       this.axios
@@ -418,12 +421,47 @@ export default {
           this.loyaltyProgram = resp.data[0];
         });
     },
-    confirmAddingNewUserCategory() {
+    confirmEditingCategoryDTO(){
       if (
-        this.newUserCategory.name == "" ||
-        this.newUserCategory.minimumPoints == 0 ||
-        this.newUserCategory.reservationDiscount == 0 ||
-        this.newUserCategory.consultationDiscount == 0
+        this.userCategoryDTO.name == "" ||
+        this.userCategoryDTO.minimumPoints == 0 ||
+        this.userCategoryDTO.reservationDiscount == 0 ||
+        this.userCategoryDTO.consultationDiscount == 0
+      )
+        return;
+      this.dialogForEditingCategory = false;
+      this.axios
+        .put(
+          process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_CATEGORIES_ENDPOINT,
+          {
+            name: this.userCategoryDTO.name,
+            minimumPoints: this.userCategoryDTO.minimumPoints,
+            reservationDiscount: this.userCategoryDTO.reservationDiscount,
+            consultationDiscount: this.userCategoryDTO.consultationDiscount,
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then(() => {
+          // TODO: Make some notification here
+          // alert("Successfuly");
+          this.updateLoyaltyProgram();
+        })
+        .catch((error) => {
+          // TODO: Make some tost notifications here
+          alert("Error: " + error);
+        });
+    },
+    confirmAddinguserCategoryDTO() {
+      if (
+        this.userCategoryDTO.name == "" ||
+        this.userCategoryDTO.minimumPoints == 0 ||
+        this.userCategoryDTO.reservationDiscount == 0 ||
+        this.userCategoryDTO.consultationDiscount == 0
       )
         return;
       this.dialogForAddingCategory = false;
@@ -432,10 +470,10 @@ export default {
           process.env.VUE_APP_BACKEND_URL +
             process.env.VUE_APP_CATEGORIES_ENDPOINT,
           {
-            name: this.newUserCategory.name,
-            minimumPoints: this.newUserCategory.minimumPoints,
-            reservationDiscount: this.newUserCategory.reservationDiscount,
-            consultationDiscount: this.newUserCategory.consultationDiscount,
+            name: this.userCategoryDTO.name,
+            minimumPoints: this.userCategoryDTO.minimumPoints,
+            reservationDiscount: this.userCategoryDTO.reservationDiscount,
+            consultationDiscount: this.userCategoryDTO.consultationDiscount,
           },
           {
             headers: {
