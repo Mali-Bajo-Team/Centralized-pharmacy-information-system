@@ -72,6 +72,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/api/pharmacies/all").permitAll()
 
+
+
+
                 // For every other request the user must be authenticated
                 .anyRequest().authenticated().and()
                 // For development purposes include configuration for CORS from the WebConfig class
