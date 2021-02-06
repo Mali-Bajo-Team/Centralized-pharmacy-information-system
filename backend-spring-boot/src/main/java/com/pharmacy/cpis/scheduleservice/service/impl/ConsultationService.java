@@ -5,7 +5,6 @@ import com.pharmacy.cpis.scheduleservice.dto.ScheduleExaminationDTO;
 import com.pharmacy.cpis.scheduleservice.model.consultations.Consultation;
 import com.pharmacy.cpis.scheduleservice.model.consultations.ConsultationStatus;
 import com.pharmacy.cpis.scheduleservice.repository.IConsultationRepository;
-import com.pharmacy.cpis.scheduleservice.repository.IWorkingTimesRepository;
 import com.pharmacy.cpis.scheduleservice.service.IConsultationService;
 import com.pharmacy.cpis.scheduleservice.service.IWorkingTimesService;
 import com.pharmacy.cpis.userservice.model.users.Consultant;
@@ -17,8 +16,6 @@ import com.pharmacy.cpis.util.DateRange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 @Service
@@ -45,7 +42,6 @@ public class ConsultationService implements IConsultationService {
     public Boolean isPhatientHaveConsultation(Long patientId, Date examinationStartDate, Date examinationEndDate) {
         Patient patient = patientRepository.getOne(patientId);
 
-        //Proci kroz sva vremena u konsultacijama i uporediti ih sa prosledjenim vremenima
         for (Consultation c: patient.getConsultations()) {
             //ESD izmedju CSD i CED
             if(DateConversionsAndComparisons.compareDates(c.getTime().getStart(), examinationStartDate) <=0 && DateConversionsAndComparisons.compareDates(c.getTime().getEnd(), examinationStartDate) >=0 ){ return true; }
@@ -58,17 +54,15 @@ public class ConsultationService implements IConsultationService {
 
     @Override
     public Consultation scheduleConsultation(ScheduleExaminationDTO consultation) {
-        Date examinationStartDate = DateConversionsAndComparisons.getUtilDate(consultation.getStartDate());
-        Date examinationEndDate = DateConversionsAndComparisons.getUtilDate(consultation.getEndDate());
-        DateRange consultationDataRange = new DateRange();
-        consultationDataRange.setStart(examinationStartDate);
-        consultationDataRange.setEnd(examinationEndDate);
 
-        Consultation consultationForSchedule = new Consultation();
-        Consultant consultant = new Consultant();
-        consultant = consultantRepository.getOne(consultation.getConsultantId());
+        DateRange consultationDataRange = new DateRange();
+        consultationDataRange.setStart(DateConversionsAndComparisons.getUtilDate(consultation.getStartDate()));
+        consultationDataRange.setEnd(DateConversionsAndComparisons.getUtilDate(consultation.getEndDate()));
+
+        Consultant consultant = consultantRepository.getOne(consultation.getConsultantId());
         Pharmacy consultantWorkingPharmacy = workingTimesService.consultantWorkingPharmacy(consultant.getId());
 
+        Consultation consultationForSchedule = new Consultation();
         consultationForSchedule.setConsultant(consultant);
         consultationForSchedule.setPatient(patientRepository.getOne(consultation.getPatientId()));
         consultationForSchedule.setPharmacy(consultantWorkingPharmacy);
