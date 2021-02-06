@@ -265,6 +265,7 @@ export default {
             this.errorMessage = error.message;
             console.error("There was an error!", error);
             this.scheduleAlert = true;
+             this.scheduleSucces = false;
           });
       }
     },
