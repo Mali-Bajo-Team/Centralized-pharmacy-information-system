@@ -40,25 +40,29 @@
 
               {{ drug.typeOfDrug }}
             </v-chip>
-
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  elevation="0"
-                  left
-                  class="mr-10"
-                  fab
-                  dark
-                  x-small
-                  color="light-green lighten-3"
-                  v-bind="attrs"
-                  v-on="on"
-                >
-                  <v-icon dark> mdi-clipboard-file-outline </v-icon>
-                </v-btn>
+            <!-- Drug specification -->
+            <v-dialog width="500">
+              <template #activator="{ on: dialog }">
+                <v-tooltip bottom>
+                  <template #activator="{ on: tooltip }">
+                    <v-btn
+                      v-on="{ ...tooltip, ...dialog }"
+                      elevation="0"
+                      left
+                      class="mr-10"
+                      fab
+                      dark
+                      x-small
+                      color="light-green lighten-3"
+                      ><v-icon dark> mdi-clipboard-file-outline </v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Drug specification</span>
+                </v-tooltip>
               </template>
-              <span>Drug specification</span>
-            </v-tooltip>
+              <v-card> Dialog content </v-card>
+            </v-dialog>
+            <!-- End of the drug specification -->
           </v-row>
           <!-- End of the row for title & drug type, specification preview -->
           <!-- Row for pharmacies and mark -->
