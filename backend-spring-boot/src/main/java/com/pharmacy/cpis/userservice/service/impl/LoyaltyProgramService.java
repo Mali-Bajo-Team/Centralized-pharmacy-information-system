@@ -54,6 +54,23 @@ public class LoyaltyProgramService implements ILoyaltyProgramService {
     }
 
     @Override
+    public UserCategory findUserCategoryByLoyaltyPoints(Integer loyaltyPoints) {
+        UserCategory userCategory = new UserCategory();
+
+        int difference = 0;
+        int minPositiveDifference = 999999;
+        for (UserCategory tempUserCategory : userCategoryRepository.findAll()) {
+            difference = loyaltyPoints - tempUserCategory.getMinimumPoints();
+            if (difference >= 0 && difference <= minPositiveDifference) {
+                minPositiveDifference = difference;
+                userCategory = tempUserCategory;
+            }
+        }
+
+        return userCategory;
+    }
+
+    @Override
     public UserCategory updateCategory(UserCategoryDTO userCategoryDTO) {
         UserCategory updatedUserCategory = userCategoryRepository.findByName(userCategoryDTO.getName());
         if(updatedUserCategory == null) throw new PSNotFoundException("User category with this name does not exist");

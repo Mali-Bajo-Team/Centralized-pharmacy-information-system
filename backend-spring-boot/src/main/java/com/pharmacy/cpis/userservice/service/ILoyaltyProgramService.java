@@ -17,4 +17,6 @@ public interface ILoyaltyProgramService {
     UserCategory updateCategory(UserCategoryDTO userCategoryDTO);
 
     void removeCategory(UserCategoryDTO userCategoryDTO);
+
+    UserCategory findUserCategoryByLoyaltyPoints(Integer loyaltyPoints);
 }
