@@ -24,7 +24,6 @@ public class DrugController {
     private IDrugService drugService;
 
     @GetMapping()
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<DrugDTO>> getAllDrugs() {
         List<Drug> drugs = drugService.findAll();
 
