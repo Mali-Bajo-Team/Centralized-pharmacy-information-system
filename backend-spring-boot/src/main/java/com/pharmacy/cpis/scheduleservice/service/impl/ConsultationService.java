@@ -28,8 +28,15 @@ public class ConsultationService implements IConsultationService {
     public Boolean isPhatientHaveConsultation(Long patientId, Date examinationStartDate, Date examinationEndDate) {
         Patient patient = patientRepository.getOne(patientId);
 
-        System.out.println(patient.getName());
-        return true;
+        //Proci kroz sva vremena u konsultacijama i uporediti ih sa prosledjenim vremenima
+        for (Consultation c: patient.getConsultations()) {
+            //ESD izmedju CSD i CED
+            if(compareDates(c.getTime().getStart(), examinationStartDate) <=0 && compareDates(c.getTime().getEnd(), examinationStartDate) >=0 ){ return true; }
+            //EED izmedju CSD i CED
+            if(compareDates(c.getTime().getEnd(),examinationEndDate) >=0 && compareDates(c.getTime().getStart(), examinationEndDate) <=0){ return true; }
+        }
+
+        return false;
     }
 
     @Override
@@ -37,5 +44,17 @@ public class ConsultationService implements IConsultationService {
         return consultation;
     }
 
+    //d1>d2 => >0
+    //d1<d2 => <0
+    //d1==d2 => =0
+    public int compareDates(Date d1, Date d2)
+    {
+        int t1;
+        int t2;
 
+        t1 = (int) (d1.getTime());
+        t2 = (int) (d2.getTime());
+        System.out.println(t1-t2);
+        return (t1 - t2);
+    }
 }

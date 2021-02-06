@@ -97,7 +97,7 @@ public class ConsultationController {
 
 		Boolean isPhatientHaveConsultation = consultationService.isPhatientHaveConsultation(scheduleExaminationDTO.getPatientId(), examinationStartDate, examinationEndDate);
 
-		if(isConsultationTimeFitsIntoConsultantWorkingTime && isPhatientHaveConsultation){
+		if(isConsultationTimeFitsIntoConsultantWorkingTime && !isPhatientHaveConsultation){
 			return new ResponseEntity<ScheduleExaminationDTO>(scheduleExaminationDTO, HttpStatus.OK);
 		}
 		return new ResponseEntity<ScheduleExaminationDTO>(scheduleExaminationDTO, HttpStatus.FORBIDDEN);
