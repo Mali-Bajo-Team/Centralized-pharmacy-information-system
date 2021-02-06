@@ -6,7 +6,10 @@ import com.pharmacy.cpis.userservice.dto.ConsultantDTO;
 import com.pharmacy.cpis.scheduleservice.dto.ConsultationDTO;
 import com.pharmacy.cpis.scheduleservice.model.consultations.Consultation;
 import com.pharmacy.cpis.scheduleservice.service.IConsultationService;
+import com.pharmacy.cpis.userservice.model.users.Patient;
 import com.pharmacy.cpis.userservice.model.users.UserAccount;
+import com.pharmacy.cpis.userservice.repository.IPatientRepository;
+import com.pharmacy.cpis.userservice.service.EmailService;
 import com.pharmacy.cpis.userservice.service.IUserService;
 import com.pharmacy.cpis.util.DateConversionsAndComparisons;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +28,16 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "api/consultations")
 public class ConsultationController {
-
+	@Autowired
+	private IPatientRepository patientRepository;
 	@Autowired
 	private IConsultationService consultationService;
 	@Autowired
 	private IWorkingTimesService workingTimesService;
 	@Autowired
 	private IUserService userService;
-
+	@Autowired
+	private EmailService emailService;
 	@GetMapping
 	@PreAuthorize("hasRole('PHARMACIST')")
 	public ResponseEntity<List<ConsultationDTO>> getAllConsultations() {
@@ -101,6 +106,12 @@ public class ConsultationController {
 
 		if(isConsultationTimeFitsIntoConsultantWorkingTime && !isPhatientHaveConsultation){
 			consultationService.scheduleConsultation(scheduleExaminationDTO);
+			try {
+				Patient patient = patientRepository.getOne(scheduleExaminationDTO.getPatientId());
+				emailService.sendConfirmConsultationEmailAsync(patient.getAccount().getEmail());
+			} catch (InterruptedException e) {
+				System.out.println("Error while sending Confirmation mail");
+			}
 			return new ResponseEntity<ScheduleExaminationDTO>(scheduleExaminationDTO, HttpStatus.OK);
 		}
 

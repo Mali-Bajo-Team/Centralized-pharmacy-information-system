@@ -28,7 +28,7 @@ insert into user_authority (user_id, authority_id) values (3, 4);
 
 -- INSERT ONE PATIENT
 insert into person (discriminator, address, city, country, name, surname, phone_number) values ('Patient', 'Pariskih komuna 13', 'Beograd', 'Srbija', 'Milunka', 'Pantic', '0614123355');
-insert into user_account (email, password, is_active, person_id, needs_password_change) values ('milunka@gmail.com', '$2a$10$VN1ORM/2CKQmuFkHTVQEvejLxi9wBl03/RWekn84APbzu31o0LAfa', true, 4, false);
+insert into user_account (email, password, is_active, person_id, needs_password_change) values ('pufke1998@gmail.com', '$2a$10$VN1ORM/2CKQmuFkHTVQEvejLxi9wBl03/RWekn84APbzu31o0LAfa', true, 4, false);
 -- Password for patient account is: milunka
 insert into user_authority (user_id, authority_id) values (4, 1);
 
