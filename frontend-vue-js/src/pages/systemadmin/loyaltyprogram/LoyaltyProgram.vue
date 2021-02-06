@@ -63,6 +63,7 @@
                         <br />
                         <v-form class="ma-5">
                           <v-text-field
+                          type="number"
                             v-model="changeLoyaltyProgram.pointsPerConsultation"
                             label="Points per consultation"
                           >
