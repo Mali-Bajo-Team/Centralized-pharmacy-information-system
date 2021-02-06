@@ -15,4 +15,6 @@ public interface IDrugService {
 
     List<DrugClass> findAllDrugClass();
 
+    Double getMarkOfDrug(Drug drug);
+
 }

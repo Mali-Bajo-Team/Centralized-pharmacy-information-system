@@ -86,3 +86,9 @@ insert into drug(code, loyalty_points, name, drug_class_id, drug_form_id) values
 insert into drug(code, loyalty_points, name, drug_class_id, drug_form_id) values ('xb0x', 3, 'Aspirin',1,1);
 insert into drug(code, loyalty_points, name, drug_class_id, drug_form_id) values ('0x2x', 6, 'Amfetamin',3,2);
 insert into drug(code, loyalty_points, name, drug_class_id, drug_form_id) values ('3b0a', 7, 'Kreatin',2,3);
+
+--INSERT DRUG RATING
+insert into drug_rating(rating,drug_code,patient_id) values (5,'lat0x',1);
+insert into drug_rating(rating,drug_code,patient_id) values (4,'xb0x',1);
+insert into drug_rating(rating,drug_code,patient_id) values (3,'lat0x',2);
+insert into drug_rating(rating,drug_code,patient_id) values (2,'xb0x',2);

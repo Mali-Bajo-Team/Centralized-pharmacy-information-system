@@ -30,7 +30,7 @@ public class DrugController {
         // convert drugs to DTOs
         List<DrugDTO> drugsDTO = new ArrayList<>();
         for (Drug drug : drugs) {
-            drugsDTO.add(new DrugDTO(drug));
+            drugsDTO.add(new DrugDTO(drug, drugService));
         }
 
         return new ResponseEntity<>(drugsDTO,HttpStatus.OK);

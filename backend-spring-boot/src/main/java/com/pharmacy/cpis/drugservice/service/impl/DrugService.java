@@ -6,6 +6,7 @@ import com.pharmacy.cpis.drugservice.dto.DrugSpecificationDTO;
 import com.pharmacy.cpis.drugservice.model.drug.*;
 import com.pharmacy.cpis.drugservice.repository.*;
 import com.pharmacy.cpis.drugservice.service.IDrugService;
+import com.pharmacy.cpis.userservice.model.ratings.DrugRating;
 import com.pharmacy.cpis.util.exceptions.PSAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,9 @@ public class DrugService implements IDrugService {
     @Autowired
     private IIngredientsRepository ingredientsRepository;
 
+    @Autowired
+    private IDrugRatingRepository drugRatingRepository;
+
     @Override
     public Drug registerDrug(DrugRegisterDTO drug) {
         if(drugRepository.existsByCode(drug.getDrug().getCode()))
@@ -50,6 +54,16 @@ public class DrugService implements IDrugService {
     @Override
     public List<DrugClass> findAllDrugClass() {
         return drugClassRepository.findAll();
+    }
+
+    @Override
+    public Double getMarkOfDrug(Drug drug) {
+        double mark= 0.0;
+        List<DrugRating> ratings = drugRatingRepository.findByDrugCode(drug.getCode());
+        for(DrugRating rating : ratings){
+            mark += rating.getRating().getRating();
+        }
+        return mark == 0.0 ? 0 : mark/ratings.size();
     }
 
     private DrugSpecification addNewDrugSpecification(DrugSpecificationDTO specification, Drug addedDrug) {
