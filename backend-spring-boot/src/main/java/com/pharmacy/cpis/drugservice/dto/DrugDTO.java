@@ -1,6 +1,7 @@
 package com.pharmacy.cpis.drugservice.dto;
 
 import com.pharmacy.cpis.drugservice.model.drug.Drug;
+import com.pharmacy.cpis.drugservice.model.drug.DrugSpecification;
 import com.pharmacy.cpis.drugservice.service.IDrugService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -26,6 +27,8 @@ public class DrugDTO {
 
     private List<DrugDTO> alternateDrugs;
 
+    private DrugSpecificationDTO drugSpecificationDTO;
+
     private Double mark;
 
     public DrugDTO(){}
@@ -46,6 +49,15 @@ public class DrugDTO {
         this.setTypeOfDrug(drug.getDrugClass().getName());
         this.setMark(drugService.getMarkOfDrug(drug));
         this.setAlternateDrugs(drug.getAlternateDrugs(),drugService);
+        this.setDrugSpecificationDTO(new DrugSpecificationDTO(drugService.getDrugSpecificationByDrugCode(drug.getCode())));
+    }
+
+    public DrugSpecificationDTO getDrugSpecificationDTO() {
+        return drugSpecificationDTO;
+    }
+
+    public void setDrugSpecificationDTO(DrugSpecificationDTO drugSpecificationDTO) {
+        this.drugSpecificationDTO = drugSpecificationDTO;
     }
 
     public Double getMark() {

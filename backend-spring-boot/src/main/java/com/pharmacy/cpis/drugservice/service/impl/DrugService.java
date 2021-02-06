@@ -66,6 +66,11 @@ public class DrugService implements IDrugService {
         return mark == 0.0 ? 0 : mark/ratings.size();
     }
 
+    @Override
+    public DrugSpecification getDrugSpecificationByDrugCode(String drugCode) {
+        return drugSpecificationRepository.findByDrugCode(drugCode);
+    }
+
     private DrugSpecification addNewDrugSpecification(DrugSpecificationDTO specification, Drug addedDrug) {
         DrugSpecification newDrugSpecification = new DrugSpecification();
         newDrugSpecification.setManufacturer(specification.getManufacturer());
