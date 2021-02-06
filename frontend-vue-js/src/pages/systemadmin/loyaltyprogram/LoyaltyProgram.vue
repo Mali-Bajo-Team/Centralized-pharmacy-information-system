@@ -11,6 +11,8 @@
             </v-toolbar-title>
           </v-toolbar>
           <!-- End of toolbar of the card -->
+
+          <!-- Content in card -->
           <v-card-actions>
             <v-row justify="center">
               <v-col xl="8" md="8" sm="8">
@@ -32,10 +34,14 @@
                   {{ loyaltyProgram.pointsPerConsultation }}
                 </h4>
                 <br /><br />
-                <!-- Button for eddit loyalty program + DIALOG -->
+                <!-- Buttons for loyalty program + DIALOGS -->
                 <v-row>
+                  <!-- Edit loyalty program button -->
                   <v-col>
-                    <v-dialog v-model="dialog" width="500">
+                    <v-dialog
+                      v-model="dialogForEditingLoyaltyProgram"
+                      width="500"
+                    >
                       <template v-slot:activator="{ on, attrs }">
                         <v-btn
                           class="mx-2"
@@ -72,7 +78,7 @@
 
                           <v-row justify="center">
                             <v-date-picker
-                            required
+                              required
                               elevation="4"
                               v-model="changeLoyaltyProgram.activeUntil"
                             ></v-date-picker>
@@ -98,12 +104,67 @@
                       <!-- End of the content inside dialog -->
                     </v-dialog>
                   </v-col>
+                  <!-- End of edit loyalty program button -->
+
+                  <!-- Add new category button -->
+                  <v-col>
+                    <v-dialog v-model="dialogForAddingCategory" width="500">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          class="mx-2"
+                          fab
+                          dark
+                          small
+                          color="primary"
+                          v-bind="attrs"
+                          v-on="on"
+                          @click="setChangeLoyaltyProgram"
+                        >
+                          <v-icon dark> mdi-account-plus-outline </v-icon>
+                        </v-btn>
+                      </template>
+
+                      <!-- Content inside dialog -->
+                      <v-card>
+                        <!--Toolbar of the card-->
+                        <v-toolbar color="primary" dark dense flat>
+                          <v-toolbar-title class="body-2">
+                            <h3>Add new user category</h3>
+                          </v-toolbar-title>
+                        </v-toolbar>
+                        <!-- End of toolbar of the card -->
+                        <br />
+                        <v-form class="ma-5">
+                          <v-text-field
+                            type="number"
+                            v-model="changeLoyaltyProgram.pointsPerConsultation"
+                            label="Points per consultation"
+                          >
+                          </v-text-field>
+                        </v-form>
+                        <v-divider></v-divider>
+
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn
+                            color="primary"
+                            @click="confirmAddingNewUserCategory()"
+                          >
+                            Confirm changes
+                          </v-btn>
+                        </v-card-actions>
+                      </v-card>
+                      <!-- End of the content inside dialog -->
+                    </v-dialog>
+                  </v-col>
+                  <!-- End of addin new category button -->
                 </v-row>
                 <!-- End of button for edit loyalty program + DIALOG-->
                 <br />
               </v-col>
             </v-row>
           </v-card-actions>
+          <!-- End of content in card -->
         </v-card>
       </v-col>
       <!-- End of the left column -->
@@ -161,7 +222,8 @@ export default {
       pointsPerConsultation: 0,
     },
     loyaltyProgram: {},
-    dialog: false,
+    dialogForEditingLoyaltyProgram: false,
+    dialogForAddingCategory: false,
   }),
   methods: {
     setChangeLoyaltyProgram() {
@@ -172,8 +234,8 @@ export default {
     },
     confirmChangesToLoyaltyProgram() {
       // TODO: Make ajax call to make these changes
-      if(this.changeLoyaltyProgram.activeUntil == "") return;
-      this.dialog = false;
+      if (this.changeLoyaltyProgram.activeUntil == "") return;
+      this.dialogForEditingLoyaltyProgram = false;
       this.loyaltyProgram.active = this.changeLoyaltyProgram.active;
       this.loyaltyProgram.activeUntil = this.changeLoyaltyProgram.activeUntil;
       this.loyaltyProgram.pointsPerConsultation = this.changeLoyaltyProgram.pointsPerConsultation;
@@ -201,6 +263,11 @@ export default {
           // TODO: Make some tost notifications here
           alert("Error: " + error);
         });
+    },
+    confirmAddingNewUserCategory() {
+      this.dialogForAddingCategory = false;
+      // TODO: Make ajax call here
+      alert("bam");
     },
   },
   mounted() {
