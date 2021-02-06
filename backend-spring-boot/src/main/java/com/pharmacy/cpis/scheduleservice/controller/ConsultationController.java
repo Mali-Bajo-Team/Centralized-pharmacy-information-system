@@ -89,19 +89,28 @@ public class ConsultationController {
 	public ResponseEntity<ScheduleExaminationDTO> scheduleConsultation(@RequestBody ScheduleExaminationDTO scheduleExaminationDTO) {
 
 		// Convert date format to Data.Util
-		Date examinationStartDate = null;
-		try {
-			examinationStartDate=new SimpleDateFormat("yy-MM-dd HH:mm:ss").parse(scheduleExaminationDTO.getStartDate());
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+		Date examinationStartDate = getUtilDate(scheduleExaminationDTO.getStartDate());
+		Date examinationEndDate = getUtilDate(scheduleExaminationDTO.getEndDate());
 
 		UserAccount loggedPharmacist = userService.findByEmail(scheduleExaminationDTO.getConsultantEmail());
 		Boolean isConsultationTimeFitsIntoConsultantWorkingTime = workingTimesService.isConsultationTimeFitsIntoConsultantWorkingTime(loggedPharmacist.getId(), examinationStartDate);
+
+//		Boolean isPhatientHaveConsultation = consultationService.isPhatientHaveConsultation(scheduleExaminationDTO.getPatientId(), examinationStartDate);
 
 		if(isConsultationTimeFitsIntoConsultantWorkingTime){
 			return new ResponseEntity<ScheduleExaminationDTO>(scheduleExaminationDTO, HttpStatus.OK);
 		}
 		return new ResponseEntity<ScheduleExaminationDTO>(scheduleExaminationDTO, HttpStatus.FORBIDDEN);
+	}
+
+
+	private Date getUtilDate(String stringTime) {
+		Date convertedUtilDate = null;
+		try {
+			convertedUtilDate=new SimpleDateFormat("yy-MM-dd HH:mm:ss").parse(stringTime);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return convertedUtilDate;
 	}
 }

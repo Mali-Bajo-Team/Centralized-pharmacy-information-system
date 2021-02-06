@@ -60,8 +60,13 @@
       color="green lighten-1"
     ></v-date-picker>
     <v-time-picker
-      v-bind:value="value"
-      v-on:input="onInput"
+      v-bind:value="valueStartTime"
+      v-on:input="onInputStartTime"
+      format="ampm"
+    ></v-time-picker>
+      <v-time-picker
+      v-bind:value="valueEndTime"
+      v-on:input="onInputEndTime"
       format="ampm"
     ></v-time-picker>
     <v-btn depressed @click="scheduleConsultation" color="primary">
@@ -74,8 +79,10 @@
 export default {
   data: () => ({
     picker: new Date().toISOString().substr(0, 10),
-    examinationTime: null,
-    value: null,
+    examinationStartTime: null,
+    examinationEndTime: null,
+    valueStartTime: null,
+    valueEndTime: null,
     valueDate: null,
     isLoading: false,
     items: [],
@@ -88,9 +95,13 @@ export default {
        handleSelectItem(item){
        this.selectedPatient = item.id;
      },
-    onInput(value) {
-      this.$emit("input", value);
-      this.examinationTime = value;
+    onInputStartTime(valueStartTime) {
+      this.$emit("input", valueStartTime);
+      this.examinationStartTime = valueStartTime;
+    },
+    onInputEndTime(valueEndTime) {
+      this.$emit("input", valueEndTime);
+      this.examinationEndTime = valueEndTime;
     },
     onInputDate(valueDate) {
       this.$emit("input", valueDate);
@@ -107,7 +118,8 @@ export default {
             "api/consultations/scheduleconsultation",
           {
             consultantEmail: email,
-            startDate: this.valueDate + " " + this.examinationTime + ":00",
+            startDate: this.valueDate + " " + this.examinationStartTime + ":00",
+            endDate: this.valueDate + " " + this.examinationEndTime + ":00",
             patientId: this.selectedPatient
           },
           {

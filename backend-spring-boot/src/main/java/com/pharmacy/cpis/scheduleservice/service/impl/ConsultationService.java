@@ -18,6 +18,11 @@ public class ConsultationService implements IConsultationService {
         return consultationRepository.findAll();
     }
 
+//    @Override
+//    public Boolean isConsultationTimeFitsIntoConsultantWorkingTime(){
+//
+//    }
+
 //. Satnica mora da se poklapa sa radnim vremenom farmaceuta. Moram prvo da dobavim radno vreme tog farmaceuta
     @Override
     public Consultation scheduleConsultation(Consultation consultation) {
