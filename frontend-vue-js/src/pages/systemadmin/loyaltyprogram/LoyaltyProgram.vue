@@ -61,8 +61,24 @@
                         <!-- End of toolbar of the card -->
                         <br />
                         <v-form class="ma-5">
-                          <v-text-field label="Points per consultation">
+                          <v-text-field
+                            v-model="loyaltyProgram.pointsPerConsultation"
+                            label="Points per consultation"
+                          >
                           </v-text-field>
+                          <!-- Data picker in dialog -->
+                          
+                          <v-row justify="center">
+                            <v-date-picker
+                            elevation="4"
+                              v-model="selectedData"
+                            ></v-date-picker>
+                          </v-row>
+                          <!-- End of the date picker in dialog -->
+                          <v-switch
+                            v-model="loyaltyProgram.active"
+                            label="Status of program  [Active or Not active]"
+                          ></v-switch>
                         </v-form>
                         <v-divider></v-divider>
 
@@ -133,6 +149,7 @@
 export default {
   methods() {},
   data: () => ({
+    selectedData: "",
     loyaltyProgram: {},
     dialog: false,
   }),
