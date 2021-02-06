@@ -316,7 +316,21 @@ export default {
         )
         .then(() => {
           // TODO: Make some notification here
-          alert("Successfuly");
+          // alert("Successfuly");
+          // UPDATE WITH NEW DATA
+          this.axios
+            .get(
+              process.env.VUE_APP_BACKEND_URL +
+                process.env.VUE_APP_LOYALTY_PROGRAM,
+              {
+                headers: {
+                  Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+                },
+              }
+            )
+            .then((resp) => {
+              this.loyaltyProgram = resp.data[0];
+            });
         })
         .catch((error) => {
           // TODO: Make some tost notifications here
