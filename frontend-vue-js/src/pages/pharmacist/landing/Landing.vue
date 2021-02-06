@@ -167,7 +167,8 @@
           >
             The schedule must match the working hours of the pharmacist. The
             appointment should not be prepared with another examination or
-            consultation that the patient has scheduled (in any pharmacy)
+            consultation that the patient has scheduled (in any pharmacy). 
+            And also it is not possible to schedule consultations in the past.
           </v-alert>
         </v-row>
       </v-col>

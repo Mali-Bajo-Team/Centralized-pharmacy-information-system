@@ -104,7 +104,7 @@ public class ConsultationController {
 
 		Boolean isPhatientFreeForConsultation = consultationService.isPhatientFreeForConsultation(scheduleExaminationDTO.getPatientId(), examinationStartDate, examinationEndDate);
 
-		if(isConsultationTimeFitsIntoConsultantWorkingTime && isPhatientFreeForConsultation){
+		if(isConsultationTimeFitsIntoConsultantWorkingTime && isPhatientFreeForConsultation && !examinationStartDate.before(new Date())){
 			consultationService.scheduleConsultation(scheduleExaminationDTO);
 
 				Patient patient = patientRepository.getOne(scheduleExaminationDTO.getPatientId());
