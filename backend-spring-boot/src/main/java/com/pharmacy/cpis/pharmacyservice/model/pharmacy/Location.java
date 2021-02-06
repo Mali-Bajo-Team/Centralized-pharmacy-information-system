@@ -63,4 +63,9 @@ public class Location {
 		this.longitude = longitude;
 	}
 
+	@Override
+	public String toString() {
+		return street + " " + houseNumber + ", " + city + ", " + country;
+	}
+
 }

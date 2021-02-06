@@ -7,8 +7,10 @@ import java.util.List;
 
 public interface IPharmacyService {
 
-    Pharmacy registerPharmacy(PharmacyRegisterDTO pharmacy);
+	Pharmacy getById(Long id);
 
-    List<Pharmacy> findAll();
+	Pharmacy registerPharmacy(PharmacyRegisterDTO pharmacy);
+
+	List<Pharmacy> findAll();
 
 }

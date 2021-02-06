@@ -1,5 +1,11 @@
 package com.pharmacy.cpis.pharmacyservice.service.impl;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.pharmacy.cpis.pharmacyservice.dto.PharmacyRegisterDTO;
 import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Location;
 import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
@@ -12,12 +18,7 @@ import com.pharmacy.cpis.userservice.model.users.UserAccount;
 import com.pharmacy.cpis.userservice.repository.IPharmacyAdministratorRepository;
 import com.pharmacy.cpis.userservice.repository.IUserRepository;
 import com.pharmacy.cpis.userservice.service.IAuthorityService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
+import com.pharmacy.cpis.util.exceptions.PSNotFoundException;
 
 @Service
 public class PharmacyService implements IPharmacyService {
@@ -36,6 +37,16 @@ public class PharmacyService implements IPharmacyService {
 
 	@Autowired
 	private IUserRepository userRepository;
+
+	@Override
+	public Pharmacy getById(Long id) {
+		Pharmacy pharmacy = pharmacyRepository.findById(id).orElse(null);
+
+		if (pharmacy == null)
+			throw new PSNotFoundException("The requested pharmacy does not exist.");
+
+		return pharmacy;
+	}
 
 	@Override
 	public List<Pharmacy> findAll() {
