@@ -22,7 +22,6 @@ public class PharmacyController {
     @Autowired
     private IPharmacyService pharmacyService;
 
-    // TODO: Decide how to name this type of routes
     @GetMapping("/all")
     public ResponseEntity<List<PharmacyDTO>> getAllPharmacies(){
 

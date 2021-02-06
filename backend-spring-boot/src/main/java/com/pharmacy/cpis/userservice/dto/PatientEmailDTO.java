@@ -1,6 +1,10 @@
 package com.pharmacy.cpis.userservice.dto;
 
+import javax.validation.constraints.NotEmpty;
+
 public class PatientEmailDTO {
+
+    @NotEmpty(message = "Email is required.")
     private String email;
 
     public PatientEmailDTO(){
