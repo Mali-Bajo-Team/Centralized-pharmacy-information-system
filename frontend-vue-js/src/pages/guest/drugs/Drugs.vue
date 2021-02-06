@@ -38,11 +38,22 @@
           <!-- End of the row for title & edit, delete buttons -->
           <!-- Row for type of drug and mark -->
           <v-row>
-            <v-chip class="ma-2" color="green" text-color="white" pill>
+            <v-chip class="ml-4" color="teal" text-color="white" pill>
               <v-icon small left> mdi-pill </v-icon>
 
               {{ drug.typeOfDrug }}
             </v-chip>
+
+            <v-spacer></v-spacer>
+            <v-rating
+              class="mr-10"
+              v-model="drug.mark"
+              color="accent"
+              background-color="orange "
+              half-increments
+              readonly
+            >
+            </v-rating>
           </v-row>
           <!-- End of the row for type of drug and mark -->
         </v-card>
