@@ -205,7 +205,7 @@
             </v-card-title>
             <v-spacer></v-spacer>
             <!-- Buttons for editing & deleting categories -->
-            <v-dialog v-model="dialogForEditingCategory" width="500">
+            <v-dialog v-model="dialogForEditingCategory" width="500" :retain-focus="false">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   class="mx-2"
