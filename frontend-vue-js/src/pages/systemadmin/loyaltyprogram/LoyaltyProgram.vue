@@ -72,6 +72,7 @@
 
                           <v-row justify="center">
                             <v-date-picker
+                            required
                               elevation="4"
                               v-model="changeLoyaltyProgram.activeUntil"
                             ></v-date-picker>
@@ -171,6 +172,7 @@ export default {
     },
     confirmChangesToLoyaltyProgram() {
       // TODO: Make ajax call to make these changes
+      if(this.changeLoyaltyProgram.activeUntil == "") return;
       this.dialog = false;
       this.loyaltyProgram.active = this.changeLoyaltyProgram.active;
       this.loyaltyProgram.activeUntil = this.changeLoyaltyProgram.activeUntil;
