@@ -29,22 +29,37 @@
           v-for="drug in filteredDrugs"
           :key="drug.code"
         >
-          <!-- Row for title & edit, delete buttons -->
-          <v-row>
+          <!-- Row for title & drug type -->
+          <v-row align="center">
             <v-card-title>
               <h2>{{ drug.name }}</h2>
             </v-card-title>
-          </v-row>
-          <!-- End of the row for title & edit, delete buttons -->
-          <!-- Row for type of drug and mark -->
-          <v-row>
-            <v-chip class="ml-4" color="teal" text-color="white" pill>
+            <v-spacer></v-spacer>
+            <v-chip class="mr-10" color="teal" text-color="white" pill>
               <v-icon small left> mdi-pill </v-icon>
 
               {{ drug.typeOfDrug }}
             </v-chip>
+          </v-row>
+          <!-- End of the row for title & drug type -->
+          <!-- Row for pharmacies and mark -->
+          <v-row>
+            <!-- Pharmacies where is available this drug -->
+            <v-card-actions>
+              <v-btn color="orange lighten-2" text> Pharmacies </v-btn>
 
+              <v-spacer></v-spacer>
+
+              <v-btn icon @click="show = !show">
+                <v-icon>{{
+                  show ? "mdi-chevron-up" : "mdi-chevron-down"
+                }}</v-icon>
+              </v-btn>
+            </v-card-actions>
+
+            <!-- End of the pharmacies where is available this drug -->
             <v-spacer></v-spacer>
+            <!-- Mark of drug -->
             <v-rating
               class="mr-10"
               v-model="drug.mark"
@@ -54,6 +69,21 @@
               readonly
             >
             </v-rating>
+            <!-- End of mark of the drug -->
+                        <v-expand-transition>
+              <div v-show="show">
+                <v-divider></v-divider>
+
+                <v-card-text>
+                  I'm a thing. But, like most politicians, he promised more than
+                  he could deliver. You won't have time for sleeping, soldier,
+                  not with all the bed making you'll be doing. Then we'll go
+                  with that data file! Hey, you add a one and two zeros to that
+                  or we walk! You're going to do his laundry? I've got to find a
+                  way to escape.
+                </v-card-text>
+              </div>
+            </v-expand-transition>
           </v-row>
           <!-- End of the row for type of drug and mark -->
         </v-card>
@@ -68,6 +98,7 @@ export default {
   data: () => ({
     drugs: [],
     searchDrugField: "",
+    show: false,
   }),
   mounted() {
     this.axios
@@ -80,7 +111,8 @@ export default {
   },
   methods: {
     isMatchedDrug(drug) {
-      if (!drug.name.toLowerCase().match(this.searchDrugField.toLowerCase())) return false;
+      if (!drug.name.toLowerCase().match(this.searchDrugField.toLowerCase()))
+        return false;
 
       return true;
     },
