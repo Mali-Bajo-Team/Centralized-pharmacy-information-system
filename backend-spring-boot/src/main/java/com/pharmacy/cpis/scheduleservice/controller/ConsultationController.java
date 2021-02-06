@@ -88,6 +88,8 @@ public class ConsultationController {
 	@PreAuthorize("hasRole('PHARMACIST')")
 	public ResponseEntity<ScheduleExaminationDTO> scheduleConsultation(@RequestBody ScheduleExaminationDTO scheduleExaminationDTO) {
 
+		//Create Consultation
+
 		// Convert date format to Data.Util
 		Date examinationStartDate = getUtilDate(scheduleExaminationDTO.getStartDate());
 		Date examinationEndDate = getUtilDate(scheduleExaminationDTO.getEndDate());
@@ -98,6 +100,8 @@ public class ConsultationController {
 		Boolean isPhatientHaveConsultation = consultationService.isPhatientHaveConsultation(scheduleExaminationDTO.getPatientId(), examinationStartDate, examinationEndDate);
 
 		if(isConsultationTimeFitsIntoConsultantWorkingTime && !isPhatientHaveConsultation){
+			scheduleExaminationDTO.setConsultantId(loggedPharmacist.getId());
+			consultationService.scheduleConsultation(scheduleExaminationDTO);
 			return new ResponseEntity<ScheduleExaminationDTO>(scheduleExaminationDTO, HttpStatus.OK);
 		}
 		return new ResponseEntity<ScheduleExaminationDTO>(scheduleExaminationDTO, HttpStatus.FORBIDDEN);
