@@ -44,6 +44,10 @@ public class UserAccount implements UserDetails {
 	@Column(nullable = false)
 	boolean needsPasswordChange;
 
+	// only set for pharmacy administrators
+	@Column
+	private Long pharmacyId;
+
 	@Column(name = "last_password_reset_date")
 	private Timestamp lastPasswordResetDate;
 
@@ -126,6 +130,18 @@ public class UserAccount implements UserDetails {
 
 	public void setNeedsPasswordChange(boolean needsPasswordChange) {
 		this.needsPasswordChange = needsPasswordChange;
+	}
+
+	public Long getPharmacyId() {
+		return pharmacyId;
+	}
+
+	public void setPharmacyId(Long pharmacyId) {
+		this.pharmacyId = pharmacyId;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 	public Person getPerson() {
