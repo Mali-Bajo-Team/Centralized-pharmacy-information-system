@@ -1,8 +1,9 @@
 package com.pharmacy.cpis.userservice.controller;
-import com.pharmacy.cpis.userservice.dto.PatientDTO;
 import com.pharmacy.cpis.userservice.dto.PatientEmailDTO;
 import com.pharmacy.cpis.userservice.dto.PatientProfileDTO;
+import com.pharmacy.cpis.userservice.dto.UserCategoryDTO;
 import com.pharmacy.cpis.userservice.model.users.Patient;
+import com.pharmacy.cpis.userservice.service.ILoyaltyProgramService;
 import com.pharmacy.cpis.userservice.service.IPatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,9 @@ public class PatientController {
     @Autowired
     private IPatientService patientService;
 
+    @Autowired
+    private ILoyaltyProgramService loyaltyProgramService;
+
     @GetMapping()
     public  ResponseEntity<PatientProfileDTO> getPatient(@RequestBody PatientEmailDTO patientEmail) {
         Patient patient = patientService.findByEmail(patientEmail.getEmail());
@@ -33,6 +37,7 @@ public class PatientController {
         patientProfileDTO.setPhoneNumber(patient.getPhoneNumber());
         patientProfileDTO.setLoyaltyPoints(patient.getLoyaltyPoints());
         patientProfileDTO.setEmail(patientEmail.getEmail());
+        patientProfileDTO.setUserCategoryDTO(new UserCategoryDTO(loyaltyProgramService.findUserCategoryByLoyaltyPoints(patient.getLoyaltyPoints())));
 
         return new ResponseEntity<>(patientProfileDTO, HttpStatus.OK);
 

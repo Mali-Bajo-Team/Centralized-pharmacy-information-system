@@ -10,13 +10,13 @@ public class PatientProfileDTO {
     private String country;
     private String email;
     private Integer loyaltyPoints;
-    //TODO: add userCategoryDTO which shows category and benefits on patient profile
+    private UserCategoryDTO userCategoryDTO;
 
-
-    public PatientProfileDTO(){
+    public PatientProfileDTO() {
 
     }
-    public PatientProfileDTO(String name, String surname, String phoneNumber, String address, String city, String country, String email, Integer loyaltyPoints) {
+
+    public PatientProfileDTO(String name, String surname, String phoneNumber, String address, String city, String country, String email, Integer loyaltyPoints, UserCategoryDTO userCategoryDTO) {
         this.name = name;
         this.surname = surname;
         this.phoneNumber = phoneNumber;
@@ -25,6 +25,7 @@ public class PatientProfileDTO {
         this.country = country;
         this.email = email;
         this.loyaltyPoints = loyaltyPoints;
+        this.userCategoryDTO = userCategoryDTO;
     }
 
     public String getName() {
@@ -89,5 +90,13 @@ public class PatientProfileDTO {
 
     public void setLoyaltyPoints(Integer loyaltyPoints) {
         this.loyaltyPoints = loyaltyPoints;
+    }
+
+    public UserCategoryDTO getUserCategoryDTO() {
+        return userCategoryDTO;
+    }
+
+    public void setUserCategoryDTO(UserCategoryDTO userCategoryDTO) {
+        this.userCategoryDTO = userCategoryDTO;
     }
 }
