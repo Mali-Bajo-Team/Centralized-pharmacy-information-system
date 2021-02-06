@@ -29,36 +29,53 @@
           v-for="drug in filteredDrugs"
           :key="drug.code"
         >
-          <!-- Row for title & drug type -->
+          <!-- Row for title & drug type, specification preview -->
           <v-row align="center">
             <v-card-title>
               <h2>{{ drug.name }}</h2>
             </v-card-title>
             <v-spacer></v-spacer>
-            <v-chip class="mr-10" color="teal" text-color="white" pill>
+            <v-chip class="mr-2" color="teal" text-color="white" pill>
               <v-icon small left> mdi-pill </v-icon>
 
               {{ drug.typeOfDrug }}
             </v-chip>
+
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  elevation="0"
+                  left
+                  class="mr-10"
+                  fab
+                  dark
+                  x-small
+                  color="light-green lighten-3"
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  <v-icon dark> mdi-clipboard-file-outline </v-icon>
+                </v-btn>
+              </template>
+              <span>Drug specification</span>
+            </v-tooltip>
           </v-row>
-          <!-- End of the row for title & drug type -->
+          <!-- End of the row for title & drug type, specification preview -->
           <!-- Row for pharmacies and mark -->
           <v-row>
-            <!-- Pharmacies where is available this drug -->
+            <!-- Button to show/hide pharmacies -->
             <v-card-actions>
               <v-btn color="orange lighten-2" text> Pharmacies </v-btn>
-
               <v-spacer></v-spacer>
-
               <v-btn icon @click="drug.show = !drug.show">
                 <v-icon>{{
                   drug.show ? "mdi-chevron-up" : "mdi-chevron-down"
                 }}</v-icon>
               </v-btn>
             </v-card-actions>
-
-            <!-- End of the pharmacies where is available this drug -->
+            <!-- End of the button to show/hide pharmacies -->
             <v-spacer></v-spacer>
+
             <!-- Mark of drug -->
             <v-rating
               class="mr-10"
@@ -70,6 +87,7 @@
             >
             </v-rating>
             <!-- End of mark of the drug -->
+            <!-- Pharmacies where is available this drug -->
             <v-expand-transition>
               <div v-show="drug.show">
                 <v-divider></v-divider>
@@ -84,6 +102,7 @@
                 </v-card-text>
               </div>
             </v-expand-transition>
+            <!-- End of the pharmacies where is available this drug -->
           </v-row>
           <!-- End of the row for type of drug and mark -->
         </v-card>
@@ -108,19 +127,18 @@ export default {
       .then((resp) => {
         this.drugs = resp.data;
         this.drugs = [];
-        for(let drug of resp.data){
-            let tempDrug = {
-                name: drug.name,
-                alternateDrugs: drug.alternateDrugs,
-                code: drug.code,
-                loyaltyPoints: drug.loyaltyPoints,
-                mark: drug.mark,
-                typeOfDrug: drug.typeOfDrug,
-                show: false
-            };
-            this.drugs.push(tempDrug);
+        for (let drug of resp.data) {
+          let tempDrug = {
+            name: drug.name,
+            alternateDrugs: drug.alternateDrugs,
+            code: drug.code,
+            loyaltyPoints: drug.loyaltyPoints,
+            mark: drug.mark,
+            typeOfDrug: drug.typeOfDrug,
+            show: false,
+          };
+          this.drugs.push(tempDrug);
         }
-
       });
   },
   methods: {
