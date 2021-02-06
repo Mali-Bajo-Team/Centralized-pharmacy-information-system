@@ -41,7 +41,7 @@
               {{ drug.typeOfDrug }}
             </v-chip>
             <!-- Drug specification -->
-            <v-dialog width="500">
+            <v-dialog v-model="show" width="500" :retain-focus="false">
               <template #activator="{ on: dialog }">
                 <v-tooltip bottom>
                   <template #activator="{ on: tooltip }">
@@ -60,7 +60,47 @@
                   <span>Drug specification</span>
                 </v-tooltip>
               </template>
-              <v-card> Dialog content </v-card>
+              <v-card>
+                <!--Toolbar of the card-->
+                <v-toolbar color="primary" dark dense flat>
+                  <v-toolbar-title class="body-2">
+                    <h3>Drug specification for {{ drug.name }}</h3>
+                  </v-toolbar-title>
+                </v-toolbar>
+                <!-- End of toolbar of the card -->
+                <br />
+                <v-form class="ma-5">
+                  <v-text-field
+                    v-model="drug.drugSpecificationDTO.manufacturer"
+                    label="Manufacturer"
+                    disabled
+                  >
+                  </v-text-field>
+                  <v-text-field
+                    v-model="drug.drugSpecificationDTO.contraindications"
+                    label="Contraindications"
+                    disabled
+                  >
+                  </v-text-field>
+                  <v-text-field
+                    v-model="drug.drugSpecificationDTO.recommendedDailyDose"
+                    label="Recommended daily dose"
+                    disabled
+                  >
+                  </v-text-field>
+                  <v-select
+                  :items="drug.drugSpecificationDTO.ingredients"
+                  item-text="name"
+                  label="Ingredients"
+                  >
+                      
+                  </v-select>
+                </v-form>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="primary" @click="show = !show"> Close </v-btn>
+                </v-card-actions>
+              </v-card>
             </v-dialog>
             <!-- End of the drug specification -->
           </v-row>
@@ -144,7 +184,8 @@ export default {
               manufacturer: drug.drugSpecificationDTO.manufacturer,
               contraindications: drug.drugSpecificationDTO.contraindications,
               ingredients: drug.drugSpecificationDTO.ingredients,
-              recommendedDailyDose: drug.drugSpecificationDTO.recommendedDailyDose,
+              recommendedDailyDose:
+                drug.drugSpecificationDTO.recommendedDailyDose,
             },
           };
           this.drugs.push(tempDrug);
