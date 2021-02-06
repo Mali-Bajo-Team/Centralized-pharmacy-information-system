@@ -108,7 +108,7 @@ public class ConsultationController {
 			consultationService.scheduleConsultation(scheduleExaminationDTO);
 			try {
 				Patient patient = patientRepository.getOne(scheduleExaminationDTO.getPatientId());
-				emailService.sendConfirmConsultationEmailAsync(patient.getAccount().getEmail());
+				emailService.sendConfirmConsultationEmailAsync(patient.getAccount().getUsername(), patient.getAccount().getEmail(), scheduleExaminationDTO);
 			} catch (InterruptedException e) {
 				System.out.println("Error while sending Confirmation mail");
 			}

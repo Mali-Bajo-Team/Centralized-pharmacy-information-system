@@ -1,5 +1,6 @@
 package com.pharmacy.cpis.userservice.service;
 
+import com.pharmacy.cpis.scheduleservice.dto.ScheduleExaminationDTO;
 import com.pharmacy.cpis.userservice.dto.UserActivationDTO;
 import com.pharmacy.cpis.userservice.model.users.Patient;
 import com.pharmacy.cpis.userservice.repository.IPatientRepository;
@@ -46,17 +47,17 @@ public class EmailService {
     }
 
     @Async
-    public void sendConfirmConsultationEmailAsync(String phatientEmail) throws MailException, InterruptedException {
+    public void sendConfirmConsultationEmailAsync(String userName, String phatientEmail, ScheduleExaminationDTO scheduleExaminationDTO) throws MailException, InterruptedException {
         System.out.println("Email sending...\n\n");
 
         SimpleMailMessage mail = new SimpleMailMessage();
 
         mail.setTo(phatientEmail);
-
         mail.setFrom(env.getProperty("spring.mail.username"));
         mail.setSubject("Confirmation consultation [CPis]");
         mail.setText(
-                "Hello " + "," + " your consultation is succesfully scheduled"
+                "Hello " + userName + "," + " your consultation is succesfully scheduled. Consultation start at " + scheduleExaminationDTO.getStartDate() + " and end at " +
+                        scheduleExaminationDTO.getEndDate() + "." + " For more information contact your Consultant at mail: " + scheduleExaminationDTO.getConsultantEmail()
         );
         javaMailSender.send(mail);
 
