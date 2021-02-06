@@ -1,7 +1,9 @@
 <template>
   <v-app>
+
     <v-row>
       <v-col md="3" class="ml-10 mt-15">
+             <h1 class="ml-n primary--text">User profile</h1>
         <v-card elevation="3" class="pa-6 primary">
           <p class="font-weight-medium">Name : {{ pharmacist.name }}</p>
           <p class="font-weight-medium">Lastname : {{ pharmacist.lastName }}</p>
