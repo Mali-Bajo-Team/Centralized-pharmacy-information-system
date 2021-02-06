@@ -48,7 +48,9 @@
                 >
                   {{ item.name.charAt(0) }}
                 </v-list-item-avatar>
-                <v-list-item-content @click="handleSelectItem(item)">
+                <v-list-item-content
+                  @click="handleSelectItem(item), (alertUser = false)"
+                >
                   <v-list-item-title
                     v-text="item.name + ' ' + item.surname"
                   ></v-list-item-title>
@@ -61,6 +63,16 @@
                 </v-list-item-action>
               </template>
             </v-autocomplete>
+            <v-alert
+              :value="alertUser"
+              color="pink"
+              dark
+              border="top"
+              icon="mdi-account"
+              transition="scale-transition"
+            >
+              You must choose user!
+            </v-alert>
           </div>
         </v-row>
         <v-divider></v-divider>
@@ -74,6 +86,16 @@
               v-on:input="onInputDate"
               color="green lighten-1"
             ></v-date-picker>
+            <v-alert
+              :value="alertDate"
+              color="pink"
+              dark
+              border="top"
+              icon="mdi-account"
+              transition="scale-transition"
+            >
+              You must pick date!
+            </v-alert>
           </div>
 
           <!-- CHOOSE START TIME -->
@@ -86,6 +108,16 @@
               v-on:input="onInputStartTime"
               format="ampm"
             ></v-time-picker>
+            <v-alert
+              :value="alertStartTime"
+              color="pink"
+              dark
+              border="top"
+              icon="mdi-account"
+              transition="scale-transition"
+            >
+              You must pick start date!
+            </v-alert>
           </div>
           <!-- CHOOSE END TIME -->
           <div>
@@ -97,14 +129,25 @@
               v-on:input="onInputEndTime"
               format="ampm"
             ></v-time-picker>
+
+            <v-alert
+              :value="alertEndTime"
+              color="pink"
+              dark
+              border="top"
+              icon="mdi-account"
+              transition="scale-transition"
+            >
+              You must pick end time!
+            </v-alert>
           </div>
           <div class="mt-14"></div>
         </v-row>
-         <v-row>
-        <v-btn depressed @click="scheduleConsultation" color="primary">
-          Schedule
-        </v-btn>
-         </v-row>
+        <v-row>
+          <v-btn depressed @click="scheduleConsultation" color="primary">
+            Schedule
+          </v-btn>
+        </v-row>
       </v-col>
     </v-row>
   </v-container>
@@ -114,6 +157,10 @@
 export default {
   data: () => ({
     picker: new Date().toISOString().substr(0, 10),
+    alertUser: false,
+    alertDate: false,
+    alertStartTime: false,
+    alertEndTime: false,
     examinationStartTime: null,
     examinationEndTime: null,
     valueStartTime: null,
@@ -133,39 +180,62 @@ export default {
     onInputStartTime(valueStartTime) {
       this.$emit("input", valueStartTime);
       this.examinationStartTime = valueStartTime;
+          this.alertStartTime = false;
     },
     onInputEndTime(valueEndTime) {
       this.$emit("input", valueEndTime);
       this.examinationEndTime = valueEndTime;
+       this.alertEndTime = false;
     },
     onInputDate(valueDate) {
       this.$emit("input", valueDate);
       this.valueDate = valueDate;
+      this.alertDate = false;
       console.log(valueDate);
     },
     scheduleConsultation() {
       var token = parseJwt(localStorage.getItem("JWT-CPIS"));
       var email = token.sub;
-
-      this.axios
-        .post(
-          process.env.VUE_APP_BACKEND_URL +
-            "api/consultations/scheduleconsultation",
-          {
-            consultantEmail: email,
-            startDate: this.valueDate + " " + this.examinationStartTime + ":00",
-            endDate: this.valueDate + " " + this.examinationEndTime + ":00",
-            patientId: this.selectedPatient,
-          },
-          {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+      if (
+        this.selectedPatient === null ||
+        this.valueDate === null ||
+        this.examinationStartTime === null ||
+        this.examinationEndTime === null
+      ) {
+        if (this.selectedPatient === null) {
+          this.alertUser = true;
+        }
+        if (this.valueDate === null) {
+          this.alertDate = true;
+        }
+        if (this.examinationStartTime === null) {
+          this.alertStartTime = true;
+        }
+        if (this.examinationEndTime === null) {
+          this.alertEndTime = true;
+        }
+      } else {
+        this.axios
+          .post(
+            process.env.VUE_APP_BACKEND_URL +
+              "api/consultations/scheduleconsultation",
+            {
+              consultantEmail: email,
+              startDate:
+                this.valueDate + " " + this.examinationStartTime + ":00",
+              endDate: this.valueDate + " " + this.examinationEndTime + ":00",
+              patientId: this.selectedPatient,
             },
-          }
-        )
-        .then((resp) => {
-          this.pharmacist = resp.data;
-        });
+            {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+              },
+            }
+          )
+          .then((resp) => {
+            this.pharmacist = resp.data;
+          });
+      }
     },
   },
   watch: {
@@ -204,3 +274,6 @@ function parseJwt(token) {
   return JSON.parse(payload.toString());
 }
 </script>
+
+<style scoped>
+</style>
