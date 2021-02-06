@@ -6,29 +6,78 @@
         <v-card>
           <!--Toolbar of the card-->
           <v-toolbar color="primary" dark dense flat>
-            <v-toolbar-title class="body-2"> Loyalty Program </v-toolbar-title>
+            <v-toolbar-title class="body-2">
+              <h3>Loyalty Program</h3>
+            </v-toolbar-title>
           </v-toolbar>
           <!-- End of toolbar of the card -->
           <v-card-actions>
             <v-row justify="center">
               <v-col xl="8" md="8" sm="8">
                 <br />
-                <h3 v-if="loyaltyProgram.active">Status: Activeted program</h3>
-                <h3 v-else>Status: Not activate program</h3>
+                <h4 v-if="loyaltyProgram.active">Status: Activeted program</h4>
+                <h4 v-else>Status: Not activate program</h4>
                 <br />
-                <h3>
+                <h4>
                   Active until:
                   {{
                     new Date(loyaltyProgram.activeUntil).toLocaleDateString(
                       "en-UE"
                     )
                   }}
-                </h3>
+                </h4>
                 <br />
-                <h3>
+                <h4>
                   Points per consultation:
                   {{ loyaltyProgram.pointsPerConsultation }}
-                </h3>
+                </h4>
+                <br /><br />
+                <!-- Button for eddit loyalty program + DIALOG -->
+                <v-row>
+                  <v-col>
+                    <v-dialog v-model="dialog" width="500">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          class="mx-2"
+                          fab
+                          dark
+                          small
+                          color="primary"
+                          v-bind="attrs"
+                          v-on="on"
+                        >
+                          <v-icon dark> mdi-pencil-outline </v-icon>
+                        </v-btn>
+                      </template>
+
+                      <!-- Content inside dialog -->
+                      <v-card>
+                        <!--Toolbar of the card-->
+                        <v-toolbar color="primary" dark dense flat>
+                          <v-toolbar-title class="body-2">
+                            <h3>Loyalty Program</h3>
+                          </v-toolbar-title>
+                        </v-toolbar>
+                        <!-- End of toolbar of the card -->
+                        <br />
+                        <v-form class="ma-5">
+                          <v-text-field label="Points per consultation">
+                          </v-text-field>
+                        </v-form>
+                        <v-divider></v-divider>
+
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn color="primary" @click="dialog = false">
+                            Confirm changes
+                          </v-btn>
+                        </v-card-actions>
+                      </v-card>
+                      <!-- End of the content inside dialog -->
+                    </v-dialog>
+                  </v-col>
+                </v-row>
+                <!-- End of button for edit loyalty program + DIALOG-->
                 <br />
               </v-col>
             </v-row>
@@ -85,6 +134,7 @@ export default {
   methods() {},
   data: () => ({
     loyaltyProgram: {},
+    dialog: false,
   }),
   mounted() {
     this.axios
