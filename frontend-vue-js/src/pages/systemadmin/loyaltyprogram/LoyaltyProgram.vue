@@ -45,6 +45,7 @@
                           color="primary"
                           v-bind="attrs"
                           v-on="on"
+                          @click="setChangeLoyaltyProgram"
                         >
                           <v-icon dark> mdi-pencil-outline </v-icon>
                         </v-btn>
@@ -62,21 +63,21 @@
                         <br />
                         <v-form class="ma-5">
                           <v-text-field
-                            v-model="loyaltyProgram.pointsPerConsultation"
+                            v-model="changeLoyaltyProgram.pointsPerConsultation"
                             label="Points per consultation"
                           >
                           </v-text-field>
                           <!-- Data picker in dialog -->
-                          
+
                           <v-row justify="center">
                             <v-date-picker
-                            elevation="4"
-                              v-model="selectedData"
+                              elevation="4"
+                              v-model="changeLoyaltyProgram.activeUntil"
                             ></v-date-picker>
                           </v-row>
                           <!-- End of the date picker in dialog -->
                           <v-switch
-                            v-model="loyaltyProgram.active"
+                            v-model="changeLoyaltyProgram.active"
                             label="Status of program  [Active or Not active]"
                           ></v-switch>
                         </v-form>
@@ -84,7 +85,7 @@
 
                         <v-card-actions>
                           <v-spacer></v-spacer>
-                          <v-btn color="primary" @click="dialog = false">
+                          <v-btn color="primary" @click="confirmChangesToLoyaltyProgram()">
                             Confirm changes
                           </v-btn>
                         </v-card-actions>
@@ -147,12 +148,31 @@
 
 <script>
 export default {
-  methods() {},
   data: () => ({
     selectedData: "",
+    changeLoyaltyProgram:{
+      active: false,
+      activeUntil: "",
+      pointsPerConsultation: 0,
+    },
     loyaltyProgram: {},
     dialog: false,
   }),
+  methods: {
+    setChangeLoyaltyProgram(){
+      this.changeLoyaltyProgram.active = this.loyaltyProgram.active;
+      // TODO: Find how to map date to something 
+      // this.changeLoyaltyProgram.activeUntil =  new Date(this.loyaltyProgram.activeUntil).toLocaleDateString("en-UE");
+      this.changeLoyaltyProgram.pointsPerConsultation = this.loyaltyProgram.pointsPerConsultation;
+    },
+    confirmChangesToLoyaltyProgram(){
+      // TODO: Make ajax call to make these changes
+      this.dialog = false;
+      this.loyaltyProgram.active = this.changeLoyaltyProgram.active;
+      this.loyaltyProgram.activeUntil = this.changeLoyaltyProgram.activeUntil;
+      this.loyaltyProgram.pointsPerConsultation = this.changeLoyaltyProgram.pointsPerConsultation;
+    },
+  },
   mounted() {
     this.axios
       .get(
