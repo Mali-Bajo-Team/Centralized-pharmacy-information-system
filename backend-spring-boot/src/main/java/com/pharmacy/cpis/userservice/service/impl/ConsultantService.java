@@ -42,6 +42,7 @@ public class ConsultantService implements IConsultantService {
         return userRepository.existsByEmail(email);
     }
 
+
     private UserAccount addNewDermatologistAccount(UserRegisterDTO userRequest, Consultant addedConsultant) {
         UserAccount newUserAccount = new UserAccount();
         newUserAccount.setEmail(userRequest.getEmail());

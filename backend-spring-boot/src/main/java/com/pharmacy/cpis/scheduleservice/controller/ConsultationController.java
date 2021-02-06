@@ -1,11 +1,17 @@
 package com.pharmacy.cpis.scheduleservice.controller;
 
+import com.pharmacy.cpis.scheduleservice.dto.ScheduleExaminationDTO;
+import com.pharmacy.cpis.scheduleservice.service.IWorkingTimesService;
 import com.pharmacy.cpis.userservice.dto.ConsultantDTO;
 import com.pharmacy.cpis.scheduleservice.dto.ConsultationDTO;
 import com.pharmacy.cpis.scheduleservice.model.consultations.Consultation;
 import com.pharmacy.cpis.scheduleservice.service.IConsultationService;
+import com.pharmacy.cpis.userservice.model.users.Patient;
 import com.pharmacy.cpis.userservice.model.users.UserAccount;
+import com.pharmacy.cpis.userservice.repository.IPatientRepository;
+import com.pharmacy.cpis.userservice.service.EmailService;
 import com.pharmacy.cpis.userservice.service.IUserService;
+import com.pharmacy.cpis.util.DateConversionsAndComparisons;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,18 +19,25 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/consultations")
 public class ConsultationController {
-
+	@Autowired
+	private IPatientRepository patientRepository;
 	@Autowired
 	private IConsultationService consultationService;
 	@Autowired
+	private IWorkingTimesService workingTimesService;
+	@Autowired
 	private IUserService userService;
-
+	@Autowired
+	private EmailService emailService;
 	@GetMapping
 	@PreAuthorize("hasRole('PHARMACIST')")
 	public ResponseEntity<List<ConsultationDTO>> getAllConsultations() {
@@ -76,4 +89,32 @@ public class ConsultationController {
 
 		return new ResponseEntity<ConsultantDTO>(consultantDTO, HttpStatus.OK);
 	}
+
+	@PostMapping("/scheduleconsultation")
+	@PreAuthorize("hasRole('PHARMACIST')")
+	public ResponseEntity<ScheduleExaminationDTO> scheduleConsultation(@RequestBody ScheduleExaminationDTO scheduleExaminationDTO) throws InterruptedException {
+
+		Date examinationStartDate = DateConversionsAndComparisons.getUtilDate(scheduleExaminationDTO.getStartDate());
+		Date examinationEndDate = DateConversionsAndComparisons.getUtilDate(scheduleExaminationDTO.getEndDate());
+
+		UserAccount loggedPharmacist = userService.findByEmail(scheduleExaminationDTO.getConsultantEmail());
+		scheduleExaminationDTO.setConsultantId(loggedPharmacist.getId());
+
+		Boolean isConsultationTimeFitsIntoConsultantWorkingTime = workingTimesService.isConsultationTimeFitsIntoConsultantWorkingTime(loggedPharmacist.getId(), examinationStartDate, examinationEndDate);
+
+		Boolean isPhatientHaveConsultation = consultationService.isPhatientHaveConsultation(scheduleExaminationDTO.getPatientId(), examinationStartDate, examinationEndDate);
+
+		if(isConsultationTimeFitsIntoConsultantWorkingTime && !isPhatientHaveConsultation){
+			consultationService.scheduleConsultation(scheduleExaminationDTO);
+
+				Patient patient = patientRepository.getOne(scheduleExaminationDTO.getPatientId());
+				emailService.sendConfirmConsultationEmailAsync(patient.getAccount().getUsername(), patient.getAccount().getEmail(), scheduleExaminationDTO);
+
+			return new ResponseEntity<ScheduleExaminationDTO>(scheduleExaminationDTO, HttpStatus.OK);
+		}
+
+		return new ResponseEntity<ScheduleExaminationDTO>(scheduleExaminationDTO, HttpStatus.BAD_REQUEST);
+	}
+
+
 }
