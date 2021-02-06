@@ -5,7 +5,6 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Location {
 	private String street;
-	private Integer houseNumber;
 	private String city;
 	private String country;
 	private Double latitude;
@@ -21,14 +20,6 @@ public class Location {
 
 	public void setStreet(String street) {
 		this.street = street;
-	}
-
-	public Integer getHouseNumber() {
-		return houseNumber;
-	}
-
-	public void setHouseNumber(Integer houseNumber) {
-		this.houseNumber = houseNumber;
 	}
 
 	public String getCity() {
@@ -65,7 +56,7 @@ public class Location {
 
 	@Override
 	public String toString() {
-		return street + " " + houseNumber + ", " + city + ", " + country;
+		return street + ", " + city + ", " + country;
 	}
 
 }

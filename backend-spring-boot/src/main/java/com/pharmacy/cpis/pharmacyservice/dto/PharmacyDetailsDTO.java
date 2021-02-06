@@ -6,10 +6,14 @@ public class PharmacyDetailsDTO {
 
 	private String name;
 	private String description;
-	private String address;
+	private String street;
+	private String city;
+	private String country;
 	private Double latitude;
 	private Double longitude;
 	private Double rating;
+	private Double dermatologistConsultationPrice;
+	private Double pharmacistConsultationPrice;
 
 	public PharmacyDetailsDTO(Pharmacy pharmacy) {
 		super();
@@ -17,8 +21,12 @@ public class PharmacyDetailsDTO {
 		this.description = pharmacy.getDescription();
 		this.latitude = pharmacy.getLocation().getLatitude();
 		this.longitude = pharmacy.getLocation().getLongitude();
-		this.address = pharmacy.getLocation().toString();
+		this.street = pharmacy.getLocation().getStreet();
+		this.city = pharmacy.getLocation().getCity();
+		this.country = pharmacy.getLocation().getCountry();
 		this.rating = pharmacy.getAverageRating();
+		this.dermatologistConsultationPrice = pharmacy.getDermatologistConsultationPrice();
+		this.pharmacistConsultationPrice = pharmacy.getPharmacistConsultationPrice();
 	}
 
 	public String getName() {
@@ -29,8 +37,16 @@ public class PharmacyDetailsDTO {
 		return description;
 	}
 
-	public String getAddress() {
-		return address;
+	public String getStreet() {
+		return street;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public String getCountry() {
+		return country;
 	}
 
 	public Double getLatitude() {
@@ -43,6 +59,14 @@ public class PharmacyDetailsDTO {
 
 	public Double getRating() {
 		return rating;
+	}
+
+	public Double getDermatologistConsultationPrice() {
+		return dermatologistConsultationPrice;
+	}
+
+	public Double getPharmacistConsultationPrice() {
+		return pharmacistConsultationPrice;
 	}
 
 }

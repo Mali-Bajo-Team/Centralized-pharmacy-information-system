@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.pharmacy.cpis.pharmacyservice.dto.PharmacyRegisterDTO;
+import com.pharmacy.cpis.pharmacyservice.dto.PharmacyUpdateDTO;
 import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Location;
 import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
 import com.pharmacy.cpis.pharmacyservice.repository.IPharmacyRepository;
@@ -46,6 +47,22 @@ public class PharmacyService implements IPharmacyService {
 			throw new PSNotFoundException("The requested pharmacy does not exist.");
 
 		return pharmacy;
+	}
+
+	public Pharmacy update(Long id, PharmacyUpdateDTO update) {
+		Pharmacy pharmacy = getById(id);
+
+		pharmacy.setName(update.getName());
+		pharmacy.setDescription(update.getDescription());
+		pharmacy.setPharmacistConsultationPrice(update.getPharmacistConsultationPrice());
+		pharmacy.setDermatologistConsultationPrice(update.getDermatologistConsultationPrice());
+		pharmacy.getLocation().setStreet(update.getStreet());
+		pharmacy.getLocation().setCity(update.getCity());
+		pharmacy.getLocation().setCountry(update.getCountry());
+		pharmacy.getLocation().setLatitude(update.getLatitude());
+		pharmacy.getLocation().setLongitude(update.getLongitude());
+
+		return pharmacyRepository.save(pharmacy);
 	}
 
 	@Override
