@@ -12,6 +12,7 @@ import com.pharmacy.cpis.userservice.model.users.Consultant;
 import com.pharmacy.cpis.userservice.model.users.Patient;
 import com.pharmacy.cpis.userservice.repository.IConsultantRepository;
 import com.pharmacy.cpis.userservice.repository.IPatientRepository;
+import com.pharmacy.cpis.util.DateConversionsAndComparisons;
 import com.pharmacy.cpis.util.DateRange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,9 +48,9 @@ public class ConsultationService implements IConsultationService {
         //Proci kroz sva vremena u konsultacijama i uporediti ih sa prosledjenim vremenima
         for (Consultation c: patient.getConsultations()) {
             //ESD izmedju CSD i CED
-            if(compareDates(c.getTime().getStart(), examinationStartDate) <=0 && compareDates(c.getTime().getEnd(), examinationStartDate) >=0 ){ return true; }
+            if(DateConversionsAndComparisons.compareDates(c.getTime().getStart(), examinationStartDate) <=0 && DateConversionsAndComparisons.compareDates(c.getTime().getEnd(), examinationStartDate) >=0 ){ return true; }
             //EED izmedju CSD i CED
-            if(compareDates(c.getTime().getEnd(),examinationEndDate) >=0 && compareDates(c.getTime().getStart(), examinationEndDate) <=0){ return true; }
+            if(DateConversionsAndComparisons.compareDates(c.getTime().getEnd(),examinationEndDate) >=0 && DateConversionsAndComparisons.compareDates(c.getTime().getStart(), examinationEndDate) <=0){ return true; }
         }
 
         return false;
@@ -57,8 +58,8 @@ public class ConsultationService implements IConsultationService {
 
     @Override
     public Consultation scheduleConsultation(ScheduleExaminationDTO consultation) {
-        Date examinationStartDate = getUtilDate(consultation.getStartDate());
-        Date examinationEndDate = getUtilDate(consultation.getEndDate());
+        Date examinationStartDate = DateConversionsAndComparisons.getUtilDate(consultation.getStartDate());
+        Date examinationEndDate = DateConversionsAndComparisons.getUtilDate(consultation.getEndDate());
         DateRange consultationDataRange = new DateRange();
         consultationDataRange.setStart(examinationStartDate);
         consultationDataRange.setEnd(examinationEndDate);
@@ -79,26 +80,5 @@ public class ConsultationService implements IConsultationService {
 
         return  consultationForSchedule;
     }
-    private Date getUtilDate(String stringTime) {
-        Date convertedUtilDate = null;
-        try {
-            convertedUtilDate=new SimpleDateFormat("yy-MM-dd HH:mm:ss").parse(stringTime);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return convertedUtilDate;
-    }
-    //d1>d2 => >0
-    //d1<d2 => <0
-    //d1==d2 => =0
-    public int compareDates(Date d1, Date d2)
-    {
-        int t1;
-        int t2;
 
-        t1 = (int) (d1.getTime());
-        t2 = (int) (d2.getTime());
-        System.out.println(t1-t2);
-        return (t1 - t2);
-    }
 }

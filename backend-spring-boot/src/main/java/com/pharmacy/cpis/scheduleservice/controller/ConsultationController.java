@@ -8,6 +8,7 @@ import com.pharmacy.cpis.scheduleservice.model.consultations.Consultation;
 import com.pharmacy.cpis.scheduleservice.service.IConsultationService;
 import com.pharmacy.cpis.userservice.model.users.UserAccount;
 import com.pharmacy.cpis.userservice.service.IUserService;
+import com.pharmacy.cpis.util.DateConversionsAndComparisons;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -91,8 +92,8 @@ public class ConsultationController {
 		//Create Consultation
 
 		// Convert date format to Data.Util
-		Date examinationStartDate = getUtilDate(scheduleExaminationDTO.getStartDate());
-		Date examinationEndDate = getUtilDate(scheduleExaminationDTO.getEndDate());
+		Date examinationStartDate = DateConversionsAndComparisons.getUtilDate(scheduleExaminationDTO.getStartDate());
+		Date examinationEndDate = DateConversionsAndComparisons.getUtilDate(scheduleExaminationDTO.getEndDate());
 
 		UserAccount loggedPharmacist = userService.findByEmail(scheduleExaminationDTO.getConsultantEmail());
 		Boolean isConsultationTimeFitsIntoConsultantWorkingTime = workingTimesService.isConsultationTimeFitsIntoConsultantWorkingTime(loggedPharmacist.getId(), examinationStartDate, examinationEndDate);
@@ -104,17 +105,9 @@ public class ConsultationController {
 			consultationService.scheduleConsultation(scheduleExaminationDTO);
 			return new ResponseEntity<ScheduleExaminationDTO>(scheduleExaminationDTO, HttpStatus.OK);
 		}
-		return new ResponseEntity<ScheduleExaminationDTO>(scheduleExaminationDTO, HttpStatus.FORBIDDEN);
+
+		return new ResponseEntity<ScheduleExaminationDTO>(scheduleExaminationDTO, HttpStatus.BAD_REQUEST);
 	}
 
 
-	private Date getUtilDate(String stringTime) {
-		Date convertedUtilDate = null;
-		try {
-			convertedUtilDate=new SimpleDateFormat("yy-MM-dd HH:mm:ss").parse(stringTime);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		return convertedUtilDate;
-	}
 }
