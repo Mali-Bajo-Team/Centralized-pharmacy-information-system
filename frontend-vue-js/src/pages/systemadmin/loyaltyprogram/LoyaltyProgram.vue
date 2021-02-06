@@ -150,14 +150,14 @@
                           <v-text-field
                             type="number"
                             v-model="newUserCategory.reservationDiscount"
-                            label="Minimum points"
+                            label="Reservation discount"
                           >
                           </v-text-field>
 
                           <v-text-field
                             type="number"
-                            v-model="newUserCategory.reservationDiscount"
-                            label="Minimum points"
+                            v-model="newUserCategory.consultationDiscount"
+                            label="Consultation discount"
                           >
                           </v-text-field>
                         </v-form>
@@ -290,10 +290,38 @@ export default {
         });
     },
     confirmAddingNewUserCategory() {
-      if(this.newUserCategory.name == "" || this.newUserCategory.minimumPoints == 0 || this.newUserCategory.reservationDiscount == 0 || this.newUserCategory.consultationDiscount == 0) return;
+      if (
+        this.newUserCategory.name == "" ||
+        this.newUserCategory.minimumPoints == 0 ||
+        this.newUserCategory.reservationDiscount == 0 ||
+        this.newUserCategory.consultationDiscount == 0
+      )
+        return;
       this.dialogForAddingCategory = false;
-      // TODO: Make ajax call here
-      alert("bam");
+      this.axios
+        .post(
+          process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_CATEGORIES_ENDPOINT,
+          {
+            name: this.newUserCategory.name,
+            minimumPoints: this.newUserCategory.minimumPoints,
+            reservationDiscount: this.newUserCategory.reservationDiscount,
+            consultationDiscount: this.newUserCategory.consultationDiscount,
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then(() => {
+          // TODO: Make some notification here
+          alert("Successfuly");
+        })
+        .catch((error) => {
+          // TODO: Make some tost notifications here
+          alert("Error: " + error);
+        });
     },
   },
   mounted() {
