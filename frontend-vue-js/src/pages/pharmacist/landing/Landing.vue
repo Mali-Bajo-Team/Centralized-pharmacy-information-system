@@ -147,6 +147,28 @@
           <v-btn depressed @click="scheduleConsultation" color="primary">
             Schedule
           </v-btn>
+          <v-alert
+            :value="scheduleSucces"
+            color="green"
+            dark
+            border="top"
+            icon="mdi-account"
+            transition="scale-transition"
+          >
+            Successfully scheduled
+          </v-alert>
+          <v-alert
+            :value="scheduleAlert"
+            color="pink"
+            dark
+            border="top"
+            icon="mdi-account"
+            transition="scale-transition"
+          >
+            The schedule must match the working hours of the pharmacist. The
+            appointment should not be prepared with another examination or
+            consultation that the patient has scheduled (in any pharmacy)
+          </v-alert>
         </v-row>
       </v-col>
     </v-row>
@@ -172,6 +194,8 @@ export default {
     search: null,
     tab: null,
     selectedPatient: null,
+    scheduleAlert: false,
+    scheduleSucces: false,
   }),
   methods: {
     handleSelectItem(item) {
@@ -180,12 +204,12 @@ export default {
     onInputStartTime(valueStartTime) {
       this.$emit("input", valueStartTime);
       this.examinationStartTime = valueStartTime;
-          this.alertStartTime = false;
+      this.alertStartTime = false;
     },
     onInputEndTime(valueEndTime) {
       this.$emit("input", valueEndTime);
       this.examinationEndTime = valueEndTime;
-       this.alertEndTime = false;
+      this.alertEndTime = false;
     },
     onInputDate(valueDate) {
       this.$emit("input", valueDate);
@@ -234,6 +258,13 @@ export default {
           )
           .then((resp) => {
             this.pharmacist = resp.data;
+            this.scheduleAlert = false;
+            this.scheduleSucces = true;
+          })
+          .catch((error) => {
+            this.errorMessage = error.message;
+            console.error("There was an error!", error);
+            this.scheduleAlert = true;
           });
       }
     },
