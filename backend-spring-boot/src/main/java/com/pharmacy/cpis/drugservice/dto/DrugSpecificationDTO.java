@@ -1,9 +1,11 @@
 package com.pharmacy.cpis.drugservice.dto;
 
-import com.pharmacy.cpis.drugservice.model.drug.Ingredient;
+import java.util.List;
 
 import javax.validation.constraints.NotEmpty;
-import java.util.List;
+import javax.validation.constraints.NotNull;
+
+import com.pharmacy.cpis.drugservice.model.drug.Ingredient;
 
 public class DrugSpecificationDTO {
 
@@ -16,7 +18,7 @@ public class DrugSpecificationDTO {
 //    @NotEmpty(message = "Ingredients is required.")
     private List<Ingredient> ingredients;
 
-    @NotEmpty(message = "Recommended daily dose is required.")
+    @NotNull(message = "Recommended daily dose is required.")
     private Integer recommendedDailyDose;
 
     public DrugSpecificationDTO(){}

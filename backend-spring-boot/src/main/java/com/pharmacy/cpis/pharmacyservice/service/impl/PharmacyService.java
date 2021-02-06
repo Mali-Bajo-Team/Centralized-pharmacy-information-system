@@ -22,79 +22,84 @@ import java.util.List;
 @Service
 public class PharmacyService implements IPharmacyService {
 
-    @Autowired
-    private IPharmacyRepository pharmacyRepository;
+	@Autowired
+	private IPharmacyRepository pharmacyRepository;
 
-    @Autowired
-    private IPharmacyAdministratorRepository pharmacyAdministratorRepository;
+	@Autowired
+	private IPharmacyAdministratorRepository pharmacyAdministratorRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private IAuthorityService authService;
+	@Autowired
+	private IAuthorityService authService;
 
-    @Autowired
-    private IUserRepository userRepository;
+	@Autowired
+	private IUserRepository userRepository;
 
-    @Override
-    public List<Pharmacy> findAll() {
-        return pharmacyRepository.findAll();
-    }
+	@Override
+	public List<Pharmacy> findAll() {
+		return pharmacyRepository.findAll();
+	}
 
-    @Override
-    public Pharmacy registerPharmacy(PharmacyRegisterDTO pharmacy) {
-        Pharmacy addedPharmacy = addPharmacy(pharmacy);
-        PharmacyAdministrator addedPharmacyAdministrator = addNewPharmacyAdministrator(pharmacy.getPharmacyAdministrator(), addedPharmacy);
-        UserAccount addedAccount = addNewPharmacyAdministratorAccount(pharmacy.getPharmacyAdministrator(), addedPharmacyAdministrator);
-        return addedPharmacy;
-    }
+	@Override
+	public Pharmacy registerPharmacy(PharmacyRegisterDTO pharmacy) {
+		Pharmacy addedPharmacy = addPharmacy(pharmacy);
+		PharmacyAdministrator addedPharmacyAdministrator = addNewPharmacyAdministrator(
+				pharmacy.getPharmacyAdministrator(), addedPharmacy);
+		UserAccount addedAccount = addNewPharmacyAdministratorAccount(pharmacy.getPharmacyAdministrator(),
+				addedPharmacyAdministrator);
+		return addedPharmacy;
+	}
 
-    private Pharmacy addPharmacy(PharmacyRegisterDTO pharmacy) {
-        Pharmacy newPharmacy = new Pharmacy();
-        newPharmacy.setName(pharmacy.getName());
-        Location pharmacyLocation = new Location();
-        pharmacyLocation.setCity(pharmacy.getCity());
-        pharmacyLocation.setStreet(pharmacy.getAddress());
-        pharmacyLocation.setCountry(pharmacy.getCountry());
-        // TODO: MAKE SOME REAL SERVICE WHICH CALCULATE REAL LATITUDE & LONGITUDE, THIS IS HARDCODED ONE !
-        pharmacyLocation.setLatitude(10.0);
-        pharmacyLocation.setLongitude(10.0);
+	private Pharmacy addPharmacy(PharmacyRegisterDTO pharmacy) {
+		Pharmacy newPharmacy = new Pharmacy();
+		newPharmacy.setName(pharmacy.getName());
+		Location pharmacyLocation = new Location();
+		pharmacyLocation.setCity(pharmacy.getCity());
+		pharmacyLocation.setStreet(pharmacy.getAddress());
+		pharmacyLocation.setCountry(pharmacy.getCountry());
+		// TODO: MAKE SOME REAL SERVICE WHICH CALCULATE REAL LATITUDE & LONGITUDE, THIS
+		// IS HARDCODED ONE !
+		pharmacyLocation.setLatitude(10.0);
+		pharmacyLocation.setLongitude(10.0);
 
-        newPharmacy.setLocation(pharmacyLocation);
-        newPharmacy.setDermatologistConsultationPrice(pharmacy.getDermatologistConsultationPrice());
-        newPharmacy.setPharmacistConsultationPrice(pharmacy.getPharmacistConsultationPrice());
-        newPharmacy.setDescription(pharmacy.getDescription());
+		newPharmacy.setLocation(pharmacyLocation);
+		newPharmacy.setDermatologistConsultationPrice(pharmacy.getDermatologistConsultationPrice());
+		newPharmacy.setPharmacistConsultationPrice(pharmacy.getPharmacistConsultationPrice());
+		newPharmacy.setDescription(pharmacy.getDescription());
 
-        Pharmacy addedPharmacy = pharmacyRepository.save(newPharmacy);
-        return addedPharmacy;
-    }
+		Pharmacy addedPharmacy = pharmacyRepository.save(newPharmacy);
+		return addedPharmacy;
+	}
 
-    private PharmacyAdministrator addNewPharmacyAdministrator(UserRegisterDTO userRequest, Pharmacy addedPharmacy) {
-        PharmacyAdministrator pharmacyAdministrator = new PharmacyAdministrator();
-        pharmacyAdministrator.setAddress(userRequest.getAddress());
-        pharmacyAdministrator.setCity(userRequest.getCity());
-        pharmacyAdministrator.setCountry(userRequest.getCountry());
-        pharmacyAdministrator.setName(userRequest.getName());
-        pharmacyAdministrator.setSurname(userRequest.getSurname());
-        pharmacyAdministrator.setPhoneNumber(userRequest.getMobile());
-        pharmacyAdministrator.setPharmacy(addedPharmacy);
-        PharmacyAdministrator addedPharmacyAdministrator = pharmacyAdministratorRepository.save(pharmacyAdministrator);
-        return addedPharmacyAdministrator;
-    }
+	private PharmacyAdministrator addNewPharmacyAdministrator(UserRegisterDTO userRequest, Pharmacy addedPharmacy) {
+		PharmacyAdministrator pharmacyAdministrator = new PharmacyAdministrator();
+		pharmacyAdministrator.setAddress(userRequest.getAddress());
+		pharmacyAdministrator.setCity(userRequest.getCity());
+		pharmacyAdministrator.setCountry(userRequest.getCountry());
+		pharmacyAdministrator.setName(userRequest.getName());
+		pharmacyAdministrator.setSurname(userRequest.getSurname());
+		pharmacyAdministrator.setPhoneNumber(userRequest.getMobile());
+		pharmacyAdministrator.setPharmacy(addedPharmacy);
+		PharmacyAdministrator addedPharmacyAdministrator = pharmacyAdministratorRepository.save(pharmacyAdministrator);
+		return addedPharmacyAdministrator;
+	}
 
-    private UserAccount addNewPharmacyAdministratorAccount(UserRegisterDTO userRequest, PharmacyAdministrator addedAdministrator) {
-        UserAccount newUserAccount = new UserAccount();
-        newUserAccount.setEmail(userRequest.getEmail());
-        newUserAccount.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-        newUserAccount.setActive(false);
-        List<Authority> auth = authService.findByName("ROLE_PHARMACY_ADMIN");
-        newUserAccount.setAuthorities(auth);
-        newUserAccount.setPerson(addedAdministrator);
+	private UserAccount addNewPharmacyAdministratorAccount(UserRegisterDTO userRequest,
+			PharmacyAdministrator addedAdministrator) {
+		UserAccount newUserAccount = new UserAccount();
+		newUserAccount.setEmail(userRequest.getEmail());
+		newUserAccount.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+		newUserAccount.setActive(true);
+		newUserAccount.setNeedsPasswordChange(true);
+		newUserAccount.setPharmacyId(addedAdministrator.getPharmacy().getId());
+		List<Authority> auth = authService.findByName("ROLE_PHARMACY_ADMIN");
+		newUserAccount.setAuthorities(auth);
+		newUserAccount.setPerson(addedAdministrator);
 
-        UserAccount addedAccount = userRepository.save(newUserAccount);
-        return addedAccount;
-    }
-
+		UserAccount addedAccount = userRepository.save(newUserAccount);
+		return addedAccount;
+	}
 
 }
