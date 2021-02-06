@@ -7,6 +7,7 @@ import com.pharmacy.cpis.userservice.service.IPatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,7 @@ public class PatientController {
     private ILoyaltyProgramService loyaltyProgramService;
 
     @GetMapping("/profile")
+    @PreAuthorize("hasRole('PATIENT')")
     public  ResponseEntity<PatientProfileDTO> getPatient(@RequestBody PatientEmailDTO patientEmail) {
         Patient patient = patientService.findByEmail(patientEmail.getEmail());
         PatientProfileDTO patientProfileDTO=new PatientProfileDTO(patient,patientEmail,loyaltyProgramService);
@@ -30,4 +32,6 @@ public class PatientController {
         return new ResponseEntity<>(patientProfileDTO, HttpStatus.OK);
 
     }
+
+
 }
