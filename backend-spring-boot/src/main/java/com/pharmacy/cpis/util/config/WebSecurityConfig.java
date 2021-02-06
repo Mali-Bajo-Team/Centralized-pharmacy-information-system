@@ -71,6 +71,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/api/pharmacies/all").permitAll()
+                .antMatchers("/api/drugs").permitAll() // only this method from api drugs, because we need drugs preview to guest
+
 
 
 
