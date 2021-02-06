@@ -6,6 +6,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class DateConversionsAndComparisons {
+
+    //number ranges from 1 (Sunday) to 7 (Saturday).
     public static int getDayNumberOld(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -22,6 +24,7 @@ public class DateConversionsAndComparisons {
         return (t1 - t2);
     }
 
+    //Convert 2021-02-12 13:55:00 to Util
     public static Date getUtilDate(String stringTime) {
         Date convertedUtilDate = null;
         try {
@@ -31,6 +34,7 @@ public class DateConversionsAndComparisons {
         }
         return convertedUtilDate;
     }
+
     //d1>d2 => >0
     //d1<d2 => <0
     //d1==d2 => =0

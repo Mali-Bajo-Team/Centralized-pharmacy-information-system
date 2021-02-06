@@ -53,7 +53,6 @@ public class WorkingTimesService implements IWorkingTimesService {
     public Boolean isConsultationTimeFitsIntoConsultantWorkingTime(Long consultantID, Date examinationStartDate, Date examinationEndDate) {
         WorkingTimes consultantWorkingTime = consultantWorkingTime(consultantID);
 
-        //number ranges from 1 (Sunday) to 7 (Saturday).
         Integer numberOfWeekDay = DateConversionsAndComparisons.getDayNumberOld(examinationStartDate);
         if(numberOfWeekDay == 1){
             return checkDay(examinationStartDate, examinationEndDate, consultantWorkingTime, consultantWorkingTime.getSunday());

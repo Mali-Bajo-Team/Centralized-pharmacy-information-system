@@ -89,19 +89,17 @@ public class ConsultationController {
 	@PreAuthorize("hasRole('PHARMACIST')")
 	public ResponseEntity<ScheduleExaminationDTO> scheduleConsultation(@RequestBody ScheduleExaminationDTO scheduleExaminationDTO) {
 
-		//Create Consultation
-
-		// Convert date format to Data.Util
 		Date examinationStartDate = DateConversionsAndComparisons.getUtilDate(scheduleExaminationDTO.getStartDate());
 		Date examinationEndDate = DateConversionsAndComparisons.getUtilDate(scheduleExaminationDTO.getEndDate());
 
 		UserAccount loggedPharmacist = userService.findByEmail(scheduleExaminationDTO.getConsultantEmail());
+		scheduleExaminationDTO.setConsultantId(loggedPharmacist.getId());
+
 		Boolean isConsultationTimeFitsIntoConsultantWorkingTime = workingTimesService.isConsultationTimeFitsIntoConsultantWorkingTime(loggedPharmacist.getId(), examinationStartDate, examinationEndDate);
 
 		Boolean isPhatientHaveConsultation = consultationService.isPhatientHaveConsultation(scheduleExaminationDTO.getPatientId(), examinationStartDate, examinationEndDate);
 
 		if(isConsultationTimeFitsIntoConsultantWorkingTime && !isPhatientHaveConsultation){
-			scheduleExaminationDTO.setConsultantId(loggedPharmacist.getId());
 			consultationService.scheduleConsultation(scheduleExaminationDTO);
 			return new ResponseEntity<ScheduleExaminationDTO>(scheduleExaminationDTO, HttpStatus.OK);
 		}
