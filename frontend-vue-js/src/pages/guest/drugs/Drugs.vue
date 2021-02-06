@@ -50,9 +50,9 @@
 
               <v-spacer></v-spacer>
 
-              <v-btn icon @click="show = !show">
+              <v-btn icon @click="drug.show = !drug.show">
                 <v-icon>{{
-                  show ? "mdi-chevron-up" : "mdi-chevron-down"
+                  drug.show ? "mdi-chevron-up" : "mdi-chevron-down"
                 }}</v-icon>
               </v-btn>
             </v-card-actions>
@@ -70,8 +70,8 @@
             >
             </v-rating>
             <!-- End of mark of the drug -->
-                        <v-expand-transition>
-              <div v-show="show">
+            <v-expand-transition>
+              <div v-show="drug.show">
                 <v-divider></v-divider>
 
                 <v-card-text>
@@ -107,6 +107,20 @@ export default {
       )
       .then((resp) => {
         this.drugs = resp.data;
+        this.drugs = [];
+        for(let drug of resp.data){
+            let tempDrug = {
+                name: drug.name,
+                alternateDrugs: drug.alternateDrugs,
+                code: drug.code,
+                loyaltyPoints: drug.loyaltyPoints,
+                mark: drug.mark,
+                typeOfDrug: drug.typeOfDrug,
+                show: false
+            };
+            this.drugs.push(tempDrug);
+        }
+
       });
   },
   methods: {
