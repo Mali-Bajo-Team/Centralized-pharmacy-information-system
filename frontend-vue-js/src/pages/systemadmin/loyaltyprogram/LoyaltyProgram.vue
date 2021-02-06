@@ -136,9 +136,28 @@
                         <br />
                         <v-form class="ma-5">
                           <v-text-field
+                            v-model="newUserCategory.name"
+                            label="Category name"
+                          >
+                          </v-text-field>
+                          <v-text-field
                             type="number"
-                            v-model="changeLoyaltyProgram.pointsPerConsultation"
-                            label="Points per consultation"
+                            v-model="newUserCategory.minimumPoints"
+                            label="Minimum points"
+                          >
+                          </v-text-field>
+
+                          <v-text-field
+                            type="number"
+                            v-model="newUserCategory.reservationDiscount"
+                            label="Minimum points"
+                          >
+                          </v-text-field>
+
+                          <v-text-field
+                            type="number"
+                            v-model="newUserCategory.reservationDiscount"
+                            label="Minimum points"
                           >
                           </v-text-field>
                         </v-form>
@@ -221,6 +240,12 @@ export default {
       activeUntil: "",
       pointsPerConsultation: 0,
     },
+    newUserCategory: {
+      name: "",
+      minimumPoints: 0,
+      reservationDiscount: 0.0,
+      consultationDiscount: 0.0,
+    },
     loyaltyProgram: {},
     dialogForEditingLoyaltyProgram: false,
     dialogForAddingCategory: false,
@@ -265,6 +290,7 @@ export default {
         });
     },
     confirmAddingNewUserCategory() {
+      if(this.newUserCategory.name == "" || this.newUserCategory.minimumPoints == 0 || this.newUserCategory.reservationDiscount == 0 || this.newUserCategory.consultationDiscount == 0) return;
       this.dialogForAddingCategory = false;
       // TODO: Make ajax call here
       alert("bam");
