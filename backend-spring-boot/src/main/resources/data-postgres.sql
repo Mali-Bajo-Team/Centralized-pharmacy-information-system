@@ -115,3 +115,13 @@ insert into drug_rating(rating,drug_code,patient_id) values (5,'lat0x',1);
 insert into drug_rating(rating,drug_code,patient_id) values (4,'xb0x',1);
 insert into drug_rating(rating,drug_code,patient_id) values (3,'lat0x',2);
 insert into drug_rating(rating,drug_code,patient_id) values (2,'xb0x',2);
+
+--INSERT DRUG SPECIFICATION
+insert into drug_specification(additional_notes, contraindications, manufacturer, prescription_required, recommended_daily_dose, drug_code)
+values('Easy and lovely', 'None', 'Cacak Frikom', false, 3, 'lat0x');
+insert into drug_specification(additional_notes, contraindications, manufacturer, prescription_required, recommended_daily_dose, drug_code)
+values('Fast one', 'None', 'McDonalds', false, 2, 'xb0x');
+insert into drug_specification(additional_notes, contraindications, manufacturer, prescription_required, recommended_daily_dose, drug_code)
+values('Very fast one', 'None', 'Liman 3', false, 1, '0x2x');
+insert into drug_specification(additional_notes, contraindications, manufacturer, prescription_required, recommended_daily_dose, drug_code)
+values('Slow one', 'None', 'Zenica KP Dom', false, 5, '3b0a');
