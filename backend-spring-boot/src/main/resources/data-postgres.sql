@@ -62,10 +62,10 @@ insert into user_category (loyalty_program_id, name, minimum_points, reservation
 
 
 -- INSERT PHARMACIES
-insert into pharmacy (dermatologist_consultation_price,pharmacist_consultation_price,latitude,longitude,name,city,country,street, house_number)
-values (20, 20, 45.267136, 45.267136,'Pharmacy Jankovic','Novi Sad','Serbia','Branka Jovica',16); -- id 1
-insert into pharmacy (dermatologist_consultation_price,pharmacist_consultation_price,latitude,longitude,name,city,country,street, house_number)
-values (40, 50, 45.267136, 45.267136,'Pharmacy BENU Mercator','Novi Sad','Serbia','Bulevar Oslobodjenja',102); -- id 2
+insert into pharmacy (dermatologist_consultation_price,pharmacist_consultation_price,latitude,longitude,name,city,country,street, description)
+values (20, 20, 45.267136, 19.83694,'Pharmacy Jankovic','Novi Sad','Serbia','Branka Jovica 16', 'Najbolja apoteka u gradu!'); -- id 1
+insert into pharmacy (dermatologist_consultation_price,pharmacist_consultation_price,latitude,longitude,name,city,country,street, description)
+values (40, 50, 45.267136, 19.83694,'Pharmacy BENU Mercator','Novi Sad','Serbia','Bulevar Oslobodjenja 102', 'Najpovoljniji i najpouzdaniji!'); -- id 2
 
 -- ISERT PHARMACY ADMINS
 insert into person (discriminator, address, city, country, name, surname, phone_number, pharmacy_id) values ('PharmacyAdmin', 'Jovana Jovanovica 12', 'Novi Sad', 'Srbija', 'Janko', 'Janković', '0661352720', 1);

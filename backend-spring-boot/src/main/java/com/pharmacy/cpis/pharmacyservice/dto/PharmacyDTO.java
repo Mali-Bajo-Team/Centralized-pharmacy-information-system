@@ -42,8 +42,7 @@ public class PharmacyDTO {
 
     private String getPharmacyLocation(Pharmacy pharmacy) {
         Location pharmacyLocation = pharmacy.getLocation();
-        String location = pharmacyLocation.getStreet() + " "
-                + pharmacyLocation.getHouseNumber() + ", "
+        String location = pharmacyLocation.getStreet() + ", "
                 + pharmacyLocation.getCity();
         return location;
     }
