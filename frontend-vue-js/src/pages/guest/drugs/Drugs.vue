@@ -8,11 +8,11 @@
           <v-toolbar color="primary" dark dense flat>
             <v-toolbar-title class="body-2"> Search drugs </v-toolbar-title>
           </v-toolbar>
-
           <!--End of toolbar of the card-->
 
           <v-form class="pa-2">
             <v-text-field
+              v-model="searchDrugField"
               prepend-icon="mdi-magnify"
               label="Name of the drug"
             ></v-text-field>
@@ -26,7 +26,7 @@
         <v-card
           elevation="4"
           class="pa-4 ml-10 mb-10"
-          v-for="drug in drugs"
+          v-for="drug in filteredDrugs"
           :key="drug.code"
         >
           <!-- Row for title & edit, delete buttons -->
@@ -67,6 +67,7 @@
 export default {
   data: () => ({
     drugs: [],
+    searchDrugField: "",
   }),
   mounted() {
     this.axios
@@ -76,6 +77,20 @@ export default {
       .then((resp) => {
         this.drugs = resp.data;
       });
+  },
+  methods: {
+    isMatchedDrug(drug) {
+      if (!drug.name.toLowerCase().match(this.searchDrugField.toLowerCase())) return false;
+
+      return true;
+    },
+  },
+  computed: {
+    filteredDrugs: function () {
+      return this.drugs.filter((drug) => {
+        return this.isMatchedDrug(drug);
+      });
+    },
   },
 };
 </script>
