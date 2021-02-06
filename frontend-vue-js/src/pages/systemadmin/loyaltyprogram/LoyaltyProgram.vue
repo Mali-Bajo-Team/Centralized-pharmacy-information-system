@@ -208,7 +208,15 @@
             <v-btn class="mx-2" fab dark elevation="0" x-small color="primary">
               <v-icon dark> mdi-pencil-outline </v-icon>
             </v-btn>
-            <v-btn class="mx-2" fab dark elevation="0" x-small color="red">
+            <v-btn
+              class="mx-2"
+              fab
+              dark
+              elevation="0"
+              x-small
+              color="red"
+              @click="deleteCategory(category)"
+            >
               <v-icon> mdi-minus </v-icon>
             </v-btn>
           </v-row>
@@ -259,6 +267,32 @@ export default {
     dialogForAddingCategory: false,
   }),
   methods: {
+    deleteCategory(category) {
+      this.axios
+        .delete(
+          process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_CATEGORIES_ENDPOINT,
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+            data: {
+              name: category.name,
+              minimumPoints: category.minimumPoints,
+              reservationDiscount: category.reservationDiscount,
+              consultationDiscount: category.consultationDiscount,
+            },
+          }
+        )
+        .then(() => {
+          // TODO: Make some notification here
+          this.updateLoyaltyProgram();
+        })
+        .catch((error) => {
+          // TODO: Make some tost notifications here
+          alert("Error: " + error);
+        });
+    },
     setChangeLoyaltyProgram() {
       this.changeLoyaltyProgram.active = this.loyaltyProgram.active;
       // TODO: Find how to map date to something
@@ -297,6 +331,21 @@ export default {
           alert("Error: " + error);
         });
     },
+    updateLoyaltyProgram() {
+      // UPDATE WITH NEW DATA
+      this.axios
+        .get(
+          process.env.VUE_APP_BACKEND_URL + process.env.VUE_APP_LOYALTY_PROGRAM,
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then((resp) => {
+          this.loyaltyProgram = resp.data[0];
+        });
+    },
     confirmAddingNewUserCategory() {
       if (
         this.newUserCategory.name == "" ||
@@ -325,20 +374,7 @@ export default {
         .then(() => {
           // TODO: Make some notification here
           // alert("Successfuly");
-          // UPDATE WITH NEW DATA
-          this.axios
-            .get(
-              process.env.VUE_APP_BACKEND_URL +
-                process.env.VUE_APP_LOYALTY_PROGRAM,
-              {
-                headers: {
-                  Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
-                },
-              }
-            )
-            .then((resp) => {
-              this.loyaltyProgram = resp.data[0];
-            });
+          this.updateLoyaltyProgram();
         })
         .catch((error) => {
           // TODO: Make some tost notifications here
