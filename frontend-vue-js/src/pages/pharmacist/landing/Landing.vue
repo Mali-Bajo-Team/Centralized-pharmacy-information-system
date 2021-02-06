@@ -226,15 +226,23 @@ export default {
     ],
   }),
   created() {
-    this.axios
-      .get("http://localhost:8081/api/users/patients", {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
-        },
-      })
-      .then((resp) => {
-        this.examinitedPatients = resp.data;
-      });
+ var token = parseJwt(localStorage.getItem("JWT-CPIS"));
+      var email = token.sub;
+
+      this.consultants = [];
+      this.axios
+        .post(
+          "http://localhost:8081/api/consultant/examinitedpatients",
+          { consultantEmail: email },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then((resp) => {
+          this.examinitedPatients = resp.data;
+        });
   },
   methods: {
     handleSelectItem(item) {

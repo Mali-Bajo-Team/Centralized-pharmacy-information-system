@@ -1,5 +1,7 @@
 package com.pharmacy.cpis.userservice.service.impl;
 
+import com.pharmacy.cpis.scheduleservice.model.consultations.Consultation;
+import com.pharmacy.cpis.userservice.dto.ExaminitedPatientDTO;
 import com.pharmacy.cpis.userservice.dto.UserRegisterDTO;
 import com.pharmacy.cpis.userservice.model.users.*;
 import com.pharmacy.cpis.userservice.repository.IConsultantRepository;
@@ -10,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ConsultantService implements IConsultantService {
@@ -43,6 +47,7 @@ public class ConsultantService implements IConsultantService {
     }
 
 
+
     private UserAccount addNewDermatologistAccount(UserRegisterDTO userRequest, Consultant addedConsultant) {
         UserAccount newUserAccount = new UserAccount();
         newUserAccount.setEmail(userRequest.getEmail());
@@ -69,4 +74,33 @@ public class ConsultantService implements IConsultantService {
         Consultant addedDermatologist = consultantRepository.save(newDermatologist);
         return addedDermatologist;
     }
+
+    @Override
+    //Treba pronaci sve korisnike koje je pregledao konsultant
+    public Set<ExaminitedPatientDTO> getExaminitedPatients(Long consultantID){
+        Consultant consultant = consultantRepository.getOne(consultantID);
+
+       Set<Consultation> allConsultations = consultant.getConsultations();
+       Set<Patient> exainitedPatients = new HashSet<>();
+       Set<ExaminitedPatientDTO> exeaminitedPatientDTOs = new HashSet<>();
+
+        for (Consultation c: allConsultations) {
+            ExaminitedPatientDTO exeaminitedPatientDTO = new ExaminitedPatientDTO();
+
+            exeaminitedPatientDTO.setName(c.getPatient().getName());
+            exeaminitedPatientDTO.setSurname(c.getPatient().getSurname());
+            exeaminitedPatientDTO.setExaminitedDate(c.getTime());
+
+            exainitedPatients.add(c.getPatient());
+            exeaminitedPatientDTOs.add(exeaminitedPatientDTO);
+        }
+
+        //Testiranje
+        for (Patient p: exainitedPatients) {
+            System.out.println(p.getName());
+        }
+
+        return exeaminitedPatientDTOs;
+    }
+
 }
