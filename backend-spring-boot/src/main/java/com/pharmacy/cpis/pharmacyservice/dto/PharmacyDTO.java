@@ -4,12 +4,18 @@ import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Location;
 import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
 import com.pharmacy.cpis.userservice.model.ratings.PharmacyRating;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.Set;
 
 public class PharmacyDTO {
 
+    @NotEmpty(message = "Name is required.")
     private String name;
+
+    @NotEmpty(message = "Location is required.")
     private String location;
+
+    @NotEmpty(message = "Rating is required.")
     private Double rating;
 
     public PharmacyDTO(){
