@@ -203,6 +203,14 @@
             <v-card-title>
               <h2>{{ category.name }} category</h2>
             </v-card-title>
+            <v-spacer></v-spacer>
+
+            <v-btn class="mx-2" fab dark elevation="0" x-small color="primary">
+              <v-icon dark> mdi-pencil-outline </v-icon>
+            </v-btn>
+            <v-btn class="mx-2" fab dark elevation="0" x-small color="red">
+              <v-icon> mdi-minus </v-icon>
+            </v-btn>
           </v-row>
           <!-- End of row for title -->
           <!-- Row with chips-categories -->
