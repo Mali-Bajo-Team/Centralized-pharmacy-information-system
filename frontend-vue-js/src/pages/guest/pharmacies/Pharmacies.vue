@@ -17,19 +17,12 @@
           <v-card-text>
             <v-row no-gutters>
               <v-col>
-                <v-text-field label="Name of pharmacy"></v-text-field>
+                <v-text-field label="Name of pharmacy" v-model="searchFieldForName"></v-text-field>
               </v-col>
             </v-row>
 
-            <v-text-field label="Place of pharmacy"></v-text-field>
+            <v-text-field label="Place of pharmacy" v-model="searchFieldForPlace"></v-text-field>
           </v-card-text>
-
-          <v-card-actions>
-            <v-btn color="primary">
-              <v-icon> mdi-magnify </v-icon>
-              Search
-            </v-btn>
-          </v-card-actions>
         </v-card>
         <!--End of search form-->
         <br /><br />
@@ -82,7 +75,7 @@
         <v-card
           elevation="4"
           class="pa-4 ml-10 mb-10"
-          v-for="pharmacy in pharmacies"
+          v-for="pharmacy in filteredPharmacies"
           :key="pharmacy.location"
         >
           <v-row>
@@ -124,6 +117,8 @@
 export default {
   data: () => ({
     pharmacies: [],
+    searchFieldForPlace:"",
+    searchFieldForName:""
   }),
   mounted() {
     this.axios
@@ -134,6 +129,28 @@ export default {
       .then((resp) => {
         this.pharmacies = resp.data;
       });
+      
   },
+  methods: {
+    isMatchedPharmacy(pharmacy){
+      //search by name of pharmacy
+      if (!pharmacy.name.toLowerCase().match(this.searchFieldForName.toLowerCase()))
+        return false;
+
+      //search by location of pharmacy
+      if(!pharmacy.location.toLowerCase().match(this.searchFieldForPlace.toLowerCase()))
+        return false;  
+
+      return true;
+    },
+    
+  },
+  computed:{
+    filteredPharmacies: function () {
+      return this.pharmacies.filter((pharmacy) => {
+        return this.isMatchedPharmacy(pharmacy);
+      });
+    },
+  }
 };
 </script>
