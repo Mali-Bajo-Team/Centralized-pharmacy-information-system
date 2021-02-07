@@ -193,6 +193,7 @@
                       <v-col>
                         <!-- Dialog for making reservation -->
                         <v-dialog
+                
                           v-model="pharmacy.showMakeReservation"
                           width="500"
                           :retain-focus="false"
@@ -201,6 +202,7 @@
                             <v-tooltip bottom>
                               <template #activator="{ on: tooltip }">
                                 <v-btn
+                                v-if="isPatient()"
                                   v-on="{ ...tooltip, ...dialog }"
                                   elevation="0"
                                   left
@@ -269,6 +271,9 @@
 </template>
 
 <script>
+
+import { getParsedToken } from "./../../../util/token"
+
 export default {
   data: () => ({
     allTypeOfDrugs: [],
@@ -321,6 +326,10 @@ export default {
       });
   },
   methods: {
+    isPatient(){
+      if(getParsedToken().role == "PATIENT") return true;
+      return false;
+    },
     makeReservation(pharmacy) {
       alert(
         "Simulation of reservation, there is go some ajax call \n" +
