@@ -45,7 +45,7 @@ const routes = [
         path: '/',
         meta: {
             guest: true
-        }, 
+        },
         children: [
             {
                 component: GuestLanding,
@@ -63,14 +63,14 @@ const routes = [
                 path: 'register'
             },
             {
-                component:Drugs,
-                name:'drugs',
-                path:'drugs'
+                component: Drugs,
+                name: 'drugs',
+                path: 'drugs'
             },
             {
-                component:Pharmacies,
-                name:'pharmacies',
-                path:'pharmacies'
+                component: Pharmacies,
+                name: 'pharmacies',
+                path: 'pharmacies'
             }
         ]
     },
@@ -80,7 +80,7 @@ const routes = [
         meta: {
             requiresAuth: true,
             role: 'PATIENT'
-        }, 
+        },
         children: [
             {
                 component: PatientLanding,
@@ -90,8 +90,13 @@ const routes = [
             {
                 component: PatientProfile,
                 name: 'profile',
-                path:'profile'
-            }
+                path: 'profile'
+            },
+            {
+                component: Drugs,
+                name: 'patientdrugs',
+                path: 'patientdrugs'
+            },
         ]
     },
     {
@@ -100,7 +105,7 @@ const routes = [
         meta: {
             requiresAuth: true,
             role: 'PHARMACIST'
-        }, 
+        },
         children: [
             {
                 component: PharmacistLanding,
@@ -116,6 +121,11 @@ const routes = [
                 component: PharmacistPatientsearch,
                 name: 'search',
                 path: 'search'
+            },
+            {
+                component: Drugs,
+                name: 'pharmacistdrugs',
+                path: 'pharmacistdrugs'
             }
         ]
     },
@@ -125,12 +135,17 @@ const routes = [
         meta: {
             requiresAuth: true,
             role: 'DERMATOLOGIST'
-        }, 
+        },
         children: [
             {
                 component: DermatologistLanding,
                 name: 'dermatologist',
                 path: ''
+            },
+            {
+                component: Drugs,
+                name: 'dermatologistdrugs',
+                path: 'dermatologistdrugs'
             }
         ]
     },
@@ -140,7 +155,7 @@ const routes = [
         meta: {
             requiresAuth: true,
             role: 'ADMIN'
-        }, 
+        },
         children: [
             {
                 component: SystemAdminLanding,
@@ -151,6 +166,11 @@ const routes = [
                 component: SystemAdminLoyaltyProgram,
                 name: 'loyaltyprogram',
                 path: 'loyaltyprogram'
+            },
+            {
+                component: Drugs,
+                name: 'systemadmindrugs',
+                path: 'systemadmindrugs'
             }
         ]
     },
@@ -160,12 +180,17 @@ const routes = [
         meta: {
             requiresAuth: true,
             role: 'PHARMACY_ADMIN'
-        }, 
+        },
         children: [
             {
                 component: PharmacyAdminLanding,
                 name: 'pharmacyadmin',
                 path: ''
+            },
+            {
+                component: Drugs,
+                name: 'pharmacyadmindrugs',
+                path: 'pharmacyadmindrugs'
             }
         ]
     },
@@ -175,7 +200,7 @@ const routes = [
         meta: {
             requiresAuth: true,
             role: 'SUPPLIER'
-        }, 
+        },
         children: [
             {
                 component: SupplierLanding,
@@ -191,7 +216,12 @@ const routes = [
                 component: Offers,
                 name: 'offers',
                 path: 'offers'
-            }
+            },
+            {
+                component: Drugs,
+                name: 'supplierdrugs',
+                path: 'supplierdrugs'
+            },
         ]
     },
     {
@@ -228,7 +258,7 @@ function getHomePage(role) {
 router.beforeEach((to, from, next) => {
     let token = getToken();
 
-    if(to.matched.some(record => record.meta.requiresAuth)) {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
         if (token == null) {
             next({
                 path: '/login',
@@ -243,7 +273,7 @@ router.beforeEach((to, from, next) => {
                 else
                     next(getHomePage(parsedToken.role))
             }
-            
+
             if (to.matched.some(record => record.meta.role && record.meta.role == parsedToken.role)) {
                 if (!parsedToken.npc)
                     next()
@@ -253,15 +283,15 @@ router.beforeEach((to, from, next) => {
                 next(getHomePage(parsedToken.role))
             }
         }
-    } else if(to.matched.some(record => record.meta.guest)) {
-        if(token == null){
+    } else if (to.matched.some(record => record.meta.guest)) {
+        if (token == null) {
             next()
         }
-        else{            
+        else {
             let parsedToken = getParsedToken()
             next(getHomePage(parsedToken.role))
         }
-    }else {
+    } else {
         next()
     }
 })
