@@ -206,8 +206,17 @@ export default {
       });
   },
   methods: {
+    findDrugByCode(drugCode) {
+      for (let tempDrug of this.drugs) {
+        if (tempDrug.code == drugCode) {
+          return tempDrug;
+        }
+      }
+      return;
+    },
     getDrugPharmacies(drug) {
-      alert("name: " + drug.name);
+      //   alert("name: " + drug.name);
+      if (drug.availableDrugs != null) return;  // PREVENT TO MAKE ONLY ONE AJAX CALL TO GET PHARMACIES
       this.axios
         .post(
           process.env.VUE_APP_BACKEND_URL +
@@ -218,7 +227,7 @@ export default {
         )
         .then((response) => {
           this.availableDrugs = [];
-          this.availableDrugs = response.data;
+          drug.availableDrugs = response.data;
         })
         .catch((error) => {
           alert("Error: " + error);
