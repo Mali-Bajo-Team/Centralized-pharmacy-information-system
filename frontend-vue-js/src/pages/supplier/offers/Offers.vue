@@ -31,7 +31,7 @@
         <v-card
           elevation="4"
           class="pa-4 ml-10 mb-10"
-          v-for="offer in supplierOffers"
+          v-for="offer in filteredOffers"
           :key="offer.id"
         >
           <!-- Row, offer for pharmacy, status & price -->
@@ -100,8 +100,19 @@
                 <!-- End of toolbar of the card -->
                 <br />
                 <v-form class="ma-5">
-                  <v-text-field type="number" label="Price" v-model="offerDto.price"> </v-text-field>
-                  <v-text-field placeholder="dd-mm-yyyy" type="date" label="Shipment date" v-model="offerDto.shipmentDate"> </v-text-field>
+                  <v-text-field
+                    type="number"
+                    label="Price"
+                    v-model="offerDto.price"
+                  >
+                  </v-text-field>
+                  <v-text-field
+                    placeholder="dd-mm-yyyy"
+                    type="date"
+                    label="Shipment date"
+                    v-model="offerDto.shipmentDate"
+                  >
+                  </v-text-field>
                 </v-form>
                 <v-card-actions>
                   <v-spacer></v-spacer>
@@ -143,21 +154,30 @@ export default {
     supplierOffers: [],
     selectedOfferStatus: "",
     allOfferStatus: ["Without", "PENDING", "ACCEPTED", "REJECTED"],
-    offerDto:{
+    offerDto: {
       price: "",
       shipmentDate: "",
-    }
+    },
   }),
   methods: {
-    setOfferDto(offer){
+
+    setOfferDto(offer) {
       this.offerDto.price = offer.price;
-      this.offerDto.shipmentDate =getStringDateFromMilliseconds(offer.shipmentDate);
+      this.offerDto.shipmentDate = getStringDateFromMilliseconds(
+        offer.shipmentDate
+      );
     },
     confirmOfferEdit() {
       alert("Edit confirm simulation");
     },
     convertMsToString(ms) {
       return getStringDateFromMilliseconds(ms);
+    },
+    isMatchedOffer(offer){
+      console.log(offer.shipmentDate);
+
+      if(this.selectedOfferStatus.toLowerCase() != "without" && !offer.status.toLowerCase().match(this.selectedOfferStatus.toLowerCase())) return false;
+      return true;
     },
   },
   mounted() {
@@ -193,6 +213,13 @@ export default {
           counter = counter + 1;
         }
       });
+  },
+  computed: {
+    filteredOffers: function(){
+      return this.supplierOffers.filter((offer) =>{
+        return this.isMatchedOffer(offer);
+      });
+    },
   },
 };
 </script>
