@@ -41,7 +41,11 @@
               {{ drug.typeOfDrug }}
             </v-chip>
             <!-- Drug specification -->
-            <v-dialog v-model="drug.showSpecification" width="500" :retain-focus="false">
+            <v-dialog
+              v-model="drug.showSpecification"
+              width="500"
+              :retain-focus="false"
+            >
               <template #activator="{ on: dialog }">
                 <v-tooltip bottom>
                   <template #activator="{ on: tooltip }">
@@ -97,7 +101,12 @@
                 </v-form>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="primary" @click="drug.showSpecification = !drug.showSpecification"> Close </v-btn>
+                  <v-btn
+                    color="primary"
+                    @click="drug.showSpecification = !drug.showSpecification"
+                  >
+                    Close
+                  </v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -110,7 +119,10 @@
             <v-card-actions>
               <v-btn color="orange lighten-2" text> Pharmacies </v-btn>
               <v-spacer></v-spacer>
-              <v-btn icon @click="drug.show = !drug.show">
+              <v-btn
+                icon
+                @click="(drug.show = !drug.show), getDrugPharmacies(drug)"
+              >
                 <v-icon>{{
                   drug.show ? "mdi-chevron-up" : "mdi-chevron-down"
                 }}</v-icon>
@@ -179,7 +191,7 @@ export default {
             mark: drug.mark,
             typeOfDrug: drug.typeOfDrug,
             show: false,
-            showSpecification:false,
+            showSpecification: false,
             drugSpecificationDTO: {
               manufacturer: drug.drugSpecificationDTO.manufacturer,
               contraindications: drug.drugSpecificationDTO.contraindications,
@@ -193,6 +205,9 @@ export default {
       });
   },
   methods: {
+    getDrugPharmacies(drug) {
+      alert("name: " + drug.name);
+    },
     isMatchedDrug(drug) {
       if (!drug.name.toLowerCase().match(this.searchDrugField.toLowerCase()))
         return false;

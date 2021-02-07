@@ -4,6 +4,7 @@ import com.pharmacy.cpis.drugservice.dto.DrugDTO;
 import com.pharmacy.cpis.drugservice.dto.DrugRegisterDTO;
 import com.pharmacy.cpis.drugservice.dto.DrugSpecificationDTO;
 import com.pharmacy.cpis.drugservice.model.drug.*;
+import com.pharmacy.cpis.drugservice.model.drugsales.AvailableDrug;
 import com.pharmacy.cpis.drugservice.repository.*;
 import com.pharmacy.cpis.drugservice.service.IDrugService;
 import com.pharmacy.cpis.userservice.model.ratings.DrugRating;
@@ -35,6 +36,9 @@ public class DrugService implements IDrugService {
 
     @Autowired
     private IDrugRatingRepository drugRatingRepository;
+
+    @Autowired
+    private IAvailableDrugRepository availableDrugRepository;
 
     @Override
     public Drug registerDrug(DrugRegisterDTO drug) {
@@ -69,6 +73,11 @@ public class DrugService implements IDrugService {
     @Override
     public DrugSpecification getDrugSpecificationByDrugCode(String drugCode) {
         return drugSpecificationRepository.findByDrugCode(drugCode);
+    }
+
+    @Override
+    public List<AvailableDrug> findAvailableDrugsByCode(String drugCode) {
+        return availableDrugRepository.findByDrugCode(drugCode);
     }
 
     private DrugSpecification addNewDrugSpecification(DrugSpecificationDTO specification, Drug addedDrug) {
