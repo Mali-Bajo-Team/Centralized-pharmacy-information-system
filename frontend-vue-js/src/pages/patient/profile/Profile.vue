@@ -103,6 +103,7 @@
                 ></v-text-field>
                 <v-text-field
                   label="Add drugs which cause you allergic reactions"
+                  v-model="patientFormDTO.allergies"
                 ></v-text-field>
               </v-form>
             </v-card-text>
@@ -133,6 +134,7 @@ export default {
       city: "",
       country: "",
       phoneNumber: "",
+      allergies:""
     },
     rules: {
       required: (value) => !!value || "Required.",
@@ -162,6 +164,7 @@ export default {
         this.patientFormDTO.city = this.patient.city;
         this.patientFormDTO.country = this.patient.country;
         this.patientFormDTO.phoneNumber = this.patient.phoneNumber;
+       
       })
       .catch((error) => {
         alert("Error: " + error);
