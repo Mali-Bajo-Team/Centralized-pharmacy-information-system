@@ -34,21 +34,100 @@
           v-for="offer in supplierOffers"
           :key="offer.id"
         >
+          <!-- Row, offer for pharmacy, status & price -->
           <v-row align="center">
             <v-card-title>
-              <h5>
-                Shipment data: {{ convertMsToString(offer.shipmentDate) }}
-              </h5>
-              <h5>
-                
-              </h5>
-              
+              <h4>Offer for {{ offer.order.pharmacy.name }}</h4>
             </v-card-title>
             <v-spacer></v-spacer>
-            <v-chip class="mr-2" color="teal" text-color="white" pill>
-              {{ offer.price }} $
+            <v-chip
+              class="mr-2"
+              color="light-blue lighten-2"
+              text-color="white"
+              pill
+            >
+              {{ offer.status.toLowerCase() }}
+            </v-chip>
+            <v-chip
+              class="mr-2"
+              color="light-blue lighten-2"
+              text-color="white"
+              pill
+            >
+              {{ offer.price }} €
             </v-chip>
           </v-row>
+          <!-- End of the row, offer for pharmacy, status & price -->
+          <!-- Row, Shipment date & edit offer -->
+          <v-row align="center">
+            <v-card-subtitle>
+              My shipment date: {{ convertMsToString(offer.shipmentDate) }}
+            </v-card-subtitle>
+            <v-spacer></v-spacer>
+            <!-- Edit a offer -->
+            <v-dialog
+              v-model="offer.showEditDialog"
+              width="500"
+              :retain-focus="false"
+            >
+              <template #activator="{ on: dialog }">
+                <v-tooltip bottom>
+                  <template #activator="{ on: tooltip }">
+                    <v-btn
+                      v-on="{ ...tooltip, ...dialog }"
+                      elevation="0"
+                      left
+                      class="mr-3"
+                      fab
+                      dark
+                      x-small
+                      color="primary"
+                      @click="setOfferDto(offer)"
+                    >
+                      <v-icon dark> mdi-pencil </v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Edit offer</span>
+                </v-tooltip>
+              </template>
+              <v-card>
+                <!--Toolbar of the card-->
+                <v-toolbar color="primary" dark dense flat>
+                  <v-toolbar-title class="body-2">
+                    <h3>Edit offer for {{ offer.order.pharmacy.name }}</h3>
+                  </v-toolbar-title>
+                </v-toolbar>
+                <!-- End of toolbar of the card -->
+                <br />
+                <v-form class="ma-5">
+                  <v-text-field type="number" label="Price" v-model="offerDto.price"> </v-text-field>
+                  <v-text-field placeholder="dd-mm-yyyy" type="date" label="Shipment date" v-model="offerDto.shipmentDate"> </v-text-field>
+                </v-form>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    color="success"
+                    dark
+                    depressed
+                    @click="confirmOfferEdit()"
+                  >
+                    <v-icon dark left> mdi-checkbox-marked-circle </v-icon>
+                    Confirm
+                  </v-btn>
+                  <v-btn
+                    color="blue"
+                    dark
+                    depressed
+                    @click="offer.showEditDialog = !offer.showEditDialog"
+                    ><v-icon dark left> mdi-minus-circle </v-icon>
+                    Close
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+            <!-- End of the edit offer -->
+          </v-row>
+          <!-- End of the row, Shipment date & edit offer -->
         </v-card>
       </v-col>
       <!-- End of the right colum for offers preview-->
@@ -57,16 +136,27 @@
 </template>
 
 <script>
-import { getStringDateFromMilliseconds } from "./../../../util/dateHandler"
+import { getStringDateFromMilliseconds } from "./../../../util/dateHandler";
 
 export default {
   data: () => ({
     supplierOffers: [],
     selectedOfferStatus: "",
-    allOfferStatus: ["PENDING", "ACCEPTED", "REJECTED"],
+    allOfferStatus: ["Without", "PENDING", "ACCEPTED", "REJECTED"],
+    offerDto:{
+      price: "",
+      shipmentDate: "",
+    }
   }),
   methods: {
-    convertMsToString(ms){
+    setOfferDto(offer){
+      this.offerDto.price = offer.price;
+      this.offerDto.shipmentDate =getStringDateFromMilliseconds(offer.shipmentDate);
+    },
+    confirmOfferEdit() {
+      alert("Edit confirm simulation");
+    },
+    convertMsToString(ms) {
       return getStringDateFromMilliseconds(ms);
     },
   },
@@ -87,16 +177,17 @@ export default {
         for (let offer of resp.data) {
           let tempObj = {
             id: counter,
+            showEditDialog: false,
             price: offer.price,
             shipmentDate: offer.shipmentDate,
             status: offer.status,
-            order:{
+            order: {
               timestamp: offer.order.timestamp,
               deadline: offer.order.deadline,
               status: offer.order.status,
               pharmacy: offer.order.pharmacy,
-              orderedDrugs: offer.order.orderedDrugs
-            }
+              orderedDrugs: offer.order.orderedDrugs,
+            },
           };
           this.supplierOffers.push(tempObj);
           counter = counter + 1;
