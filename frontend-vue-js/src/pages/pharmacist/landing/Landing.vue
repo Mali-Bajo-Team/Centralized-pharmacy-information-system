@@ -84,7 +84,7 @@
               v-model="picker"
               v-bind:value="valueDate"
               v-on:input="onInputDate"
-              color="green lighten-1"
+              color="primary lighten-1"
             ></v-date-picker>
             <v-alert
               :value="alertDate"
@@ -107,6 +107,7 @@
               v-bind:value="valueStartTime"
               v-on:input="onInputStartTime"
               format="ampm"
+               color="primary lighten-1"
             ></v-time-picker>
             <v-alert
               :value="alertStartTime"
@@ -128,6 +129,7 @@
               v-bind:value="valueEndTime"
               v-on:input="onInputEndTime"
               format="ampm"
+               color="primary lighten-1"
             ></v-time-picker>
 
             <v-alert
