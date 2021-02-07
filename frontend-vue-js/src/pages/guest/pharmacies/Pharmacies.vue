@@ -40,30 +40,18 @@
           <v-card-title> Filter pharmacies by grade [1-5] </v-card-title>
           <v-card-text>
             <v-row no-gutters>
-              <v-col>
-                <v-text-field label="From grade"></v-text-field>
-              </v-col>
+              <v-range-slider
+              :tick-labels="marks"
+              class="ml-4 mr-4"
+              v-model="markRange"
+              step="25"
+            ></v-range-slider>
             </v-row>
 
-            <v-text-field label="To grade"></v-text-field>
+            
           </v-card-text>
-          <v-divider> </v-divider>
-          <v-card-title> Filter pharmacies by distance [m] </v-card-title>
-          <v-card-text>
-            <v-row no-gutters>
-              <v-col>
-                <v-text-field label="From distance"></v-text-field>
-              </v-col>
-            </v-row>
-
-            <v-text-field label="To distance"></v-text-field>
-          </v-card-text>
-          <v-card-actions>
-            <v-btn color="primary">
-              <v-icon> mdi-filter </v-icon>
-              Filter
-            </v-btn>
-          </v-card-actions>
+          
+          
         </v-card>
         <!--End of filter form-->
       </v-col>
@@ -118,7 +106,9 @@ export default {
   data: () => ({
     pharmacies: [],
     searchFieldForPlace:"",
-    searchFieldForName:""
+    searchFieldForName:"",
+    markRange: [0, 100],
+    marks: ["1", "2", "3", "4", "5"],
   }),
   mounted() {
     this.axios
@@ -140,6 +130,10 @@ export default {
       //search by location of pharmacy
       if(!pharmacy.location.toLowerCase().match(this.searchFieldForPlace.toLowerCase()))
         return false;  
+
+      let minMark = this.markRange[0] / 25 + 1;
+      let maxMark = this.markRange[1] / 25 + 1;
+      if (pharmacy.rating < minMark || pharmacy.rating > maxMark) return false;
 
       return true;
     },
