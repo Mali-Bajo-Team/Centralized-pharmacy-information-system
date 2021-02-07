@@ -119,12 +119,9 @@
             <v-card-actions>
               <v-btn color="orange lighten-2" text> Pharmacies </v-btn>
               <v-spacer></v-spacer>
-              <v-btn
-                icon
-                @click="(drug.show = !drug.show), getDrugPharmacies(drug)"
-              >
+              <v-btn icon @click="getDrugPharmacies(drug)">
                 <v-icon>{{
-                  drug.show ? "mdi-chevron-up" : "mdi-chevron-down"
+                  drug.showPharmacies ? "mdi-chevron-up" : "mdi-chevron-down"
                 }}</v-icon>
               </v-btn>
             </v-card-actions>
@@ -144,17 +141,81 @@
             <!-- End of mark of the drug -->
             <!-- Pharmacies where is available this drug -->
             <v-expand-transition>
-              <div v-show="drug.show">
+              <div v-show="drug.showPharmacies">
                 <v-divider></v-divider>
+                <br />
+                <v-card
+                  elevation="4"
+                  class="pl-5 mr-4 mb-5 ml-16"
+                  v-for="pharmacy in drug.availableDrugs"
+                  :key="pharmacy.id"
+                >
+                  <v-card-text>
+                    <v-row align="center">
+                      <v-col> {{ pharmacy.pharmacyName }} </v-col>
 
-                <v-card-text>
-                  I'm a thing. But, like most politicians, he promised more than
-                  he could deliver. You won't have time for sleeping, soldier,
-                  not with all the bed making you'll be doing. Then we'll go
-                  with that data file! Hey, you add a one and two zeros to that
-                  or we walk! You're going to do his laundry? I've got to find a
-                  way to escape.
-                </v-card-text>
+                      <v-col> price: {{ pharmacy.priceOfDrug }} € </v-col>
+                      <v-col>
+                        <!-- Dialog for making reservation -->
+                        <v-dialog
+                          v-model="pharmacy.showMakeReservation"
+                          width="500"
+                          :retain-focus="false"
+                        >
+                          <template #activator="{ on: dialog }">
+                            <v-tooltip bottom>
+                              <template #activator="{ on: tooltip }">
+                                <v-btn
+                                  v-on="{ ...tooltip, ...dialog }"
+                                  elevation="0"
+                                  left
+                                  class="mr-10"
+                                  fab
+                                  dark
+                                  x-small
+                                  color="light-green lighten-3"
+                                  ><v-icon dark> mdi-basket </v-icon>
+                                </v-btn>
+                              </template>
+                              <span>Make reservation</span>
+                            </v-tooltip>
+                          </template>
+                          <v-card>
+                            <!--Toolbar of the card-->
+                            <v-toolbar color="primary" dark dense flat>
+                              <v-toolbar-title class="body-2">
+                                <h3>Drug reservation</h3>
+                              </v-toolbar-title>
+                            </v-toolbar>
+                            <!-- End of toolbar of the card --> 
+                            <v-card-subtitle class="pl-5 pt-5">
+                                Make reservation for drug {{drug.name}} in pharmacy {{pharmacy.pharmacyName}}, where price per drug is {{pharmacy.priceOfDrug}} €
+                            </v-card-subtitle>
+
+                            <v-form class="ma-5">
+                              <v-text-field type="date" label="Deadline to pickup drug">
+                              </v-text-field>
+                              <v-text-field type="number" label="Amount">
+                              </v-text-field>
+                            </v-form>
+                            <v-card-actions>
+                              <v-spacer></v-spacer>
+                              <v-btn
+                                color="primary"
+                                @click="makeReservation(pharmacy)"
+                                ><v-icon dark left>
+                                  mdi-checkbox-marked-circle
+                                </v-icon>
+                                Confirm
+                              </v-btn>
+                            </v-card-actions>
+                          </v-card>
+                        </v-dialog>
+                        <!-- End of dialog for making reservation -->
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
               </div>
             </v-expand-transition>
             <!-- End of the pharmacies where is available this drug -->
@@ -172,8 +233,6 @@ export default {
   data: () => ({
     drugs: [],
     searchDrugField: "",
-    show: false,
-    availableDrugs: [],
   }),
   mounted() {
     this.axios
@@ -191,7 +250,7 @@ export default {
             loyaltyPoints: drug.loyaltyPoints,
             mark: drug.mark,
             typeOfDrug: drug.typeOfDrug,
-            show: false,
+            showPharmacies: false,
             showSpecification: false,
             drugSpecificationDTO: {
               manufacturer: drug.drugSpecificationDTO.manufacturer,
@@ -206,17 +265,15 @@ export default {
       });
   },
   methods: {
-    findDrugByCode(drugCode) {
-      for (let tempDrug of this.drugs) {
-        if (tempDrug.code == drugCode) {
-          return tempDrug;
-        }
-      }
-      return;
+    makeReservation(pharmacy) {
+      alert("Simulation of reservation, there is go some ajax call \n" + pharmacy.pharmacyName);
     },
     getDrugPharmacies(drug) {
       //   alert("name: " + drug.name);
-      if (drug.availableDrugs != null) return;  // PREVENT TO MAKE ONLY ONE AJAX CALL TO GET PHARMACIES
+      if (drug.availableDrugs != null) {
+        drug.showPharmacies = !drug.showPharmacies;
+        return; // PREVENT TO MAKE ONLY ONE AJAX CALL TO GET PHARMACIES
+      }
       this.axios
         .post(
           process.env.VUE_APP_BACKEND_URL +
@@ -226,11 +283,23 @@ export default {
           }
         )
         .then((response) => {
-          this.availableDrugs = [];
-          drug.availableDrugs = response.data;
+          drug.availableDrugs = [];
+          let counterOfAvailableDrugs = 0;
+          for (let availableDrugTemp of response.data) {
+            let tempObj = {
+              id: counterOfAvailableDrugs,
+              pharmacyName: availableDrugTemp.pharmacyName,
+              priceOfDrug: availableDrugTemp.priceOfDrug,
+              showMakeReservation: false,
+            };
+            drug.availableDrugs.push(tempObj);
+            counterOfAvailableDrugs = counterOfAvailableDrugs + 1;
+          }
+          drug.showPharmacies = !drug.showPharmacies;
         })
         .catch((error) => {
           alert("Error: " + error);
+          drug.showPharmacies = !drug.showPharmacies;
         });
     },
     isMatchedDrug(drug) {
