@@ -21,6 +21,10 @@ export default {
             {
                 title: "Home",
                 to: "/supplier"
+            },
+            {
+                title: "Offers",
+                to: "/supplier/offers"
             }
         ]
     })
