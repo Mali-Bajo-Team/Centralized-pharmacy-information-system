@@ -12,13 +12,13 @@ import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 public class SupplierOfferDTO {
-    @NotEmpty(message = "Shipment date is required.")
+
+    private Long id;
+
     private Date shipmentDate;
 
-    @NotEmpty(message = "Price is required.")
     private Double price;
 
-    @NotEmpty(message = "Status is required.")
     private OfferStatus status;
 
     private DrugOrderDTO order;
@@ -26,10 +26,19 @@ public class SupplierOfferDTO {
     public SupplierOfferDTO(){}
 
     public SupplierOfferDTO(Offer offer){
+        this.setId(offer.getId());
         this.setShipmentDate(offer.getShipmentDate());
         this.setPrice(offer.getPrice());
         this.setStatus(offer.getStatus());
         this.setOrder(new DrugOrderDTO(offer.getOrder()));
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public DrugOrderDTO getOrder() {

@@ -120,7 +120,7 @@
                     color="success"
                     dark
                     depressed
-                    @click="confirmOfferEdit()"
+                    @click="confirmOfferEdit(offer)"
                   >
                     <v-icon dark left> mdi-checkbox-marked-circle </v-icon>
                     Confirm
@@ -167,8 +167,8 @@ export default {
         offer.shipmentDate
       );
     },
-    confirmOfferEdit() {
-      alert("Edit confirm simulation");
+    confirmOfferEdit(offer) {
+      alert("Edit confirm simulation" + offer.id);
     },
     convertMsToString(ms) {
       return getStringDateFromMilliseconds(ms);
@@ -196,7 +196,7 @@ export default {
         let counter = 0;
         for (let offer of resp.data) {
           let tempObj = {
-            id: counter,
+            id: offer.id,
             showEditDialog: false,
             price: offer.price,
             shipmentDate: offer.shipmentDate,
