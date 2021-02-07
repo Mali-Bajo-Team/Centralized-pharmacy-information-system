@@ -1,10 +1,12 @@
 package com.pharmacy.cpis.drugservice.dto;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import com.pharmacy.cpis.drugservice.model.drug.DrugSpecification;
 import com.pharmacy.cpis.drugservice.model.drug.Ingredient;
 
 public class DrugSpecificationDTO {
@@ -16,14 +18,22 @@ public class DrugSpecificationDTO {
     private String contraindications;
 
 //    @NotEmpty(message = "Ingredients is required.")
-    private List<Ingredient> ingredients;
+    private Set<Ingredient> ingredients;
 
     @NotNull(message = "Recommended daily dose is required.")
     private Integer recommendedDailyDose;
 
     public DrugSpecificationDTO(){}
 
-    public DrugSpecificationDTO(@NotEmpty(message = "Manufacturer is required.") String manufacturer, @NotEmpty(message = "Contraindications is required.") String contraindications, @NotEmpty(message = "Ingredients is required.") List<Ingredient> ingredients, @NotEmpty(message = "Recommended daily dose is required.") Integer recommendedDailyDose) {
+    public DrugSpecificationDTO(DrugSpecification drugSpecification){
+        this.setManufacturer(drugSpecification.getManufacturer());
+        this.setContraindications(drugSpecification.getContraindications());
+        this.setRecommendedDailyDose(drugSpecification.getRecommendedDailyDose());
+        if(drugSpecification.getIngredients() != null)
+            this.setIngredients(drugSpecification.getIngredients());
+    }
+
+    public DrugSpecificationDTO(@NotEmpty(message = "Manufacturer is required.") String manufacturer, @NotEmpty(message = "Contraindications is required.") String contraindications, @NotEmpty(message = "Ingredients is required.") Set<Ingredient> ingredients, @NotEmpty(message = "Recommended daily dose is required.") Integer recommendedDailyDose) {
         this.manufacturer = manufacturer;
         this.contraindications = contraindications;
         this.ingredients = ingredients;
@@ -46,11 +56,11 @@ public class DrugSpecificationDTO {
         this.contraindications = contraindications;
     }
 
-    public List<Ingredient> getIngredients() {
+    public Set<Ingredient> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(List<Ingredient> ingredients) {
+    public void setIngredients(Set<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
 
