@@ -100,4 +100,13 @@ public class ConsultantService implements IConsultantService {
         return exeaminitedPatientDTOs;
     }
 
+    @Override
+    public Consultant findByEmail(String email) {
+        UserAccount userAccount = userRepository.findByEmail(email);
+
+        Consultant consultant = consultantRepository.getOne(userAccount.getId());
+
+        return consultant;
+    }
+
 }

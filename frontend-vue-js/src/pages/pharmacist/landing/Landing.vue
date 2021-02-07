@@ -5,7 +5,7 @@
         <v-row>
           <!-- SEARCH EXAMINITED USER -->
           <div class="mb-16">
-               <h1 class="ml-n primary--text">Examinited patients</h1>
+            <h1 class="ml-n primary--text">Examinited patients</h1>
             <v-card>
               <v-data-table
                 :headers="headers"
@@ -15,11 +15,11 @@
             </v-card>
           </div>
         </v-row>
-       
+        <v-divider></v-divider>
         <v-row>
-          <h1 class="ml-n primary--text">Schedule consultation</h1>
+          <h1 class="ml-n primary--text mt-4">Schedule consultation</h1>
           <!-- SEARCH USER -->
-          <div class="ml-4 mb-6 mt-15">
+          <div class="ml-4 mb-6 mt-16">
             <h4 class="ml-n primary--text">Choose user for consultation</h4>
             <v-autocomplete
               v-model="model"
@@ -89,7 +89,6 @@
             </v-alert>
           </div>
         </v-row>
-        <v-divider></v-divider>
         <v-row>
           <!-- CHOOSE DATE CALENDAR -->
           <div class="mr-10 mt-6">
@@ -121,7 +120,7 @@
               v-bind:value="valueStartTime"
               v-on:input="onInputStartTime"
               format="ampm"
-               color="primary lighten-1"
+              color="primary lighten-1"
             ></v-time-picker>
             <v-alert
               :value="alertStartTime"
@@ -143,7 +142,7 @@
               v-bind:value="valueEndTime"
               v-on:input="onInputEndTime"
               format="ampm"
-               color="primary lighten-1"
+              color="primary lighten-1"
             ></v-time-picker>
 
             <v-alert
@@ -187,6 +186,50 @@
             also it is not possible to schedule consultations in the past.
           </v-alert>
         </v-row>
+
+        <!-- SEND VACATION REQUEST -->
+        <v-row>
+          <div class="mt-5">
+            <v-divider></v-divider>
+            <h1 class="ml-n primary--text">Send vacation request</h1>
+            <h4 class="ml-n mt-6 primary--text">Pick vacation date range</h4>
+            <v-date-picker
+              v-model="vacationRequestDateRange"
+              range
+            ></v-date-picker>
+            <v-alert
+              :value="vacatonrequestAlert"
+              color="pink"
+              dark
+              border="top"
+              icon="mdi-account"
+              transition="scale-transition"
+            >
+              You must pick date range for your vacation request
+            </v-alert>
+             <v-alert
+              :value="vacatonrequestSuccess"
+              color="green"
+              dark
+              border="top"
+              icon="mdi-account"
+              transition="scale-transition"
+            >
+              Successfully sent
+            </v-alert>
+            <v-text-field
+              v-model="dateRangeText"
+              label="Vacation date range"
+              prepend-icon="mdi-calendar"
+              readonly
+            ></v-text-field>
+          </div>
+        </v-row>
+        <v-row>
+          <v-btn depressed @click="sendVacationRequest" color="primary">
+            Send
+          </v-btn>
+        </v-row>
       </v-col>
     </v-row>
   </v-container>
@@ -198,6 +241,8 @@ export default {
     picker: new Date().toISOString().substr(0, 10),
     alertUser: false,
     alertDate: false,
+    vacatonrequestAlert: false,
+    vacatonrequestSuccess: false,
     alertStartTime: false,
     alertEndTime: false,
     examinationStartTime: null,
@@ -214,7 +259,8 @@ export default {
     scheduleAlert: false,
     scheduleSucces: false,
     searchExaminitedUsers: "",
-    examinitedPatients:[],
+    examinitedPatients: [],
+    vacationRequestDateRange: [],
     headers: [
       {
         text: "Patient name",
@@ -224,31 +270,38 @@ export default {
       },
       { text: "Patient surname", value: "surname" },
       { text: "Examinited date", value: "examinitedDate" },
-
     ],
   }),
+  computed: {
+    dateRangeText() {
+      return this.vacationRequestDateRange.join(" ~ ");
+    },
+  },
   created() {
- var token = parseJwt(localStorage.getItem("JWT-CPIS"));
-      var email = token.sub;
+    var token = parseJwt(localStorage.getItem("JWT-CPIS"));
+    var email = token.sub;
 
-      this.consultants = [];
-      this.axios
-        .post(
-          "http://localhost:8081/api/consultant/examinitedpatients",
-          { consultantEmail: email },
-          {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
-            },
-          }
-        )
-        .then((resp) => {
-          this.examinitedPatients = resp.data;
-       
-            this.examinitedPatients.forEach(function(entry) {
-               entry.examinitedDate = new Date(entry.examinitedDate).toISOString().substring(0,10);
-            });
+    this.consultants = [];
+    this.axios
+      .post(
+         process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_CONSULTANT_EXAMPAT_ENDPOINT,
+        { consultantEmail: email },
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+          },
+        }
+      )
+      .then((resp) => {
+        this.examinitedPatients = resp.data;
+
+        this.examinitedPatients.forEach(function (entry) {
+          entry.examinitedDate = new Date(entry.examinitedDate)
+            .toISOString()
+            .substring(0, 10);
         });
+      });
   },
   methods: {
     handleSelectItem(item) {
@@ -294,8 +347,7 @@ export default {
       } else {
         this.axios
           .post(
-            process.env.VUE_APP_BACKEND_URL +
-              "api/consultations/scheduleconsultation",
+            process.env.VUE_APP_BACKEND_URL + process.env.VUE_APP_CONSULTATIONS_SCHEDULE,
             {
               consultantEmail: email,
               startDate:
@@ -322,6 +374,50 @@ export default {
           });
       }
     },
+    sendVacationRequest() {
+      var token = parseJwt(localStorage.getItem("JWT-CPIS"));
+      var email = token.sub;
+
+      if (
+        Date.parse(this.vacationRequestDateRange[1]) <
+        Date.parse(this.vacationRequestDateRange[0])
+      ) {
+        let temp = this.vacationRequestDateRange[1];
+        this.vacationRequestDateRange[1] = this.vacationRequestDateRange[0];
+        this.vacationRequestDateRange[0] = temp;
+      }
+
+      if (this.vacationRequestDateRange === null) {
+        this.vacatonrequestAlert = true;
+      } else {
+        this.axios
+          .post(
+            process.env.VUE_APP_BACKEND_URL + process.env.VUE_APP_VACATIONREQUEST_CREATE_ENDPOINT,
+            {
+              consultantEmail: email,
+              startVacationReqDate:
+                this.vacationRequestDateRange[0] + " 12:00:00",
+              endVacatonReqDate: this.vacationRequestDateRange[1] + " 12:00:00",
+            },
+            {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+              },
+            }
+          )
+          .then((resp) => {
+            this.pharmacist = resp.data;
+            this.vacatonrequestAlert = false;
+            this.vacatonrequestSuccess = true;
+          })
+          .catch((error) => {
+            this.errorMessage = error.message;
+            console.error("There was an error!", error);
+            this.vacatonrequestAlert = true;
+            this.vacatonrequestSuccess = false;
+          });
+      }
+    },
   },
   watch: {
     model(val) {
@@ -335,7 +431,7 @@ export default {
       this.isLoading = true;
 
       // Lazily load input items
-      fetch("http://localhost:8081/api/users/patients", {
+      fetch( process.env.VUE_APP_BACKEND_URL + process.env.VUE_APP_ALL_PATIENTS_ENDPOINT, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
         },

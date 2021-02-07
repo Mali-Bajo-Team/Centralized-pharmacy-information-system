@@ -13,4 +13,6 @@ public interface IConsultantService {
     Boolean existsByEmail(String email);
 
     Set<ExaminitedPatientDTO> getExaminitedPatients(Long consultantID);
+
+    Consultant findByEmail(String email);
 }
