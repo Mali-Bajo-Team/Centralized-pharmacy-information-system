@@ -1,6 +1,6 @@
 <template >
   <v-card width="600px" class="mx-auto" v-if="patient">
-    <v-card-title>{{patient.name }} {{ patient.surname }} </v-card-title>
+    <v-card-title>{{ patient.name }} {{ patient.surname }} </v-card-title>
     <v-row v-if="patient.userCategoryDTO">
       <v-col xl="8" md="8" sm="12">
         <v-card-text>
@@ -37,7 +37,7 @@
           {{ patient.loyaltyPoints }} <i> points</i> <br /><br />
 
           <!--Category-->
-          <v-chip color="primary">  </v-chip>
+          <v-chip color="primary">{{patient.userCategoryDTO.name}} </v-chip>
           <br /><br />
 
           <!--Benefits-->
@@ -77,12 +77,30 @@
             </v-toolbar>
             <v-card-text>
               <v-form>
-                <v-text-field>
-                
-                </v-text-field>
-                <v-text-field label="Change your surname " v-model="patientFormDTO.surname" ></v-text-field>
-                <v-text-field label="Change your address"></v-text-field>
-                <v-text-field label="Change your phone number"></v-text-field>
+                <v-text-field
+                  label="Change your name "
+                  v-model="patientFormDTO.name"
+                ></v-text-field>
+                <v-text-field
+                  label="Change your surname "
+                  v-model="patientFormDTO.surname"
+                ></v-text-field>
+                <v-text-field
+                  label="Change your address"
+                  v-model="patientFormDTO.address"
+                ></v-text-field>
+                <v-text-field
+                  label="Change your city"
+                  v-model="patientFormDTO.city"
+                ></v-text-field>
+                <v-text-field
+                  label="Change your country"
+                  v-model="patientFormDTO.country"
+                ></v-text-field>
+                <v-text-field
+                  label="Change your phone number"
+                  v-model="patientFormDTO.phoneNumber"
+                ></v-text-field>
                 <v-text-field
                   label="Add drugs which cause you allergic reactions"
                 ></v-text-field>
@@ -108,9 +126,13 @@ import { getParsedToken } from "./../../../util/token";
 export default {
   data: () => ({
     patient: {},
-    patientFormDTO:{
-      name:"",
-      surname:""  
+    patientFormDTO: {
+      name: "",
+      surname: "",
+      address: "",
+      city: "",
+      country: "",
+      phoneNumber: "",
     },
     rules: {
       required: (value) => !!value || "Required.",
@@ -134,8 +156,12 @@ export default {
       )
       .then((resp) => {
         this.patient = resp.data;
-        this.patientFormDTO.name=this.patient.name;
-        this.patientFormDTO.surname=this.patient.surname;
+        this.patientFormDTO.name = this.patient.name;
+        this.patientFormDTO.surname = this.patient.surname;
+        this.patientFormDTO.address = this.patient.address;
+        this.patientFormDTO.city = this.patient.city;
+        this.patientFormDTO.country = this.patient.country;
+        this.patientFormDTO.phoneNumber = this.patient.phoneNumber;
       })
       .catch((error) => {
         alert("Error: " + error);
