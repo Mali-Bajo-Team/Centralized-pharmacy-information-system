@@ -49,7 +49,7 @@
           </v-list-item-avatar>
           <v-list-item-content @click="handleSelectItem(item), getEvents()">
             <v-list-item-title
-              v-text="item.name + ' ' + item.surname"
+              v-text="item.name + '. Location: ' + item.location"
             ></v-list-item-title>
             <v-list-item-subtitle v-text="item.symbol"></v-list-item-subtitle>
           </v-list-item-content>
@@ -340,7 +340,6 @@ export default {
   methods: {
     handleSelectItem(item) {
       this.selectedPharmacy = item.id;
-      console.log("AAAAAAAAA" + this.selectedPharmacy);
     },
     showExaminationDialog(event) {
       this.name = event.event.name;
