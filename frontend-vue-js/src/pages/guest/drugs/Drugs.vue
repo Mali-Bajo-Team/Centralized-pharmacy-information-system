@@ -3,6 +3,7 @@
     <v-row>
       <!-- Left column for filter & search -->
       <v-col xl="4" sm="12" md="4">
+        <!-- Search card -->
         <v-card>
           <!--Toolbar of the card-->
           <v-toolbar color="primary" dark dense flat>
@@ -18,6 +19,28 @@
             ></v-text-field>
           </v-form>
         </v-card>
+        <!-- End of the search card-->
+        <!-- Filter card -->
+        <v-card class="mt-5">
+          <!--Toolbar of the card-->
+          <v-toolbar color="primary" dark dense flat>
+            <v-toolbar-title class="body-2"> Filter drugs </v-toolbar-title>
+          </v-toolbar>
+          <!--End of toolbar of the card-->
+
+          <v-form class="pa-2">
+            <v-card-text> <h3> Drugs mark </h3> </v-card-text>
+            <v-range-slider
+            :tick-labels="marks"
+              class="ml-4 mr-4"
+              v-model="markRange"
+              step="25"
+            ></v-range-slider>
+            <v-divider> </v-divider>
+
+          </v-form>
+        </v-card>
+        <!-- End of the filter card -->
       </v-col>
       <!-- End of the left column for filter & search -->
 
@@ -187,13 +210,18 @@
                                 <h3>Drug reservation</h3>
                               </v-toolbar-title>
                             </v-toolbar>
-                            <!-- End of toolbar of the card --> 
+                            <!-- End of toolbar of the card -->
                             <v-card-subtitle class="pl-5 pt-5">
-                                Make reservation for drug {{drug.name}} in pharmacy {{pharmacy.pharmacyName}}, where price per drug is {{pharmacy.priceOfDrug}} €
+                              Make reservation for drug {{ drug.name }} in
+                              pharmacy {{ pharmacy.pharmacyName }}, where price
+                              per drug is {{ pharmacy.priceOfDrug }} €
                             </v-card-subtitle>
 
                             <v-form class="ma-5">
-                              <v-text-field type="date" label="Deadline to pickup drug">
+                              <v-text-field
+                                type="date"
+                                label="Deadline to pickup drug"
+                              >
                               </v-text-field>
                               <v-text-field type="number" label="Amount">
                               </v-text-field>
@@ -231,6 +259,8 @@
 <script>
 export default {
   data: () => ({
+    markRange: [0, 100],
+    marks: ["1", "2", "3", "4", "5"],
     drugs: [],
     searchDrugField: "",
   }),
@@ -266,7 +296,10 @@ export default {
   },
   methods: {
     makeReservation(pharmacy) {
-      alert("Simulation of reservation, there is go some ajax call \n" + pharmacy.pharmacyName);
+      alert(
+        "Simulation of reservation, there is go some ajax call \n" +
+          pharmacy.pharmacyName
+      );
     },
     getDrugPharmacies(drug) {
       //   alert("name: " + drug.name);
@@ -303,8 +336,12 @@ export default {
         });
     },
     isMatchedDrug(drug) {
-      if (!drug.name.toLowerCase().match(this.searchDrugField.toLowerCase()))
+      // Matched drug is one who match all the criteria
+      if (!drug.name.toLowerCase().match(this.searchDrugField.toLowerCase())) // search
         return false;
+      let minMark = this.markRange[0]/25 + 1;
+      let maxMark = this.markRange[1]/25 + 1; 
+      if(drug.mark < minMark || drug.mark > maxMark) return false;
 
       return true;
     },
