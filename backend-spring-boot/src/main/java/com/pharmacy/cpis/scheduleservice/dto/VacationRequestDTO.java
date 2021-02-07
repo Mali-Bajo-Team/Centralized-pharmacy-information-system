@@ -6,7 +6,6 @@ public class VacationRequestDTO {
     private String consultantEmail;
     private String startVacationReqDate;
     private String endVacatonReqDate;
-    private String response;
 
     public VacationRequestDTO() {
     }
@@ -15,7 +14,6 @@ public class VacationRequestDTO {
         this.consultantEmail = consultantEmail;
         this.startVacationReqDate = startVacationReqDate;
         this.endVacatonReqDate = endVacatonReqDate;
-        this.response = response;
     }
 
     public String getConsultantEmail() {
@@ -42,11 +40,4 @@ public class VacationRequestDTO {
         this.endVacatonReqDate = endVacatonReqDate;
     }
 
-    public String getResponse() {
-        return response;
-    }
-
-    public void setResponse(String response) {
-        this.response = response;
-    }
 }

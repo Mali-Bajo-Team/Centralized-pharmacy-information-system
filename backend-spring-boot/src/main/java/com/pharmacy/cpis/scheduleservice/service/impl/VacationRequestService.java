@@ -29,7 +29,6 @@ public class VacationRequestService implements IVacationRequestService {
 
         vacationRequest.setConsultant(consultantService.findByEmail(vacationRequestDTO.getConsultantEmail()));
         vacationRequest.setDateRange(vacReqDateRange);
-        vacationRequest.setResponse(vacationRequestDTO.getResponse());
         vacationRequest.setStatus(VacationRequestStatus.PENDING);
 
         vacationRequestRepository.save(vacationRequest);
