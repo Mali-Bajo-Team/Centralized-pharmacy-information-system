@@ -21,18 +21,23 @@ public class SupplierOfferDTO {
     @NotEmpty(message = "Status is required.")
     private OfferStatus status;
 
-    public SupplierOfferDTO(){}
+    private DrugOrderDTO order;
 
-    public SupplierOfferDTO(@NotEmpty(message = "Shipment date is required.") Date shipmentDate, @NotEmpty(message = "Price is required.") Double price, @NotEmpty(message = "Status is required.") OfferStatus status) {
-        this.shipmentDate = shipmentDate;
-        this.price = price;
-        this.status = status;
-    }
+    public SupplierOfferDTO(){}
 
     public SupplierOfferDTO(Offer offer){
         this.setShipmentDate(offer.getShipmentDate());
         this.setPrice(offer.getPrice());
         this.setStatus(offer.getStatus());
+        this.setOrder(new DrugOrderDTO(offer.getOrder()));
+    }
+
+    public DrugOrderDTO getOrder() {
+        return order;
+    }
+
+    public void setOrder(DrugOrderDTO order) {
+        this.order = order;
     }
 
     public Date getShipmentDate() {
