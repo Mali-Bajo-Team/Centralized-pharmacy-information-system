@@ -21,6 +21,7 @@ import PharmacistPatientsearch from './../pages/pharmacist/patientsearch/Patient
 
 import Dermatologist from './../pages/dermatologist/Container';
 import DermatologistLanding from './../pages/dermatologist/landing/Landing';
+import DermatologistProfile from './../pages/dermatologist/profile/Profile';
 
 import SystemAdmin from './../pages/systemadmin/Container';
 import SystemAdminLanding from './../pages/systemadmin/landing/Landing';
@@ -119,7 +120,7 @@ const routes = [
             },
             {
                 component: PharmacistProfile,
-                name: 'profile',
+                name: 'Pharmacistprofile',
                 path: 'profile'
             },
             {
@@ -146,6 +147,11 @@ const routes = [
                 component: DermatologistLanding,
                 name: 'dermatologist',
                 path: ''
+            },
+            {
+                component: DermatologistProfile,
+                name: 'Dermatologistprofile',
+                path: 'profile'
             },
             {
                 component: Drugs,

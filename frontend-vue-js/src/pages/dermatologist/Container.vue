@@ -13,20 +13,25 @@
 import navbar from "../../components/Navbar";
 
 export default {
-  components: {
-    navbar,
-  },
-  data: () => ({
-    links: [
-      {
-        title: "Home",
-        to: "/dermatologist",
-      },
-      {
-        title: "Drugs",
-        to: "/dermatologist/dermatologistdrugs",
-      },
-    ],
-  }),
-};
+
+    components: {
+        navbar
+    },
+    data: () => ({
+        links: [
+            {
+                title: "Home",
+                to: "/dermatologist"
+            },
+            {
+                title: "Profile",
+                to: "/dermatologist/profile"
+            },
+            {
+                title: "Drugs",
+                to: "/dermatologist/dermatologistdrugs",
+            },
+        ]
+    })
+}
 </script>
