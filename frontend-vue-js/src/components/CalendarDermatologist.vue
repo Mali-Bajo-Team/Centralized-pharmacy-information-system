@@ -1,8 +1,11 @@
 <template>
   <v-app>
     <!-- SEARCH Pharmacis -->
-    <div class="ml-4 mb-6 mt-16">
-      <h4 class="ml-n primary--text">Choose pharmacy for working calendar</h4>
+    <div class="mb-3 mt-16">
+      <h1 class="primary--text">Working calendar</h1>
+      <h4 class="primary--text">
+        Choose pharmacy for filtering working calendar
+      </h4>
       <v-autocomplete
         v-model="model"
         :items="items"
@@ -33,7 +36,7 @@
             class="white--text"
             v-on="on"
           >
-            <v-icon left> mdi-account </v-icon>
+            <v-icon left> mdi-medical-bag </v-icon>
             <span v-text="item.name"></span>
           </v-chip>
         </template>
@@ -44,20 +47,22 @@
           >
             {{ item.name.charAt(0) }}
           </v-list-item-avatar>
-          <v-list-item-content @click="handleSelectItem(item)">
+          <v-list-item-content @click="handleSelectItem(item), getEvents()">
             <v-list-item-title
               v-text="item.name + ' ' + item.surname"
             ></v-list-item-title>
             <v-list-item-subtitle v-text="item.symbol"></v-list-item-subtitle>
           </v-list-item-content>
           <v-list-item-action>
-            <v-icon>mdi-account</v-icon>
+            <v-icon>mdi-medical-bag</v-icon>
           </v-list-item-action>
         </template>
       </v-autocomplete>
     </div>
-    <h1 class="primary--text">Working calendar</h1>
-    <h4 class="primary--text">Click on event for more info or for start examination report</h4>
+
+    <h4 class="primary--text">
+      Click on event for more info or for start examination report
+    </h4>
     <v-sheet tile height="54" class="d-flex">
       <v-btn icon class="ma-2" @click="$refs.calendar.prev()">
         <v-icon>mdi-chevron-left</v-icon>
@@ -262,6 +267,7 @@
 <script>
 export default {
   data: () => ({
+    selectedPharmacy: null,
     isLoading: false,
     items: [],
     model: null,
@@ -313,7 +319,7 @@ export default {
       // Lazily load input items
       fetch(
         process.env.VUE_APP_BACKEND_URL +
-          process.env.VUE_APP_ALL_PATIENTS_ENDPOINT,
+          process.env.VUE_APP_PHARMACIES_ENDPOINT,
         {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
@@ -332,6 +338,10 @@ export default {
     },
   },
   methods: {
+    handleSelectItem(item) {
+      this.selectedPharmacy = item.id;
+      console.log("AAAAAAAAA" + this.selectedPharmacy);
+    },
     showExaminationDialog(event) {
       this.name = event.event.name;
       this.patientId = event.event.patientId;
@@ -343,37 +353,79 @@ export default {
       var email = token.sub;
 
       this.consultants = [];
-      this.axios
-        .post(
-          process.env.VUE_APP_BACKEND_URL +
-            process.env.VUE_APP_CONSULTANTEXAMINATIONS_ENDPOINT,
-          { email: email },
-          {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
-            },
-          }
-        )
-        .then((resp) => {
-          this.consultants = resp.data;
-          const events = [];
+      if (this.selectedPharmacy === null) {
+        this.axios
+          .post(
+            process.env.VUE_APP_BACKEND_URL +
+              process.env.VUE_APP_CONSULTANTEXAMINATIONS_ENDPOINT,
+            { email: email },
+            {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+              },
+            }
+          )
+          .then((resp) => {
+            this.consultants = resp.data;
+            const events = [];
 
-          for (let i = 0; i < this.consultants.length; i++) {
-            events.push({
-              name:
-               " Patient: " +
-                this.consultants[i].patientName + " " +
-                this.consultants[i].patientSurname +
-                ", Pharmacy: "  + this.consultants[i].pharmacyName + " " ,
-              start: this.consultants[i].startDate,
-              end: this.consultants[i].endDate,
-              color: "primary",
-              timed: 1,
-              patientId: this.consultants[i].patientId,
-            });
-          }
-          this.events = events;
-        });
+            for (let i = 0; i < this.consultants.length; i++) {
+              events.push({
+                name:
+                  " Patient: " +
+                  this.consultants[i].patientName +
+                  " " +
+                  this.consultants[i].patientSurname +
+                  ", Pharmacy: " +
+                  this.consultants[i].pharmacyName +
+                  " ",
+                start: this.consultants[i].startDate,
+                end: this.consultants[i].endDate,
+                color: "primary",
+                timed: 1,
+                patientId: this.consultants[i].patientId,
+              });
+            }
+            this.events = events;
+          });
+      } else {
+        this.axios
+          .post(
+            process.env.VUE_APP_BACKEND_URL +
+              process.env.VUE_APP_CONSULTANTEXAMINATIONS_ENDPOINT,
+            { email: email },
+            {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+              },
+            }
+          )
+          .then((resp) => {
+            this.consultants = resp.data;
+            const events = [];
+
+            for (let i = 0; i < this.consultants.length; i++) {
+              if (this.consultants[i].pharmacyID === this.selectedPharmacy) {
+                events.push({
+                  name:
+                    " Patient: " +
+                    this.consultants[i].patientName +
+                    " " +
+                    this.consultants[i].patientSurname +
+                    ", Pharmacy: " +
+                    this.consultants[i].pharmacyName +
+                    " ",
+                  start: this.consultants[i].startDate,
+                  end: this.consultants[i].endDate,
+                  color: "primary",
+                  timed: 1,
+                  patientId: this.consultants[i].patientId,
+                });
+              }
+            }
+            this.events = events;
+          });
+      }
     },
     getEventColor(event) {
       return event.color;
