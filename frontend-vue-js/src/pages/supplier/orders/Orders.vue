@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h3> Offers </h3>
+    <h3> Orders </h3>
   </v-container>
 </template>
 
@@ -13,7 +13,7 @@ export default {
   mounted() {
     this.axios
       .get(
-        process.env.VUE_APP_BACKEND_URL + process.env.VUE_APP_PROCUREMENT_OFFERS_ENDPOINT,
+        process.env.VUE_APP_BACKEND_URL + process.env.VUE_APP_PROCUREMENT_ORDERS_ENDPOINT,
         {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
