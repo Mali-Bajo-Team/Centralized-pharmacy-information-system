@@ -32,7 +32,7 @@ public class ProfileController {
 	@EmployeeAccountActive
 	public ResponseEntity<PersonalInformationDTO> getProfile() {
 		UserAccount account = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		Person person = personService.getByUserAccount(account);
+		Person person = personService.getPersonByUserAccount(account);
 
 		return ResponseEntity.ok(new PersonalInformationDTO(person));
 	}

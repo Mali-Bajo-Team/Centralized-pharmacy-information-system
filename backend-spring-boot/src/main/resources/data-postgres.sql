@@ -1,4 +1,4 @@
---https://www.bcryptcalculator.com/encode
+-- bcrypt: https://www.bcryptcalculator.com
 
 -- All roles need to have prefix ROLE_ !!
 INSERT INTO AUTHORITY (name) VALUES ('ROLE_PATIENT');
@@ -38,6 +38,7 @@ insert into user_account (email, password, is_active, person_id, needs_password_
 -- Password for pharmacist account is: pharmacist2
 insert into user_authority (user_id, authority_id) values (5, 4);
 
+--INSERT DRUG FORM & CLASS
 insert into drug_form (name) values ('Capsule');
 insert into drug_form (name) values ('Tablet');
 insert into drug_form (name) values ('Injection');
@@ -67,7 +68,7 @@ values (20, 20, 45.267136, 19.83694,'Pharmacy Jankovic','Novi Sad','Serbia','Bra
 insert into pharmacy (dermatologist_consultation_price,pharmacist_consultation_price,latitude,longitude,name,city,country,street, description)
 values (40, 50, 45.267136, 19.83694,'Pharmacy BENU Mercator','Novi Sad','Serbia','Bulevar Oslobodjenja 102', 'Najpovoljniji i najpouzdaniji!'); -- id 2
 
--- ISERT PHARMACY ADMINS
+-- INSERT PHARMACY ADMINS
 insert into person (discriminator, address, city, country, name, surname, phone_number, pharmacy_id) values ('PharmacyAdmin', 'Jovana Jovanovica 12', 'Novi Sad', 'Srbija', 'Janko', 'Janković', '0661352720', 1);
 insert into user_account (email, password, is_active, person_id, needs_password_change, pharmacy_id) values ('cpisuser+jankovic@gmail.com', '$2a$10$bJi9SxVJIp6sv2lQ1vgjxuJF9Y1SpaVpftEtOx9.K7uVkOrx91L5S', true, 6, false, 1);
 -- Password for patient account is: jankovic
@@ -136,6 +137,7 @@ values(100, 15, 'aspirin', 1);
 insert into available_drug(available_amount, default_price, drug_code, pharmacy_id)
 values(2, 5, 'aspirin', 2);
 
+
 -- INSERT ONE DERMATOLOGIST
 insert into person (discriminator, address, city, country, name, surname, phone_number) values ('Consultant', 'Svetislava Pesica 20', 'Novi Sad', 'Srbija', 'Miroslav', 'Jovanovic', '0635212365');
 insert into user_account (email, password, is_active, person_id, needs_password_change) values ('cpisuser+dermatologist@gmail.com', '$2a$10$ijW6YiSn3zggTw5ybFOkiO.TeAxiHo/E0Ala4JPJvdza3TSI2H7ue', true, 9, false);
@@ -145,3 +147,20 @@ insert into user_authority (user_id, authority_id) values (9, 5);
 insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (20,1,'2021-02-03 10:23','2021-02-03 11:00',9,2,1);
 insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (25,1,'2021-02-04 11:23','2021-02-04 13:20',9,2,1);
 insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (30,1,'2021-02-05 13:23','2021-02-05 14:00',9,4,2);
+
+-- INSERT SUPPLIER
+insert into person (discriminator, address, city, country, name, surname, phone_number) values ('Supplier', 'Jovana Jovanovica 13', 'Novi Sad', 'Srbija', 'Jovica', 'Dobrica', '06323462520');
+insert into user_account (email, password, is_active, person_id, needs_password_change) values ('cpisuser+jovica@gmail.com', '$2a$10$hsgWgd6gOn8Kv.8M3/QImu8e8HM6S8Sj.wfcj6/5vz6lx5i21EwIS', true, 10, false);
+-- Password for patient account is: jovica
+insert into user_authority (user_id, authority_id) values (10, 6);
+
+-- INSERT DRUG ORDER
+insert into drug_order(deadline, status,timestamp, administrator_id, pharmacy_id) values('2021-03-04 12:00', 0 ,'2021-02-07 12:00', 6,1);
+
+--INSERT ORDERED DRUG
+insert into ordered_drug(amount, drug_code, order_id) values (100, 'brufen', 1);
+
+--INSERT OFFER (Suppliers' offers)
+insert into offer(price, shipment_date, status, order_id, supplier_id) values (15, '2021-02-03 12:00', 0, 1, 10);
+
+
