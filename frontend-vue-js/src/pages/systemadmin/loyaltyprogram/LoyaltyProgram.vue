@@ -75,14 +75,12 @@
                           >
                           </v-text-field>
                           <!-- Data picker in dialog -->
-
-                          <v-row justify="center">
-                            <v-date-picker
-                              required
-                              elevation="4"
-                              v-model="changeLoyaltyProgram.activeUntil"
-                            ></v-date-picker>
-                          </v-row>
+                          <v-text-field
+                            type="date"
+                            v-model="changeLoyaltyProgram.activeUntil"
+                            label="Active until"
+                          >
+                          </v-text-field>
                           <!-- End of the date picker in dialog -->
                           <v-switch
                             v-model="changeLoyaltyProgram.active"
@@ -205,7 +203,11 @@
             </v-card-title>
             <v-spacer></v-spacer>
             <!-- Buttons for editing & deleting categories -->
-            <v-dialog v-model="dialogForEditingCategory" width="500" :retain-focus="false">
+            <v-dialog
+              v-model="dialogForEditingCategory"
+              width="500"
+              :retain-focus="false"
+            >
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   class="mx-2"
@@ -264,10 +266,7 @@
 
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn
-                    color="primary"
-                    @click="confirmEditingCategoryDTO()"
-                  >
+                  <v-btn color="primary" @click="confirmEditingCategoryDTO()">
                     Confirm changes
                   </v-btn>
                 </v-card-actions>
@@ -421,7 +420,7 @@ export default {
           this.loyaltyProgram = resp.data[0];
         });
     },
-    confirmEditingCategoryDTO(){
+    confirmEditingCategoryDTO() {
       if (
         this.userCategoryDTO.name == "" ||
         this.userCategoryDTO.minimumPoints == 0 ||
