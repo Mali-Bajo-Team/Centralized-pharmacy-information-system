@@ -76,7 +76,6 @@ public class ConsultantService implements IConsultantService {
     }
 
     @Override
-    //Treba pronaci sve korisnike koje je pregledao konsultant
     public Set<ExaminitedPatientDTO> getExaminitedPatients(Long consultantID){
         Consultant consultant = consultantRepository.getOne(consultantID);
 
@@ -89,15 +88,10 @@ public class ConsultantService implements IConsultantService {
 
             exeaminitedPatientDTO.setName(c.getPatient().getName());
             exeaminitedPatientDTO.setSurname(c.getPatient().getSurname());
-            exeaminitedPatientDTO.setExaminitedDate(c.getTime());
+            exeaminitedPatientDTO.setExaminitedDate(c.getTime().getStart());
 
             exainitedPatients.add(c.getPatient());
             exeaminitedPatientDTOs.add(exeaminitedPatientDTO);
-        }
-
-        //Testiranje
-        for (Patient p: exainitedPatients) {
-            System.out.println(p.getName());
         }
 
         return exeaminitedPatientDTOs;

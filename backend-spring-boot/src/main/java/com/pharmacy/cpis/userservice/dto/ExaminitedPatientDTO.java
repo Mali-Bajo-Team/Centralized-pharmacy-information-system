@@ -8,9 +8,9 @@ public class ExaminitedPatientDTO {
     private String consultantEmail;
     private String name;
     private String surname;
-    private DateRange examinitedDate;
+    private Date examinitedDate;
 
-    public ExaminitedPatientDTO( String consultantEmail, String name, String surname, DateRange examinitedDate) {
+    public ExaminitedPatientDTO( String consultantEmail, String name, String surname, Date examinitedDate) {
         this.consultantEmail = consultantEmail;
         this.name = name;
         this.surname = surname;
@@ -45,11 +45,11 @@ public class ExaminitedPatientDTO {
         this.surname = surname;
     }
 
-    public DateRange getExaminitedDate() {
+    public Date getExaminitedDate() {
         return examinitedDate;
     }
 
-    public void setExaminitedDate(DateRange examinitedDate) {
+    public void setExaminitedDate(Date examinitedDate) {
         this.examinitedDate = examinitedDate;
     }
 }

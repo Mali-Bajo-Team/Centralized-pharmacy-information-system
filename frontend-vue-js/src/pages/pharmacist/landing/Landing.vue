@@ -221,7 +221,7 @@ export default {
         value: "name",
       },
       { text: "Patient surname", value: "surname" },
-      { text: "Examinited date", value: "fat" },
+      { text: "Examinited date", value: "examinitedDate" },
 
     ],
   }),
@@ -242,6 +242,10 @@ export default {
         )
         .then((resp) => {
           this.examinitedPatients = resp.data;
+       
+            this.examinitedPatients.forEach(function(entry) {
+               entry.examinitedDate = new Date(entry.examinitedDate).toISOString().substring(0,10);
+            });
         });
   },
   methods: {
