@@ -9,6 +9,7 @@ import java.util.Set;
 
 public class PharmacyDTO {
 
+    private Long id;
     @NotEmpty(message = "Name is required.")
     private String name;
 
@@ -26,6 +27,7 @@ public class PharmacyDTO {
         this.setName(pharmacy.getName());
         this.setLocation(getPharmacyLocation(pharmacy));
         this.setRating(getAvgRatings(pharmacy));
+        this.setId(pharmacy.getId());
     }
 
     private Double getAvgRatings(Pharmacy pharmacy) {
@@ -49,6 +51,14 @@ public class PharmacyDTO {
         this.name = name;
         this.location = location;
         this.rating = rating;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
