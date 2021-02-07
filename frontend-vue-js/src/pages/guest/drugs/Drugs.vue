@@ -173,6 +173,7 @@ export default {
     drugs: [],
     searchDrugField: "",
     show: false,
+    availableDrugs: [],
   }),
   mounted() {
     this.axios
@@ -207,6 +208,21 @@ export default {
   methods: {
     getDrugPharmacies(drug) {
       alert("name: " + drug.name);
+      this.axios
+        .post(
+          process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_AVAILABLE_DRUGS_ENDPOINT,
+          {
+            code: drug.code,
+          }
+        )
+        .then((response) => {
+          this.availableDrugs = [];
+          this.availableDrugs = response.data;
+        })
+        .catch((error) => {
+          alert("Error: " + error);
+        });
     },
     isMatchedDrug(drug) {
       if (!drug.name.toLowerCase().match(this.searchDrugField.toLowerCase()))
