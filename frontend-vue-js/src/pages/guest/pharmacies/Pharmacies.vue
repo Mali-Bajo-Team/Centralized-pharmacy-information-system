@@ -127,12 +127,13 @@ export default {
   }),
   mounted() {
     this.axios
-      .get(process.env.VUE_APP_BACKEND_URL + process.env.VUE_APP_PHARMACIES_ENDPOINT,)
+      .get(
+        process.env.VUE_APP_BACKEND_URL +
+          process.env.VUE_APP_PHARMACIES_ENDPOINT
+      )
       .then((resp) => {
         this.pharmacies = resp.data;
       });
   },
-
-
 };
 </script>

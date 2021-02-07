@@ -22,7 +22,7 @@ insert into user_authority (user_id, authority_id) values (2, 1);
 
 -- INSERT ONE PHARMACIST
 insert into person (discriminator, address, city, country, name, surname, phone_number) values ('Consultant', 'Jovana Jovanovica 30', 'Novi Sad', 'Srbija', 'Pero', 'Ivanović', '0661352720');
-insert into user_account (email, password, is_active, person_id, needs_password_change) values ('cpisuser+pharmacist@gmail.com', '$2a$10$UYKr0EAl1Hhzmg.3LutLeuczdzcdgEwXhuY0raFaNyRRspKTg0MCW', true, 3, true);
+insert into user_account (email, password, is_active, person_id, needs_password_change) values ('cpisuser+pharmacist@gmail.com', '$2a$10$UYKr0EAl1Hhzmg.3LutLeuczdzcdgEwXhuY0raFaNyRRspKTg0MCW', true, 3, false);
 -- Password for pharmacist account is: pharmacist
 insert into user_authority (user_id, authority_id) values (3, 4);
 
@@ -105,7 +105,33 @@ insert into working_times(id,consultant_id,pharmacy_id, monday_start, monday_end
 insert into working_times(id,consultant_id,pharmacy_id, monday_start, monday_end, tuesday_start, tuesday_end, wednesday_start,wednesday_end,thursday_start,thursday_end,friday_start,friday_end,saturday_start,saturday_end, sunday_start, sunday_end) values (2,3,1, '2021-02-03 10:00', '2021-02-03 18:00','2021-02-03 10:00', '2021-02-03 18:00', '2021-02-03 10:00', '2021-02-03 18:00','2021-02-03 10:00', '2021-02-03 18:00', '2021-02-03 10:00', '2021-02-03 18:00','2021-02-03 10:00', '2021-02-03 18:00', '2021-02-03 10:00', '2021-02-03 18:00');
 
 -- INSERT DRUGS
-insert into drug(code, loyalty_points, name, drug_class_id, drug_form_id) values ('lat0x', 5, 'Brufen',1,1);
-insert into drug(code, loyalty_points, name, drug_class_id, drug_form_id) values ('xb0x', 3, 'Aspirin',1,1);
-insert into drug(code, loyalty_points, name, drug_class_id, drug_form_id) values ('0x2x', 6, 'Amfetamin',3,2);
-insert into drug(code, loyalty_points, name, drug_class_id, drug_form_id) values ('3b0a', 7, 'Kreatin',2,3);
+insert into drug(code, loyalty_points, name, drug_class_id, drug_form_id) values ('brufen', 5, 'Brufen',1,1);
+insert into drug(code, loyalty_points, name, drug_class_id, drug_form_id) values ('aspirin', 3, 'Aspirin',1,1);
+insert into drug(code, loyalty_points, name, drug_class_id, drug_form_id) values ('amfetamin', 6, 'Amfetamin',3,2);
+insert into drug(code, loyalty_points, name, drug_class_id, drug_form_id) values ('kreatin', 7, 'Kreatin',2,3);
+
+--INSERT DRUG RATING
+insert into drug_rating(rating,drug_code,patient_id) values (5,'brufen',1);
+insert into drug_rating(rating,drug_code,patient_id) values (4,'aspirin',1);
+insert into drug_rating(rating,drug_code,patient_id) values (3,'amfetamin',2);
+insert into drug_rating(rating,drug_code,patient_id) values (2,'kreatin',2);
+
+--INSERT DRUG SPECIFICATION
+insert into drug_specification(additional_notes, contraindications, manufacturer, prescription_required, recommended_daily_dose, drug_code)
+values('Easy and lovely', 'None', 'Cacak Frikom', false, 3, 'brufen');
+insert into drug_specification(additional_notes, contraindications, manufacturer, prescription_required, recommended_daily_dose, drug_code)
+values('Fast one', 'None', 'McDonalds', false, 2, 'aspirin');
+insert into drug_specification(additional_notes, contraindications, manufacturer, prescription_required, recommended_daily_dose, drug_code)
+values('Very fast one', 'None', 'Liman 3', false, 1, 'amfetamin');
+insert into drug_specification(additional_notes, contraindications, manufacturer, prescription_required, recommended_daily_dose, drug_code)
+values('Slow one', 'None', 'Zenica KP Dom', false, 5, 'kreatin');
+
+--INSERT AVAILABLE DRUG
+insert into available_drug(available_amount, default_price, drug_code, pharmacy_id)
+values(10, 10, 'brufen', 1);
+insert into available_drug(available_amount, default_price, drug_code, pharmacy_id)
+values(15, 8, 'brufen', 2);
+insert into available_drug(available_amount, default_price, drug_code, pharmacy_id)
+values(100, 15, 'aspirin', 1);
+insert into available_drug(available_amount, default_price, drug_code, pharmacy_id)
+values(2, 5, 'aspirin', 2);

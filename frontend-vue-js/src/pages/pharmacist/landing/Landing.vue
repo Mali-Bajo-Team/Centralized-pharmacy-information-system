@@ -3,6 +3,20 @@
     <v-row>
       <v-col>
         <v-row>
+          <!-- SEARCH EXAMINITED USER -->
+          <div class="mb-16">
+               <h1 class="ml-n primary--text">Examinited patients</h1>
+            <v-card>
+              <v-data-table
+                :headers="headers"
+                :items="examinitedPatients"
+                :search="search"
+              ></v-data-table>
+            </v-card>
+          </div>
+        </v-row>
+       
+        <v-row>
           <h1 class="ml-n primary--text">Schedule consultation</h1>
           <!-- SEARCH USER -->
           <div class="ml-4 mb-6 mt-15">
@@ -84,7 +98,7 @@
               v-model="picker"
               v-bind:value="valueDate"
               v-on:input="onInputDate"
-              color="green lighten-1"
+              color="primary lighten-1"
             ></v-date-picker>
             <v-alert
               :value="alertDate"
@@ -107,6 +121,7 @@
               v-bind:value="valueStartTime"
               v-on:input="onInputStartTime"
               format="ampm"
+               color="primary lighten-1"
             ></v-time-picker>
             <v-alert
               :value="alertStartTime"
@@ -128,6 +143,7 @@
               v-bind:value="valueEndTime"
               v-on:input="onInputEndTime"
               format="ampm"
+               color="primary lighten-1"
             ></v-time-picker>
 
             <v-alert
@@ -167,8 +183,8 @@
           >
             The schedule must match the working hours of the pharmacist. The
             appointment should not be prepared with another examination or
-            consultation that the patient has scheduled (in any pharmacy). 
-            And also it is not possible to schedule consultations in the past.
+            consultation that the patient has scheduled (in any pharmacy). And
+            also it is not possible to schedule consultations in the past.
           </v-alert>
         </v-row>
       </v-col>
@@ -197,7 +213,43 @@ export default {
     selectedPatient: null,
     scheduleAlert: false,
     scheduleSucces: false,
+    searchExaminitedUsers: "",
+    examinitedPatients:[],
+    headers: [
+      {
+        text: "Patient name",
+        align: "start",
+        filterable: false,
+        value: "name",
+      },
+      { text: "Patient surname", value: "surname" },
+      { text: "Examinited date", value: "examinitedDate" },
+
+    ],
   }),
+  created() {
+ var token = parseJwt(localStorage.getItem("JWT-CPIS"));
+      var email = token.sub;
+
+      this.consultants = [];
+      this.axios
+        .post(
+          "http://localhost:8081/api/consultant/examinitedpatients",
+          { consultantEmail: email },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then((resp) => {
+          this.examinitedPatients = resp.data;
+       
+            this.examinitedPatients.forEach(function(entry) {
+               entry.examinitedDate = new Date(entry.examinitedDate).toISOString().substring(0,10);
+            });
+        });
+  },
   methods: {
     handleSelectItem(item) {
       this.selectedPatient = item.id;
@@ -266,7 +318,7 @@ export default {
             this.errorMessage = error.message;
             console.error("There was an error!", error);
             this.scheduleAlert = true;
-             this.scheduleSucces = false;
+            this.scheduleSucces = false;
           });
       }
     },
