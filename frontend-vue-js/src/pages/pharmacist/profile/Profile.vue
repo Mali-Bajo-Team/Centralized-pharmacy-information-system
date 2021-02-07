@@ -4,7 +4,7 @@
     <v-row>
       <v-col md="3" class="ml-10 mt-15">
              <h1 class="ml-n primary--text">User profile</h1>
-        <v-card elevation="3" class="pa-6 primary">
+        <v-card  color="primary lighten-1" elevation="3" class="pa-6 primary">
           <p class="font-weight-medium">Name : {{ pharmacist.name }}</p>
           <p class="font-weight-medium">Lastname : {{ pharmacist.lastName }}</p>
           <p class="font-weight-medium">
@@ -210,6 +210,7 @@
         </v-card>
       </v-col>
       <v-col md="6">
+         <h1 class="primary--text">Working calendar</h1>
         <div class="calendar pa-8">
           <calendar></calendar>
         </div>

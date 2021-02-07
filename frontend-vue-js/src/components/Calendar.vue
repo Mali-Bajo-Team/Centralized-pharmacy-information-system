@@ -273,7 +273,7 @@ export default {
                 this.consultants[i].patientSurname,
               start: this.consultants[i].startDate,
               end: this.consultants[i].endDate,
-              color: "red",
+              color: "primary",
               timed: 1,
               patientId: this.consultants[i].patientId,
             });
