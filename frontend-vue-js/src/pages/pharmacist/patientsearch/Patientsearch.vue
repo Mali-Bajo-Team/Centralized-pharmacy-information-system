@@ -190,7 +190,8 @@ export default {
   },
   created() {
     this.axios
-      .get("http://localhost:8081/api/users/patients", {
+      .get( process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_ALL_PATIENTS_ENDPOINT, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
         },
