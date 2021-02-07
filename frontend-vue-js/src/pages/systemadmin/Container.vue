@@ -30,6 +30,10 @@ export default {
         title: "Drugs",
         to: "/systemadmin/systemadmindrugs",
       },
+      {
+        title:"Pharmacies",
+        to:"/systemadmin/systemadminpharmacies"
+      }
     ],
   }),
 };

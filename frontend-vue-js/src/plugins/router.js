@@ -99,6 +99,11 @@ const routes = [
                 name: 'patientdrugs',
                 path: 'patientdrugs'
             },
+            {
+                component: Pharmacies,
+                name: 'patientpharmacies',
+                path: 'patientpharmacies'
+            }
         ]
     },
     {
@@ -183,7 +188,12 @@ const routes = [
                 component: Drugs,
                 name: 'systemadmindrugs',
                 path: 'systemadmindrugs'
-            }
+            },
+            {
+                component: Pharmacies,
+                name: 'systemadminpharmacies',
+                path: 'systemadminpharmacies'
+            },
         ]
     },
     {
