@@ -27,8 +27,8 @@ export default {
         to: "/pharmacist/profile",
       },
       {
-        title: "Search",
-        to: "/pharmacist/search",
+        title: "Patient Search",
+        to: "/pharmacist/pphatientsearch",
       },
       {
         title: "Drugs",

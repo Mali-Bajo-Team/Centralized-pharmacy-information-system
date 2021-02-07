@@ -31,6 +31,10 @@ export default {
                 title: "Drugs",
                 to: "/dermatologist/dermatologistdrugs",
             },
+            {
+                title: "Patient search",
+                to: "/dermatologist/dpatientsearch",
+            },
         ]
     })
 }
