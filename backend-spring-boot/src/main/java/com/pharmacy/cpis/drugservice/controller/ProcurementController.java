@@ -1,7 +1,10 @@
 package com.pharmacy.cpis.drugservice.controller;
 
+import com.pharmacy.cpis.drugservice.dto.DrugOrderDTO;
 import com.pharmacy.cpis.drugservice.dto.SupplierOfferDTO;
+import com.pharmacy.cpis.drugservice.model.drugprocurement.DrugOrder;
 import com.pharmacy.cpis.drugservice.model.drugprocurement.Offer;
+import com.pharmacy.cpis.drugservice.service.IDrugOrderService;
 import com.pharmacy.cpis.drugservice.service.IOfferService;
 import com.pharmacy.cpis.userservice.model.users.Supplier;
 import com.pharmacy.cpis.userservice.model.users.UserAccount;
@@ -27,7 +30,10 @@ public class ProcurementController {
     @Autowired
     private IOfferService offerService;
 
-    @GetMapping
+    @Autowired
+    private IDrugOrderService drugOrderService;
+
+    @GetMapping(value = "/offers")
     public ResponseEntity<List<SupplierOfferDTO>> getSupplierOffers(){
         List<SupplierOfferDTO> supplierOfferDTOS = new ArrayList<>();
 
@@ -39,5 +45,16 @@ public class ProcurementController {
             supplierOfferDTOS.add(new SupplierOfferDTO(offer));
         }
         return new ResponseEntity<>(supplierOfferDTOS, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/orders")
+    public ResponseEntity<List<DrugOrderDTO>> getAllDrugOrders(){
+        List<DrugOrderDTO> drugOrderDTOS = new ArrayList<>();
+        List<DrugOrder> drugOrders = drugOrderService.findAll();
+        for(DrugOrder drugOrder: drugOrders){
+            DrugOrderDTO drugOrderDTO = new DrugOrderDTO(drugOrder);
+            drugOrderDTOS.add(drugOrderDTO);
+        }
+        return new ResponseEntity<>(drugOrderDTOS, HttpStatus.OK);
     }
 }

@@ -16,13 +16,10 @@ public class DrugDTO {
     @NotEmpty(message = "Name is required.")
     private String name;
 
-    @NotEmpty(message = "Code is required.")
     private String code;
 
-    @NotEmpty(message = "Loyalty points is required.")
     private String loyaltyPoints;
 
-    @NotEmpty(message = "Type of drug is required.")
     private String typeOfDrug;
 
     private List<DrugDTO> alternateDrugs;
@@ -33,15 +30,6 @@ public class DrugDTO {
 
     public DrugDTO(){}
 
-    public DrugDTO(@NotEmpty(message = "Name is required.") String name, @NotEmpty(message = "Code is required.") String code, @NotEmpty(message = "Loyalty points is required.") String loyaltyPoints, @NotEmpty(message = "Type of drug is required.") String typeOfDrug, List<DrugDTO> alternateDrugs, Double mark) {
-        this.name = name;
-        this.code = code;
-        this.loyaltyPoints = loyaltyPoints;
-        this.typeOfDrug = typeOfDrug;
-        this.alternateDrugs = alternateDrugs;
-        this.mark = mark;
-    }
-
     public DrugDTO(Drug drug, IDrugService drugService){
         this.setName(drug.getName());
         this.setCode(drug.getCode());
@@ -50,6 +38,13 @@ public class DrugDTO {
         this.setMark(drugService.getMarkOfDrug(drug));
         this.setAlternateDrugs(drug.getAlternateDrugs(),drugService);
         this.setDrugSpecificationDTO(new DrugSpecificationDTO(drugService.getDrugSpecificationByDrugCode(drug.getCode())));
+    }
+
+    public DrugDTO(Drug drug){
+        this.setName(drug.getName());
+        this.setCode(drug.getCode());
+        this.setLoyaltyPoints(drug.getLoyaltyPoints().toString());
+        this.setTypeOfDrug(drug.getDrugClass().getName());
     }
 
     public DrugSpecificationDTO getDrugSpecificationDTO() {
