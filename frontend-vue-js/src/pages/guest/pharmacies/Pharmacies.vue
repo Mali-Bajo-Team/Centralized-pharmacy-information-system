@@ -17,19 +17,12 @@
           <v-card-text>
             <v-row no-gutters>
               <v-col>
-                <v-text-field label="Name of pharmacy"></v-text-field>
+                <v-text-field label="Name of pharmacy" v-model="searchFieldForName"></v-text-field>
               </v-col>
             </v-row>
 
-            <v-text-field label="Place of pharmacy"></v-text-field>
+            <v-text-field label="Place of pharmacy" v-model="searchFieldForPlace"></v-text-field>
           </v-card-text>
-
-          <v-card-actions>
-            <v-btn color="primary">
-              <v-icon> mdi-magnify </v-icon>
-              Search
-            </v-btn>
-          </v-card-actions>
         </v-card>
         <!--End of search form-->
         <br /><br />
@@ -47,30 +40,18 @@
           <v-card-title> Filter pharmacies by grade [1-5] </v-card-title>
           <v-card-text>
             <v-row no-gutters>
-              <v-col>
-                <v-text-field label="From grade"></v-text-field>
-              </v-col>
+              <v-range-slider
+              :tick-labels="marks"
+              class="ml-4 mr-4"
+              v-model="markRange"
+              step="25"
+            ></v-range-slider>
             </v-row>
 
-            <v-text-field label="To grade"></v-text-field>
+            
           </v-card-text>
-          <v-divider> </v-divider>
-          <v-card-title> Filter pharmacies by distance [m] </v-card-title>
-          <v-card-text>
-            <v-row no-gutters>
-              <v-col>
-                <v-text-field label="From distance"></v-text-field>
-              </v-col>
-            </v-row>
-
-            <v-text-field label="To distance"></v-text-field>
-          </v-card-text>
-          <v-card-actions>
-            <v-btn color="primary">
-              <v-icon> mdi-filter </v-icon>
-              Filter
-            </v-btn>
-          </v-card-actions>
+          
+          
         </v-card>
         <!--End of filter form-->
       </v-col>
@@ -82,7 +63,7 @@
         <v-card
           elevation="4"
           class="pa-4 ml-10 mb-10"
-          v-for="pharmacy in pharmacies"
+          v-for="pharmacy in filteredPharmacies"
           :key="pharmacy.location"
         >
           <v-row>
@@ -124,6 +105,10 @@
 export default {
   data: () => ({
     pharmacies: [],
+    searchFieldForPlace:"",
+    searchFieldForName:"",
+    markRange: [0, 100],
+    marks: ["1", "2", "3", "4", "5"],
   }),
   mounted() {
     this.axios
@@ -134,6 +119,32 @@ export default {
       .then((resp) => {
         this.pharmacies = resp.data;
       });
+      
   },
+  methods: {
+    isMatchedPharmacy(pharmacy){
+      //search by name of pharmacy
+      if (!pharmacy.name.toLowerCase().match(this.searchFieldForName.toLowerCase()))
+        return false;
+
+      //search by location of pharmacy
+      if(!pharmacy.location.toLowerCase().match(this.searchFieldForPlace.toLowerCase()))
+        return false;  
+
+      let minMark = this.markRange[0] / 25 + 1;
+      let maxMark = this.markRange[1] / 25 + 1;
+      if (pharmacy.rating < minMark || pharmacy.rating > maxMark) return false;
+
+      return true;
+    },
+    
+  },
+  computed:{
+    filteredPharmacies: function () {
+      return this.pharmacies.filter((pharmacy) => {
+        return this.isMatchedPharmacy(pharmacy);
+      });
+    },
+  }
 };
 </script>

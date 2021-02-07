@@ -21,6 +21,8 @@ import PharmacistPatientsearch from './../pages/pharmacist/patientsearch/Patient
 
 import Dermatologist from './../pages/dermatologist/Container';
 import DermatologistLanding from './../pages/dermatologist/landing/Landing';
+import DermatologistProfile from './../pages/dermatologist/profile/Profile';
+import DermatologistPatientsearch from './../pages/dermatologist/patientsearch/Patientsearch.vue';
 
 import SystemAdmin from './../pages/systemadmin/Container';
 import SystemAdminLanding from './../pages/systemadmin/landing/Landing';
@@ -97,6 +99,11 @@ const routes = [
                 name: 'patientdrugs',
                 path: 'patientdrugs'
             },
+            {
+                component: Pharmacies,
+                name: 'patientpharmacies',
+                path: 'patientpharmacies'
+            }
         ]
     },
     {
@@ -114,13 +121,13 @@ const routes = [
             },
             {
                 component: PharmacistProfile,
-                name: 'profile',
+                name: 'Pharmacistprofile',
                 path: 'profile'
             },
             {
                 component: PharmacistPatientsearch,
-                name: 'search',
-                path: 'search'
+                name: 'pphatientsearch',
+                path: 'pphatientsearch'
             },
             {
                 component: Drugs,
@@ -143,9 +150,19 @@ const routes = [
                 path: ''
             },
             {
+                component: DermatologistProfile,
+                name: 'Dermatologistprofile',
+                path: 'profile'
+            },
+            {
                 component: Drugs,
                 name: 'dermatologistdrugs',
                 path: 'dermatologistdrugs'
+            },
+            {
+                component: DermatologistPatientsearch,
+                name: 'dermatologistpatientsearch',
+                path: 'dpatientsearch'
             }
         ]
     },
@@ -171,7 +188,12 @@ const routes = [
                 component: Drugs,
                 name: 'systemadmindrugs',
                 path: 'systemadmindrugs'
-            }
+            },
+            {
+                component: Pharmacies,
+                name: 'systemadminpharmacies',
+                path: 'systemadminpharmacies'
+            },
         ]
     },
     {

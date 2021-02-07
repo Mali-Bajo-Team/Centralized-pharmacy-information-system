@@ -53,7 +53,7 @@ public class ConsultationController {
 	}
 
 	@PostMapping("/consultantexaminations")
-	@PreAuthorize("hasRole('PHARMACIST')")
+	@PreAuthorize("hasRole('PHARMACIST')|| hasRole('DERMATOLOGIST')")
 	public ResponseEntity<List<ConsultationDTO>> getAllConsultationsForConsultant(
 			@RequestBody ConsultantDTO consultantDTO) {
 
@@ -72,7 +72,7 @@ public class ConsultationController {
 	}
 
 	@PostMapping("/loggedconsultant")
-	@PreAuthorize("hasRole('PHARMACIST')")
+	@PreAuthorize("hasRole('PHARMACIST')|| hasRole('DERMATOLOGIST')")
 	public ResponseEntity<ConsultantDTO> getLoggedConsultant(@RequestBody ConsultantDTO consultantDTO) {
 
 		UserAccount loggedUser = (UserAccount) SecurityContextHolder.getContext().getAuthentication()
