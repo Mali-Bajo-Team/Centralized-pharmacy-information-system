@@ -29,15 +29,26 @@
           <!--End of toolbar of the card-->
 
           <v-form class="pa-2">
-            <v-card-text> <h3> Drugs mark </h3> </v-card-text>
+            <v-card-text> <h3>Drugs mark</h3> </v-card-text>
             <v-range-slider
-            :tick-labels="marks"
+              :tick-labels="marks"
               class="ml-4 mr-4"
               v-model="markRange"
               step="25"
             ></v-range-slider>
+            <br />
             <v-divider> </v-divider>
+            <br />
 
+            <v-select
+              class="ml-4 mr-4"
+              v-model="selectedTypeOfDrugs"
+              :items="allTypeOfDrugs"
+              label="Select type of the drug"
+              multiple
+              chips
+            ></v-select>
+            <v-divider></v-divider>
           </v-form>
         </v-card>
         <!-- End of the filter card -->
@@ -259,6 +270,8 @@
 <script>
 export default {
   data: () => ({
+    allTypeOfDrugs: [],
+    selectedTypeOfDrugs: [],
     markRange: [0, 100],
     marks: ["1", "2", "3", "4", "5"],
     drugs: [],
@@ -302,7 +315,6 @@ export default {
       );
     },
     getDrugPharmacies(drug) {
-      //   alert("name: " + drug.name);
       if (drug.availableDrugs != null) {
         drug.showPharmacies = !drug.showPharmacies;
         return; // PREVENT TO MAKE ONLY ONE AJAX CALL TO GET PHARMACIES
@@ -337,11 +349,12 @@ export default {
     },
     isMatchedDrug(drug) {
       // Matched drug is one who match all the criteria
-      if (!drug.name.toLowerCase().match(this.searchDrugField.toLowerCase())) // search
+      if (!drug.name.toLowerCase().match(this.searchDrugField.toLowerCase()))
+        // search
         return false;
-      let minMark = this.markRange[0]/25 + 1;
-      let maxMark = this.markRange[1]/25 + 1; 
-      if(drug.mark < minMark || drug.mark > maxMark) return false;
+      let minMark = this.markRange[0] / 25 + 1;
+      let maxMark = this.markRange[1] / 25 + 1;
+      if (drug.mark < minMark || drug.mark > maxMark) return false;
 
       return true;
     },
