@@ -11,15 +11,17 @@ public class ConsultationDTO {
     private String patientSurname;
     private Long patientId;
     private Long consultantId;
+    private Long pharmacyID;
+    private String pharmacyName;
 
     public ConsultationDTO() {
     }
 
     public ConsultationDTO(Consultation consultation) {
-        this(consultation.getConsultant().getAccount().getEmail() , consultation.getId(), consultation.getTime().getStart(), consultation.getTime().getEnd(), consultation.getPatient().getName(), consultation.getPatient().getSurname(), consultation.getPatient().getId(), consultation.getConsultant().getId());
+        this(consultation.getConsultant().getAccount().getEmail() , consultation.getId(), consultation.getTime().getStart(), consultation.getTime().getEnd(), consultation.getPatient().getName(), consultation.getPatient().getSurname(), consultation.getPatient().getId(), consultation.getConsultant().getId(), consultation.getPharmacy().getId(), consultation.getPharmacy().getName());
     }
 
-    public ConsultationDTO(String consultantEmail, Long id, Date startDate, Date endDate, String patientName, String patientSurname, Long patientId, Long consultantId) {
+    public ConsultationDTO(String consultantEmail, Long id, Date startDate, Date endDate, String patientName, String patientSurname, Long patientId, Long consultantId, Long pharmacyID, String pharmacyName) {
         super();
         this.id = id;
         this.startDate = startDate;
@@ -29,6 +31,24 @@ public class ConsultationDTO {
         this.patientId = patientId;
         this.consultantId = consultantId;
         this.consultantEmail = consultantEmail;
+        this.pharmacyID = pharmacyID;
+        this.pharmacyName = pharmacyName;
+    }
+
+    public Long getPharmacyID() {
+        return pharmacyID;
+    }
+
+    public void setPharmacyID(Long pharmacyID) {
+        this.pharmacyID = pharmacyID;
+    }
+
+    public String getPharmacyName() {
+        return pharmacyName;
+    }
+
+    public void setPharmacyName(String pharmacyName) {
+        this.pharmacyName = pharmacyName;
     }
 
     public String getConsultantEmail() {

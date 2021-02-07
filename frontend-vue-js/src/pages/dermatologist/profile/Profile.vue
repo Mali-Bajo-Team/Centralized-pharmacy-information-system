@@ -210,9 +210,9 @@
         </v-card>
       </v-col>
       <v-col md="6">
-         <h1 class="primary--text">Working calendar</h1>
+
         <div class="calendar pa-8">
-          <calendar></calendar>
+          <calendarDermatologist></calendarDermatologist>
         </div>
       </v-col>
     </v-row>
@@ -220,14 +220,14 @@
 </template>
 
 <script>
-import calendar from "../../../components/Calendar";
+import calendarDermatologist from "../../../components/CalendarDermatologist";
 import { validationMixin } from "vuelidate";
 import { required, minLength, sameAs } from "vuelidate/lib/validators";
 import { saveToken, getToken, getParsedToken } from "./../../../util/token";
 export default {
   mixins: [validationMixin],
   components: {
-    calendar,
+    calendarDermatologist,
   },
   data: () => ({
     rules: {
