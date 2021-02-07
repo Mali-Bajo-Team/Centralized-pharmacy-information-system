@@ -284,7 +284,8 @@ export default {
     this.consultants = [];
     this.axios
       .post(
-        "http://localhost:8081/api/consultant/examinitedpatients",
+         process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_CONSULTANT_EXAMPAT_ENDPOINT,
         { consultantEmail: email },
         {
           headers: {
@@ -346,8 +347,7 @@ export default {
       } else {
         this.axios
           .post(
-            process.env.VUE_APP_BACKEND_URL +
-              "api/consultations/scheduleconsultation",
+            process.env.VUE_APP_BACKEND_URL + process.env.VUE_APP_CONSULTATIONS_SCHEDULE,
             {
               consultantEmail: email,
               startDate:
@@ -392,8 +392,7 @@ export default {
       } else {
         this.axios
           .post(
-            process.env.VUE_APP_BACKEND_URL +
-              "api/vacationrequst/createrequest",
+            process.env.VUE_APP_BACKEND_URL + process.env.VUE_APP_VACATIONREQUEST_CREATE_ENDPOINT,
             {
               consultantEmail: email,
               startVacationReqDate:
@@ -432,7 +431,7 @@ export default {
       this.isLoading = true;
 
       // Lazily load input items
-      fetch("http://localhost:8081/api/users/patients", {
+      fetch( process.env.VUE_APP_BACKEND_URL + process.env.VUE_APP_ALL_PATIENTS_ENDPOINT, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
         },
