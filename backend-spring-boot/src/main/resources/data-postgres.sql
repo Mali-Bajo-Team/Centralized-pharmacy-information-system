@@ -135,3 +135,9 @@ insert into available_drug(available_amount, default_price, drug_code, pharmacy_
 values(100, 15, 'aspirin', 1);
 insert into available_drug(available_amount, default_price, drug_code, pharmacy_id)
 values(2, 5, 'aspirin', 2);
+
+-- INSERT ONE DERMATOLOGIST
+insert into person (discriminator, address, city, country, name, surname, phone_number) values ('Consultant', 'Svetislava Pesica 20', 'Novi Sad', 'Srbija', 'Miroslav', 'Jovanovic', '0635212365');
+insert into user_account (email, password, is_active, person_id, needs_password_change) values ('cpisuser+dermatologist@gmail.com', '$2a$10$ijW6YiSn3zggTw5ybFOkiO.TeAxiHo/E0Ala4JPJvdza3TSI2H7ue', true, 9, false);
+-- Password for dermatologist account is: dermatologist
+insert into user_authority (user_id, authority_id) values (9, 5);
