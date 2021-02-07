@@ -1,12 +1,9 @@
 <template >
-  <v-card width="600px" class="mx-auto">
-    <v-card-title>{{ patient.name }} {{ patient.surname }} </v-card-title>
-    <v-row>
+  <v-card width="600px" class="mx-auto" v-if="patient">
+    <v-card-title>{{patient.name }} {{ patient.surname }} </v-card-title>
+    <v-row v-if="patient.userCategoryDTO">
       <v-col xl="8" md="8" sm="12">
         <v-card-text>
-          <!--Category-->
-          <v-chip color="primary"> {{ patient.userCategoryDTO.name }} </v-chip>
-          <br /><br />
           <!--Username-->
           <v-icon color="primary">mdi-account</v-icon>
           {{ patient.email }}
@@ -15,6 +12,16 @@
           <!--Adress-->
           <v-icon color="primary"> mdi-map-marker </v-icon>
           {{ patient.address }}
+          <br /><br />
+
+          <!--City-->
+          <v-icon color="primary">mdi-city</v-icon>
+          {{ patient.city }}
+          <br /><br />
+
+          <!--Country-->
+          <v-icon color="primary">mdi-map</v-icon>
+          {{ patient.country }}
           <br /><br />
 
           <!--Phone nubmer-->
@@ -27,13 +34,29 @@
 
           <!--Points-->
           <v-icon color="primary">mdi-star</v-icon>
-          {{ patient.loyaltyPoints }}
+          {{ patient.loyaltyPoints }} <i> points</i> <br /><br />
+
+          <!--Category-->
+          <v-chip color="primary">  </v-chip>
           <br /><br />
 
           <!--Benefits-->
-          <v-icon color="primary">mdi-check</v-icon>
-          {{patient.userCategoryDTO.reservationDiscount}}
-          {{patient.userCategoryDTO.consultationDiscount}}
+
+          <v-chip color="primary"
+            >Reservation discount:{{
+              patient.userCategoryDTO.reservationDiscount
+            }}
+            %</v-chip
+          >
+          <br /><br />
+
+          <v-chip color="primary"
+            >Consultation discount:{{
+              patient.userCategoryDTO.consultationDiscount
+            }}
+            %</v-chip
+          >
+          <b> </b>
         </v-card-text>
       </v-col>
 
@@ -54,11 +77,10 @@
             </v-toolbar>
             <v-card-text>
               <v-form>
-                <v-text-field
-                  :rules="[rules.min]"
-                  label="Change your name"
-                ></v-text-field>
-                <v-text-field label="Change your surname"></v-text-field>
+                <v-text-field>
+                
+                </v-text-field>
+                <v-text-field label="Change your surname " v-model="patientFormDTO.surname" ></v-text-field>
                 <v-text-field label="Change your address"></v-text-field>
                 <v-text-field label="Change your phone number"></v-text-field>
                 <v-text-field
@@ -86,6 +108,10 @@ import { getParsedToken } from "./../../../util/token";
 export default {
   data: () => ({
     patient: {},
+    patientFormDTO:{
+      name:"",
+      surname:""  
+    },
     rules: {
       required: (value) => !!value || "Required.",
       min: (v) => v.length >= 8 || "Min 8 characters",
@@ -98,7 +124,7 @@ export default {
         process.env.VUE_APP_BACKEND_URL +
           process.env.VUE_APP_PATIENT_PROFILE_ENDPOINT,
         {
-          email: this.patientEmail,
+          email: getParsedToken().sub,
         },
         {
           headers: {
@@ -108,6 +134,8 @@ export default {
       )
       .then((resp) => {
         this.patient = resp.data;
+        this.patientFormDTO.name=this.patient.name;
+        this.patientFormDTO.surname=this.patient.surname;
       })
       .catch((error) => {
         alert("Error: " + error);
