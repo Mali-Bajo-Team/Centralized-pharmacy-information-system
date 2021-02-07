@@ -42,7 +42,7 @@ public class DrugController {
         return new ResponseEntity<>(drugsDTO,HttpStatus.OK);
     }
 
-    // Post is only because i want send data through body
+    // Post is only because i want to send data through body
     @PostMapping(value = "/availabledrugs")
     public ResponseEntity<List<PharmacyDrugPriceDTO>> getDrugPharmaciesPrices(@RequestBody DrugDTO drugDTO){
         List<PharmacyDrugPriceDTO> pharmacyDrugPriceDTOS = new ArrayList<>();
