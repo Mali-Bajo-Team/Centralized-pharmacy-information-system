@@ -4,11 +4,14 @@ import java.sql.Date;
 
 public class VacationRequestDTO {
     private String consultantEmail;
-    private Date startVacationReqDate;
-    private Date endVacatonReqDate;
+    private String startVacationReqDate;
+    private String endVacatonReqDate;
     private String response;
 
-    public VacationRequestDTO(String consultantEmail, Date startVacationReqDate, Date endVacatonReqDate, String response) {
+    public VacationRequestDTO() {
+    }
+
+    public VacationRequestDTO(String consultantEmail, String startVacationReqDate, String endVacatonReqDate, String response) {
         this.consultantEmail = consultantEmail;
         this.startVacationReqDate = startVacationReqDate;
         this.endVacatonReqDate = endVacatonReqDate;
@@ -23,19 +26,19 @@ public class VacationRequestDTO {
         this.consultantEmail = consultantEmail;
     }
 
-    public Date getStartVacationReqDate() {
+    public String getStartVacationReqDate() {
         return startVacationReqDate;
     }
 
-    public void setStartVacationReqDate(Date startVacationReqDate) {
+    public void setStartVacationReqDate(String startVacationReqDate) {
         this.startVacationReqDate = startVacationReqDate;
     }
 
-    public Date getEndVacatonReqDate() {
+    public String getEndVacatonReqDate() {
         return endVacatonReqDate;
     }
 
-    public void setEndVacatonReqDate(Date endVacatonReqDate) {
+    public void setEndVacatonReqDate(String endVacatonReqDate) {
         this.endVacatonReqDate = endVacatonReqDate;
     }
 
