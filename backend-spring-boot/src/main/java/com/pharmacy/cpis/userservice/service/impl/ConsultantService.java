@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -86,12 +87,14 @@ public class ConsultantService implements IConsultantService {
         for (Consultation c: allConsultations) {
             ExaminitedPatientDTO exeaminitedPatientDTO = new ExaminitedPatientDTO();
 
-            exeaminitedPatientDTO.setName(c.getPatient().getName());
-            exeaminitedPatientDTO.setSurname(c.getPatient().getSurname());
-            exeaminitedPatientDTO.setExaminitedDate(c.getTime().getStart());
+            if(c.getTime().getStart().before(new Date())) {
+                exeaminitedPatientDTO.setName(c.getPatient().getName());
+                exeaminitedPatientDTO.setSurname(c.getPatient().getSurname());
+                exeaminitedPatientDTO.setExaminitedDate(c.getTime().getStart());
 
-            exainitedPatients.add(c.getPatient());
-            exeaminitedPatientDTOs.add(exeaminitedPatientDTO);
+                exainitedPatients.add(c.getPatient());
+                exeaminitedPatientDTOs.add(exeaminitedPatientDTO);
+            }
         }
 
         return exeaminitedPatientDTOs;
