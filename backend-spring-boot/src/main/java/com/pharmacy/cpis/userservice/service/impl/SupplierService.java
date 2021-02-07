@@ -6,6 +6,7 @@ import com.pharmacy.cpis.userservice.repository.ISupplierRepository;
 import com.pharmacy.cpis.userservice.repository.IUserRepository;
 import com.pharmacy.cpis.userservice.service.IAuthorityService;
 import com.pharmacy.cpis.userservice.service.ISupplierService;
+import com.pharmacy.cpis.util.exceptions.PSNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,13 @@ public class SupplierService implements ISupplierService {
     @Autowired
     private IUserRepository userRepository;
 
+    @Override
+    public Supplier getSupplierByUserAccount(UserAccount account) {
+        Supplier person = supplierRepository.findByAccount(account);
+        if (person == null)
+            throw new PSNotFoundException("Personal information not found.");
+        return person;
+    }
 
     // TODO: Think about how to improve DRY, because this is similar as patient, dermatologist registration service
     // only difference is that this is for supplier :/

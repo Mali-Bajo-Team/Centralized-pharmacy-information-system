@@ -29,7 +29,7 @@
           <!--End of toolbar of the card-->
 
           <v-form class="pa-2">
-            <v-card-text> <h3>Drugs mark</h3> </v-card-text>
+            <v-card-text> <h3>Drugs rating</h3> </v-card-text>
             <v-range-slider
               :tick-labels="marks"
               class="ml-4 mr-4"

@@ -1,5 +1,7 @@
 package com.pharmacy.cpis.userservice.service.impl;
 
+import com.pharmacy.cpis.userservice.model.users.Supplier;
+import com.pharmacy.cpis.userservice.repository.ISupplierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +19,13 @@ public class PersonService implements IPersonService {
 	private IPersonRepository repository;
 
 	@Override
-	public Person getByUserAccount(UserAccount account) {
+	public Person getPersonByUserAccount(UserAccount account) {
 		Person person = repository.findByAccount(account);
 		if (person == null)
 			throw new PSNotFoundException("Personal information not found.");
 		return person;
 	}
+
 
 	@Override
 	public Person update(UserAccount account, PersonalInformationDTO personalInfo) {

@@ -76,6 +76,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/drugs/availabledrugs").permitAll()
                 .antMatchers("/api/drugs/types").permitAll()
 
+                //TODO: DELETE THIS, only for testing purpose
+                .antMatchers("/api/procurement").permitAll()
+
+
 
 
 
