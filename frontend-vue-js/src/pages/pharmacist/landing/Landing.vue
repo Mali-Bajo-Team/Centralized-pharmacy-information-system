@@ -197,7 +197,26 @@
               v-model="vacationRequestDateRange"
               range
             ></v-date-picker>
-
+            <v-alert
+              :value="vacatonrequestAlert"
+              color="pink"
+              dark
+              border="top"
+              icon="mdi-account"
+              transition="scale-transition"
+            >
+              You must pick date range for your vacation request
+            </v-alert>
+             <v-alert
+              :value="vacatonrequestSuccess"
+              color="green"
+              dark
+              border="top"
+              icon="mdi-account"
+              transition="scale-transition"
+            >
+              Successfully sent
+            </v-alert>
             <v-text-field
               v-model="dateRangeText"
               label="Vacation date range"
@@ -222,6 +241,8 @@ export default {
     picker: new Date().toISOString().substr(0, 10),
     alertUser: false,
     alertDate: false,
+    vacatonrequestAlert: false,
+    vacatonrequestSuccess: false,
     alertStartTime: false,
     alertEndTime: false,
     examinationStartTime: null,
@@ -239,7 +260,7 @@ export default {
     scheduleSucces: false,
     searchExaminitedUsers: "",
     examinitedPatients: [],
-    vacationRequestDateRange: ["2019-09-10", "2019-09-20"],
+    vacationRequestDateRange: [],
     headers: [
       {
         text: "Patient name",
@@ -253,7 +274,6 @@ export default {
   }),
   computed: {
     dateRangeText() {
-        
       return this.vacationRequestDateRange.join(" ~ ");
     },
   },
@@ -357,39 +377,47 @@ export default {
     sendVacationRequest() {
       var token = parseJwt(localStorage.getItem("JWT-CPIS"));
       var email = token.sub;
-       if (Date.parse(this.vacationRequestDateRange[1]) < Date.parse(this.vacationRequestDateRange[0])) {
-                let temp = this.vacationRequestDateRange[1]
-                this.vacationRequestDateRange[1] = this.vacationRequestDateRange[0]
-                this.vacationRequestDateRange[0] = temp
-        }
-      console.log(this.vacationRequestDateRange[0]);
-      console.log(this.vacationRequestDateRange[1]);
 
-      this.axios
-        .post(
-          process.env.VUE_APP_BACKEND_URL + "api/vacationrequst/createrequest",
-          {
-            consultantEmail: email,
-            startVacationReqDate: this.vacationRequestDateRange[0] + " 12:00:00",
-            endVacatonReqDate: this.vacationRequestDateRange[1] + " 12:00:00",
-          },
-          {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+      if (
+        Date.parse(this.vacationRequestDateRange[1]) <
+        Date.parse(this.vacationRequestDateRange[0])
+      ) {
+        let temp = this.vacationRequestDateRange[1];
+        this.vacationRequestDateRange[1] = this.vacationRequestDateRange[0];
+        this.vacationRequestDateRange[0] = temp;
+      }
+
+      if (this.vacationRequestDateRange === null) {
+        this.vacatonrequestAlert = true;
+      } else {
+        this.axios
+          .post(
+            process.env.VUE_APP_BACKEND_URL +
+              "api/vacationrequst/createrequest",
+            {
+              consultantEmail: email,
+              startVacationReqDate:
+                this.vacationRequestDateRange[0] + " 12:00:00",
+              endVacatonReqDate: this.vacationRequestDateRange[1] + " 12:00:00",
             },
-          }
-        )
-        .then((resp) => {
-          this.pharmacist = resp.data;
-          this.scheduleAlert = false;
-          this.scheduleSucces = true;
-        })
-        .catch((error) => {
-          this.errorMessage = error.message;
-          console.error("There was an error!", error);
-          this.scheduleAlert = true;
-          this.scheduleSucces = false;
-        });
+            {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+              },
+            }
+          )
+          .then((resp) => {
+            this.pharmacist = resp.data;
+            this.vacatonrequestAlert = false;
+            this.vacatonrequestSuccess = true;
+          })
+          .catch((error) => {
+            this.errorMessage = error.message;
+            console.error("There was an error!", error);
+            this.vacatonrequestAlert = true;
+            this.vacatonrequestSuccess = false;
+          });
+      }
     },
   },
   watch: {
