@@ -1,25 +1,32 @@
 <template >
-  <v-card width="600px" class="mx-auto">
-    <v-card-title> Ana Maksimovic </v-card-title>
-    <v-row>
+  <v-card width="600px" class="mx-auto" v-if="patient">
+    <v-card-title>{{ patient.name }} {{ patient.surname }} </v-card-title>
+    <v-row v-if="patient.userCategoryDTO">
       <v-col xl="8" md="8" sm="12">
         <v-card-text>
-          <!--Category-->
-          <v-chip color="primary"> kategorija </v-chip>
-          <br /><br />
           <!--Username-->
           <v-icon color="primary">mdi-account</v-icon>
-          anaperisic@gmail.com
+          {{ patient.email }}
           <br /><br />
 
           <!--Adress-->
           <v-icon color="primary"> mdi-map-marker </v-icon>
-          Dr Sime Milosevica 10
+          {{ patient.address }}
+          <br /><br />
+
+          <!--City-->
+          <v-icon color="primary">mdi-city</v-icon>
+          {{ patient.city }}
+          <br /><br />
+
+          <!--Country-->
+          <v-icon color="primary">mdi-map</v-icon>
+          {{ patient.country }}
           <br /><br />
 
           <!--Phone nubmer-->
           <v-icon color="primary"> mdi-phone-classic </v-icon>
-          050220033
+          {{ patient.phoneNumber }}
 
           <br /><br />
           <v-divider></v-divider>
@@ -27,11 +34,29 @@
 
           <!--Points-->
           <v-icon color="primary">mdi-star</v-icon>
-          15
-          <br /><br />
+          {{ patient.loyaltyPoints }} <i> points</i> <br /><br />
 
           <!--Category-->
-          <v-icon color="primary">mdi-check</v-icon>
+          <v-chip color="primary">{{patient.userCategoryDTO.name}} </v-chip>
+          <br /><br />
+
+          <!--Benefits-->
+
+          <v-chip color="primary"
+            >Reservation discount:{{
+              patient.userCategoryDTO.reservationDiscount
+            }}
+            %</v-chip
+          >
+          <br /><br />
+
+          <v-chip color="primary"
+            >Consultation discount:{{
+              patient.userCategoryDTO.consultationDiscount
+            }}
+            %</v-chip
+          >
+          <b> </b>
         </v-card-text>
       </v-col>
 
@@ -52,14 +77,33 @@
             </v-toolbar>
             <v-card-text>
               <v-form>
-                <v-text-field 
-                     :rules="[rules.min]"
-                     label="Change your name"></v-text-field>
-                <v-text-field label="Change your surname"></v-text-field>
-                <v-text-field label="Change your address"></v-text-field>
-                <v-text-field label="Change your phone number"></v-text-field>
+                <v-text-field
+                  label="Change your name "
+                  v-model="patientFormDTO.name"
+                ></v-text-field>
+                <v-text-field
+                  label="Change your surname "
+                  v-model="patientFormDTO.surname"
+                ></v-text-field>
+                <v-text-field
+                  label="Change your address"
+                  v-model="patientFormDTO.address"
+                ></v-text-field>
+                <v-text-field
+                  label="Change your city"
+                  v-model="patientFormDTO.city"
+                ></v-text-field>
+                <v-text-field
+                  label="Change your country"
+                  v-model="patientFormDTO.country"
+                ></v-text-field>
+                <v-text-field
+                  label="Change your phone number"
+                  v-model="patientFormDTO.phoneNumber"
+                ></v-text-field>
                 <v-text-field
                   label="Add drugs which cause you allergic reactions"
+                  v-model="patientFormDTO.allergies"
                 ></v-text-field>
               </v-form>
             </v-card-text>
@@ -79,14 +123,52 @@
   </v-card>
 </template>
 <script>
+import { getParsedToken } from "./../../../util/token";
 export default {
   data: () => ({
+    patient: {},
+    patientFormDTO: {
+      name: "",
+      surname: "",
+      address: "",
+      city: "",
+      country: "",
+      phoneNumber: "",
+      allergies:""
+    },
     rules: {
       required: (value) => !!value || "Required.",
       min: (v) => v.length >= 8 || "Min 8 characters",
-    
-    }
-  })
-
+    },
+    patientEmail: getParsedToken().sub,
+  }),
+  mounted() {
+    this.axios
+      .post(
+        process.env.VUE_APP_BACKEND_URL +
+          process.env.VUE_APP_PATIENT_PROFILE_ENDPOINT,
+        {
+          email: getParsedToken().sub,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+          },
+        }
+      )
+      .then((resp) => {
+        this.patient = resp.data;
+        this.patientFormDTO.name = this.patient.name;
+        this.patientFormDTO.surname = this.patient.surname;
+        this.patientFormDTO.address = this.patient.address;
+        this.patientFormDTO.city = this.patient.city;
+        this.patientFormDTO.country = this.patient.country;
+        this.patientFormDTO.phoneNumber = this.patient.phoneNumber;
+       
+      })
+      .catch((error) => {
+        alert("Error: " + error);
+      });
+  },
 };
 </script>

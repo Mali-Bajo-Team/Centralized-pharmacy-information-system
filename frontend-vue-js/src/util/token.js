@@ -16,3 +16,7 @@ export function getParsedToken() {
 export function removeToken() {
     localStorage.removeItem("JWT-CPIS");
 }
+export function getEmailFromToken() {
+    let parsedToken=getParsedToken();
+    return parsedToken.sub;
+}
