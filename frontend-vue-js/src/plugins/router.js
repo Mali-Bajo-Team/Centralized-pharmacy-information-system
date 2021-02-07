@@ -22,6 +22,7 @@ import PharmacistPatientsearch from './../pages/pharmacist/patientsearch/Patient
 import Dermatologist from './../pages/dermatologist/Container';
 import DermatologistLanding from './../pages/dermatologist/landing/Landing';
 import DermatologistProfile from './../pages/dermatologist/profile/Profile';
+import DermatologistPatientsearch from './../pages/dermatologist/patientsearch/Patientsearch.vue';
 
 import SystemAdmin from './../pages/systemadmin/Container';
 import SystemAdminLanding from './../pages/systemadmin/landing/Landing';
@@ -125,8 +126,8 @@ const routes = [
             },
             {
                 component: PharmacistPatientsearch,
-                name: 'search',
-                path: 'search'
+                name: 'pphatientsearch',
+                path: 'pphatientsearch'
             },
             {
                 component: Drugs,
@@ -157,6 +158,11 @@ const routes = [
                 component: Drugs,
                 name: 'dermatologistdrugs',
                 path: 'dermatologistdrugs'
+            },
+            {
+                component: DermatologistPatientsearch,
+                name: 'dermatologistpatientsearch',
+                path: 'dpatientsearch'
             }
         ]
     },
