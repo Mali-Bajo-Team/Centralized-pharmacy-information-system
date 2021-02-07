@@ -47,7 +47,8 @@
               label="Select type of the drug"
               multiple
               chips
-            ></v-select>
+            >
+            </v-select>
             <v-divider></v-divider>
           </v-form>
         </v-card>
@@ -306,6 +307,18 @@ export default {
           this.drugs.push(tempDrug);
         }
       });
+
+    this.axios
+      .get(
+        process.env.VUE_APP_BACKEND_URL +
+          process.env.VUE_APP_ALL_DRUGS_TYPES_ENDPOINT
+      )
+      .then((resp) => {
+        this.allTypeOfDrugs = [];
+        for (let drugType of resp.data) {
+          this.allTypeOfDrugs.push(drugType.name);
+        }
+      });
   },
   methods: {
     makeReservation(pharmacy) {
@@ -349,12 +362,26 @@ export default {
     },
     isMatchedDrug(drug) {
       // Matched drug is one who match all the criteria
+      // Search filter
       if (!drug.name.toLowerCase().match(this.searchDrugField.toLowerCase()))
-        // search
         return false;
+
+      // Mark filter
       let minMark = this.markRange[0] / 25 + 1;
       let maxMark = this.markRange[1] / 25 + 1;
       if (drug.mark < minMark || drug.mark > maxMark) return false;
+
+      // Type of the drug filter
+      if (this.selectedTypeOfDrugs.length != 0) {
+        let isSomeOfThoseTypes = false;
+        for (let typeOfDrug of this.selectedTypeOfDrugs) {
+          if (drug.typeOfDrug == typeOfDrug) {
+            isSomeOfThoseTypes = true;
+            break;
+          }
+        }
+        if (!isSomeOfThoseTypes) return false;
+      }
 
       return true;
     },

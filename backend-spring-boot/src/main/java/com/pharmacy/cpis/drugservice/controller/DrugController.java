@@ -54,7 +54,6 @@ public class DrugController {
     }
 
     @GetMapping(value = "/types")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<DrugClass>> getAllDrugsTypes() {
         List<DrugClass> drugsTypes = drugService.findAllDrugClass();
         return new ResponseEntity<>(drugsTypes,HttpStatus.OK);
