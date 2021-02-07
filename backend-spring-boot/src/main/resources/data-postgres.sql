@@ -150,5 +150,5 @@ insert into drug_order(deadline, status,timestamp, administrator_id, pharmacy_id
 insert into ordered_drug(amount, drug_code, order_id) values (100, 'brufen', 1);
 
 --INSERT OFFER (Suppliers' offers)
-insert into offer(price, shipment_date, status, order_id, supplier_id) values (15, '2021-02-03 12:00', 0, 1, 1);
+insert into offer(price, shipment_date, status, order_id, supplier_id) values (15, '2021-02-03 12:00', 0, 1, 9);
 
