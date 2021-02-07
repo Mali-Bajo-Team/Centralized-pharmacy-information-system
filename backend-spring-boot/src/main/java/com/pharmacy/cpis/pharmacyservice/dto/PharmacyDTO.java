@@ -13,10 +13,8 @@ public class PharmacyDTO {
     @NotEmpty(message = "Name is required.")
     private String name;
 
-    @NotEmpty(message = "Location is required.")
     private String location;
 
-    @NotEmpty(message = "Rating is required.")
     private Double rating;
 
     public PharmacyDTO(){
