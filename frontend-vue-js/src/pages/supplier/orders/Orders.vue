@@ -14,7 +14,7 @@
               <h3 class="ml-3">{{ order.pharmacy.name }}</h3>
             </v-card-title>
             <v-spacer></v-spacer>
-            <!-- Make a offer -->
+            <!-- Make a offer dialog -->
             <v-dialog
               v-model="order.showAddOfferDialog"
               width="500"
@@ -46,6 +46,37 @@
                     <h3>Make offer</h3>
                   </v-toolbar-title>
                 </v-toolbar>
+                <!-- End of the toolbar of the card -->
+                <!-- Form for making a offer -->
+                <v-form class="ma-5">
+                  <v-text-field v-model="offerDto.price" type="number" label="Total price">
+                  </v-text-field>
+                  <v-text-field v-model="offerDto.shipmentDate" type="date" label="My shipment date">
+                  </v-text-field>
+                </v-form>
+                <!-- End of the form for making a offer -->
+                <v-card-actions>
+                  <v-spacer> </v-spacer>
+                  <v-btn
+                    color="success"
+                    dark
+                    depressed
+                    @click="confirmOfferCreation()"
+                  >
+                    <v-icon dark left> mdi-checkbox-marked-circle </v-icon>
+                    Confirm
+                  </v-btn>
+                  <v-btn
+                    color="blue"
+                    dark
+                    depressed
+                    @click="
+                      order.showAddOfferDialog = !order.showAddOfferDialog
+                    "
+                    ><v-icon dark left> mdi-minus-circle </v-icon>
+                    Close
+                  </v-btn>
+                </v-card-actions>
               </v-card>
             </v-dialog>
             <!-- End of the make offer -->
@@ -92,7 +123,7 @@
                     deadline date to make your offer is
                     {{ convertMsToString(order.deadline) }}, if you are need
                     more information, you can contact us on our website or go to
-                    the {{order.pharmacy.location}}
+                    the {{ order.pharmacy.location }}
                   </v-card-text>
                 </v-card>
               </div>
@@ -111,8 +142,15 @@ import { getStringDateFromMilliseconds } from "./../../../util/dateHandler";
 export default {
   data: () => ({
     allOrders: [],
+    offerDto: {
+      price: "",
+      shipmentDate: "",
+    },
   }),
   methods: {
+    confirmOfferCreation() {
+      alert("simulation of creation" + this.offerDto.price + " " + this.offerDto.shipmentDate);
+    },
     convertMsToString(ms) {
       return getStringDateFromMilliseconds(ms);
     },
