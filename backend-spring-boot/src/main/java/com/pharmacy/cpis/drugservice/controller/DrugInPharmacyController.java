@@ -18,7 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pharmacy.cpis.drugservice.dto.AddAvailableDrugDTO;
+import com.pharmacy.cpis.drugservice.dto.AddDrugPriceDTO;
 import com.pharmacy.cpis.drugservice.dto.AvailableDrugDTO;
+import com.pharmacy.cpis.drugservice.dto.DrugPriceDTO;
+import com.pharmacy.cpis.drugservice.dto.DrugPriceSearchDTO;
 import com.pharmacy.cpis.drugservice.dto.DrugSearchDTO;
 import com.pharmacy.cpis.drugservice.model.drugsales.AvailableDrug;
 import com.pharmacy.cpis.drugservice.service.IAvailableDrugService;
@@ -103,6 +106,37 @@ public class DrugInPharmacyController {
 			throw new PSForbiddenException("You are not authorized to administrate a pharmacy.");
 
 		availableDrugService.deleteFromPharmacy(user.getPharmacyId(), code);
+
+		return ResponseEntity.noContent().build();
+	}
+
+	@PostMapping(value = "/{code}/price/search", consumes = "application/json")
+	@PreAuthorize("hasRole('PHARMACY_ADMIN')")
+	@EmployeeAccountActive
+	public ResponseEntity<Collection<DrugPriceDTO>> getDrugPrice(@PathVariable(required = true) String code,
+			@RequestBody @Valid DrugPriceSearchDTO dates) {
+		UserAccount user = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		if (user.getPharmacyId() == null)
+			throw new PSForbiddenException("You are not authorized to administrate a pharmacy.");
+
+		Collection<DrugPriceDTO> prices = availableDrugService.getPrice(user.getPharmacyId(), code, dates.getStart(),
+				dates.getEnd());
+
+		return ResponseEntity.ok(prices);
+	}
+
+	@PostMapping(value = "/{code}/price", consumes = "application/json")
+	@PreAuthorize("hasRole('PHARMACY_ADMIN')")
+	@EmployeeAccountActive
+	public ResponseEntity<Void> addDrugPrice(@PathVariable(required = true) String code,
+			@RequestBody @Valid AddDrugPriceDTO priceInfo) {
+		UserAccount user = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		if (user.getPharmacyId() == null)
+			throw new PSForbiddenException("You are not authorized to administrate a pharmacy.");
+
+		availableDrugService.addPrice(user.getPharmacyId(), code, priceInfo);
 
 		return ResponseEntity.noContent().build();
 	}
