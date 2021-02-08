@@ -56,6 +56,17 @@ public class ReservationService implements IReservationService {
         return reservationDTO;
     }
 
+    @Override
+    public ReservationDTO dispensingMedicine(ReservationDTO reservationDTO) {
+        Reservation reservation = reservationRepository.getOne(reservationDTO.getReservationID());
+
+        reservation.setIsPickedUp(true);
+
+        reservationRepository.save(reservation);
+
+        return reservationDTO;
+    }
+
     Pharmacy findPharmacyWhereConsultantWork(Long consultantID){
         List<Pharmacy> allPharmacies = pharmacyService.findAll();
 

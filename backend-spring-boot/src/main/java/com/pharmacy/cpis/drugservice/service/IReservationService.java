@@ -5,4 +5,6 @@ import com.pharmacy.cpis.drugservice.model.drugsales.Reservation;
 
 public interface IReservationService {
     ReservationDTO isReservationValid(ReservationDTO reservationDTO);
+
+    ReservationDTO dispensingMedicine(ReservationDTO reservationDTO);
 }

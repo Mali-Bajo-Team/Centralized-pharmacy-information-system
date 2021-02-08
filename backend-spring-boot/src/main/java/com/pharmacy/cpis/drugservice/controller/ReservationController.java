@@ -1,12 +1,7 @@
 package com.pharmacy.cpis.drugservice.controller;
 
 import com.pharmacy.cpis.drugservice.dto.ReservationDTO;
-import com.pharmacy.cpis.drugservice.model.drugsales.Reservation;
 import com.pharmacy.cpis.drugservice.service.IReservationService;
-import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
-import com.pharmacy.cpis.pharmacyservice.service.IPharmacyService;
-import com.pharmacy.cpis.userservice.model.users.Consultant;
-import com.pharmacy.cpis.userservice.service.IConsultantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +24,14 @@ public class ReservationController {
     public ResponseEntity<ReservationDTO> getDrugPharmaciesPrices(@RequestBody ReservationDTO reservationDTO){
 
         ReservationDTO isReservationValid = reservationService.isReservationValid(reservationDTO);
+        
+        return new ResponseEntity<>(reservationDTO, HttpStatus.OK);
+    }
 
+    @PostMapping(value = "/dispense")
+    public ResponseEntity<ReservationDTO> dispensingMedicine(@RequestBody ReservationDTO reservationDTO){
+
+        reservationService.dispensingMedicine(reservationDTO);
 
         return new ResponseEntity<>(reservationDTO, HttpStatus.OK);
     }
