@@ -11,7 +11,7 @@
           <!-- Row for title -->
           <v-row align="center">
             <v-card-title>
-              <h4>{{ order.pharmacy.name }}</h4>
+              <h3 class="ml-3">{{ order.pharmacy.name }}</h3>
             </v-card-title>
             <v-spacer></v-spacer>
             <!-- Make a offer -->
@@ -51,15 +51,40 @@
             <!-- End of the make offer -->
           </v-row>
           <!-- End of the row for the title -->
-          <v-row
-            ><v-col>
-              <h5 class="ml-4">
-                Created order: {{ convertMsToString(order.timestamp) }}
-              </h5>
-              <h5 class="ml-4">
-                Deadline to make offer: {{ convertMsToString(order.deadline) }}
-              </h5>
-            </v-col>
+          <v-row>
+            <v-card-actions>
+              <v-btn class="ml-3" color="orange lighten-2" text> Order details </v-btn>
+
+              <v-spacer></v-spacer>
+
+              <v-btn
+                icon
+                @click="
+                  order.showExtensionDetails = !order.showExtensionDetails
+                "
+              >
+                <v-icon>{{
+                  order.showExtensionDetails
+                    ? "mdi-chevron-up"
+                    : "mdi-chevron-down"
+                }}</v-icon>
+              </v-btn>
+            </v-card-actions>
+
+            <v-expand-transition>
+              <div v-show="order.showExtensionDetails">
+                <v-divider></v-divider>
+
+                <v-card-text>
+                  I'm a thing. But, like most politicians, he promised more than
+                  he could deliver. You won't have time for sleeping, soldier,
+                  not with all the bed making you'll be doing. Then we'll go
+                  with that data file! Hey, you add a one and two zeros to that
+                  or we walk! You're going to do his laundry? I've got to find a
+                  way to escape.
+                </v-card-text>
+              </div>
+            </v-expand-transition>
           </v-row>
         </v-card>
       </v-col>
@@ -100,6 +125,7 @@ export default {
             status: order.status,
             timestamp: order.timestamp,
             showAddOfferDialog: false,
+            showExtensionDetails: false,
           };
 
           this.allOrders.push(tempObj);
