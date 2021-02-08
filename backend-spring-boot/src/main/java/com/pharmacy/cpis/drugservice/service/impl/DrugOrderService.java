@@ -109,6 +109,32 @@ public class DrugOrderService implements IDrugOrderService {
 		drugOrderRepository.delete(order);
 	}
 
+	public void update(UserAccount user, Long orderId, AddDrugOrderDTO orderUpdate) {
+		PharmacyAdministrator admin = pharmacyAdminRepository.findByAccount(user).orElse(null);
+
+		if (admin == null)
+			throw new PSForbiddenException("No pharmacy administrator associated with this account.");
+
+		DrugOrder order = findById(orderId);
+
+		if (!order.getAdministrator().equals(admin))
+			throw new PSForbiddenException("Drug orders can only be updated by their creator.");
+
+		if (!order.getStatus().equals(DrugOrderStatus.WAITING_FOR_OFFERS))
+			throw new PSConflictException("Drug order cannot be updated because it already has offers.");
+		
+		order.setDeadline(orderUpdate.getDeadline());
+		order = drugOrderRepository.save(order);
+
+		for (OrderedDrug orderedDrug : order.getOrderedDrugs()) {
+			orderedDrugRepository.delete(orderedDrug);
+		}
+
+		for (AddOrderedDrugDTO orderedDrugDTO : orderUpdate.getOrderedDrugs()) {
+			addDrugToOder(order, orderedDrugDTO);
+		}
+	}
+
 	private void addDrugToOder(DrugOrder order, AddOrderedDrugDTO orderedDrugDTO) {
 		Drug drug = drugRepository.findById(orderedDrugDTO.getCode()).orElse(null);
 

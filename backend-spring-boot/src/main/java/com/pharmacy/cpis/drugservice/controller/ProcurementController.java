@@ -132,4 +132,19 @@ public class ProcurementController {
 		return ResponseEntity.noContent().build();
 	}
 
+	@PutMapping(value = "/orders/{id}", consumes = "application/json")
+	@PreAuthorize("hasRole('PHARMACY_ADMIN')")
+	@EmployeeAccountActive
+	public ResponseEntity<Void> updateDrugOrder(@PathVariable(required = true) Long id,
+			@RequestBody @Valid AddDrugOrderDTO drugOrder) {
+		UserAccount user = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		if (user.getPharmacyId() == null)
+			throw new PSForbiddenException("You are not authorized to administrate a pharmacy.");
+
+		drugOrderService.update(user, id, drugOrder);
+
+		return ResponseEntity.noContent().build();
+	}
+
 }

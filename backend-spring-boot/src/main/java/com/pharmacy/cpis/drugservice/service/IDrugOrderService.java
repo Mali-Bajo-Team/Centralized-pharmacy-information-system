@@ -13,9 +13,11 @@ public interface IDrugOrderService {
 	List<DrugOrder> findByPharmacyId(Long pharmacyId);
 
 	DrugOrder add(UserAccount creator, AddDrugOrderDTO drugOrder);
-	
+
 	void delete(UserAccount user, Long orderId);
-	
+
 	DrugOrder findById(Long id);
+
+	void update(UserAccount user, Long orderId, AddDrugOrderDTO orderUpdate);
 
 }
