@@ -32,28 +32,33 @@ public class ProcurementController {
     private IDrugOrderService drugOrderService;
 
     @GetMapping(value = "/offers")
-    public ResponseEntity<List<SupplierOfferDTO>> getSupplierOffers(){
+    public ResponseEntity<List<SupplierOfferDTO>> getSupplierOffers() {
         List<SupplierOfferDTO> supplierOfferDTOS = new ArrayList<>();
-        UserAccount account = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Supplier supplier = supplierService.getSupplierByUserAccount(account);
-        for(Offer offer : offerService.findOffersBySupplier(supplier)){
+        for (Offer offer : offerService.findOffersBySupplier(supplierService.getLoggedSupplier())) {
             supplierOfferDTOS.add(new SupplierOfferDTO(offer));
         }
         return new ResponseEntity<>(supplierOfferDTOS, HttpStatus.OK);
     }
 
     @PutMapping(value = "/offers")
-    public ResponseEntity<SupplierOfferDTO> getSupplierOffers(@RequestBody SupplierOfferDTO supplierOffer){
+    public ResponseEntity<SupplierOfferDTO> updateSupplierOffer(@RequestBody SupplierOfferDTO supplierOffer) {
         Offer offer = offerService.updateOffer(supplierOffer);
         return new ResponseEntity<>(new SupplierOfferDTO(offer), HttpStatus.OK);
     }
 
+    @PostMapping(value = "/offers")
+    public ResponseEntity<SupplierOfferDTO> createSupplierOffer(@RequestBody SupplierOfferDTO supplierOffer) {
+        Offer offer = offerService.saveOffer(supplierOffer);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @GetMapping(value = "/orders")
-    public ResponseEntity<List<DrugOrderDTO>> getAllDrugOrders(){
+    public ResponseEntity<List<DrugOrderDTO>> getAllDrugOrders() {
         List<DrugOrderDTO> drugOrderDTOS = new ArrayList<>();
-        for(DrugOrder drugOrder: drugOrderService.findAll()){
+        for (DrugOrder drugOrder : drugOrderService.findAll()) {
             drugOrderDTOS.add(new DrugOrderDTO(drugOrder));
         }
         return new ResponseEntity<>(drugOrderDTOS, HttpStatus.OK);
     }
+
 }

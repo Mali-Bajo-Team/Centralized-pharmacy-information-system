@@ -11,4 +11,6 @@ public interface IOfferService {
     List<Offer> findOffersBySupplier(Supplier supplier);
 
     Offer updateOffer(SupplierOfferDTO offerDTO);
+
+    Offer saveOffer(SupplierOfferDTO offerDTO);
 }
