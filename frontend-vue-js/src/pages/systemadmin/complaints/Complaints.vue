@@ -115,7 +115,21 @@
                 <br />
                 <v-card class="pl-2 mr-4 mb-5 ml-8" elevation="4">
                   <v-card-text>
-                    I have complaint on 
+                    Dear centralized pharmacy information system administrators.
+                    I have complaint on
+                    {{
+                      complaint.pharmacy != null
+                        ? complaint.pharmacy.name
+                        : complaint.consultant != null
+                        ? complaint.consultant.name +
+                          " " +
+                          complaint.consultant.lastName
+                        : "none"
+                    }}
+
+                    because of {{ complaint.content }} <br /><br />
+
+                    {{ convertMsToString(complaint.creationTimestamp) }}
                   </v-card-text>
                 </v-card>
               </div>
@@ -172,19 +186,18 @@ export default {
               surname: complaint.creator.surname,
               alergies: complaint.creator.alergies,
             },
-            
           };
 
-        if(complaint.pharmacy != null){
-            tempObj.pharmacy={
+          if (complaint.pharmacy != null) {
+            tempObj.pharmacy = {
               id: complaint.pharmacy.id,
               name: complaint.pharmacy.name,
               location: complaint.pharmacy.location,
               rating: complaint.pharmacy.rating,
-            }
-        }
-         if(complaint.consultant != null){
-            tempObj.consultant= {
+            };
+          }
+          if (complaint.consultant != null) {
+            tempObj.consultant = {
               email: complaint.consultant.email,
               name: complaint.consultant.name,
               lastName: complaint.consultant.lastName,
@@ -192,8 +205,8 @@ export default {
               location: complaint.consultant.location,
               city: complaint.consultant.city,
               country: complaint.consultant.country,
-            }
-        }
+            };
+          }
 
           this.allComplaints.push(tempObj);
           counter = counter + 1;
