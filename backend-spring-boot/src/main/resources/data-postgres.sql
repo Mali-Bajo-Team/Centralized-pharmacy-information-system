@@ -167,3 +167,10 @@ insert into ordered_drug(amount, drug_code, order_id) values (50, 'aspirin', 2);
 insert into offer(price, shipment_date, status, order_id, supplier_id) values (15, '2021-02-03 12:00', 0, 1, 10);
 
 
+--INSERT COMPLAINT ( only patient who had a consultation can make a complaint about consultant)
+insert into complaint(content, creation_timestamp, response, consultant_id, creator_id, pharmacy_id)
+values('Very sad after consultation','2021-02-02 12:00', 'Waiting on reply', 9,2,1);
+insert into complaint(content, creation_timestamp, response, consultant_id, creator_id, pharmacy_id)
+values('Very sad after consultation','2021-02-02 12:00', 'Waiting on reply', 9,2,1);
+insert into complaint(content, creation_timestamp, response, consultant_id, creator_id, pharmacy_id)
+values('Omg, there is no need for this type of conversation...','2021-03-03 12:00', 'Waiting on reply', 9,4,2);
