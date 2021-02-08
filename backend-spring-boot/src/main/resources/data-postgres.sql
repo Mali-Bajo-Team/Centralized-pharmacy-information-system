@@ -175,9 +175,9 @@ insert into reservation(id,amount,date_of_creation,deadline,is_picked_up,drug_co
 insert into reservation(id,amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (5,4,'2021-03-04 12:00','2021-02-09 12:00',false,'brufen',2,2);
 
 --INSERT COMPLAINT ( only patient who had a consultation can make a complaint about consultant)
-insert into complaint(content, creation_timestamp, response, consultant_id, creator_id, pharmacy_id)
-values('Very sad after consultation','2021-02-02 12:00', 'Waiting on reply', 9,2,1);
-insert into complaint(content, creation_timestamp, response, consultant_id, creator_id, pharmacy_id)
-values('Very expensive one','2021-05-05 12:00', 'Waiting on reply', 9,2,1);
-insert into complaint(content, creation_timestamp, response, consultant_id, creator_id, pharmacy_id)
-values('Omg, there is no need for this type of conversation...','2021-03-03 12:00', 'Waiting on reply', 9,4,2);
+insert into complaint(content, creation_timestamp, response, consultant_id, creator_id)
+values('Very sad after consultation','2021-02-02 12:00', 'Waiting on reply', 9,2);
+insert into complaint(content, creation_timestamp, response,  creator_id, pharmacy_id)
+values('Very expensive one','2021-05-05 12:00', 'Waiting on reply', 2,1);
+insert into complaint(content, creation_timestamp, response, consultant_id, creator_id)
+values('Omg, there is no need for this type of conversation...','2021-03-03 12:00', 'Waiting on reply', 9,4);

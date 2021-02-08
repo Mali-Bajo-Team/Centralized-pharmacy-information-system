@@ -21,8 +21,10 @@ public class ComplaintDTO {
         this.setResponse(complaint.getResponse());
         this.setCreationTimestamp(complaint.getCreationTimestamp());
         this.setCreator(new PatientDTO(complaint.getCreator()));
-        this.setPharmacy(new PharmacyDTO(complaint.getPharmacy()));
-        this.setConsultant(new ConsultantDTO(complaint.getConsultant()));
+        if(complaint.getPharmacy() != null)
+            this.setPharmacy(new PharmacyDTO(complaint.getPharmacy()));
+        if(complaint.getConsultant() != null)
+            this.setConsultant(new ConsultantDTO(complaint.getConsultant()));
     }
 
     public String getContent() {

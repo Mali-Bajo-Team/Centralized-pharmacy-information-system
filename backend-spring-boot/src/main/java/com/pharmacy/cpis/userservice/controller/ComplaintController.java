@@ -23,7 +23,7 @@ public class ComplaintController {
     private IComplaintService complaintService;
 
     @GetMapping()
-//TODO: Add this after finished with postman testing    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<ComplaintDTO>> getAllComplaints(){
         List<ComplaintDTO> complaintDTOS = new ArrayList<>();
         for(Complaint complaint:  complaintService.findAllComplaints())

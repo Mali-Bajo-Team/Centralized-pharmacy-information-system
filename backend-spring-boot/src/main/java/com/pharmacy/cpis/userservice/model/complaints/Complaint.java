@@ -3,12 +3,14 @@ package com.pharmacy.cpis.userservice.model.complaints;
 import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
 import com.pharmacy.cpis.userservice.model.users.Consultant;
 import com.pharmacy.cpis.userservice.model.users.Patient;
+import org.hibernate.annotations.Check;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Check(constraints = "(consultant_id is not null) or (pharmacy_id is not null)")
 public class Complaint {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,10 +30,10 @@ public class Complaint {
 	@ManyToOne(optional = false)
 	private Patient creator;
 
-	@ManyToOne(optional = false)
+	@ManyToOne()
 	private Pharmacy pharmacy;
 
-	@ManyToOne(optional = false)
+	@ManyToOne()
 	private Consultant consultant;
 
 	public Complaint() {

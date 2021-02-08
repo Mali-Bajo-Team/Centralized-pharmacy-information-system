@@ -115,9 +115,7 @@
                 <br />
                 <v-card class="pl-2 mr-4 mb-5 ml-8" elevation="4">
                   <v-card-text>
-                    I have complaint on {{ complaint.pharmacy.name }} because of
-                    {{ complaint.content }} <br /><br />
-                    {{convertMsToString(complaint.creationTimestamp)}}
+                    I have complaint on 
                   </v-card-text>
                 </v-card>
               </div>
@@ -174,13 +172,19 @@ export default {
               surname: complaint.creator.surname,
               alergies: complaint.creator.alergies,
             },
-            pharmacy: {
+            
+          };
+
+        if(complaint.pharmacy != null){
+            tempObj.pharmacy={
               id: complaint.pharmacy.id,
               name: complaint.pharmacy.name,
               location: complaint.pharmacy.location,
               rating: complaint.pharmacy.rating,
-            },
-            consultant: {
+            }
+        }
+         if(complaint.consultant != null){
+            tempObj.consultant= {
               email: complaint.consultant.email,
               name: complaint.consultant.name,
               lastName: complaint.consultant.lastName,
@@ -188,8 +192,9 @@ export default {
               location: complaint.consultant.location,
               city: complaint.consultant.city,
               country: complaint.consultant.country,
-            },
-          };
+            }
+        }
+
           this.allComplaints.push(tempObj);
           counter = counter + 1;
         }
