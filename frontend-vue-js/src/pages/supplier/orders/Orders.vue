@@ -7,7 +7,7 @@
 <script>
 export default {
   data: () => ({
-    supplierOffers: [],
+    allOrders: [],
   }),
   methods: {},
   mounted() {
@@ -21,8 +21,7 @@ export default {
         }
       )
       .then((resp) => {
-        alert("success");
-        this.supplierOffers = resp.data[0];
+        this.allOrders = resp.data;
       });
   },
 };
