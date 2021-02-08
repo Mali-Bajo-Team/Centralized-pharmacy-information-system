@@ -34,7 +34,7 @@ public class Pharmacy {
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "subscriptions")
 	private Set<Patient> subscribers;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "pharmacy", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "pharmacy")
 	private Set<AvailableDrug> availableDrugs;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "pharmacy")
