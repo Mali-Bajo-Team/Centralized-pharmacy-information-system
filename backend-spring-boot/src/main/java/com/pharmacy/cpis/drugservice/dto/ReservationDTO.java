@@ -1,5 +1,7 @@
 package com.pharmacy.cpis.drugservice.dto;
 
+import com.pharmacy.cpis.drugservice.model.drugsales.Reservation;
+
 import java.util.Date;
 
 public class ReservationDTO {
@@ -7,7 +9,7 @@ public class ReservationDTO {
     Long reservationID;
     Date dateOfCreation;
     Date deadLine;
-    Long amount;
+    Integer amount;
     String phatientName;
     String pharmacyName;
     String consultantEmail;
@@ -15,7 +17,7 @@ public class ReservationDTO {
     public ReservationDTO() {
     }
 
-    public ReservationDTO(Boolean isValid, Long reservationID, Date dateOfCreation, Date deadLine, Long amount, String phatientName, String pharmacyName, String consultantEmail) {
+    public ReservationDTO(Boolean isValid, Long reservationID, Date dateOfCreation, Date deadLine, Integer amount, String phatientName, String pharmacyName, String consultantEmail) {
         this.isValid = isValid;
         this.reservationID = reservationID;
         this.dateOfCreation = dateOfCreation;
@@ -58,11 +60,11 @@ public class ReservationDTO {
         this.deadLine = deadLine;
     }
 
-    public Long getAmount() {
+    public Integer getAmount() {
         return amount;
     }
 
-    public void setAmount(Long amount) {
+    public void setAmount(Integer amount) {
         this.amount = amount;
     }
 

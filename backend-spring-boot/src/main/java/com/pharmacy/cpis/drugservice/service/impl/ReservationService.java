@@ -26,7 +26,7 @@ public class ReservationService implements IReservationService {
     @Autowired
     private IPharmacyService pharmacyService;
     @Override
-    public Boolean isReservationValid(ReservationDTO reservationDTO) {
+    public ReservationDTO isReservationValid(ReservationDTO reservationDTO) {
         Reservation reservation = reservationRepository.getOne(reservationDTO.getReservationID());
 
         Boolean isValid = false;
@@ -41,11 +41,19 @@ public class ReservationService implements IReservationService {
         if(pharmacy.getId().equals(reservation.getPharmacy().getId())){
             if(reservationRepository.existsById(reservationDTO.getReservationID()) && reservation.getDeadline().compareTo(dateBefore24h) > 0){
                 isValid = true;
-                return isValid;
+                reservationDTO.setValid(isValid);
+                reservationDTO.setAmount(reservation.getAmount());
+                reservationDTO.setDateOfCreation(reservation.getDateOfCreation());
+                reservationDTO.setDeadLine(reservation.getDeadline());
+                reservationDTO.setPhatientName(reservation.getPatient().getName());
+                reservationDTO.setPharmacyName(reservation.getPharmacy().getName());
+                return reservationDTO;
             }
         }
 
-        return isValid;
+        reservationDTO.setValid(isValid);
+
+        return reservationDTO;
     }
 
     Pharmacy findPharmacyWhereConsultantWork(Long consultantID){

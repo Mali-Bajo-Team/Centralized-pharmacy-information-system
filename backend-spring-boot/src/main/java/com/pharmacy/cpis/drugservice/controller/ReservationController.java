@@ -28,8 +28,7 @@ public class ReservationController {
     @PostMapping(value = "/isvalid")
     public ResponseEntity<ReservationDTO> getDrugPharmaciesPrices(@RequestBody ReservationDTO reservationDTO){
 
-        Boolean isReservationValid = reservationService.isReservationValid(reservationDTO);
-        reservationDTO.setValid(isReservationValid);
+        ReservationDTO isReservationValid = reservationService.isReservationValid(reservationDTO);
 
 
         return new ResponseEntity<>(reservationDTO, HttpStatus.OK);

@@ -4,5 +4,5 @@ import com.pharmacy.cpis.drugservice.dto.ReservationDTO;
 import com.pharmacy.cpis.drugservice.model.drugsales.Reservation;
 
 public interface IReservationService {
-    Boolean isReservationValid(ReservationDTO reservationDTO);
+    ReservationDTO isReservationValid(ReservationDTO reservationDTO);
 }
