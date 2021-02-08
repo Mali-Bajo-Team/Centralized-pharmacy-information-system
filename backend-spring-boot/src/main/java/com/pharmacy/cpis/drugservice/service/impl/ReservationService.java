@@ -102,8 +102,10 @@ public class ReservationService implements IReservationService {
         UserCategory userCategory = loyaltyProgramService.findUserCategoryByLoyaltyPoints(reservation.getPatient().getLoyaltyPoints());
         Double discount = userCategory.getReservationDiscount();
 
+        System.out.println("POPUST JE AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA " + discount);
+
         if(discount != 0){
-            priceWithDiscount = (priceWithoutDiscount*(discount/10)) * reservation.getAmount();
+            priceWithDiscount = (priceWithoutDiscount -(priceWithoutDiscount*(discount/100))) * reservation.getAmount();
         }else{
             priceWithDiscount =priceWithoutDiscount;
         }
