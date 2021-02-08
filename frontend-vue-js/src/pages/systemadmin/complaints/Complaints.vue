@@ -51,7 +51,7 @@
                   </v-toolbar-title>
                 </v-toolbar>
                 <!-- End of the toolbar of the card -->
-                <!-- Form for making a offer -->
+                <!-- Form for making a response -->
                 <v-form class="ma-5">
                   <v-textarea
                     outlined
@@ -59,7 +59,7 @@
                     label="Response"
                   ></v-textarea>
                 </v-form>
-                <!-- End of the form for making a offer -->
+                <!-- End of the form for making a response -->
                 <v-card-actions class="pb-4">
                   <v-spacer> </v-spacer>
                   <v-btn
@@ -87,6 +87,43 @@
             <!-- End of the make response dialog -->
           </v-row>
           <!-- End of the row for title & make response dialog-->
+          <!-- Row for complaint details -->
+          <v-row>
+            <v-card-actions>
+              <v-btn class="ml-3" color="orange lighten-2" text>
+                Details
+              </v-btn>
+
+              <v-spacer></v-spacer>
+
+              <v-btn
+                icon
+                @click="
+                  complaint.showExtensionDetails = !complaint.showExtensionDetails
+                "
+              >
+                <v-icon>{{
+                  complaint.showExtensionDetails
+                    ? "mdi-chevron-up"
+                    : "mdi-chevron-down"
+                }}</v-icon>
+              </v-btn>
+            </v-card-actions>
+            <v-expand-transition>
+              <div v-show="complaint.showExtensionDetails">
+                <v-divider></v-divider>
+                <br />
+                <v-card class="pl-2 mr-4 mb-5 ml-8" elevation="4">
+                  <v-card-text>
+                    I have complaint on {{ complaint.pharmacy.name }} because of
+                    {{ complaint.content }} <br /><br />
+                    {{convertMsToString(complaint.creationTimestamp)}}
+                  </v-card-text>
+                </v-card>
+              </div>
+            </v-expand-transition>
+          </v-row>
+          <!-- End of the row for complaint details -->
         </v-card>
       </v-col>
     </v-row>
@@ -94,11 +131,16 @@
 </template>
 
 <script>
+import { getStringDateFromMilliseconds } from "./../../../util/dateHandler";
+
 export default {
   data: () => ({
     allComplaints: [],
   }),
   methods: {
+    convertMsToString(ms) {
+      return getStringDateFromMilliseconds(ms);
+    },
     confirmResponse(complaint) {
       alert(complaint);
     },
@@ -122,6 +164,7 @@ export default {
           let tempObj = {
             id: counter,
             showMakeResponseDialog: false,
+            showExtensionDetails: false,
             content: complaint.content,
             response: complaint.response,
             creationTimestamp: complaint.creationTimestamp,
