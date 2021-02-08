@@ -12,9 +12,12 @@ import com.pharmacy.cpis.drugservice.dto.AddDrugPriceDTO;
 import com.pharmacy.cpis.drugservice.dto.DrugPriceDTO;
 import com.pharmacy.cpis.drugservice.dto.DrugSearchDTO;
 import com.pharmacy.cpis.drugservice.model.drug.Drug;
+import com.pharmacy.cpis.drugservice.model.drugprocurement.DrugOrder;
+import com.pharmacy.cpis.drugservice.model.drugprocurement.DrugOrderStatus;
 import com.pharmacy.cpis.drugservice.model.drugsales.AvailableDrug;
 import com.pharmacy.cpis.drugservice.model.drugsales.Price;
 import com.pharmacy.cpis.drugservice.repository.IAvailableDrugRepository;
+import com.pharmacy.cpis.drugservice.repository.IDrugOrderRepository;
 import com.pharmacy.cpis.drugservice.repository.IDrugRepository;
 import com.pharmacy.cpis.drugservice.repository.IPriceRepository;
 import com.pharmacy.cpis.drugservice.repository.IReservationRepository;
@@ -43,6 +46,9 @@ public class AvailableDrugService implements IAvailableDrugService {
 
 	@Autowired
 	private IPriceRepository priceRepository;
+
+	@Autowired
+	private IDrugOrderRepository drugOrderRepository;
 
 	public Collection<AvailableDrug> getByPharmacy(Long pharmacyId) {
 		Pharmacy pharmacy = pharmacyRepository.findById(pharmacyId).orElse(null);
@@ -99,12 +105,30 @@ public class AvailableDrugService implements IAvailableDrugService {
 		if (availableDrug == null)
 			throw new PSConflictException("The requested drug is not available in the requested pharmacy.");
 
-		if (CollectionUtil.contains(reservationRepository.findAllByPharmacyIdAndDrugCode(pharmacyId, drugCode),
-				res -> !res.getIsPickedUp()))
-			throw new PSConflictException(
-					"The requestes drug cannot be deleted because there are unfinished reservations.");
+		if (hasActiveReservations(pharmacyId, drugCode))
+			throw new PSConflictException("The requestes drug cannot be deleted because of unfinished reservations.");
+
+		if (hasActiveOrders(pharmacyId, drugCode))
+			throw new PSConflictException("The requestes drug cannot be deleted because of unfinished orders.");
 
 		availableDrugRepository.delete(availableDrug);
+	}
+
+	private boolean hasActiveReservations(Long pharmacyId, String drugCode) {
+		return CollectionUtil.contains(reservationRepository.findAllByPharmacyIdAndDrugCode(pharmacyId, drugCode),
+				res -> !res.getIsPickedUp());
+	}
+
+	private boolean hasActiveOrders(Long pharmacyId, String drugCode) {
+		Collection<DrugOrder> orders = drugOrderRepository.findAllByPharmacyId(pharmacyId);
+		orders = CollectionUtil.findAll(orders, order -> !order.getStatus().equals(DrugOrderStatus.FINISHED));
+
+		for (DrugOrder order : orders) {
+			if (CollectionUtil.contains(order.getOrderedDrugs(), drug -> drug.getDrug().getCode().equals(drugCode)))
+				return true;
+		}
+
+		return false;
 	}
 
 	public AvailableDrug getByPharmacyAndDrug(Long pharmacyId, String drugCode) {
