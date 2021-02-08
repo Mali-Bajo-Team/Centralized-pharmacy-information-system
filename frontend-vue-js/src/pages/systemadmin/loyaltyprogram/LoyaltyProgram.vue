@@ -197,7 +197,7 @@
           :key="category.name"
         >
           <!-- Row for title & edit, delete buttons -->
-          <v-row>
+          <v-row align="center">
             <v-card-title>
               <h2>{{ category.name }} category</h2>
             </v-card-title>
@@ -275,7 +275,7 @@
             </v-dialog>
 
             <v-btn
-              class="mx-2"
+              class="mx-2 mr-3"
               fab
               dark
               elevation="0"

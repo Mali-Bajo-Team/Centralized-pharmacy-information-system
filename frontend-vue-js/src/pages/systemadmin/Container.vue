@@ -33,6 +33,10 @@ export default {
       {
         title:"Pharmacies",
         to:"/systemadmin/systemadminpharmacies"
+      },
+      {
+        title: "Complaints",
+        to: "/systemadmin/systemadmincomplaints"
       }
     ],
   }),

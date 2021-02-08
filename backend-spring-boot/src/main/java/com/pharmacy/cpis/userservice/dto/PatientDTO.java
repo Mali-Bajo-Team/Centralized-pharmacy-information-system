@@ -14,6 +14,8 @@ public class PatientDTO {
     private String surname;
     private Set<Drug> alergies;
 
+    public PatientDTO(){}
+
     public PatientDTO(Patient p) { this(p.getId(), p.getName(), p.getSurname(), p.getAllergies()); }
 
     public PatientDTO(Long id, String name, String surname,Set<Drug> alergies) {
