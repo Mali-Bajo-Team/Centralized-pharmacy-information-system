@@ -31,10 +31,10 @@ public class DrugOrder {
 	@ManyToOne(optional = false)
 	private PharmacyAdministrator administrator;
 
-	@OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
 	private Set<OrderedDrug> orderedDrugs;
 
-	@OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
 	private Set<Offer> offers;
 
 	public DrugOrder() {
