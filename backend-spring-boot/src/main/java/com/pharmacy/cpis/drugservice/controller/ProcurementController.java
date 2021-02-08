@@ -1,6 +1,7 @@
 package com.pharmacy.cpis.drugservice.controller;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pharmacy.cpis.drugservice.dto.AddDrugOrderDTO;
 import com.pharmacy.cpis.drugservice.dto.DrugOrderDTO;
+import com.pharmacy.cpis.drugservice.dto.OfferDTO;
 import com.pharmacy.cpis.drugservice.dto.SupplierOfferDTO;
 import com.pharmacy.cpis.drugservice.model.drugprocurement.DrugOrder;
 import com.pharmacy.cpis.drugservice.model.drugprocurement.Offer;
@@ -28,6 +30,7 @@ import com.pharmacy.cpis.drugservice.service.IDrugOrderService;
 import com.pharmacy.cpis.drugservice.service.IOfferService;
 import com.pharmacy.cpis.userservice.model.users.UserAccount;
 import com.pharmacy.cpis.userservice.service.ISupplierService;
+import com.pharmacy.cpis.util.CollectionUtil;
 import com.pharmacy.cpis.util.aspects.EmployeeAccountActive;
 import com.pharmacy.cpis.util.exceptions.PSForbiddenException;
 
@@ -143,6 +146,36 @@ public class ProcurementController {
 			throw new PSForbiddenException("You are not authorized to administrate a pharmacy.");
 
 		drugOrderService.update(user, id, drugOrder);
+
+		return ResponseEntity.noContent().build();
+	}
+
+	@GetMapping(value = "/orders/{id}/offers")
+	@PreAuthorize("hasRole('PHARMACY_ADMIN')")
+	@EmployeeAccountActive
+	public ResponseEntity<Collection<OfferDTO>> getDrugOrderOffers(@PathVariable(required = true) Long id) {
+		UserAccount user = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		DrugOrder order = drugOrderService.findById(id);
+
+		if (user.getPharmacyId() == null)
+			throw new PSForbiddenException("You are not authorized to administrate a pharmacy.");
+
+		if (!order.getPharmacy().getId().equals(user.getPharmacyId()))
+			throw new PSForbiddenException("You can only view orders from your pharmacy.");
+
+		Collection<OfferDTO> offers = CollectionUtil.map(order.getOffers(), offer -> new OfferDTO(offer));
+
+		return ResponseEntity.ok(offers);
+	}
+
+	@PostMapping(value = "/offers/{id}/accept")
+	@PreAuthorize("hasRole('PHARMACY_ADMIN')")
+	@EmployeeAccountActive
+	public ResponseEntity<Void> acceptOffer(@PathVariable(required = true) Long id) {
+		UserAccount user = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		offerService.accept(user, id);
 
 		return ResponseEntity.noContent().build();
 	}
