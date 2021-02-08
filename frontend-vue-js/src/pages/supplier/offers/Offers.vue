@@ -120,7 +120,7 @@
                     color="success"
                     dark
                     depressed
-                    @click="confirmOfferEdit(offer)"
+                    @click="confirmOfferEdit()"
                   >
                     <v-icon dark left> mdi-checkbox-marked-circle </v-icon>
                     Confirm
@@ -161,7 +161,6 @@ export default {
     },
   }),
   methods: {
-
     setOfferDto(offer) {
       this.offerDto.id = offer.id;
       this.offerDto.price = offer.price;
@@ -169,16 +168,54 @@ export default {
         offer.shipmentDate
       );
     },
-    confirmOfferEdit(offer) {
-      alert("Edit confirm simulation" + offer.id);
+    confirmOfferEdit() {
+      this.axios
+        .put(
+          process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_PROCUREMENT_OFFERS_ENDPOINT,
+          {
+            id: this.offerDto.id,
+            shipmentDate: this.offerDto.shipmentDate,
+            price: this.offerDto.price,
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then((resp) => {
+          // TODO: Make some notification here
+          let offer = this.findOfferById(resp.data.id);
+          offer.price = resp.data.price;
+          offer.stats = resp.data.status;
+          offer.shipmentDate = resp.data.shipmentDate;
+          alert("Success edit");
+        })
+        .catch((error) => {
+          // TODO: Make some tost notifications here
+          alert("Error: " + error);
+        });
+    },
+    findOfferById(id) {
+      for (let offer of this.supplierOffers) {
+        if (offer.id == id) return offer;
+      }
+      return;
     },
     convertMsToString(ms) {
       return getStringDateFromMilliseconds(ms);
     },
-    isMatchedOffer(offer){
+    isMatchedOffer(offer) {
       console.log(offer.shipmentDate);
 
-      if(this.selectedOfferStatus.toLowerCase() != "without" && !offer.status.toLowerCase().match(this.selectedOfferStatus.toLowerCase())) return false;
+      if (
+        this.selectedOfferStatus.toLowerCase() != "without" &&
+        !offer.status
+          .toLowerCase()
+          .match(this.selectedOfferStatus.toLowerCase())
+      )
+        return false;
       return true;
     },
   },
@@ -217,8 +254,8 @@ export default {
       });
   },
   computed: {
-    filteredOffers: function(){
-      return this.supplierOffers.filter((offer) =>{
+    filteredOffers: function () {
+      return this.supplierOffers.filter((offer) => {
         return this.isMatchedOffer(offer);
       });
     },
