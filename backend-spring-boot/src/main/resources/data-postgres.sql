@@ -166,4 +166,6 @@ insert into ordered_drug(amount, drug_code, order_id) values (50, 'aspirin', 2);
 --INSERT OFFER (Suppliers' offers)
 insert into offer(price, shipment_date, status, order_id, supplier_id) values (15, '2021-02-03 12:00', 0, 1, 10);
 
-
+--INSERT RESERVATION FOR DRUG
+insert into reservation(amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id)
+ values (15,'2021-02-08','2021-02-10',false,'brufen',4,1);
