@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.pharmacy.cpis.util.exceptions.PSAlreadyExistsException;
 import com.pharmacy.cpis.util.exceptions.PSBadRequestException;
+import com.pharmacy.cpis.util.exceptions.PSConflictException;
 import com.pharmacy.cpis.util.exceptions.PSForbiddenException;
 import com.pharmacy.cpis.util.exceptions.PSNotFoundException;
 
@@ -42,9 +42,10 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<Object>(response, HttpStatus.BAD_REQUEST);
 	}
 
-	@ExceptionHandler(PSAlreadyExistsException.class)
-	public ResponseEntity<Object> alreadyExists(PSAlreadyExistsException ex) {
-		ErrorResponse response = new ErrorResponse("The resource you tried to create already exists.", ex.getMessage());
+	@ExceptionHandler(PSConflictException.class)
+	public ResponseEntity<Object> alreadyExists(PSConflictException ex) {
+		ErrorResponse response = new ErrorResponse("The request is in conflict with the current state of the resource.",
+				ex.getMessage());
 		return new ResponseEntity<Object>(response, HttpStatus.CONFLICT);
 	}
 

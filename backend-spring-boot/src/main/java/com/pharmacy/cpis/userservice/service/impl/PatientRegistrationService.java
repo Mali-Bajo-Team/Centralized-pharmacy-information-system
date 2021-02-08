@@ -16,7 +16,7 @@ import com.pharmacy.cpis.userservice.repository.IUserRepository;
 import com.pharmacy.cpis.userservice.service.EmailService;
 import com.pharmacy.cpis.userservice.service.IAuthorityService;
 import com.pharmacy.cpis.userservice.service.IPatientRegistrationService;
-import com.pharmacy.cpis.util.exceptions.PSAlreadyExistsException;
+import com.pharmacy.cpis.util.exceptions.PSConflictException;
 
 @Service
 public class PatientRegistrationService implements IPatientRegistrationService {
@@ -39,7 +39,7 @@ public class PatientRegistrationService implements IPatientRegistrationService {
 	@Override
 	public UserAccount registerPatient(UserRegisterDTO user) {
 		if (userRepository.existsByEmail(user.getEmail()))
-			throw new PSAlreadyExistsException("The email is already taken.");
+			throw new PSConflictException("The email is already taken.");
 		Patient addedPatient = addNewPatient(user);
 		UserAccount addedAccount = addNewPatientAccount(user, addedPatient);
 		sendActivationEmail(addedAccount);
