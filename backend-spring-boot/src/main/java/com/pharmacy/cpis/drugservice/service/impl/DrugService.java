@@ -8,7 +8,7 @@ import com.pharmacy.cpis.drugservice.model.drugsales.AvailableDrug;
 import com.pharmacy.cpis.drugservice.repository.*;
 import com.pharmacy.cpis.drugservice.service.IDrugService;
 import com.pharmacy.cpis.userservice.model.ratings.DrugRating;
-import com.pharmacy.cpis.util.exceptions.PSAlreadyExistsException;
+import com.pharmacy.cpis.util.exceptions.PSConflictException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +43,7 @@ public class DrugService implements IDrugService {
     @Override
     public Drug registerDrug(DrugRegisterDTO drug) {
         if(drugRepository.existsByCode(drug.getDrug().getCode()))
-            throw new PSAlreadyExistsException("A drug with this code already exists");
+            throw new PSConflictException("A drug with this code already exists");
         Drug addedDrug = addNewDrug(drug.getDrug());
         DrugSpecification addedSpecification = addNewDrugSpecification(drug.getSpecification(), addedDrug);
 

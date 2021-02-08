@@ -4,13 +4,21 @@ package com.pharmacy.cpis.util.exceptions.handler;
  * The response body that will be returned if an exception is handled.
  */
 public class ErrorResponse {
+	private String error;
 	private String message;
-	private String details;
 
-	public ErrorResponse(String message, String details) {
+	public ErrorResponse(String error, String message) {
 		super();
+		this.error = error;
 		this.message = message;
-		this.details = details;
+	}
+
+	public String getError() {
+		return error;
+	}
+
+	public void setError(String error) {
+		this.error = error;
 	}
 
 	public String getMessage() {
@@ -19,14 +27,6 @@ public class ErrorResponse {
 
 	public void setMessage(String message) {
 		this.message = message;
-	}
-
-	public String getDetails() {
-		return details;
-	}
-
-	public void setDetails(String details) {
-		this.details = details;
 	}
 
 }

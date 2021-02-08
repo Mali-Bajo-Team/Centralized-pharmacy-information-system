@@ -1,10 +1,16 @@
 package com.pharmacy.cpis.drugservice.repository;
 
-import com.pharmacy.cpis.drugservice.model.drugsales.AvailableDrug;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+import com.pharmacy.cpis.drugservice.model.drugsales.AvailableDrug;
 
 public interface IAvailableDrugRepository extends JpaRepository<AvailableDrug, Long> {
-    List<AvailableDrug> findByDrugCode(String drugCode);
+
+	List<AvailableDrug> findByDrugCode(String drugCode);
+
+	Optional<AvailableDrug> findByPharmacyIdAndDrugCode(Long pharmacyId, String drugCode);
+
 }
