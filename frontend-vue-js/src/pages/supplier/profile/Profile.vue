@@ -46,6 +46,7 @@
               color="primary"
               v-bind="attrs"
               v-on="on"
+              @click="setSupplierFormDTO(supplier)"
             >
               <v-icon dark> mdi-pencil </v-icon>
             </v-btn>
@@ -59,7 +60,7 @@
             </v-toolbar>
             <!-- Content -->
             <v-card-text>
-              <br><br>
+              <br /><br />
               <v-form>
                 <v-text-field
                   label="Change your name "
@@ -82,7 +83,7 @@
                   v-model="supplierFormDTO.country"
                 ></v-text-field>
                 <v-text-field
-                type="number"
+                  type="number"
                   label="Change your phone number"
                   v-model="supplierFormDTO.phone"
                 ></v-text-field>
@@ -91,24 +92,19 @@
             <!-- End of the content -->
 
             <v-card-actions>
-               <v-spacer></v-spacer>
-                  <v-btn
-                    color="success"
-                    dark
-                    depressed
-                    @click="confirmChanges()"
-                  >
-                    <v-icon dark left> mdi-checkbox-marked-circle </v-icon>
-                    Confirm
-                  </v-btn>
-                  <v-btn
-                    color="red lighten-3"
-                    dark
-                    depressed
-                    @click="showEditDialog = !showEditDialog"
-                    ><v-icon dark left> mdi-minus-circle </v-icon>
-                    Close
-                  </v-btn>
+              <v-spacer></v-spacer>
+              <v-btn color="success" dark depressed @click="confirmChanges()">
+                <v-icon dark left> mdi-checkbox-marked-circle </v-icon>
+                Confirm
+              </v-btn>
+              <v-btn
+                color="red lighten-3"
+                dark
+                depressed
+                @click="showEditDialog = !showEditDialog"
+                ><v-icon dark left> mdi-minus-circle </v-icon>
+                Close
+              </v-btn>
             </v-card-actions>
           </v-card>
           <!-- End of the dialog form-->
@@ -138,31 +134,32 @@ export default {
     },
     supplierEmail: getParsedToken().sub,
   }),
-  methods:{
-    confirmChanges(){
+  methods: {
+    setSupplierFormDTO(supplier) {
+      this.supplierFormDTO.name = supplier.name;
+      this.supplierFormDTO.surname = supplier.surname;
+      this.supplierFormDTO.address = supplier.address;
+      this.supplierFormDTO.city = supplier.city;
+      this.supplierFormDTO.country = supplier.country;
+      this.supplierFormDTO.phone = supplier.phone;
+    },
+    confirmChanges() {
       this.axios
-      .put(
-        process.env.VUE_APP_BACKEND_URL +
-          process.env.VUE_APP_PROFILE_ENDPOINT,
-        this.supplierFormDTO,
-        {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
-          },
-        }
-      )
-      .then((resp) => {
-        alert("Success changed supplier information")
-        this.supplier = resp.data;
-        this.supplierFormDTO.name = this.supplier.name;
-        this.supplierFormDTO.surname = this.supplier.surname;
-        this.supplierFormDTO.address = this.supplier.address;
-        this.supplierFormDTO.city = this.supplier.city;
-        this.supplierFormDTO.country = this.supplier.country;
-        this.supplierFormDTO.phone = this.supplier.phone;
-      });
-
-    }
+        .put(
+          process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_PROFILE_ENDPOINT,
+          this.supplierFormDTO,
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then((resp) => {
+          alert("Success changed supplier information");
+          this.supplier = resp.data;
+        });
+    },
   },
   mounted() {
     this.axios
@@ -176,14 +173,7 @@ export default {
       )
       .then((resp) => {
         // alert("success");
-
         this.supplier = resp.data;
-        this.supplierFormDTO.name = this.supplier.name;
-        this.supplierFormDTO.surname = this.supplier.surname;
-        this.supplierFormDTO.address = this.supplier.address;
-        this.supplierFormDTO.city = this.supplier.city;
-        this.supplierFormDTO.country = this.supplier.country;
-        this.supplierFormDTO.phone = this.supplier.phone;
       });
   },
 };
