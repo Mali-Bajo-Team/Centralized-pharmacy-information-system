@@ -36,6 +36,7 @@
                       dark
                       x-small
                       color="primary"
+                      @click="setComplaintDto(complaint)"
                     >
                       <v-icon dark> mdi-forum </v-icon>
                     </v-btn>
@@ -55,7 +56,7 @@
                 <v-form class="ma-5">
                   <v-textarea
                     outlined
-                    v-model="complaint.response"
+                    v-model="complaintDTO.response"
                     label="Response"
                   ></v-textarea>
                 </v-form>
@@ -148,13 +149,43 @@ import { getStringDateFromMilliseconds } from "./../../../util/dateHandler";
 export default {
   data: () => ({
     allComplaints: [],
+    complaintDTO: {},
   }),
   methods: {
+    setComplaintDto(complaint) {
+    //   alert(complaint);
+      this.complaintDTO.content = complaint.content;
+      this.complaintDTO.response = complaint.response;
+      this.complaintDTO.creationTimestamp = complaint.creationTimestamp;
+      this.complaintDTO.creator = complaint.creator;
+      this.complaintDTO.pharmacy = complaint.pharmacy;
+      this.complaintDTO.consultant = complaint.consultant;
+    },
     convertMsToString(ms) {
       return getStringDateFromMilliseconds(ms);
     },
     confirmResponse(complaint) {
-      alert(complaint);
+    //   alert(complaint);
+      this.axios
+        .put(
+          process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_COMPLAINTS_ENDPOINT,
+          this.complaintDTO,
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then((resp) => {
+          // TODO: Make some notification here
+          complaint.response = resp.data.response;
+          alert("Success created response");
+        })
+        .catch((error) => {
+          // TODO: Make some tost notifications here
+          alert("Error: " + error);
+        });
     },
   },
   mounted() {
