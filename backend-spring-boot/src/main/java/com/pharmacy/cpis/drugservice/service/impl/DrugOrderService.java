@@ -22,7 +22,9 @@ import com.pharmacy.cpis.userservice.model.users.PharmacyAdministrator;
 import com.pharmacy.cpis.userservice.model.users.UserAccount;
 import com.pharmacy.cpis.userservice.repository.IPharmacyAdministratorRepository;
 import com.pharmacy.cpis.util.exceptions.PSBadRequestException;
+import com.pharmacy.cpis.util.exceptions.PSConflictException;
 import com.pharmacy.cpis.util.exceptions.PSForbiddenException;
+import com.pharmacy.cpis.util.exceptions.PSNotFoundException;
 
 @Service
 public class DrugOrderService implements IDrugOrderService {
@@ -47,10 +49,22 @@ public class DrugOrderService implements IDrugOrderService {
 		return drugOrderRepository.findAll();
 	}
 
+	@Override
 	public List<DrugOrder> findByPharmacyId(Long pharmacyId) {
 		return drugOrderRepository.findAllByPharmacyId(pharmacyId);
 	}
 
+	@Override
+	public DrugOrder findById(Long id) {
+		DrugOrder order = drugOrderRepository.findById(id).orElse(null);
+
+		if (order == null)
+			throw new PSNotFoundException("Drug order with the requested id does not exist.");
+
+		return order;
+	}
+
+	@Override
 	public DrugOrder add(UserAccount creator, AddDrugOrderDTO drugOrder) {
 		PharmacyAdministrator admin = pharmacyAdminRepository.findByAccount(creator).orElse(null);
 
@@ -71,6 +85,28 @@ public class DrugOrderService implements IDrugOrderService {
 		}
 
 		return saved;
+	}
+
+	@Override
+	public void delete(UserAccount user, Long orderId) {
+		PharmacyAdministrator admin = pharmacyAdminRepository.findByAccount(user).orElse(null);
+
+		if (admin == null)
+			throw new PSForbiddenException("No pharmacy administrator associated with this account.");
+
+		DrugOrder order = findById(orderId);
+
+		if (!order.getAdministrator().equals(admin))
+			throw new PSForbiddenException("Drug orders can only be deleted by their creator.");
+
+		if (!order.getStatus().equals(DrugOrderStatus.WAITING_FOR_OFFERS))
+			throw new PSConflictException("Drug order cannot be deleted because it already has offers.");
+
+		for (OrderedDrug orderedDrug : order.getOrderedDrugs()) {
+			orderedDrugRepository.delete(orderedDrug);
+		}
+
+		drugOrderRepository.delete(order);
 	}
 
 	private void addDrugToOder(DrugOrder order, AddOrderedDrugDTO orderedDrugDTO) {

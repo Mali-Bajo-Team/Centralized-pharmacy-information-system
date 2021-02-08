@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -93,6 +95,39 @@ public class ProcurementController {
 		UserAccount user = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		drugOrderService.add(user, drugOrder);
+
+		return ResponseEntity.noContent().build();
+	}
+
+	@GetMapping(value = "/orders/{id}")
+	@PreAuthorize("hasAnyRole('PHARMACY_ADMIN', 'SUPPLIER')")
+	@EmployeeAccountActive
+	public ResponseEntity<DrugOrderDTO> getDrugOrder(@PathVariable(required = true) Long id) {
+		UserAccount user = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		DrugOrder order = drugOrderService.findById(id);
+
+		if (user.getRole().equals("PHARMACY_ADMIN")) {
+			if (user.getPharmacyId() == null)
+				throw new PSForbiddenException("You are not authorized to administrate a pharmacy.");
+
+			if (!order.getPharmacy().getId().equals(user.getPharmacyId()))
+				throw new PSForbiddenException("You can only view orders from your pharmacy.");
+		}
+
+		return new ResponseEntity<>(new DrugOrderDTO(order), HttpStatus.OK);
+	}
+
+	@DeleteMapping(value = "/orders/{id}")
+	@PreAuthorize("hasRole('PHARMACY_ADMIN')")
+	@EmployeeAccountActive
+	public ResponseEntity<Void> deleteDrugOrder(@PathVariable(required = true) Long id) {
+		UserAccount user = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		if (user.getPharmacyId() == null)
+			throw new PSForbiddenException("You are not authorized to administrate a pharmacy.");
+
+		drugOrderService.delete(user, id);
 
 		return ResponseEntity.noContent().build();
 	}
