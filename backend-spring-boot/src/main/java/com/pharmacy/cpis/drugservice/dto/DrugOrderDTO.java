@@ -16,6 +16,8 @@ import java.util.Set;
 
 public class DrugOrderDTO {
 
+    private Long id;
+
     private Date timestamp;
 
     private Date deadline;
@@ -27,6 +29,7 @@ public class DrugOrderDTO {
     private Set<OrderedDrugDTO> orderedDrugs;
 
     public DrugOrderDTO(DrugOrder drugOrder){
+        this.setId(drugOrder.getId());
         this.setTimestamp(drugOrder.getTimestamp());
         this.setDeadline(drugOrder.getDeadline());
         this.setStatus(drugOrder.getStatus());
@@ -35,6 +38,15 @@ public class DrugOrderDTO {
     }
 
     public DrugOrderDTO(){}
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Date getTimestamp() {
         return timestamp;
     }
