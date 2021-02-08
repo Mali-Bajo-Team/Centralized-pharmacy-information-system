@@ -1,10 +1,21 @@
 package com.pharmacy.cpis.drugservice.model.drugsales;
 
+import java.util.Date;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+
 import com.pharmacy.cpis.drugservice.model.drug.Drug;
 import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
-
-import javax.persistence.*;
-import java.util.Set;
+import com.pharmacy.cpis.util.CollectionUtil;
+import com.pharmacy.cpis.util.DateConversionsAndComparisons;
 
 @Entity
 public class AvailableDrug {
@@ -24,7 +35,7 @@ public class AvailableDrug {
 	@ManyToOne(optional = false)
 	private Pharmacy pharmacy;
 
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "drug", cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "drug")
 	private Set<Price> prices;
 
 	public AvailableDrug() {
@@ -102,6 +113,21 @@ public class AvailableDrug {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	public Price findPrice(Date date) {
+		Price foundPrice = CollectionUtil.findFirst(prices,
+				price -> DateConversionsAndComparisons.compareDatesWithoutTime(date, price.getDate()) == 0);
+
+		if (foundPrice != null)
+			return foundPrice;
+		else {
+			Price retVal = new Price();
+			retVal.setDrug(this);
+			retVal.setDate(date);
+			retVal.setPrice(defaultPrice);
+			return retVal;
+		}
 	}
 
 }
