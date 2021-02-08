@@ -15,7 +15,7 @@
             hide-default-footer
           >
             <template v-slot:header>
-              <v-toolbar dark color="blue darken-3" class="mb-1 primary">
+              <v-toolbar dark  class="mb-1 primary">
                 <v-text-field
                   v-model="search"
                   clearable
@@ -54,9 +54,9 @@
                     <v-btn
                       color="primary"
                       @click="showExaminationDialog(item)"
-                      class="mt-5"
+                      class="ml-3 mt-5 elevation-10"
                     >
-                      EXAMINATION REPORT
+                      REPORT
                     </v-btn>
                     <v-card-title class="subheading font-weight-bold">
                       {{ item.id + ". " + item.name + " " + item.surname }}
@@ -127,7 +127,7 @@
                 <v-btn
                   fab
                   dark
-                  color=" primary darken-3"
+                  color=" primary"
                   class="mr-1"
                   @click="formerPage"
                 >
@@ -136,7 +136,7 @@
                 <v-btn
                   fab
                   dark
-                  color="primary darken-3"
+                  color="primary"
                   class="ml-1"
                   @click="nextPage"
                 >
