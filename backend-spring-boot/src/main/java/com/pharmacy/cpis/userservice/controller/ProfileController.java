@@ -4,7 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,22 +30,22 @@ public class ProfileController {
 
 	@GetMapping
 	@EmployeeAccountActive
-	public ResponseEntity<PersonalInformationDTO> getProfile() {
-		UserAccount account = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	public ResponseEntity<PersonalInformationDTO> getProfile(Authentication authentication) {
+		UserAccount account = (UserAccount) authentication.getPrincipal();
 		Person person = personService.getPersonByUserAccount(account);
 
 		return ResponseEntity.ok(new PersonalInformationDTO(person));
 	}
 
 	@PutMapping(consumes = "application/json")
-	public ResponseEntity<PersonalInformationDTO> updateProfile(
-			@RequestBody @Valid PersonalInformationDTO personalInfo) {
-		UserAccount account = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	public ResponseEntity<PersonalInformationDTO> updateProfile(@RequestBody @Valid PersonalInformationDTO personalInfo,
+			Authentication authentication) {
+		UserAccount account = (UserAccount) authentication.getPrincipal();
 		Person person = personService.update(account, personalInfo);
 
 		return ResponseEntity.ok(new PersonalInformationDTO(person));
 	}
-	
+
 	@PutMapping(value = "/password", consumes = "application/json")
 	public ResponseEntity<Void> changePassword(@RequestBody @Valid PasswordChangeDTO password) {
 		userAccountService.changePassword(password.getOldPassword(), password.getNewPassword());

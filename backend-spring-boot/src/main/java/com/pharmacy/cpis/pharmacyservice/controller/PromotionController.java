@@ -8,7 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,8 +37,8 @@ public class PromotionController {
 	@GetMapping
 	@PreAuthorize("hasRole('PHARMACY_ADMIN')")
 	@EmployeeAccountActive
-	public ResponseEntity<Iterable<PromotionDTO>> getPromotions() {
-		UserAccount user = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	public ResponseEntity<Iterable<PromotionDTO>> getPromotions(Authentication authentication) {
+		UserAccount user = (UserAccount) authentication.getPrincipal();
 
 		if (user.getPharmacyId() == null)
 			throw new PSForbiddenException("You are not authorized to administrate a pharmacy.");
@@ -56,8 +56,9 @@ public class PromotionController {
 	@PostMapping
 	@PreAuthorize("hasRole('PHARMACY_ADMIN')")
 	@EmployeeAccountActive
-	public ResponseEntity<PromotionDTO> addPromotion(@RequestBody @Valid PromotionDTO promotion) {
-		UserAccount user = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	public ResponseEntity<PromotionDTO> addPromotion(@RequestBody @Valid PromotionDTO promotion,
+			Authentication authentication) {
+		UserAccount user = (UserAccount) authentication.getPrincipal();
 
 		if (user.getPharmacyId() == null)
 			throw new PSForbiddenException("You are not authorized to administrate a pharmacy.");
