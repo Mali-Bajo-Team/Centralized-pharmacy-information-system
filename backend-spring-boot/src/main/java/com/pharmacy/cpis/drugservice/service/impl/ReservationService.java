@@ -36,22 +36,28 @@ public class ReservationService implements IReservationService {
         Date dateBefore24h = Date.from(before24h);
 
         Consultant consultant = consultantService.findByEmail(reservationDTO.getConsultantEmail());
-        List<Pharmacy> allPharmacies = pharmacyService.findAll();
 
-        //find pharmacy where consultant work amd check is reservation valid in that pharmacy
-        for (Pharmacy p : allPharmacies) {
-            for (WorkingTimes c : reservation.getPharmacy().getConsultants()){
-                if(c.getConsultant().getId().equals(consultant.getId())){
-                    if(reservation.getPharmacy().getId().equals(reservationDTO.getReservationID())){
-                        if(reservationRepository.existsById(reservationDTO.getReservationID()) && reservation.getDeadline().compareTo(dateBefore24h) > 0){
-                            isValid = true;
-                            return isValid;
-                        }
-                    }
-                }
+        Pharmacy pharmacy = findPharmacyWhereConsultantWork(consultant.getId());
+        if(pharmacy.getId().equals(reservation.getPharmacy().getId())){
+            if(reservationRepository.existsById(reservationDTO.getReservationID()) && reservation.getDeadline().compareTo(dateBefore24h) > 0){
+                isValid = true;
+                return isValid;
             }
         }
 
         return isValid;
+    }
+
+    Pharmacy findPharmacyWhereConsultantWork(Long consultantID){
+        List<Pharmacy> allPharmacies = pharmacyService.findAll();
+
+        for (Pharmacy p : allPharmacies) {
+            for(WorkingTimes wt : p.getConsultants()){
+                if(wt.getConsultant().getId().equals(consultantID)){
+                    return p;
+                }
+            }
+        }
+        return new Pharmacy();
     }
 }
