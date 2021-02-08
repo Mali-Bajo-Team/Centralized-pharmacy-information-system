@@ -85,7 +85,7 @@ public class ReservationService implements IReservationService {
         drugPurchase.setAmount(reservation.getAmount());
         drugPurchase.setDrug(reservation.getDrug());
         drugPurchase.setPatient(reservation.getPatient());
-        drugPurchase.setPharmacy(drugPurchase.getPharmacy());
+        drugPurchase.setPharmacy(reservation.getPharmacy());
 
         drugPurchase.setPrice(calculatePriceDrugPurchaseWithDiscount(reservation));
         drugPurchase.setTimestamp(new Date());
@@ -95,13 +95,18 @@ public class ReservationService implements IReservationService {
     }
 
     private Double calculatePriceDrugPurchaseWithDiscount(Reservation reservation) {
+        Double priceWithDiscount;
 
         AvailableDrug availableDrug = availableDrugService.getByPharmacyAndDrug(reservation.getPharmacy().getId(), reservation.getDrug().getCode());
         Double priceWithoutDiscount = availableDrug.findPrice(reservation.getDateOfCreation()).getPrice();
         UserCategory userCategory = loyaltyProgramService.findUserCategoryByLoyaltyPoints(reservation.getPatient().getLoyaltyPoints());
         Double discount = userCategory.getReservationDiscount();
-        Double priceWithDiscount = (priceWithoutDiscount - discount) * reservation.getAmount();
 
+        if(discount != 0){
+            priceWithDiscount = (priceWithoutDiscount*(discount/10)) * reservation.getAmount();
+        }else{
+            priceWithDiscount =priceWithoutDiscount;
+        }
         return priceWithDiscount;
     }
 
