@@ -13,9 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,24 +34,25 @@ public class ProcurementController {
     @GetMapping(value = "/offers")
     public ResponseEntity<List<SupplierOfferDTO>> getSupplierOffers(){
         List<SupplierOfferDTO> supplierOfferDTOS = new ArrayList<>();
-
         UserAccount account = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Supplier supplier = supplierService.getSupplierByUserAccount(account);
-
-        List<Offer> supplierOffers = offerService.findOffersBySupplier(supplier);
-        for(Offer offer : supplierOffers){
+        for(Offer offer : offerService.findOffersBySupplier(supplier)){
             supplierOfferDTOS.add(new SupplierOfferDTO(offer));
         }
         return new ResponseEntity<>(supplierOfferDTOS, HttpStatus.OK);
     }
 
+    @PutMapping(value = "/offers")
+    public ResponseEntity<SupplierOfferDTO> getSupplierOffers(@RequestBody SupplierOfferDTO supplierOffer){
+        Offer offer = offerService.updateOffer(supplierOffer);
+        return new ResponseEntity<>(new SupplierOfferDTO(offer), HttpStatus.OK);
+    }
+
     @GetMapping(value = "/orders")
     public ResponseEntity<List<DrugOrderDTO>> getAllDrugOrders(){
         List<DrugOrderDTO> drugOrderDTOS = new ArrayList<>();
-        List<DrugOrder> drugOrders = drugOrderService.findAll();
-        for(DrugOrder drugOrder: drugOrders){
-            DrugOrderDTO drugOrderDTO = new DrugOrderDTO(drugOrder);
-            drugOrderDTOS.add(drugOrderDTO);
+        for(DrugOrder drugOrder: drugOrderService.findAll()){
+            drugOrderDTOS.add(new DrugOrderDTO(drugOrder));
         }
         return new ResponseEntity<>(drugOrderDTOS, HttpStatus.OK);
     }

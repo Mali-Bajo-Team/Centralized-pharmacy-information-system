@@ -12,27 +12,41 @@ import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 public class SupplierOfferDTO {
-    @NotEmpty(message = "Shipment date is required.")
+
+    private Long id;
+
     private Date shipmentDate;
 
-    @NotEmpty(message = "Price is required.")
     private Double price;
 
-    @NotEmpty(message = "Status is required.")
     private OfferStatus status;
+
+    private DrugOrderDTO order;
 
     public SupplierOfferDTO(){}
 
-    public SupplierOfferDTO(@NotEmpty(message = "Shipment date is required.") Date shipmentDate, @NotEmpty(message = "Price is required.") Double price, @NotEmpty(message = "Status is required.") OfferStatus status) {
-        this.shipmentDate = shipmentDate;
-        this.price = price;
-        this.status = status;
-    }
-
     public SupplierOfferDTO(Offer offer){
+        this.setId(offer.getId());
         this.setShipmentDate(offer.getShipmentDate());
         this.setPrice(offer.getPrice());
         this.setStatus(offer.getStatus());
+        this.setOrder(new DrugOrderDTO(offer.getOrder()));
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public DrugOrderDTO getOrder() {
+        return order;
+    }
+
+    public void setOrder(DrugOrderDTO order) {
+        this.order = order;
     }
 
     public Date getShipmentDate() {
