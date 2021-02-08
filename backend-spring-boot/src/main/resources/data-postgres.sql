@@ -155,7 +155,7 @@ insert into user_account (email, password, is_active, person_id, needs_password_
 insert into user_authority (user_id, authority_id) values (10, 6);
 
 -- INSERT DRUG ORDER
-insert into drug_order(deadline, status,timestamp, administrator_id, pharmacy_id) values('2021-03-04 12:00', 0 ,'2021-02-07 12:00', 6,1);
+insert into drug_order(deadline, status,timestamp, administrator_id, pharmacy_id) values('2021-01-01 12:00', 0 ,'2020-02-07 12:00', 6,1);
 insert into drug_order(deadline, status,timestamp, administrator_id, pharmacy_id) values('2021-04-05 12:00', 0 ,'2021-02-07 12:00', 6,2);
 
 --INSERT ORDERED DRUG
