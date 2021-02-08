@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +21,19 @@ public class ComplaintController {
     private IComplaintService complaintService;
 
     @GetMapping()
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<ComplaintDTO>> getAllComplaints(){
         List<ComplaintDTO> complaintDTOS = new ArrayList<>();
         for(Complaint complaint:  complaintService.findAllComplaints())
             complaintDTOS.add(new ComplaintDTO(complaint));
         return new ResponseEntity<>(complaintDTOS, HttpStatus.OK);
+    }
+
+    @PutMapping()
+//    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ComplaintDTO> updateComplaintResponse(@RequestBody ComplaintDTO complaintDTO){
+        Complaint complaint = complaintService.updateComplaintResponse(complaintDTO);
+        return new ResponseEntity<>(new ComplaintDTO(complaint),HttpStatus.OK);
     }
 
 }
