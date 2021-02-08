@@ -51,9 +51,12 @@
             <!-- End of the make offer -->
           </v-row>
           <!-- End of the row for the title -->
+          <!-- Row for order details -->
           <v-row>
             <v-card-actions>
-              <v-btn class="ml-3" color="orange lighten-2" text> Order details </v-btn>
+              <v-btn class="ml-3" color="orange lighten-2" text>
+                Order details
+              </v-btn>
 
               <v-spacer></v-spacer>
 
@@ -74,18 +77,28 @@
             <v-expand-transition>
               <div v-show="order.showExtensionDetails">
                 <v-divider></v-divider>
-
-                <v-card-text>
-                  I'm a thing. But, like most politicians, he promised more than
-                  he could deliver. You won't have time for sleeping, soldier,
-                  not with all the bed making you'll be doing. Then we'll go
-                  with that data file! Hey, you add a one and two zeros to that
-                  or we walk! You're going to do his laundry? I've got to find a
-                  way to escape.
-                </v-card-text>
+                <br />
+                <v-card
+                  class="pl-2 mr-4 mb-5 ml-8"
+                  elevation="4"
+                  v-for="orderedDrug in order.orderedDrugs"
+                  :key="orderedDrug.drug.code"
+                >
+                  <v-card-text>
+                    We need a {{ orderedDrug.amount }} amount of the
+                    {{ orderedDrug.drug.name }} drug [code:
+                    {{ orderedDrug.drug.code }}]. And we are created this order
+                    at date {{ convertMsToString(order.timestamp) }}, and our
+                    deadline date to make your offer is
+                    {{ convertMsToString(order.deadline) }}, if you are need
+                    more information, you can contact us on our website or go to
+                    the {{order.pharmacy.location}}
+                  </v-card-text>
+                </v-card>
               </div>
             </v-expand-transition>
           </v-row>
+          <!-- End of the row with order details-->
         </v-card>
       </v-col>
     </v-row>
