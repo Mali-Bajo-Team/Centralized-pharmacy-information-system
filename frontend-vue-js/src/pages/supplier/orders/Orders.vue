@@ -61,7 +61,7 @@
                     color="success"
                     dark
                     depressed
-                    @click="confirmOfferCreation()"
+                    @click="confirmOfferCreation(order)"
                   >
                     <v-icon dark left> mdi-checkbox-marked-circle </v-icon>
                     Confirm
@@ -148,8 +148,36 @@ export default {
     },
   }),
   methods: {
-    confirmOfferCreation() {
+    confirmOfferCreation(selectedOrder) {
       alert("simulation of creation" + this.offerDto.price + " " + this.offerDto.shipmentDate);
+
+       this.axios
+        .post(
+          process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_PROCUREMENT_OFFERS_ENDPOINT,
+          {
+            id: this.offerDto.id,
+            shipmentDate: this.offerDto.shipmentDate,
+            price: this.offerDto.price,
+            order:{
+              id: selectedOrder.id
+            }
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then(() => {
+          // TODO: Make some notification here
+          alert("Success create");
+        })
+        .catch((error) => {
+          // TODO: Make some tost notifications here
+          alert("Error: " + error);
+        });
+    
     },
     convertMsToString(ms) {
       return getStringDateFromMilliseconds(ms);
@@ -170,6 +198,7 @@ export default {
         this.allOrders = [];
         for (let order of resp.data) {
           let tempObj = {
+            id: order.id,
             deadline: order.deadline,
             orderedDrugs: order.orderedDrugs,
             pharmacy: order.pharmacy,
