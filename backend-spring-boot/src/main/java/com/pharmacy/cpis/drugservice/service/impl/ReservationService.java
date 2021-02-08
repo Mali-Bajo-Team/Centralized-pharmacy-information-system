@@ -63,9 +63,12 @@ public class ReservationService implements IReservationService {
         reservation.setIsPickedUp(true);
 
         reservationRepository.save(reservation);
+        //Kad izdam lek reba da kreiram Drug Purcharse, smanjim amount i izracunam cenu
+
 
         return reservationDTO;
     }
+
 
     Pharmacy findPharmacyWhereConsultantWork(Long consultantID){
         List<Pharmacy> allPharmacies = pharmacyService.findAll();
