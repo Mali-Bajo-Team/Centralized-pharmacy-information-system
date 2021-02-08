@@ -156,9 +156,12 @@ insert into user_authority (user_id, authority_id) values (10, 6);
 
 -- INSERT DRUG ORDER
 insert into drug_order(deadline, status,timestamp, administrator_id, pharmacy_id) values('2021-03-04 12:00', 0 ,'2021-02-07 12:00', 6,1);
+insert into drug_order(deadline, status,timestamp, administrator_id, pharmacy_id) values('2021-04-05 12:00', 0 ,'2021-02-07 12:00', 6,2);
 
 --INSERT ORDERED DRUG
 insert into ordered_drug(amount, drug_code, order_id) values (100, 'brufen', 1);
+insert into ordered_drug(amount, drug_code, order_id) values (50, 'aspirin', 1);
+insert into ordered_drug(amount, drug_code, order_id) values (50, 'aspirin', 2);
 
 --INSERT OFFER (Suppliers' offers)
 insert into offer(price, shipment_date, status, order_id, supplier_id) values (15, '2021-02-03 12:00', 0, 1, 10);

@@ -207,8 +207,6 @@ export default {
       return getStringDateFromMilliseconds(ms);
     },
     isMatchedOffer(offer) {
-      console.log(offer.shipmentDate);
-
       if (
         this.selectedOfferStatus.toLowerCase() != "without" &&
         !offer.status
