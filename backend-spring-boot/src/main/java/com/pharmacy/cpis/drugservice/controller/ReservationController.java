@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/reservation")
@@ -23,9 +21,9 @@ public class ReservationController {
     @PostMapping(value = "/isvalid")
     public ResponseEntity<ReservationDTO> getDrugPharmaciesPrices(@RequestBody ReservationDTO reservationDTO){
 
-        ReservationDTO isReservationValid = reservationService.isReservationValid(reservationDTO);
-        
-        return new ResponseEntity<>(reservationDTO, HttpStatus.OK);
+        ReservationDTO reservationDTOforReturn = reservationService.isReservationValid(reservationDTO);
+
+        return new ResponseEntity<>(reservationDTOforReturn, HttpStatus.OK);
     }
 
     @PostMapping(value = "/dispense")
