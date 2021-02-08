@@ -155,6 +155,7 @@ export default {
     selectedOfferStatus: "",
     allOfferStatus: ["Without", "PENDING", "ACCEPTED", "REJECTED"],
     offerDto: {
+      id: 0,
       price: "",
       shipmentDate: "",
     },
@@ -162,6 +163,7 @@ export default {
   methods: {
 
     setOfferDto(offer) {
+      this.offerDto.id = offer.id;
       this.offerDto.price = offer.price;
       this.offerDto.shipmentDate = getStringDateFromMilliseconds(
         offer.shipmentDate
