@@ -1,11 +1,16 @@
 package com.pharmacy.cpis.drugservice.service;
 
+import java.util.Collection;
+
 import com.pharmacy.cpis.drugservice.dto.AddAvailableDrugDTO;
+import com.pharmacy.cpis.drugservice.dto.DrugSearchDTO;
 import com.pharmacy.cpis.drugservice.model.drugsales.AvailableDrug;
 
 public interface IAvailableDrugService {
 
-	Iterable<AvailableDrug> getByPharmacy(Long pharmacyId);
+	Collection<AvailableDrug> getByPharmacy(Long pharmacyId);
+
+	public Collection<AvailableDrug> searchByPharmacy(Long pharmacyId, DrugSearchDTO searchDTO);
 
 	AvailableDrug addToPharmacy(Long pharmacyId, AddAvailableDrugDTO drugInfo);
 

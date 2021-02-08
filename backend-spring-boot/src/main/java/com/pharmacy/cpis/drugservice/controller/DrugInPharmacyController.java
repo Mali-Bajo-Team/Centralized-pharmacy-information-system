@@ -1,7 +1,6 @@
 package com.pharmacy.cpis.drugservice.controller;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 import javax.validation.Valid;
 
@@ -20,9 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pharmacy.cpis.drugservice.dto.AddAvailableDrugDTO;
 import com.pharmacy.cpis.drugservice.dto.AvailableDrugDTO;
+import com.pharmacy.cpis.drugservice.dto.DrugSearchDTO;
 import com.pharmacy.cpis.drugservice.model.drugsales.AvailableDrug;
 import com.pharmacy.cpis.drugservice.service.IAvailableDrugService;
 import com.pharmacy.cpis.userservice.model.users.UserAccount;
+import com.pharmacy.cpis.util.CollectionUtil;
 import com.pharmacy.cpis.util.aspects.EmployeeAccountActive;
 import com.pharmacy.cpis.util.exceptions.PSForbiddenException;
 
@@ -42,10 +43,24 @@ public class DrugInPharmacyController {
 		if (user.getPharmacyId() == null)
 			throw new PSForbiddenException("You are not authorized to administrate a pharmacy.");
 
-		List<AvailableDrugDTO> availableDrugs = new ArrayList<>();
-		for (AvailableDrug availableDrug : availableDrugService.getByPharmacy(user.getPharmacyId())) {
-			availableDrugs.add(new AvailableDrugDTO(availableDrug));
-		}
+		Collection<AvailableDrugDTO> availableDrugs = CollectionUtil
+				.map(availableDrugService.getByPharmacy(user.getPharmacyId()), drug -> new AvailableDrugDTO(drug));
+
+		return ResponseEntity.ok(availableDrugs);
+	}
+
+	@PostMapping(value = "/search", consumes = "application/json")
+	@PreAuthorize("hasRole('PHARMACY_ADMIN')")
+	@EmployeeAccountActive
+	public ResponseEntity<Iterable<AvailableDrugDTO>> searchDrugs(@RequestBody @Valid DrugSearchDTO searchDTO) {
+		UserAccount user = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		if (user.getPharmacyId() == null)
+			throw new PSForbiddenException("You are not authorized to administrate a pharmacy.");
+
+		Collection<AvailableDrugDTO> availableDrugs = CollectionUtil.map(
+				availableDrugService.searchByPharmacy(user.getPharmacyId(), searchDTO),
+				drug -> new AvailableDrugDTO(drug));
 
 		return ResponseEntity.ok(availableDrugs);
 	}
