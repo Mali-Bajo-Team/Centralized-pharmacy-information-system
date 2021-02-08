@@ -177,6 +177,8 @@ insert into reservation(id,amount,date_of_creation,deadline,is_picked_up,drug_co
 --INSERT COMPLAINT ( only patient who had a consultation can make a complaint about consultant)
 insert into complaint(content, creation_timestamp, response, consultant_id, creator_id)
 values('Very sad after consultation','2021-02-02 12:00', 'Waiting on reply', 9,2);
+insert into complaint(content, creation_timestamp, response, consultant_id, creator_id)
+values('He is psyho, i need only pediatar','2021-04-04 12:00', 'Waiting on reply', 9,2);
 insert into complaint(content, creation_timestamp, response,  creator_id, pharmacy_id)
 values('Very expensive one','2021-05-05 12:00', 'Waiting on reply', 2,1);
 insert into complaint(content, creation_timestamp, response, consultant_id, creator_id)
