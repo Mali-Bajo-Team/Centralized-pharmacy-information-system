@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
+import com.pharmacy.cpis.util.exceptions.PSBadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -169,6 +170,19 @@ public class AvailableDrugService implements IAvailableDrugService {
 			price.setPrice(priceInfo.getPrice());
 			priceRepository.save(price);
 		}
+	}
+
+	@Override
+	public AvailableDrug updateAmount(Long pharmacyId,String drugCode,Integer amount) {
+		AvailableDrug availableDrug= availableDrugRepository.findByPharmacyIdAndDrugCode(pharmacyId,drugCode).orElse(null);
+
+		int amountOfDrug=availableDrug.getAvailableAmount()-amount;
+		if(amountOfDrug<0){
+			throw new PSBadRequestException("There is no available drug in requested amount.");
+		}
+		availableDrug.setAvailableAmount(amountOfDrug);
+
+		return availableDrugRepository.save(availableDrug);
 	}
 
 }

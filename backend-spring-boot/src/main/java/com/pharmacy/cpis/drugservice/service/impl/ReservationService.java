@@ -4,10 +4,10 @@ import com.pharmacy.cpis.drugservice.dto.DrugReservationDTO;
 import com.pharmacy.cpis.drugservice.model.drugsales.Reservation;
 import com.pharmacy.cpis.drugservice.repository.IDrugRepository;
 import com.pharmacy.cpis.drugservice.repository.IReservationRepository;
+import com.pharmacy.cpis.drugservice.service.IAvailableDrugService;
 import com.pharmacy.cpis.drugservice.service.IReservationService;
 import com.pharmacy.cpis.pharmacyservice.service.IPharmacyService;
 import com.pharmacy.cpis.userservice.service.IPatientService;
-import com.pharmacy.cpis.util.DateConversionsAndComparisons;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +26,9 @@ public class ReservationService implements IReservationService {
     @Autowired
     private IPharmacyService pharmacyService;
 
+    @Autowired
+    private IAvailableDrugService availableDrugService;
+
     @Override
     public Reservation saveReservation(DrugReservationDTO reservationDTO) {
         Reservation reservation=new Reservation();
@@ -36,6 +39,8 @@ public class ReservationService implements IReservationService {
         reservation.setPharmacy(pharmacyService.getById(reservationDTO.getPharmacyID()));
         reservation.setDrug(drugRepository.findByCode(reservationDTO.getDrugCode()));
         reservation.setIsPickedUp(false);
+
+        availableDrugService.updateAmount(reservationDTO.getPharmacyID(),reservationDTO.getDrugCode(),reservationDTO.getAmount());
 
 
         return reservationRepository.save(reservation);
