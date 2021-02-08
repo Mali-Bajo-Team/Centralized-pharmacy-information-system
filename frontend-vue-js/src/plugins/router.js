@@ -35,6 +35,8 @@ import Supplier from './../pages/supplier/Container';
 import SupplierLanding from './../pages/supplier/landing/Landing';
 import Orders from './../pages/supplier/orders/Orders';
 import Offers from './../pages/supplier/offers/Offers';
+import SupplierProfile from './../pages/supplier/profile/Profile';
+
 
 
 import MandatoryPasswordChange from './../pages/mandatoryPasswordChange/Page'
@@ -243,6 +245,11 @@ const routes = [
                 component: Drugs,
                 name: 'supplierdrugs',
                 path: 'supplierdrugs'
+            },
+            {
+                component: SupplierProfile,
+                name: 'supplierprofile',
+                path: 'supplierprofile'
             },
         ]
     },
