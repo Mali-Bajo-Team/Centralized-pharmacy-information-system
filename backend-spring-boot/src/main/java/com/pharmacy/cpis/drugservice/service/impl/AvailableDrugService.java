@@ -1,21 +1,28 @@
 package com.pharmacy.cpis.drugservice.service.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pharmacy.cpis.drugservice.dto.AddAvailableDrugDTO;
+import com.pharmacy.cpis.drugservice.dto.AddDrugPriceDTO;
+import com.pharmacy.cpis.drugservice.dto.DrugPriceDTO;
 import com.pharmacy.cpis.drugservice.dto.DrugSearchDTO;
 import com.pharmacy.cpis.drugservice.model.drug.Drug;
 import com.pharmacy.cpis.drugservice.model.drugsales.AvailableDrug;
+import com.pharmacy.cpis.drugservice.model.drugsales.Price;
 import com.pharmacy.cpis.drugservice.repository.IAvailableDrugRepository;
 import com.pharmacy.cpis.drugservice.repository.IDrugRepository;
+import com.pharmacy.cpis.drugservice.repository.IPriceRepository;
 import com.pharmacy.cpis.drugservice.repository.IReservationRepository;
 import com.pharmacy.cpis.drugservice.service.IAvailableDrugService;
 import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
 import com.pharmacy.cpis.pharmacyservice.repository.IPharmacyRepository;
 import com.pharmacy.cpis.util.CollectionUtil;
+import com.pharmacy.cpis.util.DateConversionsAndComparisons;
 import com.pharmacy.cpis.util.exceptions.PSConflictException;
 import com.pharmacy.cpis.util.exceptions.PSNotFoundException;
 
@@ -33,6 +40,9 @@ public class AvailableDrugService implements IAvailableDrugService {
 
 	@Autowired
 	private IReservationRepository reservationRepository;
+
+	@Autowired
+	private IPriceRepository priceRepository;
 
 	public Collection<AvailableDrug> getByPharmacy(Long pharmacyId) {
 		Pharmacy pharmacy = pharmacyRepository.findById(pharmacyId).orElse(null);
@@ -105,6 +115,36 @@ public class AvailableDrugService implements IAvailableDrugService {
 			throw new PSConflictException("The requested drug is not available in the requested pharmacy.");
 
 		return availableDrug;
+	}
+
+	public Collection<DrugPriceDTO> getPrice(Long pharmacyId, String drugCode, Date start, Date end) {
+		AvailableDrug availableDrug = availableDrugRepository.findByPharmacyIdAndDrugCode(pharmacyId, drugCode)
+				.orElse(null);
+
+		if (availableDrug == null)
+			throw new PSConflictException("The requested drug is not available in the requested pharmacy.");
+
+		Collection<DrugPriceDTO> prices = new ArrayList<>();
+
+		for (Date date : DateConversionsAndComparisons.getDatesBetween(start, end)) {
+			prices.add(new DrugPriceDTO(date, availableDrug.findPrice(date).getPrice()));
+		}
+
+		return prices;
+	}
+
+	public void addPrice(Long pharmacyId, String drugCode, AddDrugPriceDTO priceInfo) {
+		AvailableDrug availableDrug = availableDrugRepository.findByPharmacyIdAndDrugCode(pharmacyId, drugCode)
+				.orElse(null);
+
+		if (availableDrug == null)
+			throw new PSConflictException("The requested drug is not available in the requested pharmacy.");
+
+		for (Date date : DateConversionsAndComparisons.getDatesBetween(priceInfo.getStart(), priceInfo.getEnd())) {
+			Price price = availableDrug.findPrice(date);
+			price.setPrice(priceInfo.getPrice());
+			priceRepository.save(price);
+		}
 	}
 
 }
