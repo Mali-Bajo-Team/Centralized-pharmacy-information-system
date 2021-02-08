@@ -1,14 +1,19 @@
 package com.pharmacy.cpis.drugservice.service.impl;
 
 import com.pharmacy.cpis.drugservice.dto.ReservationDTO;
-import com.pharmacy.cpis.drugservice.model.drugsales.Reservation;
+import com.pharmacy.cpis.drugservice.model.drugsales.*;
+import com.pharmacy.cpis.drugservice.repository.IDrugPurchaseRepository;
 import com.pharmacy.cpis.drugservice.repository.IReservationRepository;
+import com.pharmacy.cpis.drugservice.service.IAvailableDrugService;
+import com.pharmacy.cpis.drugservice.service.IDrugPurchaseService;
 import com.pharmacy.cpis.drugservice.service.IReservationService;
 import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
 import com.pharmacy.cpis.pharmacyservice.service.IPharmacyService;
 import com.pharmacy.cpis.scheduleservice.model.workschedule.WorkingTimes;
+import com.pharmacy.cpis.userservice.model.loyaltyprogram.UserCategory;
 import com.pharmacy.cpis.userservice.model.users.Consultant;
 import com.pharmacy.cpis.userservice.service.IConsultantService;
+import com.pharmacy.cpis.userservice.service.ILoyaltyProgramService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +30,13 @@ public class ReservationService implements IReservationService {
     private IConsultantService consultantService;
     @Autowired
     private IPharmacyService pharmacyService;
+    @Autowired
+    private IDrugPurchaseRepository drugPurchaseRepository;
+    @Autowired
+    private IAvailableDrugService availableDrugService;
+    @Autowired
+    private ILoyaltyProgramService loyaltyProgramService;
+
     @Override
     public ReservationDTO isReservationValid(ReservationDTO reservationDTO) {
         Reservation reservation = reservationRepository.getOne(reservationDTO.getReservationID());
@@ -61,12 +73,36 @@ public class ReservationService implements IReservationService {
         Reservation reservation = reservationRepository.getOne(reservationDTO.getReservationID());
 
         reservation.setIsPickedUp(true);
-
         reservationRepository.save(reservation);
-        //Kad izdam lek reba da kreiram Drug Purcharse, smanjim amount i izracunam cenu
-
+        sendDrugPurchase(reservation);
 
         return reservationDTO;
+    }
+
+    private void sendDrugPurchase(Reservation reservation) {
+        DrugPurchase drugPurchase = new DrugPurchase();
+
+        drugPurchase.setAmount(reservation.getAmount());
+        drugPurchase.setDrug(reservation.getDrug());
+        drugPurchase.setPatient(reservation.getPatient());
+        drugPurchase.setPharmacy(drugPurchase.getPharmacy());
+
+        drugPurchase.setPrice(calculatePriceDrugPurchaseWithDiscount(reservation));
+        drugPurchase.setTimestamp(new Date());
+        drugPurchase.setType(DrugPurchaseType.RESERVATION);
+
+        drugPurchaseRepository.save(drugPurchase);
+    }
+
+    private Double calculatePriceDrugPurchaseWithDiscount(Reservation reservation) {
+
+        AvailableDrug availableDrug = availableDrugService.getByPharmacyAndDrug(reservation.getPharmacy().getId(), reservation.getDrug().getCode());
+        Double priceWithoutDiscount = availableDrug.findPrice(reservation.getDateOfCreation()).getPrice();
+        UserCategory userCategory = loyaltyProgramService.findUserCategoryByLoyaltyPoints(reservation.getPatient().getLoyaltyPoints());
+        Double discount = userCategory.getReservationDiscount();
+        Double priceWithDiscount = (priceWithoutDiscount - discount) * reservation.getAmount();
+
+        return priceWithDiscount;
     }
 
 
