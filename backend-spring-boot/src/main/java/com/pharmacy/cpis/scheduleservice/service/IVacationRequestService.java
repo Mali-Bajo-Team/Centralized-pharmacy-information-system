@@ -1,7 +1,16 @@
 package com.pharmacy.cpis.scheduleservice.service;
 
-import com.pharmacy.cpis.scheduleservice.dto.VacationRequestDTO;
+import java.util.Collection;
+
+import com.pharmacy.cpis.scheduleservice.dto.AddVacationRequestDTO;
+import com.pharmacy.cpis.scheduleservice.model.workschedule.VacationRequest;
 
 public interface IVacationRequestService {
-    VacationRequestDTO createVacationRequest(VacationRequestDTO vacationRequestDTO);
+
+	AddVacationRequestDTO createVacationRequest(AddVacationRequestDTO vacationRequestDTO);
+
+	Collection<VacationRequest> getDermatologistRequests();
+
+	Collection<VacationRequest> getPharmacistRequestsByPharmacy(Long pharmacyId);
+
 }
