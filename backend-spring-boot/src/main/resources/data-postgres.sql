@@ -164,7 +164,7 @@ insert into ordered_drug(amount, drug_code, order_id) values (100, 'brufen', 1);
 insert into offer(price, shipment_date, status, order_id, supplier_id) values (15, '2021-02-03 12:00', 0, 1, 10);
 
 --INSERT RESERVATION (Drug reservation)
-insert into reservation(id,amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (1,4,'2021-03-04 12:00','2021-03-04 12:00',false,'brufen',2,1);
-insert into reservation(id,amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (2,3,'2021-03-06 12:00','2021-05-04 12:00',false,'brufen',4,2);
-insert into reservation(id,amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (3,6,'2021-03-06 12:00','2021-05-04 12:00',false,'brufen',2,1);
-insert into reservation(id,amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (4,5,'2021-03-06 12:00','2021-05-04 12:00',false,'brufen',4,2);
+insert into reservation(id,amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (1,4,'2021-03-04 12:00','2021-02-09 12:00',false,'brufen',2,1);
+insert into reservation(id,amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (2,3,'2021-03-06 12:00','2021-02-09 04:00',false,'brufen',4,2);
+insert into reservation(id,amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (3,6,'2021-03-06 12:00','2021-02-08 12:00',false,'brufen',2,1);
+insert into reservation(id,amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (4,5,'2021-03-06 12:00','2021-02-10 12:00',false,'brufen',4,2);
