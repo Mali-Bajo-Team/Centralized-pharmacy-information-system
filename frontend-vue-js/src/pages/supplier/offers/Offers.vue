@@ -74,6 +74,7 @@
                 <v-tooltip bottom>
                   <template #activator="{ on: tooltip }">
                     <v-btn
+                      v-if="isAvailableToChange(offer)"
                       v-on="{ ...tooltip, ...dialog }"
                       elevation="0"
                       left
@@ -147,7 +148,7 @@
 </template>
 
 <script>
-import { getStringDateFromMilliseconds } from "./../../../util/dateHandler";
+import { getStringDateFromMilliseconds, getTodayDateString } from "./../../../util/dateHandler";
 
 export default {
   data: () => ({
@@ -161,6 +162,12 @@ export default {
     },
   }),
   methods: {
+    isAvailableToChange(offer) {
+      var todayDate = Date.parse(getTodayDateString());
+      var deadlineDate = Date.parse(getStringDateFromMilliseconds(offer.order.deadline));
+      if (todayDate > deadlineDate) return false;
+      return true;
+    },
     setOfferDto(offer) {
       this.offerDto.id = offer.id;
       this.offerDto.price = offer.price;
@@ -207,8 +214,6 @@ export default {
       return getStringDateFromMilliseconds(ms);
     },
     isMatchedOffer(offer) {
-      console.log(offer.shipmentDate);
-
       if (
         this.selectedOfferStatus.toLowerCase() != "without" &&
         !offer.status

@@ -38,7 +38,6 @@ public class ProfileController {
 	}
 
 	@PutMapping(consumes = "application/json")
-	@EmployeeAccountActive
 	public ResponseEntity<PersonalInformationDTO> updateProfile(
 			@RequestBody @Valid PersonalInformationDTO personalInfo) {
 		UserAccount account = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

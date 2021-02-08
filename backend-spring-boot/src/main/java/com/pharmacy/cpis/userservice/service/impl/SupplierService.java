@@ -8,6 +8,7 @@ import com.pharmacy.cpis.userservice.service.IAuthorityService;
 import com.pharmacy.cpis.userservice.service.ISupplierService;
 import com.pharmacy.cpis.util.exceptions.PSNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +36,11 @@ public class SupplierService implements ISupplierService {
         if (person == null)
             throw new PSNotFoundException("Personal information not found.");
         return person;
+    }
+
+    @Override
+    public Supplier getLoggedSupplier() {
+        return getSupplierByUserAccount((UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
     }
 
     // TODO: Think about how to improve DRY, because this is similar as patient, dermatologist registration service

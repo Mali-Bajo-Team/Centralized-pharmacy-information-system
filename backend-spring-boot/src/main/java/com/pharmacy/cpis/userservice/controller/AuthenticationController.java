@@ -27,7 +27,7 @@ import com.pharmacy.cpis.userservice.service.IPatientRegistrationService;
 import com.pharmacy.cpis.userservice.service.ISupplierService;
 import com.pharmacy.cpis.userservice.service.ISystemAdministratorService;
 import com.pharmacy.cpis.userservice.service.IUserService;
-import com.pharmacy.cpis.util.exceptions.PSAlreadyExistsException;
+import com.pharmacy.cpis.util.exceptions.PSConflictException;
 
 // Controller in charge of user authentication
 @RestController
@@ -87,7 +87,7 @@ public class AuthenticationController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Consultant> addDermatologist(@RequestBody UserRegisterDTO dermatologist) {
         if (consultantService.existsByEmail(dermatologist.getEmail()))
-            throw new PSAlreadyExistsException("The email is already taken.");
+            throw new PSConflictException("The email is already taken.");
 
         Consultant addedConsultant = consultantService.registerDermatologist(dermatologist);
         return new ResponseEntity<>(addedConsultant, HttpStatus.CREATED);
@@ -97,7 +97,7 @@ public class AuthenticationController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Supplier> addSupplier(@RequestBody UserRegisterDTO supplier) {
         if (supplierService.existsByEmail(supplier.getEmail()))
-            throw new PSAlreadyExistsException("The email is already taken.");
+            throw new PSConflictException("The email is already taken.");
 
         Supplier addedSupplier = supplierService.registerSupplier(supplier);
         return new ResponseEntity<>(addedSupplier, HttpStatus.CREATED);
@@ -107,7 +107,7 @@ public class AuthenticationController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<SystemAdministrator> addSystemAdministrator(@RequestBody UserRegisterDTO systemAdministrator) {
         if (systemAdministratorService.existsByEmail(systemAdministrator.getEmail()))
-            throw new PSAlreadyExistsException("The email is already taken.");
+            throw new PSConflictException("The email is already taken.");
 
         SystemAdministrator addedSystemAdministrator = systemAdministratorService.registerSystemAdministrator(systemAdministrator);
         return new ResponseEntity<>(addedSystemAdministrator, HttpStatus.CREATED);

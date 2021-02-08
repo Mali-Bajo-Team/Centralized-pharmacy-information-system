@@ -34,6 +34,10 @@ export default {
         title: "Drugs",
         to: "/supplier/supplierdrugs",
       },
+      {
+        title: "Profile",
+        to: "/supplier/supplierprofile",
+      },
     ],
   }),
 };
