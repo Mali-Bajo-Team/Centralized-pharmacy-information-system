@@ -22,6 +22,7 @@ import com.pharmacy.cpis.userservice.model.users.UserAccount;
 import com.pharmacy.cpis.userservice.repository.IPharmacyAdministratorRepository;
 import com.pharmacy.cpis.userservice.service.EmailService;
 import com.pharmacy.cpis.userservice.service.ISupplierService;
+import com.pharmacy.cpis.util.CollectionUtil;
 import com.pharmacy.cpis.util.exceptions.PSBadRequestException;
 import com.pharmacy.cpis.util.exceptions.PSConflictException;
 import com.pharmacy.cpis.util.exceptions.PSForbiddenException;
@@ -58,6 +59,8 @@ public class OfferService implements IOfferService {
 		Offer offer = offerRepository.findById(offerDTO.getId()).orElse(null);
 		if (offer == null)
 			throw new PSNotFoundException("Not found that offer");
+		if (!offer.getStatus().equals(OfferStatus.PENDING))
+			throw new PSConflictException("The offer has already been reviewed.");
 		offer.setPrice(offerDTO.getPrice());
 		offer.setShipmentDate(offerDTO.getShipmentDate());
 		return offerRepository.save(offer);
@@ -65,19 +68,24 @@ public class OfferService implements IOfferService {
 
 	@Override
 	public Offer saveOffer(SupplierOfferDTO offerDTO) {
-		Offer offer = new Offer();
+		Supplier supplier = supplierService.getLoggedSupplier();
+		if (supplier == null)
+			throw new PSBadRequestException("There is no logged supplier");
 
 		DrugOrder order = drugOrderRepository.findById(offerDTO.getOrder().getId()).orElse(null);
+		if (order == null)
+			throw new PSBadRequestException("The requested drug order doesn't exist.");
+		if (order.getStatus().equals(DrugOrderStatus.FINISHED))
+			throw new PSConflictException("The requested drug order is already finished.");
+		if (CollectionUtil.contains(order.getOffers(), offer -> offer.getSupplier().equals(supplier)))
+			throw new PSConflictException("You have already made an offer for the requested order.");
 
+		Offer offer = new Offer();
 		offer.setShipmentDate(offerDTO.getShipmentDate());
 		offer.setPrice(offerDTO.getPrice());
 		offer.setStatus(OfferStatus.PENDING);
-		if (supplierService.getLoggedSupplier() == null)
-			throw new PSBadRequestException("There is no logged supplier");
-		offer.setSupplier(supplierService.getLoggedSupplier());
-		if (order == null)
-			throw new PSBadRequestException("There is no drg order with that id");
-		offer.setOrder(drugOrderRepository.findById(offerDTO.getOrder().getId()).orElse(null));
+		offer.setSupplier(supplier);
+		offer.setOrder(order);
 
 		order.setStatus(DrugOrderStatus.WAITING_FOR_SELECTION);
 
