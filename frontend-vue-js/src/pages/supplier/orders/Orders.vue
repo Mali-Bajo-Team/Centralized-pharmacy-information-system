@@ -149,8 +149,6 @@ export default {
   }),
   methods: {
     confirmOfferCreation(selectedOrder) {
-      alert("simulation of creation" + this.offerDto.price + " " + this.offerDto.shipmentDate);
-
        this.axios
         .post(
           process.env.VUE_APP_BACKEND_URL +
