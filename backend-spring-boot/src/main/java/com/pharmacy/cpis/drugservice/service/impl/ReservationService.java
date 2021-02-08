@@ -52,14 +52,16 @@ public class ReservationService implements IReservationService {
         Pharmacy pharmacy = findPharmacyWhereConsultantWork(consultant.getId());
         if(pharmacy.getId().equals(reservation.getPharmacy().getId())){
             if(reservationRepository.existsById(reservationDTO.getReservationID()) && reservation.getDeadline().compareTo(dateBefore24h) > 0){
-                isValid = true;
-                reservationDTO.setValid(isValid);
-                reservationDTO.setAmount(reservation.getAmount());
-                reservationDTO.setDateOfCreation(reservation.getDateOfCreation());
-                reservationDTO.setDeadLine(reservation.getDeadline());
-                reservationDTO.setPhatientName(reservation.getPatient().getName());
-                reservationDTO.setPharmacyName(reservation.getPharmacy().getName());
-                return reservationDTO;
+                if(!reservation.getIsPickedUp()) {
+                    isValid = true;
+                    reservationDTO.setValid(isValid);
+                    reservationDTO.setAmount(reservation.getAmount());
+                    reservationDTO.setDateOfCreation(reservation.getDateOfCreation());
+                    reservationDTO.setDeadLine(reservation.getDeadline());
+                    reservationDTO.setPhatientName(reservation.getPatient().getName());
+                    reservationDTO.setPharmacyName(reservation.getPharmacy().getName());
+                    return reservationDTO;
+                }
             }
         }
 
