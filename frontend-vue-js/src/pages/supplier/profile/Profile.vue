@@ -138,6 +138,32 @@ export default {
     },
     supplierEmail: getParsedToken().sub,
   }),
+  methods:{
+    confirmChanges(){
+      this.axios
+      .put(
+        process.env.VUE_APP_BACKEND_URL +
+          process.env.VUE_APP_PROFILE_ENDPOINT,
+        this.supplierFormDTO,
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+          },
+        }
+      )
+      .then((resp) => {
+        alert("Success changed supplier information")
+        this.supplier = resp.data;
+        this.supplierFormDTO.name = this.supplier.name;
+        this.supplierFormDTO.surname = this.supplier.surname;
+        this.supplierFormDTO.address = this.supplier.address;
+        this.supplierFormDTO.city = this.supplier.city;
+        this.supplierFormDTO.country = this.supplier.country;
+        this.supplierFormDTO.phone = this.supplier.phone;
+      });
+
+    }
+  },
   mounted() {
     this.axios
       .get(
