@@ -73,7 +73,7 @@
                     Confirm
                   </v-btn>
                   <v-btn
-                    color="blue"
+                    color="red lighten-3"
                     dark
                     depressed
                     @click="
@@ -153,7 +153,7 @@ export default {
   }),
   methods: {
     setComplaintDto(complaint) {
-    //   alert(complaint);
+      //   alert(complaint);
       this.complaintDTO.content = complaint.content;
       this.complaintDTO.response = complaint.response;
       this.complaintDTO.creationTimestamp = complaint.creationTimestamp;
@@ -165,7 +165,7 @@ export default {
       return getStringDateFromMilliseconds(ms);
     },
     confirmResponse(complaint) {
-    //   alert(complaint);
+      //   alert(complaint);
       this.axios
         .put(
           process.env.VUE_APP_BACKEND_URL +
