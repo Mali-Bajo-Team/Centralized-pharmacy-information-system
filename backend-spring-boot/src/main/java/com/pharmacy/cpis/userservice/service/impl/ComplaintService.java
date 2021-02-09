@@ -13,6 +13,7 @@ import com.pharmacy.cpis.userservice.repository.IComplaintRepository;
 import com.pharmacy.cpis.userservice.repository.IConsultantRepository;
 import com.pharmacy.cpis.userservice.repository.IPatientRepository;
 import com.pharmacy.cpis.userservice.repository.IUserRepository;
+import com.pharmacy.cpis.userservice.service.EmailService;
 import com.pharmacy.cpis.userservice.service.IComplaintService;
 import com.pharmacy.cpis.util.exceptions.PSBadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,9 @@ public class ComplaintService implements IComplaintService {
     @Autowired
     private IReservationService reservationService;
 
+    @Autowired
+    private EmailService emailService;
+
     @Override
     public List<Complaint> findAllComplaints() {
         return complaintRepository.findAll();
@@ -55,7 +59,16 @@ public class ComplaintService implements IComplaintService {
     public Complaint updateComplaintResponse(ComplaintDTO complaintDTO) {
         Complaint complaint = getComplaint(complaintDTO);
         complaint.setResponse(complaintDTO.getResponse());
-        return complaintRepository.save(complaint);
+        Complaint updatedComplaint = complaintRepository.save(complaint);
+
+        try {
+            System.out.println("Sending mail in process ..");
+            emailService.sendComplaintResponseEmailAsync(updatedComplaint);
+        } catch (Exception e) {
+            System.out.println("Error during sending email: " + e.getMessage());
+        }
+
+        return updatedComplaint;
     }
 
     @Override
