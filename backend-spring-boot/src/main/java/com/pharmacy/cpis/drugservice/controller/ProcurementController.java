@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -71,9 +71,9 @@ public class ProcurementController {
 	@GetMapping(value = "/orders")
 	@PreAuthorize("hasAnyRole('PHARMACY_ADMIN', 'SUPPLIER')")
 	@EmployeeAccountActive
-	public ResponseEntity<List<DrugOrderDTO>> getAllDrugOrders() {
+	public ResponseEntity<List<DrugOrderDTO>> getAllDrugOrders(Authentication authentication) {
 		List<DrugOrderDTO> drugOrderDTOS = new ArrayList<>();
-		UserAccount user = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserAccount user = (UserAccount) authentication.getPrincipal();
 
 		if (user.getRole().equals("SUPPLIER")) {
 			for (DrugOrder drugOrder : drugOrderService.findAll()) {
@@ -94,8 +94,9 @@ public class ProcurementController {
 	@PostMapping(value = "/orders", consumes = "application/json")
 	@PreAuthorize("hasRole('PHARMACY_ADMIN')")
 	@EmployeeAccountActive
-	public ResponseEntity<Void> addDrugOrder(@RequestBody @Valid AddDrugOrderDTO drugOrder) {
-		UserAccount user = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	public ResponseEntity<Void> addDrugOrder(@RequestBody @Valid AddDrugOrderDTO drugOrder,
+			Authentication authentication) {
+		UserAccount user = (UserAccount) authentication.getPrincipal();
 
 		drugOrderService.add(user, drugOrder);
 
@@ -105,8 +106,9 @@ public class ProcurementController {
 	@GetMapping(value = "/orders/{id}")
 	@PreAuthorize("hasAnyRole('PHARMACY_ADMIN', 'SUPPLIER')")
 	@EmployeeAccountActive
-	public ResponseEntity<DrugOrderDTO> getDrugOrder(@PathVariable(required = true) Long id) {
-		UserAccount user = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	public ResponseEntity<DrugOrderDTO> getDrugOrder(@PathVariable(required = true) Long id,
+			Authentication authentication) {
+		UserAccount user = (UserAccount) authentication.getPrincipal();
 
 		DrugOrder order = drugOrderService.findById(id);
 
@@ -124,8 +126,8 @@ public class ProcurementController {
 	@DeleteMapping(value = "/orders/{id}")
 	@PreAuthorize("hasRole('PHARMACY_ADMIN')")
 	@EmployeeAccountActive
-	public ResponseEntity<Void> deleteDrugOrder(@PathVariable(required = true) Long id) {
-		UserAccount user = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	public ResponseEntity<Void> deleteDrugOrder(@PathVariable(required = true) Long id, Authentication authentication) {
+		UserAccount user = (UserAccount) authentication.getPrincipal();
 
 		if (user.getPharmacyId() == null)
 			throw new PSForbiddenException("You are not authorized to administrate a pharmacy.");
@@ -139,8 +141,8 @@ public class ProcurementController {
 	@PreAuthorize("hasRole('PHARMACY_ADMIN')")
 	@EmployeeAccountActive
 	public ResponseEntity<Void> updateDrugOrder(@PathVariable(required = true) Long id,
-			@RequestBody @Valid AddDrugOrderDTO drugOrder) {
-		UserAccount user = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			@RequestBody @Valid AddDrugOrderDTO drugOrder, Authentication authentication) {
+		UserAccount user = (UserAccount) authentication.getPrincipal();
 
 		if (user.getPharmacyId() == null)
 			throw new PSForbiddenException("You are not authorized to administrate a pharmacy.");
@@ -153,8 +155,9 @@ public class ProcurementController {
 	@GetMapping(value = "/orders/{id}/offers")
 	@PreAuthorize("hasRole('PHARMACY_ADMIN')")
 	@EmployeeAccountActive
-	public ResponseEntity<Collection<OfferDTO>> getDrugOrderOffers(@PathVariable(required = true) Long id) {
-		UserAccount user = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	public ResponseEntity<Collection<OfferDTO>> getDrugOrderOffers(@PathVariable(required = true) Long id,
+			Authentication authentication) {
+		UserAccount user = (UserAccount) authentication.getPrincipal();
 
 		DrugOrder order = drugOrderService.findById(id);
 
@@ -172,8 +175,8 @@ public class ProcurementController {
 	@PostMapping(value = "/offers/{id}/accept")
 	@PreAuthorize("hasRole('PHARMACY_ADMIN')")
 	@EmployeeAccountActive
-	public ResponseEntity<Void> acceptOffer(@PathVariable(required = true) Long id) {
-		UserAccount user = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	public ResponseEntity<Void> acceptOffer(@PathVariable(required = true) Long id, Authentication authentication) {
+		UserAccount user = (UserAccount) authentication.getPrincipal();
 
 		offerService.accept(user, id);
 

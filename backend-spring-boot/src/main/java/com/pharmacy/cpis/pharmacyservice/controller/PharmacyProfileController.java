@@ -5,7 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,8 +31,8 @@ public class PharmacyProfileController {
 	@GetMapping
 	@PreAuthorize("hasRole('PHARMACY_ADMIN')")
 	@EmployeeAccountActive
-	public ResponseEntity<PharmacyDetailsDTO> getPharmacy() {
-		UserAccount user = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	public ResponseEntity<PharmacyDetailsDTO> getPharmacy(Authentication authentication) {
+		UserAccount user = (UserAccount) authentication.getPrincipal();
 
 		if (user.getPharmacyId() == null)
 			throw new PSForbiddenException("You are not authorized to administrate a pharmacy.");
@@ -45,8 +45,9 @@ public class PharmacyProfileController {
 	@PutMapping
 	@PreAuthorize("hasRole('PHARMACY_ADMIN')")
 	@EmployeeAccountActive
-	public ResponseEntity<PharmacyDetailsDTO> updatePharmacy(@RequestBody @Valid PharmacyUpdateDTO update) {
-		UserAccount user = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	public ResponseEntity<PharmacyDetailsDTO> updatePharmacy(@RequestBody @Valid PharmacyUpdateDTO update,
+			Authentication authentication) {
+		UserAccount user = (UserAccount) authentication.getPrincipal();
 
 		if (user.getPharmacyId() == null)
 			throw new PSForbiddenException("You are not authorized to administrate a pharmacy.");

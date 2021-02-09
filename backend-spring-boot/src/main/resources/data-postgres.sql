@@ -10,7 +10,7 @@ INSERT INTO AUTHORITY (name) VALUES ('ROLE_SUPPLIER');
 
 -- INSERT ONE ADMIN (system administrator)
 insert into person (discriminator, address, city, country, name, surname, phone_number) values ('SystemAdmin', 'Marka Miljanova 7', 'Novi Sad', 'Srbija', 'Milana', 'Todorović', '0601452700');
-insert into user_account (email, password, is_active, person_id, needs_password_change) values ('cpisuser+admin@gmail.com', '$2a$10$nshjokILtTylR5sz//j/3OowjgJOtRLk0Z8gI4E2/2QP.VtlDSeEa', true, 1, true);
+insert into user_account (email, password, is_active, person_id, needs_password_change) values ('cpisuser+admin@gmail.com', '$2a$10$nshjokILtTylR5sz//j/3OowjgJOtRLk0Z8gI4E2/2QP.VtlDSeEa', true, 1, false);
 -- Password for admin account is: administrator
 insert into user_authority (user_id, authority_id) values (1, 2);
 
@@ -21,7 +21,7 @@ insert into user_account (email, password, is_active, person_id, needs_password_
 insert into user_authority (user_id, authority_id) values (2, 1);
 
 -- INSERT ONE PHARMACIST
-insert into person (discriminator, address, city, country, name, surname, phone_number) values ('Consultant', 'Jovana Jovanovica 30', 'Novi Sad', 'Srbija', 'Pero', 'Ivanović', '0661352720');
+insert into person (discriminator, address, city, country, name, surname, phone_number, type) values ('Consultant', 'Jovana Jovanovica 30', 'Novi Sad', 'Srbija', 'Pero', 'Ivanović', '0661352720', 0);
 insert into user_account (email, password, is_active, person_id, needs_password_change) values ('cpisuser+pharmacist@gmail.com', '$2a$10$UYKr0EAl1Hhzmg.3LutLeuczdzcdgEwXhuY0raFaNyRRspKTg0MCW', true, 3, false);
 -- Password for pharmacist account is: pharmacist
 insert into user_authority (user_id, authority_id) values (3, 4);
@@ -33,7 +33,7 @@ insert into user_account (email, password, is_active, person_id, needs_password_
 insert into user_authority (user_id, authority_id) values (4, 1);
 
 -- INSERT ONE PHARMACIST
-insert into person (discriminator, address, city, country, name, surname, phone_number) values ('Consultant', 'Milana Rakica 20', 'Beograd', 'Srbija', 'Vlado', 'Perkic', '06123654523');
+insert into person (discriminator, address, city, country, name, surname, phone_number, type) values ('Consultant', 'Milana Rakica 20', 'Beograd', 'Srbija', 'Vlado', 'Perkic', '06123654523', 0);
 insert into user_account (email, password, is_active, person_id, needs_password_change) values ('cpisuser+pharmacist2@gmail.com', '$2a$10$JTbQjDeRv57Hlb/zKRjCUuq348rfmAdoV/Q5KM8ZQ/5LSaCJVJaPW', true, 5, false);
 -- Password for pharmacist account is: pharmacist2
 insert into user_authority (user_id, authority_id) values (5, 4);
@@ -74,7 +74,7 @@ insert into user_account (email, password, is_active, person_id, needs_password_
 -- Password for patient account is: jankovic
 insert into user_authority (user_id, authority_id) values (6, 3);
 insert into person (discriminator, address, city, country, name, surname, phone_number, pharmacy_id) values ('PharmacyAdmin', 'Jovana Jovanovica 12', 'Novi Sad', 'Srbija', 'Marko', 'Marković', '0661352720', 2);
-insert into user_account (email, password, is_active, person_id, needs_password_change, pharmacy_id) values ('cpisuser+benu@gmail.com', '$2a$10$JyYk6irz0ZidM3Y4nVJ3ZOLNzifSWHxOxuPt8yrm/YHMqaE1UaEPe', true, 7, false, 2);
+insert into user_account (email, password, is_active, person_id, needs_password_change, pharmacy_id) values ('cpisuser+benu@gmail.com', '$2a$10$JyYk6irz0ZidM3Y4nVJ3ZOLNzifSWHxOxuPt8yrm/YHMqaE1UaEPe', true, 7, true, 2);
 -- Password for patient account is: benumerkator
 insert into user_authority (user_id, authority_id) values (7, 3);
 
@@ -103,7 +103,7 @@ insert into consultation (price,status,start_date,end_date,consultant_id,patient
 
 --INSERT WORKING TIMES
 insert into working_times(id,consultant_id,pharmacy_id, monday_start, monday_end, tuesday_start, tuesday_end, wednesday_start,wednesday_end,thursday_start,thursday_end,friday_start,friday_end,saturday_start,saturday_end, sunday_start, sunday_end) values (1,5,1, '2021-02-03 10:00', '2021-02-03 18:00','2021-02-03 10:00', '2021-02-03 18:00', '2021-02-03 10:00', '2021-02-03 18:00','2021-02-03 10:00', '2021-02-03 18:00', '2021-02-03 10:00', '2021-02-03 18:00','2021-02-03 10:00', '2021-02-03 18:00', '2021-02-03 10:00', '2021-02-03 18:00');
-insert into working_times(id,consultant_id,pharmacy_id, monday_start, monday_end, tuesday_start, tuesday_end, wednesday_start,wednesday_end,thursday_start,thursday_end,friday_start,friday_end,saturday_start,saturday_end, sunday_start, sunday_end) values (2,3,1, '2021-02-03 10:00', '2021-02-03 18:00','2021-02-03 10:00', '2021-02-03 18:00', '2021-02-03 10:00', '2021-02-03 18:00','2021-02-03 10:00', '2021-02-03 18:00', '2021-02-03 10:00', '2021-02-03 18:00','2021-02-03 10:00', '2021-02-03 18:00', '2021-02-03 10:00', '2021-02-03 18:00');
+insert into working_times(id,consultant_id,pharmacy_id, monday_start, monday_end, tuesday_start, tuesday_end, wednesday_start,wednesday_end,thursday_start,thursday_end,friday_start,friday_end,saturday_start,saturday_end, sunday_start, sunday_end) values (2,3,2, '2021-02-03 10:00', '2021-02-03 18:00','2021-02-03 10:00', '2021-02-03 18:00', '2021-02-03 10:00', '2021-02-03 18:00','2021-02-03 10:00', '2021-02-03 18:00', '2021-02-03 10:00', '2021-02-03 18:00','2021-02-03 10:00', '2021-02-03 18:00', '2021-02-03 10:00', '2021-02-03 18:00');
 
 -- INSERT DRUGS
 insert into drug(code, loyalty_points, name, drug_class_id, drug_form_id) values ('brufen', 5, 'Brufen',1,1);
@@ -139,7 +139,7 @@ values(2, 5, 'aspirin', 2);
 
 
 -- INSERT ONE DERMATOLOGIST
-insert into person (discriminator, address, city, country, name, surname, phone_number) values ('Consultant', 'Svetislava Pesica 20', 'Novi Sad', 'Srbija', 'Miroslav', 'Jovanovic', '0635212365');
+insert into person (discriminator, address, city, country, name, surname, phone_number, type) values ('Consultant', 'Svetislava Pesica 20', 'Novi Sad', 'Srbija', 'Miroslav', 'Jovanovic', '0635212365', 1);
 insert into user_account (email, password, is_active, person_id, needs_password_change) values ('cpisuser+dermatologist@gmail.com', '$2a$10$ijW6YiSn3zggTw5ybFOkiO.TeAxiHo/E0Ala4JPJvdza3TSI2H7ue', true, 9, false);
 -- Password for dermatologist account is: dermatologist
 insert into user_authority (user_id, authority_id) values (9, 5);
@@ -188,4 +188,10 @@ insert into complaint(content, creation_timestamp, response,  creator_id, pharma
 values('Very expensive one','2021-05-05 12:00', 'Waiting on reply', 2,1);
 insert into complaint(content, creation_timestamp, response, consultant_id, creator_id)
 values('Omg, there is no need for this type of conversation...','2021-03-03 12:00', 'Waiting on reply', 9,4);
+
+-- INSERT VACATION REQUESTS
+insert into vacation_request (consultant_id, status, start_date, end_date) values (3, 0, '2021-03-25', '2021-03-29');
+insert into vacation_request (consultant_id, status, start_date, end_date, response) values (3, 2, '2021-01-25', '2021-01-29', 'Ne možemo da prihvatimo odmor u tom periodu zato što je zahtjev prekasno poslat.');
+
+insert into vacation_request (consultant_id, status, start_date, end_date) values (9, 0, '2021-05-25', '2021-05-29');
 

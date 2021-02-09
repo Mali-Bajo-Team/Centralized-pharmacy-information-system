@@ -34,6 +34,10 @@ export default {
         title: "Drugs",
         to: "/pharmacist/pharmacistdrugs",
       },
+      {
+        title: "Dispensing",
+        to: "/pharmacist/dispensingdrugs",
+      },
     ],
   }),
 };

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,8 +40,8 @@ public class DrugInPharmacyController {
 	@GetMapping
 	@PreAuthorize("hasRole('PHARMACY_ADMIN')")
 	@EmployeeAccountActive
-	public ResponseEntity<Iterable<AvailableDrugDTO>> getDrugs() {
-		UserAccount user = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	public ResponseEntity<Iterable<AvailableDrugDTO>> getDrugs(Authentication authentication) {
+		UserAccount user = (UserAccount) authentication.getPrincipal();
 
 		if (user.getPharmacyId() == null)
 			throw new PSForbiddenException("You are not authorized to administrate a pharmacy.");
@@ -55,8 +55,9 @@ public class DrugInPharmacyController {
 	@PostMapping(value = "/search", consumes = "application/json")
 	@PreAuthorize("hasRole('PHARMACY_ADMIN')")
 	@EmployeeAccountActive
-	public ResponseEntity<Iterable<AvailableDrugDTO>> searchDrugs(@RequestBody @Valid DrugSearchDTO searchDTO) {
-		UserAccount user = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	public ResponseEntity<Iterable<AvailableDrugDTO>> searchDrugs(@RequestBody @Valid DrugSearchDTO searchDTO,
+			Authentication authentication) {
+		UserAccount user = (UserAccount) authentication.getPrincipal();
 
 		if (user.getPharmacyId() == null)
 			throw new PSForbiddenException("You are not authorized to administrate a pharmacy.");
@@ -71,8 +72,9 @@ public class DrugInPharmacyController {
 	@PostMapping(value = "", consumes = "application/json")
 	@PreAuthorize("hasRole('PHARMACY_ADMIN')")
 	@EmployeeAccountActive
-	public ResponseEntity<AvailableDrugDTO> addDrug(@RequestBody @Valid AddAvailableDrugDTO drugInfo) {
-		UserAccount user = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	public ResponseEntity<AvailableDrugDTO> addDrug(@RequestBody @Valid AddAvailableDrugDTO drugInfo,
+			Authentication authentication) {
+		UserAccount user = (UserAccount) authentication.getPrincipal();
 
 		if (user.getPharmacyId() == null)
 			throw new PSForbiddenException("You are not authorized to administrate a pharmacy.");
@@ -85,8 +87,9 @@ public class DrugInPharmacyController {
 	@GetMapping("/{code}")
 	@PreAuthorize("hasRole('PHARMACY_ADMIN')")
 	@EmployeeAccountActive
-	public ResponseEntity<AvailableDrugDTO> getDrug(@PathVariable(required = true) String code) {
-		UserAccount user = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	public ResponseEntity<AvailableDrugDTO> getDrug(@PathVariable(required = true) String code,
+			Authentication authentication) {
+		UserAccount user = (UserAccount) authentication.getPrincipal();
 
 		if (user.getPharmacyId() == null)
 			throw new PSForbiddenException("You are not authorized to administrate a pharmacy.");
@@ -99,8 +102,8 @@ public class DrugInPharmacyController {
 	@DeleteMapping("/{code}")
 	@PreAuthorize("hasRole('PHARMACY_ADMIN')")
 	@EmployeeAccountActive
-	public ResponseEntity<Void> deleteDrug(@PathVariable(required = true) String code) {
-		UserAccount user = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	public ResponseEntity<Void> deleteDrug(@PathVariable(required = true) String code, Authentication authentication) {
+		UserAccount user = (UserAccount) authentication.getPrincipal();
 
 		if (user.getPharmacyId() == null)
 			throw new PSForbiddenException("You are not authorized to administrate a pharmacy.");
@@ -114,8 +117,8 @@ public class DrugInPharmacyController {
 	@PreAuthorize("hasRole('PHARMACY_ADMIN')")
 	@EmployeeAccountActive
 	public ResponseEntity<Collection<DrugPriceDTO>> getDrugPrice(@PathVariable(required = true) String code,
-			@RequestBody @Valid DrugPriceSearchDTO dates) {
-		UserAccount user = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			@RequestBody @Valid DrugPriceSearchDTO dates, Authentication authentication) {
+		UserAccount user = (UserAccount) authentication.getPrincipal();
 
 		if (user.getPharmacyId() == null)
 			throw new PSForbiddenException("You are not authorized to administrate a pharmacy.");
@@ -130,8 +133,8 @@ public class DrugInPharmacyController {
 	@PreAuthorize("hasRole('PHARMACY_ADMIN')")
 	@EmployeeAccountActive
 	public ResponseEntity<Void> addDrugPrice(@PathVariable(required = true) String code,
-			@RequestBody @Valid AddDrugPriceDTO priceInfo) {
-		UserAccount user = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			@RequestBody @Valid AddDrugPriceDTO priceInfo, Authentication authentication) {
+		UserAccount user = (UserAccount) authentication.getPrincipal();
 
 		if (user.getPharmacyId() == null)
 			throw new PSForbiddenException("You are not authorized to administrate a pharmacy.");
