@@ -51,10 +51,10 @@
                 </v-toolbar>
                 <!-- End of the toolbar of the card -->
                 <v-card-text class="pa-5">
-                  <br/>
-                   Are you sure you want cancel subscription on {{pharmacy.name}}
-                   
-                    </v-card-text>
+                  <br />
+                  Are you sure you want cancel subscription on
+                  {{ pharmacy.name }}
+                </v-card-text>
 
                 <v-card-actions class="pb-4">
                   <v-spacer> </v-spacer>
@@ -68,11 +68,11 @@
                     Confirm
                   </v-btn>
                   <v-btn
-                     color="red lighten-3"
+                    color="red lighten-3"
                     dark
                     depressed
                     @click="
-                     pharmacy.showDialogForUnsubscribe = !pharmacy.showDialogForUnsubscribe
+                      pharmacy.showDialogForUnsubscribe = !pharmacy.showDialogForUnsubscribe
                     "
                     ><v-icon dark left> mdi-minus-circle </v-icon>
                     Close
@@ -129,12 +129,41 @@ export default {
       });
   },
   methods: {
-    setPharmacyIdForUnsubscribe(pharmacy){
+    setPharmacyIdForUnsubscribe(pharmacy) {
       console.log(pharmacy);
+      this.pharmacyIdToUnsubscribe = pharmacy.id;
     },
-    confirmUnsubscribe(){
+    confirmUnsubscribe() {
       console.log("simulation of unsub");
-    }
+      this.axios
+        .post(
+          process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_PHARMACIES_SUBSCRIPTION_ENDPOINT + '/'+
+            this.pharmacyIdToUnsubscribe +
+            "/unsubscribe",
+          {
+            email: getParsedToken().sub,
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then(() => {
+          this.pharmaciesSubscriptions = [];
+          for(let pharmacy of  this.pharmaciesSubscriptions){
+            if(pharmacy.id == this.pharmacyIdToUnsubscribe){
+              this.pharmaciesSubscriptions.pop(pharmacy);
+              break;
+            }
+          }
+          console.log("success cancel subscibe");
+        })
+        .catch((error) => {
+          alert("Error: " + error);
+        });
+    },
   },
 };
 </script>
