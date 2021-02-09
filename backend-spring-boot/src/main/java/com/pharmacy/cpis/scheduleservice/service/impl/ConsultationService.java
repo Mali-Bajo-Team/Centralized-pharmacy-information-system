@@ -16,6 +16,7 @@ import com.pharmacy.cpis.util.DateRange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 @Service
@@ -74,6 +75,17 @@ public class ConsultationService implements IConsultationService {
         consultationRepository.save(consultationForSchedule);
 
         return  consultationForSchedule;
+    }
+
+    @Override
+    public List<Consultant> findAllPatientConsultants(Patient patient) {
+        List<Consultant> allPatientConsultants = new ArrayList<>();
+        List<Consultation> consultations = consultationRepository.findAllByPatient(patient);
+        for(Consultation consultation : consultations){
+            Consultant consultant = consultation.getConsultant();
+            allPatientConsultants.add(consultant);
+        }
+        return allPatientConsultants;
     }
 
 }

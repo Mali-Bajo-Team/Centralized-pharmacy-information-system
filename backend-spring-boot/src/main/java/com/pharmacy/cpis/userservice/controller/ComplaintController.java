@@ -1,9 +1,18 @@
 package com.pharmacy.cpis.userservice.controller;
 
+import com.pharmacy.cpis.scheduleservice.service.IConsultationService;
 import com.pharmacy.cpis.userservice.dto.ComplaintDTO;
+import com.pharmacy.cpis.userservice.dto.ConsultantDTO;
 import com.pharmacy.cpis.userservice.dto.CreateComplaintDTO;
+import com.pharmacy.cpis.userservice.dto.PatientEmailDTO;
 import com.pharmacy.cpis.userservice.model.complaints.Complaint;
+import com.pharmacy.cpis.userservice.model.users.Consultant;
+import com.pharmacy.cpis.userservice.model.users.Patient;
+import com.pharmacy.cpis.userservice.model.users.Person;
+import com.pharmacy.cpis.userservice.model.users.UserAccount;
 import com.pharmacy.cpis.userservice.service.IComplaintService;
+import com.pharmacy.cpis.userservice.service.IConsultantService;
+import com.pharmacy.cpis.userservice.service.IPatientService;
 import com.sun.mail.iap.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +30,30 @@ public class ComplaintController {
     @Autowired
     private IComplaintService complaintService;
 
+    @Autowired
+    private IConsultantService consultantService;
+
+    @Autowired
+    private IConsultationService consultationService;
+
+    @Autowired
+    private IPatientService patientService;
+
+    @PostMapping("/consultants")
+//    @PreAuthorize("hasRole('PATIENT')")
+    public ResponseEntity<List<ConsultantDTO>> getAllPossibleConsultantsForComplaint(@RequestBody PatientEmailDTO patientEmail){
+        Patient patient = patientService.findByEmail(patientEmail.getEmail());
+        List<ConsultantDTO> consultants = new ArrayList<>();
+        for(Consultant consultant : consultationService.findAllPatientConsultants(patient))
+            consultants.add(new ConsultantDTO(consultant));
+        return new ResponseEntity<>(consultants,HttpStatus.OK);
+    }
+
+    @GetMapping("/pharmacies")
+    @PreAuthorize("hasRole('PATIENT')")
+    public ResponseEntity<Void> getAllPossiblePharmaciesForComplaint(){
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
     @GetMapping()
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<ComplaintDTO>> getAllComplaints(){

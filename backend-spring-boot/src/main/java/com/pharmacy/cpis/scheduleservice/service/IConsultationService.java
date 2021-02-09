@@ -2,6 +2,8 @@ package com.pharmacy.cpis.scheduleservice.service;
 
 import com.pharmacy.cpis.scheduleservice.dto.ScheduleExaminationDTO;
 import com.pharmacy.cpis.scheduleservice.model.consultations.Consultation;
+import com.pharmacy.cpis.userservice.model.users.Consultant;
+import com.pharmacy.cpis.userservice.model.users.Patient;
 import com.pharmacy.cpis.userservice.model.users.UserAccount;
 
 import java.util.Date;
@@ -13,5 +15,7 @@ public interface IConsultationService {
     Boolean isPhatientFreeForConsultation(Long patientId, Date examinationStartDate, Date examinationEndDate);
 
     Consultation scheduleConsultation(ScheduleExaminationDTO consultation);
+
+    List<Consultant> findAllPatientConsultants(Patient patient);
 
 }

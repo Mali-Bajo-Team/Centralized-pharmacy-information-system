@@ -198,6 +198,9 @@
 import { getParsedToken } from "./../../../util/token";
 export default {
   data: () => ({
+    possibleConsultantsForComplaint: [],
+    possiblePharmacyForComplaint: [],
+
     complaintDTO: {
       content: "",
       consultantId: null,

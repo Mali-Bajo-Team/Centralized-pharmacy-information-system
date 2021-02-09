@@ -24,11 +24,7 @@ public class PatientController {
     @PreAuthorize("hasRole('PATIENT')")
     public  ResponseEntity<PatientProfileDTO> getPatient(@RequestBody PatientEmailDTO patientEmail) {
         Patient patient = patientService.findByEmail(patientEmail.getEmail());
-        PatientProfileDTO patientProfileDTO=new PatientProfileDTO(patient,patientEmail,loyaltyProgramService);
-
-        return new ResponseEntity<>(patientProfileDTO, HttpStatus.OK);
-
+        return new ResponseEntity<>(new PatientProfileDTO(patient,patientEmail,loyaltyProgramService), HttpStatus.OK);
     }
-
 
 }
