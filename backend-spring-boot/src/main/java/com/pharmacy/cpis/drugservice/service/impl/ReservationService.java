@@ -12,6 +12,7 @@ import com.pharmacy.cpis.pharmacyservice.service.IPharmacyService;
 import com.pharmacy.cpis.scheduleservice.model.workschedule.WorkingTimes;
 import com.pharmacy.cpis.userservice.model.loyaltyprogram.UserCategory;
 import com.pharmacy.cpis.userservice.model.users.Consultant;
+import com.pharmacy.cpis.userservice.service.EmailService;
 import com.pharmacy.cpis.userservice.service.IConsultantService;
 import com.pharmacy.cpis.userservice.service.ILoyaltyProgramService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,8 @@ public class ReservationService implements IReservationService {
     @Autowired
     private ILoyaltyProgramService loyaltyProgramService;
 
+    @Autowired
+    private EmailService emailService;
     @Override
     public ReservationDTO isReservationValid(ReservationDTO reservationDTO) {
         Reservation reservation = reservationRepository.getOne(reservationDTO.getReservationID());
@@ -52,7 +55,8 @@ public class ReservationService implements IReservationService {
         Pharmacy pharmacy = findPharmacyWhereConsultantWork(consultant.getId());
         if(pharmacy.getId().equals(reservation.getPharmacy().getId())){
             if(reservationRepository.existsById(reservationDTO.getReservationID()) && reservation.getDeadline().compareTo(dateBefore24h) > 0){
-                if(!reservation.getIsPickedUp()) {
+                Boolean isPickedUp = reservation.getIsPickedUp();
+                if(!isPickedUp) {
                     isValid = true;
                     reservationDTO.setValid(isValid);
                     reservationDTO.setAmount(reservation.getAmount());
@@ -60,6 +64,9 @@ public class ReservationService implements IReservationService {
                     reservationDTO.setDeadLine(reservation.getDeadline());
                     reservationDTO.setPhatientName(reservation.getPatient().getName());
                     reservationDTO.setPharmacyName(reservation.getPharmacy().getName());
+                 
+                 //   emailService.sendConfirmDisepnsingToPatientAsync(reservation.get().);
+
                     return reservationDTO;
                 }
             }
@@ -103,8 +110,6 @@ public class ReservationService implements IReservationService {
         Double priceWithoutDiscount = availableDrug.findPrice(reservation.getDateOfCreation()).getPrice();
         UserCategory userCategory = loyaltyProgramService.findUserCategoryByLoyaltyPoints(reservation.getPatient().getLoyaltyPoints());
         Double discount = userCategory.getReservationDiscount();
-
-        System.out.println("POPUST JE AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA " + discount);
 
         if(discount != 0){
             priceWithDiscount = (priceWithoutDiscount -(priceWithoutDiscount*(discount/100))) * reservation.getAmount();

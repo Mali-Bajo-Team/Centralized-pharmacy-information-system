@@ -1,5 +1,6 @@
 package com.pharmacy.cpis.userservice.service;
 
+import com.pharmacy.cpis.drugservice.model.drugsales.Reservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.MailException;
@@ -60,6 +61,23 @@ public class EmailService {
 				+ scheduleExaminationDTO.getStartDate() + " and end at " + scheduleExaminationDTO.getEndDate() + "."
 				+ " For more information contact your Consultant at mail: "
 				+ scheduleExaminationDTO.getConsultantEmail());
+		javaMailSender.send(mail);
+
+		System.out.println("Email was send!");
+	}
+
+	@Async
+	public void sendConfirmDisepnsingToPatientAsync(String userName, String phatientEmail,
+												  Reservation reservation) throws MailException, InterruptedException {
+		System.out.println("Email sending...\n\n");
+
+		SimpleMailMessage mail = new SimpleMailMessage();
+
+		mail.setTo(phatientEmail);
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Confirmation dispensing drug [CPis]");
+		mail.setText("Hello " + userName + "," + " your drug is succesfully dispensed. " + " Pharmacy where drug dispensed is " +
+				reservation.getPharmacy().getName() +  " ,amount of Drug "  + reservation.getDrug().getName() + " ,amount is " + reservation.getAmount() +".");
 		javaMailSender.send(mail);
 
 		System.out.println("Email was send!");
