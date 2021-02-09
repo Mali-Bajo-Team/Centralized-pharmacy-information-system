@@ -26,7 +26,7 @@ public class DrugRequest {
 	private Pharmacy pharmacy;
 
 	@ManyToOne(optional = false)
-	private Consultant cosultant;
+	private Consultant consultant;
 
 	public DrugRequest() {
 		super();
@@ -64,12 +64,12 @@ public class DrugRequest {
 		this.pharmacy = pharmacy;
 	}
 
-	public Consultant getCosultant() {
-		return cosultant;
+	public Consultant getConsultant() {
+		return consultant;
 	}
 
-	public void setCosultant(Consultant cosultant) {
-		this.cosultant = cosultant;
+	public void setConsultant(Consultant cosultant) {
+		this.consultant = cosultant;
 	}
 
 	@Override

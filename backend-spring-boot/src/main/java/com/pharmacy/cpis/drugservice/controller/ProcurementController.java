@@ -22,10 +22,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pharmacy.cpis.drugservice.dto.AddDrugOrderDTO;
 import com.pharmacy.cpis.drugservice.dto.DrugOrderDTO;
+import com.pharmacy.cpis.drugservice.dto.DrugRequestDTO;
 import com.pharmacy.cpis.drugservice.dto.OfferDTO;
 import com.pharmacy.cpis.drugservice.dto.SupplierOfferDTO;
 import com.pharmacy.cpis.drugservice.model.drugprocurement.DrugOrder;
+import com.pharmacy.cpis.drugservice.model.drugprocurement.DrugRequest;
 import com.pharmacy.cpis.drugservice.model.drugprocurement.Offer;
+import com.pharmacy.cpis.drugservice.repository.IDrugRequestRepository;
 import com.pharmacy.cpis.drugservice.service.IDrugOrderService;
 import com.pharmacy.cpis.drugservice.service.IOfferService;
 import com.pharmacy.cpis.userservice.model.users.UserAccount;
@@ -46,6 +49,9 @@ public class ProcurementController {
 
 	@Autowired
 	private IDrugOrderService drugOrderService;
+
+	@Autowired
+	private IDrugRequestRepository drugRequestRepository;
 
 	@GetMapping(value = "/offers")
 	public ResponseEntity<List<SupplierOfferDTO>> getSupplierOffers() {
@@ -181,6 +187,23 @@ public class ProcurementController {
 		offerService.accept(user, id);
 
 		return ResponseEntity.noContent().build();
+	}
+
+	@GetMapping(value = "/requests")
+	@PreAuthorize("hasRole('PHARMACY_ADMIN')")
+	@EmployeeAccountActive
+	public ResponseEntity<Collection<DrugRequestDTO>> addDrugOrder(Authentication authentication) {
+		UserAccount user = (UserAccount) authentication.getPrincipal();
+
+		if (user.getPharmacyId() == null)
+			throw new PSForbiddenException("You are not authorized to administrate a pharmacy.");
+
+		Collection<DrugRequest> requests = drugRequestRepository
+				.findByPharmacyIdOrderByTimestampDesc(user.getPharmacyId());
+
+		Collection<DrugRequestDTO> mapped = CollectionUtil.map(requests, DrugRequestDTO::new);
+
+		return ResponseEntity.ok(mapped);
 	}
 
 }

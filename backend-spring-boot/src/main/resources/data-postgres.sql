@@ -223,4 +223,6 @@ insert into user_authority (user_id, authority_id) values (12, 5);
 
 insert into working_times(consultant_id,pharmacy_id, monday_start, monday_end, saturday_start, saturday_end, sunday_start,sunday_end) values (12,2, '2021-02-03 12:00', '2021-02-03 20:00','2021-02-03 10:00', '2021-02-03 18:00', '2021-02-03 10:00', '2021-02-03 18:30');
 
-
+-- INSERT DRUG REQUESTS
+insert into drug_request (consultant_id, pharmacy_id, drug_code, timestamp) values (9, 1, 'aspirin', '2020-10-14');
+insert into drug_request (consultant_id, pharmacy_id, drug_code, timestamp) values (9, 1, 'brufen', '2020-12-14');
