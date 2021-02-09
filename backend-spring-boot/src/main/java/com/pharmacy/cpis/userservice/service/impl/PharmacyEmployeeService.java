@@ -1,5 +1,7 @@
 package com.pharmacy.cpis.userservice.service.impl;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,8 +11,10 @@ import com.pharmacy.cpis.scheduleservice.repository.IConsultationRepository;
 import com.pharmacy.cpis.scheduleservice.repository.IWorkingTimesRepository;
 import com.pharmacy.cpis.userservice.model.users.Consultant;
 import com.pharmacy.cpis.userservice.model.users.ConsultantType;
+import com.pharmacy.cpis.userservice.repository.IConsultantRepository;
 import com.pharmacy.cpis.userservice.repository.IUserRepository;
 import com.pharmacy.cpis.userservice.service.IPharmacyEmployeeService;
+import com.pharmacy.cpis.util.CollectionUtil;
 import com.pharmacy.cpis.util.exceptions.PSBadRequestException;
 import com.pharmacy.cpis.util.exceptions.PSConflictException;
 
@@ -25,6 +29,20 @@ public class PharmacyEmployeeService implements IPharmacyEmployeeService {
 
 	@Autowired
 	private IConsultationRepository consultationRepository;
+
+	@Autowired
+	private IConsultantRepository consultantRepository;
+
+	public Collection<Consultant> getDermatologistsWhoDontWorkInPharmacy(Long pharmacyId) {
+		Collection<Consultant> dermatologists = consultantRepository.findAllByType(ConsultantType.DERMATOLOGIST);
+
+		return CollectionUtil.findAll(dermatologists, dermatologist -> doesntWorkInPharmacy(dermatologist, pharmacyId));
+	}
+
+	private boolean doesntWorkInPharmacy(Consultant consultant, Long pharmacyId) {
+		return !CollectionUtil.contains(consultant.getWorkingTimes(),
+				wt -> wt.getPharmacy().getId().equals(pharmacyId));
+	}
 
 	@Override
 	public void fireConsultant(Long pharmacyId, Long consultantId) {

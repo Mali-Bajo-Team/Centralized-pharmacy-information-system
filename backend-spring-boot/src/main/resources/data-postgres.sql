@@ -199,3 +199,19 @@ insert into vacation_request (consultant_id, status, start_date, end_date, respo
 
 insert into vacation_request (consultant_id, status, start_date, end_date) values (9, 0, '2021-05-25', '2021-05-29');
 
+-- ISERT DERMATOLOGISTS WHO WORK IN ONLY ONE PHARMACY
+insert into person (discriminator, address, city, country, name, surname, phone_number, type) values ('Consultant', 'Svetislava Pesica 20', 'Novi Sad', 'Srbija', 'Stanko', 'Marković', '0635212365', 1);
+insert into user_account (email, password, is_active, person_id, needs_password_change) values ('cpisuser+dermatologist2@gmail.com', '$2a$10$ijW6YiSn3zggTw5ybFOkiO.TeAxiHo/E0Ala4JPJvdza3TSI2H7ue', true, 11, false);
+-- Password for dermatologist account is: dermatologist
+insert into user_authority (user_id, authority_id) values (11, 5);
+
+insert into working_times(consultant_id,pharmacy_id, monday_start, monday_end, saturday_start, saturday_end) values (11,2, '2021-02-03 19:00', '2021-02-03 21:00','2021-02-03 10:00', '2021-02-03 18:00');
+
+
+insert into person (discriminator, address, city, country, name, surname, phone_number, type) values ('Consultant', 'Svetislava Pesica 20', 'Novi Sad', 'Srbija', 'Stanka', 'Janković', '0635212365', 1);
+insert into user_account (email, password, is_active, person_id, needs_password_change) values ('cpisuser+dermatologist3@gmail.com', '$2a$10$ijW6YiSn3zggTw5ybFOkiO.TeAxiHo/E0Ala4JPJvdza3TSI2H7ue', true, 12, false);
+-- Password for dermatologist account is: dermatologist
+insert into user_authority (user_id, authority_id) values (12, 5);
+
+insert into working_times(consultant_id,pharmacy_id, monday_start, monday_end, saturday_start, saturday_end, sunday_start,sunday_end) values (12,2, '2021-02-03 12:00', '2021-02-03 20:00','2021-02-03 10:00', '2021-02-03 18:00', '2021-02-03 10:00', '2021-02-03 18:30');
+

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pharmacy.cpis.scheduleservice.dto.WorkingTimesDTO;
 import com.pharmacy.cpis.scheduleservice.model.workschedule.WorkingTimes;
 import com.pharmacy.cpis.scheduleservice.service.IWorkingTimesService;
+import com.pharmacy.cpis.userservice.dto.ConsultantWithBusyTimesDTO;
 import com.pharmacy.cpis.userservice.dto.ConsultantWithPharmaciesDTO;
 import com.pharmacy.cpis.userservice.model.users.Consultant;
 import com.pharmacy.cpis.userservice.model.users.ConsultantType;
@@ -58,6 +59,24 @@ public class DermatologistController {
 
 		Collection<ConsultantWithPharmaciesDTO> mapped = CollectionUtil.map(consultants,
 				consultant -> new ConsultantWithPharmaciesDTO(consultant));
+
+		return ResponseEntity.ok(mapped);
+	}
+
+	@GetMapping("/notemployees")
+	@PreAuthorize("hasRole('PHARMACY_ADMIN')")
+	@EmployeeAccountActive
+	public ResponseEntity<Collection<ConsultantWithBusyTimesDTO>> getNotEmployees(Authentication authentication) {
+		UserAccount user = (UserAccount) authentication.getPrincipal();
+
+		if (user.getPharmacyId() == null)
+			throw new PSForbiddenException("You are not authorized to administrate a pharmacy.");
+
+		Collection<Consultant> consultants = pharmacyEmployeeService
+				.getDermatologistsWhoDontWorkInPharmacy(user.getPharmacyId());
+
+		Collection<ConsultantWithBusyTimesDTO> mapped = CollectionUtil.map(consultants,
+				consultant -> new ConsultantWithBusyTimesDTO(consultant));
 
 		return ResponseEntity.ok(mapped);
 	}
