@@ -120,9 +120,9 @@ public class WorkingTimesService implements IWorkingTimesService {
 		for (WorkingTimes wt : workingTimes) {
 			if(wt.getConsultant().getId().equals(consultantID)){
 				dermatlogistWorkingPharmacy.add(wt.getPharmacy());
-				return  dermatlogistWorkingPharmacy;
 			}
 		}
+
 		return  dermatlogistWorkingPharmacy;
 	}
 

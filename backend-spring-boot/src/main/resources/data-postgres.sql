@@ -149,6 +149,7 @@ insert into consultation (price,status,start_date,end_date,consultant_id,patient
 insert into working_times(consultant_id,pharmacy_id, monday_start, monday_end, tuesday_start, tuesday_end, wednesday_start,wednesday_end,thursday_start,thursday_end,friday_start,friday_end) values (9,1, '2021-02-03 10:00', '2021-02-03 18:00','2021-02-03 10:00', '2021-02-03 18:00', '2021-02-03 10:00', '2021-02-03 18:00','2021-02-03 10:00', '2021-02-03 18:00', '2021-02-03 10:00', '2021-02-03 17:00');
 insert into working_times(consultant_id,pharmacy_id, monday_start, monday_end, saturday_start, saturday_end, sunday_start,sunday_end) values (9,2, '2021-02-03 19:00', '2021-02-03 21:00','2021-02-03 10:00', '2021-02-03 18:00', '2021-02-03 10:00', '2021-02-03 18:00');
 
+
 -- INSERT SUPPLIER
 insert into person (discriminator, address, city, country, name, surname, phone_number) values ('Supplier', 'Jovana Jovanovica 13', 'Novi Sad', 'Srbija', 'Jovica', 'Dobrica', '06323462520');
 insert into user_account (email, password, is_active, person_id, needs_password_change) values ('cpisuser+jovica@gmail.com', '$2a$10$hsgWgd6gOn8Kv.8M3/QImu8e8HM6S8Sj.wfcj6/5vz6lx5i21EwIS', true, 10, false);
