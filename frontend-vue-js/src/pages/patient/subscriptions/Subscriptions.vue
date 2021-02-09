@@ -7,5 +7,9 @@
 <script>
 export default {
   data: () => ({}),
+  mounted() {
+    console.log("mounting...");
+  },
+  methods: {},
 };
 </script>
