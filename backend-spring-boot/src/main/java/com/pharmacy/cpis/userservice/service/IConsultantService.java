@@ -10,7 +10,7 @@ import com.pharmacy.cpis.userservice.model.users.ConsultantType;
 
 public interface IConsultantService {
 
-	Consultant registerDermatologist(UserRegisterDTO dermatologist);
+	Consultant registerConsultant(UserRegisterDTO dermatologist, ConsultantType type);
 
 	Boolean existsByEmail(String email);
 
@@ -21,5 +21,7 @@ public interface IConsultantService {
 	Collection<Consultant> getByType(ConsultantType type);
 	
 	Collection<Consultant> getByTypeAndPharmacy(ConsultantType type, Long pharmacyId);
+	
+	Consultant getByIdAndType(Long id, ConsultantType type);
 	
 }

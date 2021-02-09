@@ -2,6 +2,8 @@ package com.pharmacy.cpis.userservice.controller;
 
 import java.util.Collection;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -9,10 +11,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pharmacy.cpis.userservice.dto.ConsultantWithPharmaciesDTO;
+import com.pharmacy.cpis.userservice.dto.EmployPharmacistDTO;
 import com.pharmacy.cpis.userservice.model.users.Consultant;
 import com.pharmacy.cpis.userservice.model.users.ConsultantType;
 import com.pharmacy.cpis.userservice.model.users.UserAccount;
@@ -53,6 +58,20 @@ public class PharmacistController {
 				consultant -> new ConsultantWithPharmaciesDTO(consultant));
 
 		return ResponseEntity.ok(mapped);
+	}
+
+	@PostMapping(consumes = "application/json")
+	@PreAuthorize("hasRole('PHARMACY_ADMIN')")
+	@EmployeeAccountActive
+	public ResponseEntity<Void> employ(Authentication authentication, @RequestBody @Valid EmployPharmacistDTO details) {
+		UserAccount user = (UserAccount) authentication.getPrincipal();
+
+		if (user.getPharmacyId() == null)
+			throw new PSForbiddenException("You are not authorized to administrate a pharmacy.");
+
+		pharmacyEmployeeService.employPharmacist(user.getPharmacyId(), details);
+
+		return ResponseEntity.noContent().build();
 	}
 
 	@GetMapping("/pharmacy/{id}")

@@ -1,7 +1,6 @@
 package com.pharmacy.cpis.userservice.controller;
 
 import java.util.Collection;
-import java.util.Date;
 
 import javax.validation.Valid;
 
@@ -29,7 +28,6 @@ import com.pharmacy.cpis.userservice.model.users.UserAccount;
 import com.pharmacy.cpis.userservice.service.IConsultantService;
 import com.pharmacy.cpis.userservice.service.IPharmacyEmployeeService;
 import com.pharmacy.cpis.util.CollectionUtil;
-import com.pharmacy.cpis.util.DateConversionsAndComparisons;
 import com.pharmacy.cpis.util.aspects.EmployeeAccountActive;
 import com.pharmacy.cpis.util.exceptions.PSForbiddenException;
 import com.pharmacy.cpis.util.exceptions.PSNotFoundException;

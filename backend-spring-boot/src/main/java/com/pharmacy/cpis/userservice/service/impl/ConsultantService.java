@@ -25,6 +25,7 @@ import com.pharmacy.cpis.userservice.repository.IUserRepository;
 import com.pharmacy.cpis.userservice.service.IAuthorityService;
 import com.pharmacy.cpis.userservice.service.IConsultantService;
 import com.pharmacy.cpis.util.CollectionUtil;
+import com.pharmacy.cpis.util.exceptions.PSNotFoundException;
 
 @Service
 public class ConsultantService implements IConsultantService {
@@ -45,6 +46,16 @@ public class ConsultantService implements IConsultantService {
 	private IWorkingTimesRepository workingTimesRepository;
 
 	@Override
+	public Consultant getByIdAndType(Long id, ConsultantType type) {
+		Consultant consultant = consultantRepository.findById(id).orElse(null);
+
+		if (consultant == null || !consultant.getType().equals(type))
+			throw new PSNotFoundException("The requested " + type.toString().toLowerCase() + " does not exist.");
+
+		return consultant;
+	}
+
+	@Override
 	public Collection<Consultant> getByType(ConsultantType type) {
 		return consultantRepository.findAllByType(type);
 	}
@@ -61,10 +72,10 @@ public class ConsultantService implements IConsultantService {
 	// registration service
 	// only difference is that this is for dermatologist :/
 	@Override
-	public Consultant registerDermatologist(UserRegisterDTO dermatologist) {
-		Consultant addedDermatologist = addNewDermatologist(dermatologist);
-		UserAccount addedAccount = addNewDermatologistAccount(dermatologist, addedDermatologist);
-		return addedDermatologist;
+	public Consultant registerConsultant(UserRegisterDTO dermatologist, ConsultantType type) {
+		Consultant addedConsultant = addNewConsultant(dermatologist, type);
+		addNewConsultantAccount(dermatologist, addedConsultant);
+		return addedConsultant;
 	}
 
 	@Override
@@ -72,13 +83,17 @@ public class ConsultantService implements IConsultantService {
 		return userRepository.existsByEmail(email);
 	}
 
-	private UserAccount addNewDermatologistAccount(UserRegisterDTO userRequest, Consultant addedConsultant) {
+	private UserAccount addNewConsultantAccount(UserRegisterDTO userRequest, Consultant addedConsultant) {
 		UserAccount newUserAccount = new UserAccount();
 		newUserAccount.setEmail(userRequest.getEmail());
 		newUserAccount.setPassword(passwordEncoder.encode(userRequest.getPassword()));
 		newUserAccount.setActive(true);
 		newUserAccount.setNeedsPasswordChange(true);
-		List<Authority> auth = authService.findByName("ROLE_DERMATOLOGIST");
+		List<Authority> auth = null;
+		if (addedConsultant.getType().equals(ConsultantType.DERMATOLOGIST))
+			auth = authService.findByName("ROLE_DERMATOLOGIST");
+		else
+			auth = authService.findByName("ROLE_PHARMACIST");
 		newUserAccount.setAuthorities(auth);
 		newUserAccount.setPerson(addedConsultant);
 
@@ -86,17 +101,17 @@ public class ConsultantService implements IConsultantService {
 		return addedAccount;
 	}
 
-	private Consultant addNewDermatologist(UserRegisterDTO userRequest) {
-		Consultant newDermatologist = new Consultant();
-		newDermatologist.setType(ConsultantType.DERMATOLOGIST);
-		newDermatologist.setAddress(userRequest.getAddress());
-		newDermatologist.setCity(userRequest.getCity());
-		newDermatologist.setCountry(userRequest.getCountry());
-		newDermatologist.setName(userRequest.getName());
-		newDermatologist.setSurname(userRequest.getSurname());
-		newDermatologist.setPhoneNumber(userRequest.getMobile());
-		Consultant addedDermatologist = consultantRepository.save(newDermatologist);
-		return addedDermatologist;
+	private Consultant addNewConsultant(UserRegisterDTO userRequest, ConsultantType type) {
+		Consultant newConsultant = new Consultant();
+		newConsultant.setType(type);
+		newConsultant.setAddress(userRequest.getAddress());
+		newConsultant.setCity(userRequest.getCity());
+		newConsultant.setCountry(userRequest.getCountry());
+		newConsultant.setName(userRequest.getName());
+		newConsultant.setSurname(userRequest.getSurname());
+		newConsultant.setPhoneNumber(userRequest.getMobile());
+		Consultant addedConsultant = consultantRepository.save(newConsultant);
+		return addedConsultant;
 	}
 
 	@Override

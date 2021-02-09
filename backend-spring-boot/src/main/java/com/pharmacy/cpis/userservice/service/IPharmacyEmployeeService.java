@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import com.pharmacy.cpis.scheduleservice.model.workschedule.WorkingTimes;
 import com.pharmacy.cpis.userservice.dto.EmployDermatologistDTO;
+import com.pharmacy.cpis.userservice.dto.EmployPharmacistDTO;
 import com.pharmacy.cpis.userservice.model.users.Consultant;
 
 public interface IPharmacyEmployeeService {
@@ -13,5 +14,7 @@ public interface IPharmacyEmployeeService {
 	Collection<Consultant> getDermatologistsWhoDontWorkInPharmacy(Long pharmacyId);
 
 	WorkingTimes employDermatologist(Long pharmacyId, EmployDermatologistDTO details);
+
+	WorkingTimes employPharmacist(Long pharmacyId, EmployPharmacistDTO details);
 
 }

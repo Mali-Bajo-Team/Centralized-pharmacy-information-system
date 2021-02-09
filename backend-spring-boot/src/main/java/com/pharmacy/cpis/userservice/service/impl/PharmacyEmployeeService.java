@@ -14,10 +14,11 @@ import com.pharmacy.cpis.scheduleservice.repository.IWorkingTimesRepository;
 import com.pharmacy.cpis.userservice.dto.AddWorkingDayDTO;
 import com.pharmacy.cpis.userservice.dto.AddWorkingTimeDTO;
 import com.pharmacy.cpis.userservice.dto.EmployDermatologistDTO;
+import com.pharmacy.cpis.userservice.dto.EmployPharmacistDTO;
 import com.pharmacy.cpis.userservice.model.users.Consultant;
 import com.pharmacy.cpis.userservice.model.users.ConsultantType;
-import com.pharmacy.cpis.userservice.repository.IConsultantRepository;
 import com.pharmacy.cpis.userservice.repository.IUserRepository;
+import com.pharmacy.cpis.userservice.service.IConsultantService;
 import com.pharmacy.cpis.userservice.service.IPharmacyEmployeeService;
 import com.pharmacy.cpis.util.CollectionUtil;
 import com.pharmacy.cpis.util.DateConversionsAndComparisons;
@@ -39,10 +40,24 @@ public class PharmacyEmployeeService implements IPharmacyEmployeeService {
 	private IConsultationRepository consultationRepository;
 
 	@Autowired
-	private IConsultantRepository consultantRepository;
+	private IConsultantService consultantService;
 
 	@Autowired
 	private IPharmacyRepository pharmacyRepository;
+
+	@Override
+	public WorkingTimes employPharmacist(Long pharmacyId, EmployPharmacistDTO details) {
+		Pharmacy pharmacy = pharmacyRepository.findById(pharmacyId).orElse(null);
+		if (pharmacy == null)
+			throw new PSNotFoundException("The requested pharmacy does not exist.");
+
+		Consultant consultant = consultantService.registerConsultant(details.getPharmacist(),
+				ConsultantType.PHARMACIST);
+
+		WorkingTimes workingTimes = initializeWorkingTimes(consultant, pharmacy, details.getWorkingTimes());
+
+		return workingTimesRepository.save(workingTimes);
+	}
 
 	@Override
 	public WorkingTimes employDermatologist(Long pharmacyId, EmployDermatologistDTO details) {
@@ -50,9 +65,8 @@ public class PharmacyEmployeeService implements IPharmacyEmployeeService {
 		if (pharmacy == null)
 			throw new PSNotFoundException("The requested pharmacy does not exist.");
 
-		Consultant consultant = consultantRepository.findById(details.getDermatologistId()).orElse(null);
-		if (consultant == null || !consultant.getType().equals(ConsultantType.DERMATOLOGIST))
-			throw new PSNotFoundException("The requested dermatologist does not exist.");
+		Consultant consultant = consultantService.getByIdAndType(details.getDermatologistId(),
+				ConsultantType.DERMATOLOGIST);
 
 		if (!doesntWorkInPharmacy(consultant, pharmacyId))
 			throw new PSConflictException("The consultant already works for the pharmacy.");
@@ -118,7 +132,7 @@ public class PharmacyEmployeeService implements IPharmacyEmployeeService {
 
 	@Override
 	public Collection<Consultant> getDermatologistsWhoDontWorkInPharmacy(Long pharmacyId) {
-		Collection<Consultant> dermatologists = consultantRepository.findAllByType(ConsultantType.DERMATOLOGIST);
+		Collection<Consultant> dermatologists = consultantService.getByType(ConsultantType.DERMATOLOGIST);
 
 		return CollectionUtil.findAll(dermatologists, dermatologist -> doesntWorkInPharmacy(dermatologist, pharmacyId));
 	}
