@@ -6,6 +6,8 @@ import com.pharmacy.cpis.pharmacyservice.repository.IPharmacyRepository;
 import com.pharmacy.cpis.pharmacyservice.service.IPharmacyService;
 import com.pharmacy.cpis.userservice.model.users.Patient;
 import com.pharmacy.cpis.userservice.repository.IPatientRepository;
+import com.pharmacy.cpis.userservice.service.IPatientService;
+import com.pharmacy.cpis.userservice.service.impl.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -164,7 +166,7 @@ public class DrugService implements IDrugService {
 	}
 
 	@Override
-	public List<DrugDTO> getDrugsForPhatientWithoutAlergies(Long patientID) {
+	public List<DrugDTO> getDrugsForPhatientWithoutAlergies(Long patientID, IDrugService drugService) {
 
 		List<Drug> allDrugs = drugRepository.findAll();
 		List<Drug> allDrugsWithoutAlergies = new ArrayList<>(allDrugs);
@@ -183,7 +185,7 @@ public class DrugService implements IDrugService {
 		List<DrugDTO> allDrugsWithoutAlergiesDTOs = new ArrayList<>();
 		//Convert to dto
 		for(Drug d: allDrugsWithoutAlergies){
-			allDrugsWithoutAlergiesDTOs.add(new DrugDTO(d));
+			allDrugsWithoutAlergiesDTOs.add(new DrugDTO(d, drugService));
 		}
 
 		return allDrugsWithoutAlergiesDTOs;

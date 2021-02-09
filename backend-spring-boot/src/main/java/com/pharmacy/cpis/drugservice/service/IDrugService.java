@@ -27,5 +27,5 @@ public interface IDrugService {
 
 	Collection<DrugForm> findAllDrugForms();
 
-	List<DrugDTO> getDrugsForPhatientWithoutAlergies(Long paatientID);
+	List<DrugDTO> getDrugsForPhatientWithoutAlergies(Long paatientID, IDrugService drugService);
 }

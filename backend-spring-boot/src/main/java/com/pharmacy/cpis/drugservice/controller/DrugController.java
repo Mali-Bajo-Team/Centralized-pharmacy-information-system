@@ -81,7 +81,7 @@ public class DrugController {
     @PostMapping(value = "/alldrugswithoutalergies", consumes = "application/json")
     @PreAuthorize("hasRole('DERMATOLOGIST') || hasRole('PHARMACIST')")
     public ResponseEntity<List<DrugDTO>> addDrug(@RequestBody DrugWithoutAlergiesDTO drugWithoutAlergiesDTO) {
-        List<DrugDTO> drugDTO = drugService.getDrugsForPhatientWithoutAlergies(drugWithoutAlergiesDTO.getPaatientID());
+        List<DrugDTO> drugDTO = drugService.getDrugsForPhatientWithoutAlergies(drugWithoutAlergiesDTO.getPaatientID(), drugService);
         return new ResponseEntity<>(drugDTO, HttpStatus.OK);
     }
 }

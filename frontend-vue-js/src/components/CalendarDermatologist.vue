@@ -138,7 +138,7 @@
             color="primary"
             text
             @click="
-             getDrugsWithoutAllergies();
+              getDrugsWithoutAllergies();
               questionDialog = false;
               reportDialog = true;
             "
@@ -211,6 +211,11 @@
                     v-on:input="onInputWithoutAllergies"
                     @click="alertDrugsWithoutAllergies = false"
                   ></v-select>
+                  <h4 class="ml-n primary--text">Drug specification</h4>
+                  <v-btn depressed color="primary" @click="showDescription">
+                    Show specification
+                  </v-btn>
+                  <h3 class="mt-5 ml-2 primary--text">{{ drugSpecification }}</h3>
                   <v-alert
                     :value="alertDrugsWithoutAllergies"
                     color="pink"
@@ -318,6 +323,7 @@ export default {
     drugsWithoutAllergies: null,
     alertDrugsWithoutAllergies: false,
     valueDrugsWithoutAllergies: null,
+    drugSpecification: "",
 
     type: "month",
     types: ["month", "week", "day", "4day"],
@@ -376,6 +382,19 @@ export default {
     },
   },
   methods: {
+    showDescription() {
+      this.drugSpecification =
+        "Manufacturer is " +
+        this.selecteddrugWithoutAllergies.drugSpecificationDTO.manufacturer +
+        ". Contraindications of drug are " +
+        this.selecteddrugWithoutAllergies.drugSpecificationDTO
+          .contraindications +
+        " . Recommended daily dose is " +
+        this.selecteddrugWithoutAllergies.drugSpecificationDTO
+          .recommendedDailyDose +
+        " . Ingredients are " +
+        this.selecteddrugWithoutAllergies.drugSpecificationDTO.ingredients;
+    },
     getDrugsWithoutAllergies() {
       this.axios
         .post(
