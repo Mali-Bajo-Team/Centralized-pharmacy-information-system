@@ -44,7 +44,7 @@ public class ConsultationService implements IConsultationService {
 
 	@Autowired
 	private IPharmacyRepository pharmacyRepository;
-	
+
 	@Override
 	public Collection<Consultation> findByPharmacyAndStatus(Long pharmacyId, ConsultationStatus status) {
 		return consultationRepository.findAllByPharmacyIdAndStatus(pharmacyId, status);
@@ -130,13 +130,14 @@ public class ConsultationService implements IConsultationService {
 		consultation.setPharmacy(pharmacy);
 		consultation.setStatus(ConsultationStatus.PREDEFINED);
 		consultation.setTime(new DateRange(consultationInfo.getStart(), consultationInfo.getEnd()));
-		if (consultationInfo.getPrice() == null)
+		if (consultationInfo.getPrice() == null) {
 			if (consultant.getType().equals(ConsultantType.DERMATOLOGIST))
 				consultation.setPrice(pharmacy.getDermatologistConsultationPrice());
 			else
 				consultation.setPrice(pharmacy.getPharmacistConsultationPrice());
-		else
+		} else {
 			consultation.setPrice(consultationInfo.getPrice());
+		}
 
 		return consultation;
 	}
