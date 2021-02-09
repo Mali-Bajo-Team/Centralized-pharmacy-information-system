@@ -101,7 +101,6 @@ insert into consultation (price,status,start_date,end_date,consultant_id,patient
 insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (20,1,'2021-02-04 11:23','2021-02-04 13:20',3,2,1);
 insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (20,1,'2021-02-05 13:23','2021-02-05 14:00',5,4,1);
 
-
 -- INSERT DRUGS
 insert into drug(code, loyalty_points, name, drug_class_id, drug_form_id) values ('brufen', 5, 'Brufen',1,1);
 insert into drug(code, loyalty_points, name, drug_class_id, drug_form_id) values ('aspirin', 3, 'Aspirin',1,1);
@@ -145,6 +144,10 @@ insert into consultation (price,status,start_date,end_date,consultant_id,patient
 insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (25,1,'2021-02-04 11:23','2021-02-04 13:20',9,2,1);
 insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (30,1,'2021-02-05 13:23','2021-02-05 14:00',9,4,2);
 
+-- INSERT DERMATOLOGIST WORKING TIME
+insert into working_times(consultant_id,pharmacy_id, monday_start, monday_end, tuesday_start, tuesday_end, wednesday_start,wednesday_end,thursday_start,thursday_end,friday_start,friday_end) values (9,1, '2021-02-03 10:00', '2021-02-03 18:00','2021-02-03 10:00', '2021-02-03 18:00', '2021-02-03 10:00', '2021-02-03 18:00','2021-02-03 10:00', '2021-02-03 18:00', '2021-02-03 10:00', '2021-02-03 17:00');
+insert into working_times(consultant_id,pharmacy_id, monday_start, monday_end, saturday_start, saturday_end, sunday_start,sunday_end) values (9,2, '2021-02-03 19:00', '2021-02-03 21:00','2021-02-03 10:00', '2021-02-03 18:00', '2021-02-03 10:00', '2021-02-03 18:00');
+
 -- INSERT SUPPLIER
 insert into person (discriminator, address, city, country, name, surname, phone_number) values ('Supplier', 'Jovana Jovanovica 13', 'Novi Sad', 'Srbija', 'Jovica', 'Dobrica', '06323462520');
 insert into user_account (email, password, is_active, person_id, needs_password_change) values ('cpisuser+jovica@gmail.com', '$2a$10$hsgWgd6gOn8Kv.8M3/QImu8e8HM6S8Sj.wfcj6/5vz6lx5i21EwIS', true, 10, false);
@@ -187,8 +190,8 @@ insert into complaint(content, creation_timestamp, response, consultant_id, crea
 values('Omg, there is no need for this type of conversation...','2021-03-03 12:00', 'Waiting on reply', 9,4);
 
 -- INSERT VACATION REQUESTS
-insert into vacation_request (consultant_id, status, start_date, end_date) values (3, 0, '2021-03-25', '2021-03-29');
-insert into vacation_request (consultant_id, status, start_date, end_date, response) values (3, 2, '2021-01-25', '2021-01-29', 'Ne možemo da prihvatimo odmor u tom periodu zato što je zahtjev prekasno poslat.');
+insert into vacation_request (consultant_id, status, start_date, end_date) values (5, 0, '2021-03-25', '2021-03-29');
+insert into vacation_request (consultant_id, status, start_date, end_date, response) values (5, 2, '2021-01-25', '2021-01-29', 'Ne možemo da prihvatimo odmor u tom periodu zato što je zahtjev prekasno poslat.');
 
 insert into vacation_request (consultant_id, status, start_date, end_date) values (9, 0, '2021-05-25', '2021-05-29');
 
