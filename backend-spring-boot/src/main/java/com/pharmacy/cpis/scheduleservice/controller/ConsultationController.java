@@ -1,6 +1,7 @@
 package com.pharmacy.cpis.scheduleservice.controller;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +24,7 @@ import com.pharmacy.cpis.scheduleservice.dto.AddPredefinedConsultationDTO;
 import com.pharmacy.cpis.scheduleservice.dto.ConsultationDTO;
 import com.pharmacy.cpis.scheduleservice.dto.ScheduleExaminationDTO;
 import com.pharmacy.cpis.scheduleservice.model.consultations.Consultation;
+import com.pharmacy.cpis.scheduleservice.model.consultations.ConsultationStatus;
 import com.pharmacy.cpis.scheduleservice.service.IConsultationService;
 import com.pharmacy.cpis.scheduleservice.service.IWorkingTimesService;
 import com.pharmacy.cpis.userservice.dto.ConsultantDTO;
@@ -30,6 +33,7 @@ import com.pharmacy.cpis.userservice.model.users.UserAccount;
 import com.pharmacy.cpis.userservice.repository.IPatientRepository;
 import com.pharmacy.cpis.userservice.service.EmailService;
 import com.pharmacy.cpis.userservice.service.IUserService;
+import com.pharmacy.cpis.util.CollectionUtil;
 import com.pharmacy.cpis.util.DateConversionsAndComparisons;
 import com.pharmacy.cpis.util.aspects.EmployeeAccountActive;
 import com.pharmacy.cpis.util.exceptions.PSForbiddenException;
@@ -140,10 +144,38 @@ public class ConsultationController {
 
 		if (user.getPharmacyId() == null)
 			throw new PSForbiddenException("You are not authorized to administrate a pharmacy.");
-		
+
 		Consultation consultation = consultationService.addPredefined(user.getPharmacyId(), consultationInfo);
 
 		return ResponseEntity.ok(new ConsultationDTO(consultation));
+	}
+
+	@GetMapping(value = "/predefined")
+	@PreAuthorize("hasRole('PHARMACY_ADMIN')")
+	@EmployeeAccountActive
+	public ResponseEntity<Collection<ConsultationDTO>> getPredefined(Authentication authentication) {
+		UserAccount user = (UserAccount) authentication.getPrincipal();
+
+		if (user.getPharmacyId() == null)
+			throw new PSForbiddenException("You are not authorized to administrate a pharmacy.");
+
+		Collection<Consultation> consultations = consultationService.findByPharmacyAndStatus(user.getPharmacyId(),
+				ConsultationStatus.PREDEFINED);
+		Collection<ConsultationDTO> mapped = CollectionUtil.map(consultations,
+				consultation -> new ConsultationDTO(consultation));
+
+		return ResponseEntity.ok(mapped);
+	}
+
+	@GetMapping(value = "/predefined/pharmacy/{id}")
+	@PreAuthorize("hasRole('PATIENT')")
+	public ResponseEntity<Collection<ConsultationDTO>> getPredefinedByPharmacy(@PathVariable(required = true) Long id) {
+		Collection<Consultation> consultations = consultationService.findByPharmacyAndStatus(id,
+				ConsultationStatus.PREDEFINED);
+		Collection<ConsultationDTO> mapped = CollectionUtil.map(consultations,
+				consultation -> new ConsultationDTO(consultation));
+
+		return ResponseEntity.ok(mapped);
 	}
 
 }

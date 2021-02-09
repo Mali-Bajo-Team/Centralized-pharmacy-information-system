@@ -1,5 +1,6 @@
 package com.pharmacy.cpis.scheduleservice.service.impl;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -43,6 +44,11 @@ public class ConsultationService implements IConsultationService {
 
 	@Autowired
 	private IPharmacyRepository pharmacyRepository;
+	
+	@Override
+	public Collection<Consultation> findByPharmacyAndStatus(Long pharmacyId, ConsultationStatus status) {
+		return consultationRepository.findAllByPharmacyIdAndStatus(pharmacyId, status);
+	}
 
 	@Override
 	public List<Consultation> findAll() {

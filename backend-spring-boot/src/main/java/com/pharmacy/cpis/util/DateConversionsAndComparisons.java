@@ -83,10 +83,10 @@ public class DateConversionsAndComparisons {
 	}
 
 	public static boolean overlaps(DateRange dr1, DateRange dr2) {
-		if (dr1.getStart().compareTo(dr2.getStart()) <= 0 && dr1.getEnd().compareTo(dr2.getStart()) >= 0)
+		if (dr1.getStart().compareTo(dr2.getStart()) <= 0 && dr1.getEnd().compareTo(dr2.getStart()) > 0)
 			return true;
 
-		if (dr1.getStart().compareTo(dr2.getEnd()) <= 0 && dr1.getEnd().compareTo(dr2.getEnd()) >= 0)
+		if (dr1.getStart().compareTo(dr2.getEnd()) < 0 && dr1.getEnd().compareTo(dr2.getEnd()) >= 0)
 			return true;
 
 		return false;
