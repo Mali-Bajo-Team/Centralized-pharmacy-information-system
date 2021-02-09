@@ -9,6 +9,7 @@ import com.pharmacy.cpis.util.DateRange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -47,6 +48,20 @@ public class WorkingTimesService implements IWorkingTimesService {
             }
         }
         return  consultantWorkingPharmacy;
+    }
+
+    @Override
+    public List<Pharmacy> dermatologistWorkingPharmacies(Long consultantID) {
+        List<Pharmacy> dermatlogistWorkingPharmacy = new ArrayList<>();
+        List<WorkingTimes> workingTimes = workingTimesRepository.findAll();
+
+        for (WorkingTimes wt : workingTimes) {
+            if(wt.getConsultant().getId().equals(consultantID)){
+                dermatlogistWorkingPharmacy.add(wt.getPharmacy());
+                return  dermatlogistWorkingPharmacy;
+            }
+        }
+        return  dermatlogistWorkingPharmacy;
     }
 
     @Override

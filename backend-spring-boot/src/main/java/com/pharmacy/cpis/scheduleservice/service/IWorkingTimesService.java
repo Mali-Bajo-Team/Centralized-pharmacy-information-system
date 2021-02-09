@@ -13,5 +13,7 @@ public interface IWorkingTimesService {
 
     Pharmacy consultantWorkingPharmacy(Long consultantID);
 
+    List<Pharmacy> dermatologistWorkingPharmacies(Long consultantID);
+
     Boolean isConsultationTimeFitsIntoConsultantWorkingTime(Long consultantID, Date examinationStartDate, Date examinationTime);
 }

@@ -88,76 +88,7 @@
               You must choose user!
             </v-alert>
           </div>
-           <!-- SEARCH PHARMACIES -->
-          <div class="ml-4 mb-6 mt-16">
-            <h5 class="ml-n primary--text">Choose pharmacy for consultation</h5>
-            <v-autocomplete
-              v-model="model"
-              :items="items"
-              :loading="isLoading"
-              :search-input.sync="search"
-              chips
-              clearable
-              hide-details
-              hide-selected
-              item-text="name"
-              item-value="symbol"
-              label="Search for a pharmacy..."
-              solo
-            >
-              <template v-slot:no-data>
-                <v-list-item>
-                  <v-list-item-title>
-                    Search and choose
-                    <strong>pharmacy</strong>
-                  </v-list-item-title>
-                </v-list-item>
-              </template>
-              <template v-slot:selection="{ attr, on, item, selected }">
-                <v-chip
-                  v-bind="attr"
-                  :input-value="selected"
-                  color="blue-grey"
-                  class="white--text"
-                  v-on="on"
-                >
-                  <v-icon left> mdi-account </v-icon>
-                  <span v-text="item.name"></span>
-                </v-chip>
-              </template>
-              <template v-slot:item="{ item }">
-                <v-list-item-avatar
-                  color="primary"
-                  class="headline font-weight-light white--text"
-                >
-                  {{ item.name.charAt(0) }}
-                </v-list-item-avatar>
-                <v-list-item-content
-                  @click="handleSelectItem(item), (alertUser = false)"
-                >
-                  <v-list-item-title
-                    v-text="item.name + ' ' + item.surname"
-                  ></v-list-item-title>
-                  <v-list-item-subtitle
-                    v-text="item.symbol"
-                  ></v-list-item-subtitle>
-                </v-list-item-content>
-                <v-list-item-action>
-                  <v-icon>mdi-account</v-icon>
-                </v-list-item-action>
-              </template>
-            </v-autocomplete>
-            <v-alert
-              :value="alertUser"
-              color="pink"
-              dark
-              border="top"
-              icon="mdi-account"
-              transition="scale-transition"
-            >
-              You must choose user!
-            </v-alert>
-          </div>
+  
         </v-row>
         <v-row>
           <!-- CHOOSE DATE CALENDAR -->
@@ -277,7 +208,7 @@
             >
               You must pick date range for your vacation request
             </v-alert>
-             <v-alert
+            <v-alert
               :value="vacatonrequestSuccess"
               color="green"
               dark
@@ -322,6 +253,7 @@ export default {
     valueDate: null,
     isLoading: false,
     items: [],
+    items2: [],
     model: null,
     search: null,
     tab: null,
@@ -330,6 +262,7 @@ export default {
     scheduleSucces: false,
     searchExaminitedUsers: "",
     examinitedPatients: [],
+    pharmaciesForDermatologist: [],
     vacationRequestDateRange: [],
     headers: [
       {
@@ -354,8 +287,8 @@ export default {
     this.consultants = [];
     this.axios
       .post(
-         process.env.VUE_APP_BACKEND_URL +
-            process.env.VUE_APP_CONSULTANT_EXAMPAT_ENDPOINT,
+        process.env.VUE_APP_BACKEND_URL +
+          process.env.VUE_APP_CONSULTANT_EXAMPAT_ENDPOINT,
         { consultantEmail: email },
         {
           headers: {
@@ -417,7 +350,8 @@ export default {
       } else {
         this.axios
           .post(
-            process.env.VUE_APP_BACKEND_URL + process.env.VUE_APP_CONSULTATIONS_SCHEDULE,
+            process.env.VUE_APP_BACKEND_URL +
+              process.env.VUE_APP_CONSULTATIONS_SCHEDULE,
             {
               consultantEmail: email,
               startDate:
@@ -462,7 +396,8 @@ export default {
       } else {
         this.axios
           .post(
-            process.env.VUE_APP_BACKEND_URL + process.env.VUE_APP_VACATIONREQUEST_CREATE_ENDPOINT,
+            process.env.VUE_APP_BACKEND_URL +
+              process.env.VUE_APP_VACATIONREQUEST_CREATE_ENDPOINT,
             {
               consultantEmail: email,
               startVacationReqDate:
@@ -501,11 +436,15 @@ export default {
       this.isLoading = true;
 
       // Lazily load input items
-      fetch( process.env.VUE_APP_BACKEND_URL + process.env.VUE_APP_ALL_PATIENTS_ENDPOINT, {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
-        },
-      })
+      fetch(
+        process.env.VUE_APP_BACKEND_URL +
+          process.env.VUE_APP_ALL_PATIENTS_ENDPOINT,
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+          },
+        }
+      )
         .then((res) => res.clone().json())
         .then((res) => {
           console.log(res);
@@ -516,6 +455,7 @@ export default {
         })
         .finally(() => (this.isLoading = false));
     },
+   
   },
 };
 

@@ -3,6 +3,11 @@ package com.pharmacy.cpis.pharmacyservice.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pharmacy.cpis.pharmacyservice.dto.PharmaciesForDermatologistDTO;
+import com.pharmacy.cpis.scheduleservice.service.impl.WorkingTimesService;
+import com.pharmacy.cpis.userservice.model.users.UserAccount;
+import com.pharmacy.cpis.userservice.repository.IConsultantRepository;
+import com.pharmacy.cpis.userservice.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +31,10 @@ public class PharmacyController {
 
 	@Autowired
 	private IPharmacyService pharmacyService;
+	@Autowired
+	private IUserService userService;
+	@Autowired
+	private WorkingTimesService workingTimesService;
 
 	@GetMapping("/{id}")
 	@PreAuthorize("hasRole('PATIENT')")
@@ -40,6 +49,23 @@ public class PharmacyController {
 	public ResponseEntity<List<PharmacyDTO>> getAllPharmacies() {
 
 		List<Pharmacy> pharmacies = pharmacyService.findAll();
+
+		// convert pharmacies to DTOs
+		List<PharmacyDTO> pharmaciesDTO = new ArrayList<>();
+		for (Pharmacy pharmacy : pharmacies) {
+			PharmacyDTO dtoPharmacy = new PharmacyDTO(pharmacy);
+			pharmaciesDTO.add(dtoPharmacy);
+		}
+
+		return new ResponseEntity<>(pharmaciesDTO, HttpStatus.OK);
+	}
+
+	@PostMapping(value ="/allfordermatologist", consumes = "application/json")
+	@PreAuthorize("hasRole('DERMATOLOGIST')")
+	public ResponseEntity<List<PharmacyDTO>> getAllPharmaciesWhereWorkingDermatolgoist(@RequestBody PharmaciesForDermatologistDTO pharmaciesForDermatologistDTO) {
+		UserAccount userAccount = userService.findByEmail(pharmaciesForDermatologistDTO.getDermatologistEmail());
+
+		List<Pharmacy> pharmacies = workingTimesService.dermatologistWorkingPharmacies(userAccount.getId());
 
 		// convert pharmacies to DTOs
 		List<PharmacyDTO> pharmaciesDTO = new ArrayList<>();
