@@ -1,43 +1,63 @@
 package com.pharmacy.cpis.scheduleservice.dto;
 
-import java.sql.Date;
+import java.util.Date;
+
+import com.pharmacy.cpis.scheduleservice.model.workschedule.VacationRequest;
+import com.pharmacy.cpis.scheduleservice.model.workschedule.VacationRequestStatus;
 
 public class VacationRequestDTO {
-    private String consultantEmail;
-    private String startVacationReqDate;
-    private String endVacatonReqDate;
 
-    public VacationRequestDTO() {
-    }
+	private Long id;
+	private String consultantEmail;
+	private String consultantName;
+	private String consultantSurname;
+	private Date start;
+	private Date end;
+	private VacationRequestStatus status;
+	private String response;
 
-    public VacationRequestDTO(String consultantEmail, String startVacationReqDate, String endVacatonReqDate, String response) {
-        this.consultantEmail = consultantEmail;
-        this.startVacationReqDate = startVacationReqDate;
-        this.endVacatonReqDate = endVacatonReqDate;
-    }
+	public VacationRequestDTO(VacationRequest request) {
+		super();
+		this.id = request.getId();
+		this.consultantEmail = request.getConsultant().getAccount().getEmail();
+		this.consultantName = request.getConsultant().getName();
+		this.consultantSurname = request.getConsultant().getSurname();
+		this.start = request.getDateRange().getStart();
+		this.end = request.getDateRange().getEnd();
+		this.status = request.getStatus();
+		this.response = request.getResponse();
+	}
 
-    public String getConsultantEmail() {
-        return consultantEmail;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setConsultantEmail(String consultantEmail) {
-        this.consultantEmail = consultantEmail;
-    }
+	public String getConsultantEmail() {
+		return consultantEmail;
+	}
 
-    public String getStartVacationReqDate() {
-        return startVacationReqDate;
-    }
+	public String getConsultantName() {
+		return consultantName;
+	}
 
-    public void setStartVacationReqDate(String startVacationReqDate) {
-        this.startVacationReqDate = startVacationReqDate;
-    }
+	public String getConsultantSurname() {
+		return consultantSurname;
+	}
 
-    public String getEndVacatonReqDate() {
-        return endVacatonReqDate;
-    }
+	public Date getStart() {
+		return start;
+	}
 
-    public void setEndVacatonReqDate(String endVacatonReqDate) {
-        this.endVacatonReqDate = endVacatonReqDate;
-    }
+	public Date getEnd() {
+		return end;
+	}
+
+	public VacationRequestStatus getStatus() {
+		return status;
+	}
+
+	public String getResponse() {
+		return response;
+	}
 
 }

@@ -1,11 +1,15 @@
 package com.pharmacy.cpis.scheduleservice.repository;
 
-import com.pharmacy.cpis.scheduleservice.model.consultations.Consultation;
-import com.pharmacy.cpis.userservice.model.users.Consultant;
-import com.pharmacy.cpis.userservice.model.users.Person;
-import com.pharmacy.cpis.userservice.model.users.UserAccount;
+import java.util.Collection;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface IConsultationRepository  extends JpaRepository<Consultation, Long> {
+import com.pharmacy.cpis.scheduleservice.model.consultations.Consultation;
+import com.pharmacy.cpis.scheduleservice.model.consultations.ConsultationStatus;
+import com.pharmacy.cpis.userservice.model.users.Consultant;
+
+public interface IConsultationRepository extends JpaRepository<Consultation, Long> {
+
+	Collection<Consultation> findAllByConsultantAndStatus(Consultant consultant, ConsultationStatus status);
 
 }
