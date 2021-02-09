@@ -16,4 +16,6 @@ public interface IPharmacyService {
 
 	List<Pharmacy> findAll();
 
+	void subscribePatientOnPharmacyPromotions(String patientEmail, Long pharmacyId);
+
 }

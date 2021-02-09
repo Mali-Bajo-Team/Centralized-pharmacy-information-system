@@ -90,6 +90,7 @@ insert into promotion (pharmacy_id, start_date, end_date, title, content) values
 -- ISERT SUBSCRIBERS
 insert into subscriptions (pharmacy_id, patient_id) values (1, 8);
 insert into subscriptions (pharmacy_id, patient_id) values (1, 2);
+--insert into subscriptions (pharmacy_id, patient_id) values (2, 4);
 
 -- INSERT PHARMACY RATINGS
 insert into pharmacy_rating(rating, patient_id,pharmacy_id) values (5,2,1);
@@ -226,3 +227,4 @@ insert into working_times(consultant_id,pharmacy_id, monday_start, monday_end, s
 -- INSERT DRUG REQUESTS
 insert into drug_request (consultant_id, pharmacy_id, drug_code, timestamp) values (9, 1, 'aspirin', '2020-10-14');
 insert into drug_request (consultant_id, pharmacy_id, drug_code, timestamp) values (9, 1, 'brufen', '2020-12-14');
+
