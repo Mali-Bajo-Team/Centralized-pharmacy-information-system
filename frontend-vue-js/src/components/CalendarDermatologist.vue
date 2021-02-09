@@ -407,21 +407,21 @@ export default {
 
             for (let i = 0; i < this.consultants.length; i++) {
               if (this.consultants[i].pharmacyID === this.selectedPharmacy) {
-                events.push({
-                  name:
-                    " Patient: " +
-                    this.consultants[i].patientName +
-                    " " +
-                    this.consultants[i].patientSurname +
-                    ", Pharmacy: " +
-                    this.consultants[i].pharmacyName +
-                    " ",
-                  start: this.consultants[i].startDate,
-                  end: this.consultants[i].endDate,
-                  color: "primary",
-                  timed: 1,
-                  patientId: this.consultants[i].patientId,
-                });
+               events.push({
+                name:
+                  " Patient: " +
+                  this.consultants[i].patientName +
+                  "    " +
+                  this.consultants[i].patientSurname +
+                  ". Pharmacy: " +
+                  this.consultants[i].pharmacyName +
+                  " " + " Start: " + getStringDateWithTimeFromMilliseconds( this.consultants[i].startDate) + ". End: " + getStringDateWithTimeFromMilliseconds( this.consultants[i].endDate),
+                start: this.consultants[i].startDate,
+                end: this.consultants[i].endDate,
+                color: "primary",
+                timed: 1,
+                patientId: this.consultants[i].patientId,
+              });
               }
             }
             this.events = events;

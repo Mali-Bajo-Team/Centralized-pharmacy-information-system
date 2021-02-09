@@ -37,7 +37,7 @@ public class PatientController {
     public  ResponseEntity<PenaltieDTO> addPenaltie(@RequestBody PenaltieDTO penaltieDTO) {
 
         UserAccount userAccount = userRepository.getOne(penaltieDTO.getPhatientID());
-        Patient patient = patientService.addPenaltie(userAccount.getEmail());
+        Patient patient = patientService.addPenaltie(userAccount.getEmail() , penaltieDTO.getConsultationID());
 
         return new ResponseEntity<>(penaltieDTO, HttpStatus.OK);
     }

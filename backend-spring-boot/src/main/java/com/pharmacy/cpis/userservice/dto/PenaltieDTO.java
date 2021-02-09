@@ -2,12 +2,14 @@ package com.pharmacy.cpis.userservice.dto;
 
 public class PenaltieDTO {
     Long phatientID;
-
-    public PenaltieDTO(Long phatientID) {
-        this.phatientID = phatientID;
-    }
+    Long consultationID;
 
     public PenaltieDTO() {
+    }
+
+    public PenaltieDTO(Long phatientID, Long consultationID) {
+        this.phatientID = phatientID;
+        this.consultationID = consultationID;
     }
 
     public Long getPhatientID() {
@@ -16,5 +18,13 @@ public class PenaltieDTO {
 
     public void setPhatientID(Long phatientID) {
         this.phatientID = phatientID;
+    }
+
+    public Long getConsultationID() {
+        return consultationID;
+    }
+
+    public void setConsultationID(Long consultationID) {
+        this.consultationID = consultationID;
     }
 }
