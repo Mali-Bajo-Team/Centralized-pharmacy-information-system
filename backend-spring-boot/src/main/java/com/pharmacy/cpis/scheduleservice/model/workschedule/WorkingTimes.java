@@ -51,8 +51,8 @@ public class WorkingTimes {
 
 	@Embedded
 	@AttributeOverrides(value = {
-			@AttributeOverride(name = "start", column = @Column(nullable = false, name = "saturday_start")),
-			@AttributeOverride(name = "end", column = @Column(nullable = false, name = "saturday_end")) })
+			@AttributeOverride(name = "start", column = @Column(nullable = true, name = "saturday_start")),
+			@AttributeOverride(name = "end", column = @Column(nullable = true, name = "saturday_end")) })
 	private DateRange saturday;
 
 	@Embedded
