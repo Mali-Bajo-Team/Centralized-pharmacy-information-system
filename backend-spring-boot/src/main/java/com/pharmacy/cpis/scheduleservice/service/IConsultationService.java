@@ -30,6 +30,7 @@ public interface IConsultationService {
 
     List<Consultant> findAllPatientConsultants(Patient patient);
 
+    // All pharmacies where that patient had consultation
     List<Pharmacy> findAllPatientPharmacies(Patient patient);
 
 }

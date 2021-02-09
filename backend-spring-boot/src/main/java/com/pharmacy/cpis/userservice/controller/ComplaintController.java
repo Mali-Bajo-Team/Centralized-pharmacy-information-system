@@ -56,7 +56,7 @@ public class ComplaintController {
     public ResponseEntity< List<PharmacyDTO>> getAllPossiblePharmaciesForComplaint(@RequestBody PatientEmailDTO patientEmail){
         Patient patient = patientService.findByEmail(patientEmail.getEmail());
         List<PharmacyDTO> pharmacies = new ArrayList<>();
-        for(Pharmacy pharmacy: consultationService.findAllPatientPharmacies(patient))
+        for(Pharmacy pharmacy: complaintService.findAllPatientPharmacies(patient))
             pharmacies.add(new PharmacyDTO(pharmacy));
         return new ResponseEntity<>(pharmacies,HttpStatus.OK);
     }

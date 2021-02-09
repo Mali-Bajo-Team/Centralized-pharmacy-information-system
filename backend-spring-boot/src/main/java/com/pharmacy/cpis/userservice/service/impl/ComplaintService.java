@@ -1,7 +1,9 @@
 package com.pharmacy.cpis.userservice.service.impl;
 
+import com.pharmacy.cpis.drugservice.service.IReservationService;
 import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
 import com.pharmacy.cpis.pharmacyservice.repository.IPharmacyRepository;
+import com.pharmacy.cpis.scheduleservice.service.IConsultationService;
 import com.pharmacy.cpis.userservice.dto.ComplaintDTO;
 import com.pharmacy.cpis.userservice.dto.CreateComplaintDTO;
 import com.pharmacy.cpis.userservice.model.complaints.Complaint;
@@ -16,6 +18,7 @@ import com.pharmacy.cpis.util.exceptions.PSBadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -36,6 +39,12 @@ public class ComplaintService implements IComplaintService {
 
     @Autowired
     private IPatientRepository patientRepository;
+
+    @Autowired
+    private IConsultationService consultationService;
+
+    @Autowired
+    private IReservationService reservationService;
 
     @Override
     public List<Complaint> findAllComplaints() {
@@ -69,6 +78,29 @@ public class ComplaintService implements IComplaintService {
             complaint.setPharmacy(pharmacy);
         }
         return complaintRepository.save(complaint);
+    }
+
+    @Override
+    /*
+      Return all pharmacies with which the patient had contact points:
+      consultations, drug reservation, ePrescription
+     */
+    public List<Pharmacy> findAllPatientPharmacies(Patient patient) {
+        // TODO: add pharmacies from prescribed ePrescription
+        List<Pharmacy> allPatientPharmacies = new ArrayList<>(consultationService.findAllPatientPharmacies(patient));
+        for(Pharmacy pharmacy : reservationService.findAllPatientPharmacies(patient)){
+            boolean alreadyAdded = false;
+            for(Pharmacy alreadyAddedPharmacy : allPatientPharmacies){
+                if(alreadyAddedPharmacy.getId().equals(pharmacy.getId())){
+                    alreadyAdded = true;
+                    break;
+                }
+            }
+            if(!alreadyAdded)
+                allPatientPharmacies.add(pharmacy);
+        }
+
+        return allPatientPharmacies;
     }
 
     private Complaint getComplaint(ComplaintDTO complaintDTO) {

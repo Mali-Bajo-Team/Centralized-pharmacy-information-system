@@ -183,8 +183,8 @@ public class ConsultationService implements IConsultationService {
     }
 
 	@Override
-	/**
-	 * Find all pharmacies where patient had a consultation
+	/*
+	 Find all pharmacies where patient had a consultation
 	 */
 	public List<Pharmacy> findAllPatientPharmacies(Patient patient) {
 		List<Pharmacy> allPatientPharmacies = new ArrayList<>();
