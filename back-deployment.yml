@@ -19,5 +19,5 @@ steps:
     inputs:
       targetType: 'inline'
       script: |
-        git remote add heroku-backend https://heroku:$(API_KEY)@git.heroku.com/isa-2020-tim29-backend.git
+        git remote add heroku-backend https://heroku:$API_KEY@git.heroku.com/isa-2020-tim29-backend.git
         git push heroku-backend `git subtree split --prefix backend-spring-boot HEAD`:refs/heads/main --force
