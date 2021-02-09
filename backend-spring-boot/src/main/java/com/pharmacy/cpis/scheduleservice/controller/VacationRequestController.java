@@ -36,7 +36,7 @@ public class VacationRequestController {
 	EmailService emailService;
 
 	@PostMapping("/createrequest")
-	@PreAuthorize("hasRole('PHARMACIST')")
+	@PreAuthorize("hasRole('PHARMACIST') || hasRole('DERMATOLOGIST')")
 	public ResponseEntity<AddVacationRequestDTO> getAllConsultationsForConsultant(
 			@RequestBody AddVacationRequestDTO vacationRequestDTO) {
 
