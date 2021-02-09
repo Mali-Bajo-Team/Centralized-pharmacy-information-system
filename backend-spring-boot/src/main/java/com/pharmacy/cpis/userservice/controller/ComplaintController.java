@@ -77,7 +77,7 @@ public class ComplaintController {
     }
 
     @PostMapping()
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('PATIENT')")
     public ResponseEntity<ComplaintDTO> createComplaint(@RequestBody CreateComplaintDTO complaintDTO){
         Complaint complaint = complaintService.createComplaint(complaintDTO);
         return new ResponseEntity<>(new ComplaintDTO(complaint),HttpStatus.OK);

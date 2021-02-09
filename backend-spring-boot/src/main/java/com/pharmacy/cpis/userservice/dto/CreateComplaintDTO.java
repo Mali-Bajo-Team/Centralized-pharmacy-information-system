@@ -2,11 +2,27 @@ package com.pharmacy.cpis.userservice.dto;
 
 public class CreateComplaintDTO {
     private String content;
-    private Long consultantId;
-    private Long creatorId;
+    private String consultantEmail;
     private Long pharmacyId;
+    private String patientEmail;
 
     public CreateComplaintDTO(){}
+
+    public String getPatientEmail() {
+        return patientEmail;
+    }
+
+    public String getConsultantEmail() {
+        return consultantEmail;
+    }
+
+    public void setConsultantEmail(String consultantEmail) {
+        this.consultantEmail = consultantEmail;
+    }
+
+    public void setPatientEmail(String patientEmail) {
+        this.patientEmail = patientEmail;
+    }
 
     public String getContent() {
         return content;
@@ -14,22 +30,6 @@ public class CreateComplaintDTO {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public Long getConsultantId() {
-        return consultantId;
-    }
-
-    public void setConsultantId(Long consultantId) {
-        this.consultantId = consultantId;
-    }
-
-    public Long getCreatorId() {
-        return creatorId;
-    }
-
-    public void setCreatorId(Long creatorId) {
-        this.creatorId = creatorId;
     }
 
     public Long getPharmacyId() {

@@ -191,7 +191,7 @@
                 :items="possibleConsultantsForComplaint"
                 item-value="email"
                 item-text="email"
-                v-model="complaintDTO.consultantId"
+                v-model="complaintDTO.consultantEmail"
                 outlined
                 label="Select dermatologist/pharmacist"
               >
@@ -237,12 +237,11 @@ export default {
     selectedAccussed: {},
     possibleConsultantsForComplaint: [],
     possiblePharmaciesForComplaint: [],
-
     complaintDTO: {
       content: "",
-      consultantId: null,
-      creatorId: null,
-      pharmacyId: null,
+      consultantEmail: null,
+      patientEmail:getParsedToken().sub,
+    pharmacyId: null,
     },
     showComplaintPart: false,
     patient: {},
@@ -303,7 +302,9 @@ export default {
       )
       .then((resp) => {
         this.possibleConsultantsForComplaint = resp.data;
-        this.possibleConsultantsForComplaint.push("None");
+        this.possibleConsultantsForComplaint.push({
+          name: "None",lastName:'None',email: 'None'
+          });
       })
       .catch((error) => {
         alert("Error: " + error);
@@ -324,7 +325,9 @@ export default {
       )
       .then((resp) => {
         this.possiblePharmaciesForComplaint = resp.data;
-        this.possiblePharmaciesForComplaint.push("None");
+        this.possiblePharmaciesForComplaint.push({
+          id: 0, name: "None", location: "None"
+        });
       })
       .catch((error) => {
         alert("Error: " + error);

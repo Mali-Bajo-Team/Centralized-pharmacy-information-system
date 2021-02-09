@@ -64,11 +64,16 @@ public class ComplaintService implements IComplaintService {
         complaint.setResponse("Waiting on reply");
         complaint.setCreationTimestamp(new Date());
         complaint.setContent(complaintDTO.getContent());
-        Patient creator = patientRepository.findById(complaintDTO.getCreatorId()).orElse(null);
+        Long creatorId = userRepository.findByEmail(complaintDTO.getPatientEmail()).getPerson().getId();
+        Patient creator = patientRepository.findById(creatorId).orElse(null);
+
         if(creator == null) throw new PSBadRequestException("There is no patient with that data");
         complaint.setCreator(creator);
-        if(complaintDTO.getConsultantId() != null){
-            Consultant consultant = consultantRepository.findById(complaintDTO.getConsultantId()).orElse(null);
+
+        if(complaintDTO.getConsultantEmail() != null && !complaintDTO.getConsultantEmail().equals("")){
+            Long consultantId = userRepository.findByEmail(complaintDTO.getPatientEmail()).getPerson().getId();
+            if(consultantId == null) throw new PSBadRequestException("There is no consultant with that data");
+            Consultant consultant = consultantRepository.findById(consultantId).orElse(null);
             if(consultant == null) throw new PSBadRequestException("There is no consultant with that data");
             complaint.setConsultant(consultant);
         }
