@@ -1,5 +1,6 @@
 package com.pharmacy.cpis.scheduleservice.service;
 
+import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
 import com.pharmacy.cpis.scheduleservice.dto.ScheduleExaminationDTO;
 import com.pharmacy.cpis.scheduleservice.model.consultations.Consultation;
 import com.pharmacy.cpis.userservice.model.users.Consultant;
@@ -28,5 +29,7 @@ public interface IConsultationService {
 	Collection<Consultation> findByPharmacyAndStatus(Long pharmacyId, ConsultationStatus status);
 
     List<Consultant> findAllPatientConsultants(Patient patient);
+
+    List<Pharmacy> findAllPatientPharmacies(Patient patient);
 
 }

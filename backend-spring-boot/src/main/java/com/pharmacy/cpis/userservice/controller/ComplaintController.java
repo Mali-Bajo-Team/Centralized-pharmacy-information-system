@@ -49,9 +49,11 @@ public class ComplaintController {
         return new ResponseEntity<>(consultants,HttpStatus.OK);
     }
 
-    @GetMapping("/pharmacies")
-    @PreAuthorize("hasRole('PATIENT')")
-    public ResponseEntity<Void> getAllPossiblePharmaciesForComplaint(){
+    @PostMapping("/pharmacies")
+//    @PreAuthorize("hasRole('PATIENT')")
+    public ResponseEntity<Void> getAllPossiblePharmaciesForComplaint(@RequestBody PatientEmailDTO patientEmail){
+        Patient patient = patientService.findByEmail(patientEmail.getEmail());
+        consultationService.findAllPatientPharmacies(patient);
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @GetMapping()

@@ -168,12 +168,38 @@ public class ConsultationService implements IConsultationService {
     @Override
     public List<Consultant> findAllPatientConsultants(Patient patient) {
         List<Consultant> allPatientConsultants = new ArrayList<>();
-        List<Consultation> consultations = consultationRepository.findAllByPatient(patient);
-        for(Consultation consultation : consultations){
-            Consultant consultant = consultation.getConsultant();
-            allPatientConsultants.add(consultant);
-        }
+        for(Consultation consultation : consultationRepository.findAllByPatient(patient)){
+			boolean alreadyExistConsultant = false;
+			for(Consultant consultant :allPatientConsultants){
+				if(consultant.getId().equals(consultation.getConsultant().getId())){
+					alreadyExistConsultant = true;
+					break;
+				}
+			}
+			if(!alreadyExistConsultant)
+				allPatientConsultants.add(consultation.getConsultant());
+		}
         return allPatientConsultants;
     }
+
+	@Override
+	/**
+	 * Find all pharmacies where patient had a consultation
+	 */
+	public List<Pharmacy> findAllPatientPharmacies(Patient patient) {
+		List<Pharmacy> allPatientPharmacies = new ArrayList<>();
+		for(Consultation consultation : consultationRepository.findAllByPatient(patient)){
+			boolean alreadyExistPharmacy = false;
+			for(Pharmacy pharmacy : allPatientPharmacies){
+				if(pharmacy.getId().equals(consultation.getPharmacy().getId())){
+					alreadyExistPharmacy = true;
+					break;
+				}
+			}
+			if(!alreadyExistPharmacy)
+				allPatientPharmacies.add(consultation.getPharmacy());
+		}
+		return allPatientPharmacies;
+	}
 
 }
