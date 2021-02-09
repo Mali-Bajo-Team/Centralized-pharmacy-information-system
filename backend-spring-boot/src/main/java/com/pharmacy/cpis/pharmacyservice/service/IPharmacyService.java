@@ -18,4 +18,6 @@ public interface IPharmacyService {
 
 	void subscribePatientOnPharmacyPromotions(String patientEmail, Long pharmacyId);
 
+	void unsubscribePatientOnPharmacyPromotions(String patientEmail, Long pharmacyId);
+
 }

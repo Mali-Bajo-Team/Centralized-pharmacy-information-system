@@ -53,6 +53,14 @@ public class PharmacyController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
+	@PostMapping("/{id}/unsubscribe")
+	//TODO: add auth after postman testing
+//	@PreAuthorize("hasRole('PATIENT')")
+	public ResponseEntity<Void> unsubscribeOnPharmacyPromotions(@PathVariable(required = true) Long id, @RequestBody PatientEmailDTO patientEmailDTO) {
+		pharmacyService.unsubscribePatientOnPharmacyPromotions(patientEmailDTO.getEmail(),id);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
 
 	@GetMapping("/all")
 	public ResponseEntity<List<PharmacyDTO>> getAllPharmacies() {

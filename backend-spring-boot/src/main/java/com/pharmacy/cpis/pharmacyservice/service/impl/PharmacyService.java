@@ -91,6 +91,20 @@ public class PharmacyService implements IPharmacyService {
 	}
 
 	@Override
+	public void unsubscribePatientOnPharmacyPromotions(String patientEmail, Long pharmacyId) {
+		Pharmacy pharmacy = pharmacyRepository.findById(pharmacyId).orElse(null);
+		Long patientId = userRepository.findByEmail(patientEmail).getPerson().getId();
+		if(patientId == null) throw new PSNotFoundException("That person does not exist");
+
+		Patient patient = patientRepository.findById(patientId).orElse(null);
+		if(pharmacy == null || patient == null) throw new PSNotFoundException("Not found that pharmacy or patient");
+		pharmacy.removeSubscriber(patient);
+		patient.removeSubscription(pharmacy);
+		pharmacyRepository.save(pharmacy);
+		patientRepository.save(patient);
+	}
+
+	@Override
 	public Pharmacy registerPharmacy(PharmacyRegisterDTO pharmacy) {
 		Pharmacy addedPharmacy = addPharmacy(pharmacy);
 		PharmacyAdministrator addedPharmacyAdministrator = addNewPharmacyAdministrator(
