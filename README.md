@@ -1,5 +1,4 @@
-[![Build Status](https://dev.azure.com/milanatodorovic/ISA/_apis/build/status/Pufke.ISA?branchName=develop)](https://dev.azure.com/milanatodorovic/ISA/_build/latest?definitionId=22&branchName=develop)
-## Centralized-pharmacy-information-system
+# Centralized-pharmacy-information-system
 
 | Our members          | 
 | -------------------- | 
@@ -8,17 +7,13 @@
 | Nemanja Pualić       | 
 | Vladislav Maksimović | 
 
-### Heroku deployment
-- Frontend: (https://isa-2020-tim29.herokuapp.com/)[https://isa-2020-tim29.herokuapp.com/]
-- Backend: (https://isa-2020-tim29-backend.herokuapp.com/)[https://isa-2020-tim29-backend.herokuapp.com/]
-
-### Help
+## Help
 
 <details>
   <summary> Instalation Guide for IDEA Intelij Maven </summary>
   <br>
   
-   - Skini Intelij i instaliraj ga: https://www.jetbrains.com/idea/download/#section=windows 
+   - Skini Intelij i instalitaj ga: https://www.jetbrains.com/idea/download/#section=windows 
    - Backend-spring-boot projekat pulluj sa ovog repozitorijuma
    - Otvori pom.xml 
     <p align="left">
