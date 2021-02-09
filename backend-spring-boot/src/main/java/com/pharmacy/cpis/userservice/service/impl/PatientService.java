@@ -51,7 +51,7 @@ public class PatientService implements IPatientService {
 
         Consultation consultation = consultationRepository.getOne(consultationID);
         consultation.setStatus(ConsultationStatus.NO_SHOW);
-        
+
         consultationRepository.save(consultation);
 
         return patient;

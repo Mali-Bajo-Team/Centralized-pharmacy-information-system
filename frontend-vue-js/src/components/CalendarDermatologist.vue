@@ -127,7 +127,11 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" text @click="questionDialog = false">
+          <v-btn
+            color="primary"
+            text
+            @click="addPenaltie(), (questionDialog = false)"
+          >
             The patient did not show up
           </v-btn>
           <v-btn
@@ -283,6 +287,7 @@ export default {
     reportDialog: false,
     consultants: [],
     response: null,
+    consultationId: null,
     type: "month",
     types: ["month", "week", "day", "4day"],
     mode: "stack",
@@ -340,14 +345,31 @@ export default {
     },
   },
   methods: {
+    addPenaltie() {
+      this.axios
+        .post(
+          process.env.VUE_APP_BACKEND_URL + "api/patient/addpenaltie",
+          { phatientID: this.patientId, consultationID: this.consultationId },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then((resp) => {
+          //succes dialog
+          console.log(resp);
+        });
+    },
     handleSelectItem(item) {
       this.selectedPharmacy = item.id;
     },
     showExaminationDialog(event) {
       this.name = event.event.name;
       this.patientId = event.event.patientId;
+      this.consultationId = event.event.id;
       this.questionDialog = true;
-      console.log(event);
+      console.log(event.event.id);
     },
     getEvents() {
       var token = parseJwt(localStorage.getItem("JWT-CPIS"));
@@ -379,12 +401,21 @@ export default {
                   this.consultants[i].patientSurname +
                   ". Pharmacy: " +
                   this.consultants[i].pharmacyName +
-                  " " + " Start: " + getStringDateWithTimeFromMilliseconds( this.consultants[i].startDate) + ". End: " + getStringDateWithTimeFromMilliseconds( this.consultants[i].endDate),
+                  " " +
+                  " Start: " +
+                  getStringDateWithTimeFromMilliseconds(
+                    this.consultants[i].startDate
+                  ) +
+                  ". End: " +
+                  getStringDateWithTimeFromMilliseconds(
+                    this.consultants[i].endDate
+                  ),
                 start: this.consultants[i].startDate,
                 end: this.consultants[i].endDate,
                 color: "primary",
                 timed: 1,
                 patientId: this.consultants[i].patientId,
+                id: this.consultants[i].id,
               });
             }
             this.events = events;
@@ -407,21 +438,30 @@ export default {
 
             for (let i = 0; i < this.consultants.length; i++) {
               if (this.consultants[i].pharmacyID === this.selectedPharmacy) {
-               events.push({
-                name:
-                  " Patient: " +
-                  this.consultants[i].patientName +
-                  "    " +
-                  this.consultants[i].patientSurname +
-                  ". Pharmacy: " +
-                  this.consultants[i].pharmacyName +
-                  " " + " Start: " + getStringDateWithTimeFromMilliseconds( this.consultants[i].startDate) + ". End: " + getStringDateWithTimeFromMilliseconds( this.consultants[i].endDate),
-                start: this.consultants[i].startDate,
-                end: this.consultants[i].endDate,
-                color: "primary",
-                timed: 1,
-                patientId: this.consultants[i].patientId,
-              });
+                events.push({
+                  name:
+                    " Patient: " +
+                    this.consultants[i].patientName +
+                    "    " +
+                    this.consultants[i].patientSurname +
+                    ". Pharmacy: " +
+                    this.consultants[i].pharmacyName +
+                    " " +
+                    " Start: " +
+                    getStringDateWithTimeFromMilliseconds(
+                      this.consultants[i].startDate
+                    ) +
+                    ". End: " +
+                    getStringDateWithTimeFromMilliseconds(
+                      this.consultants[i].endDate
+                    ),
+                  start: this.consultants[i].startDate,
+                  end: this.consultants[i].endDate,
+                  color: "primary",
+                  timed: 1,
+                  patientId: this.consultants[i].patientId,
+                  id: this.consultants[i].id,
+                });
               }
             }
             this.events = events;
