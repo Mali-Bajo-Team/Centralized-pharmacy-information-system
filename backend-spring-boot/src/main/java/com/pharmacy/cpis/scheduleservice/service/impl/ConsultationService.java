@@ -1,5 +1,6 @@
 package com.pharmacy.cpis.scheduleservice.service.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -21,15 +22,12 @@ import com.pharmacy.cpis.userservice.model.users.ConsultantType;
 import com.pharmacy.cpis.userservice.model.users.Patient;
 import com.pharmacy.cpis.userservice.repository.IConsultantRepository;
 import com.pharmacy.cpis.userservice.repository.IPatientRepository;
+import com.pharmacy.cpis.util.CollectionUtil;
 import com.pharmacy.cpis.util.DateConversionsAndComparisons;
 import com.pharmacy.cpis.util.DateRange;
 import com.pharmacy.cpis.util.exceptions.PSBadRequestException;
 import com.pharmacy.cpis.util.exceptions.PSConflictException;
 import com.pharmacy.cpis.util.exceptions.PSNotFoundException;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Service
 public class ConsultationService implements IConsultationService {
@@ -112,19 +110,25 @@ public class ConsultationService implements IConsultationService {
 
 		Consultation consultation = initializeConsultation(consultationInfo, pharmacy, consultant);
 
-		if (!workingTimesService.consultationFitsIntoWorkingTime(consultationInfo.getConsultantId(), pharmacyId,
-				consultation.getTime()))
-			throw new PSConflictException("Consultation doesn't fit into the consultants working time.");
-
-		if (hasOverlappingConsultations(consultant, consultation.getTime(), ConsultationStatus.PREDEFINED))
-			throw new PSConflictException("Consultant already has a predefined consultation in the time period.");
-
-		if (hasOverlappingConsultations(consultant, consultation.getTime(), ConsultationStatus.SCHEDULED))
-			throw new PSConflictException("Consultant already has a scheduled consultation in the time period.");
+		checkConsultantAvailability(pharmacyId, consultant, consultation.getTime());
 
 		validateTimeIntervalForConsultation(consultation.getTime());
 
 		return consultationRepository.save(consultation);
+	}
+
+	private void checkConsultantAvailability(Long pharmacyId, Consultant consultant, DateRange interval) {
+		if (!workingTimesService.consultationFitsIntoWorkingTime(consultant.getId(), pharmacyId, interval))
+			throw new PSConflictException("Consultation doesn't fit into the consultants working time.");
+
+		if (hasOverlappingConsultations(consultant, interval, ConsultationStatus.PREDEFINED))
+			throw new PSConflictException("Consultant already has a predefined consultation in the time period.");
+
+		if (hasOverlappingConsultations(consultant, interval, ConsultationStatus.SCHEDULED))
+			throw new PSConflictException("Consultant already has a scheduled consultation in the time period.");
+
+		if (hasOverlappingVacations(consultant, interval))
+			throw new PSConflictException("Consultant already has a scheduled vacation in the time period.");
 	}
 
 	private Consultation initializeConsultation(AddPredefinedConsultationDTO consultationInfo, Pharmacy pharmacy,
@@ -155,6 +159,11 @@ public class ConsultationService implements IConsultationService {
 		return false;
 	}
 
+	private boolean hasOverlappingVacations(Consultant consultant, DateRange interval) {
+		return CollectionUtil.contains(consultant.getVacations(),
+				vacation -> DateConversionsAndComparisons.overlapsWithoutTime(vacation.getDateRange(), interval));
+	}
+
 	private void validateTimeIntervalForConsultation(DateRange interval) {
 		if (interval.getStart().compareTo(interval.getEnd()) >= 0)
 			throw new PSBadRequestException("Consultation start must be after the consultation end.");
@@ -165,38 +174,38 @@ public class ConsultationService implements IConsultationService {
 			throw new PSBadRequestException("Consultations must be scheduled at least 24 hours in advance.");
 	}
 
-    @Override
-    public List<Consultant> findAllPatientConsultants(Patient patient) {
-        List<Consultant> allPatientConsultants = new ArrayList<>();
-        for(Consultation consultation : consultationRepository.findAllByPatient(patient)){
+	@Override
+	public List<Consultant> findAllPatientConsultants(Patient patient) {
+		List<Consultant> allPatientConsultants = new ArrayList<>();
+		for (Consultation consultation : consultationRepository.findAllByPatient(patient)) {
 			boolean alreadyExistConsultant = false;
-			for(Consultant consultant :allPatientConsultants){
-				if(consultant.getId().equals(consultation.getConsultant().getId())){
+			for (Consultant consultant : allPatientConsultants) {
+				if (consultant.getId().equals(consultation.getConsultant().getId())) {
 					alreadyExistConsultant = true;
 					break;
 				}
 			}
-			if(!alreadyExistConsultant)
+			if (!alreadyExistConsultant)
 				allPatientConsultants.add(consultation.getConsultant());
 		}
-        return allPatientConsultants;
-    }
+		return allPatientConsultants;
+	}
 
 	@Override
 	/*
-	 Find all pharmacies where patient had a consultation
+	 * Find all pharmacies where patient had a consultation
 	 */
 	public List<Pharmacy> findAllPatientPharmacies(Patient patient) {
 		List<Pharmacy> allPatientPharmacies = new ArrayList<>();
-		for(Consultation consultation : consultationRepository.findAllByPatient(patient)){
+		for (Consultation consultation : consultationRepository.findAllByPatient(patient)) {
 			boolean alreadyExistPharmacy = false;
-			for(Pharmacy pharmacy : allPatientPharmacies){
-				if(pharmacy.getId().equals(consultation.getPharmacy().getId())){
+			for (Pharmacy pharmacy : allPatientPharmacies) {
+				if (pharmacy.getId().equals(consultation.getPharmacy().getId())) {
 					alreadyExistPharmacy = true;
 					break;
 				}
 			}
-			if(!alreadyExistPharmacy)
+			if (!alreadyExistPharmacy)
 				allPatientPharmacies.add(consultation.getPharmacy());
 		}
 		return allPatientPharmacies;
