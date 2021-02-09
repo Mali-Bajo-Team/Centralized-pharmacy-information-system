@@ -12,3 +12,10 @@ export function getTodayDateString() {
     today = yyyy + "-" + mm + "-" + dd;
     return today;
 }
+
+export function getStringDateWithTimeFromMilliseconds(dateInMilliseconds) {
+    var date = new Date(dateInMilliseconds).toISOString().split('T')[0];
+    var time = new Date(dateInMilliseconds).toISOString().split('T')[1];
+    var DateWithTime = date + " "+ time.substring(0,5);
+    return DateWithTime;
+}

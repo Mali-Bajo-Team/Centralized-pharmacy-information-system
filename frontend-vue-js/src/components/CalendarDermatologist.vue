@@ -265,6 +265,8 @@
 </template>
 
 <script>
+import { getStringDateWithTimeFromMilliseconds } from "./../util/dateHandler";
+
 export default {
   data: () => ({
     selectedPharmacy: null,
@@ -373,11 +375,11 @@ export default {
                 name:
                   " Patient: " +
                   this.consultants[i].patientName +
-                  " " +
+                  "    " +
                   this.consultants[i].patientSurname +
-                  ", Pharmacy: " +
+                  ". Pharmacy: " +
                   this.consultants[i].pharmacyName +
-                  " ",
+                  " " + " Start: " + getStringDateWithTimeFromMilliseconds( this.consultants[i].startDate) + ". End: " + getStringDateWithTimeFromMilliseconds( this.consultants[i].endDate),
                 start: this.consultants[i].startDate,
                 end: this.consultants[i].endDate,
                 color: "primary",
