@@ -191,7 +191,7 @@ values('Omg, there is no need for this type of conversation...','2021-03-03 12:0
 
 -- INSERT VACATION REQUESTS
 insert into vacation_request (consultant_id, status, start_date, end_date) values (3, 0, '2021-03-25', '2021-03-29');
-insert into vacation_request (consultant_id, status, start_date, end_date, response) values (5, 2, '2021-01-25', '2021-01-29', 'Ne možemo da prihvatimo odmor u tom periodu zato što je zahtjev prekasno poslat.');
+insert into vacation_request (consultant_id, status, start_date, end_date, response) values (3, 2, '2021-01-25', '2021-01-29', 'Ne možemo da prihvatimo odmor u tom periodu zato što je zahtjev prekasno poslat.');
 
 insert into vacation_request (consultant_id, status, start_date, end_date) values (9, 0, '2021-05-25', '2021-05-29');
 
