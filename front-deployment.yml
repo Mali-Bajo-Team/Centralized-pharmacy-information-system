@@ -17,6 +17,5 @@ steps:
     inputs:
       targetType: 'inline'
       script: |
-        # 
         git remote add heroku-frontend https://heroku:a191be3d-3484-49dc-a542-8f47c02c1ad9@git.heroku.com/isa-2020-tim29.git
-        git push heroku-frontend `git subtree split --prefix frontend-vue-js $(Build.SourceBranchName)`:refs/heads/main --force
+        git push heroku-frontend `git subtree split --prefix frontend-vue-js HEAD`:refs/heads/main --force
