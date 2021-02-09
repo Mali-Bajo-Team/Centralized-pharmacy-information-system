@@ -48,7 +48,7 @@ public class UserController {
 	}
 
 	@GetMapping(value = "/patients")
-	@PreAuthorize("hasRole('PHARMACIST')")
+	@PreAuthorize("hasRole('PHARMACIST') || hasRole('DERMATOLOGIST')")
 	@EmployeeAccountActive
 	public ResponseEntity<List<PatientDTO>> getAllPatient() {
 
