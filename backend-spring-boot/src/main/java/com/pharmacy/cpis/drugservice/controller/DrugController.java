@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.pharmacy.cpis.drugservice.dto.DrugWithoutAlergiesDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -75,5 +76,12 @@ public class DrugController {
     public ResponseEntity<Drug> addDrug(@RequestBody DrugRegisterDTO drugRegisterDTO) {
         Drug addedPharmacy = drugService.registerDrug(drugRegisterDTO);
         return new ResponseEntity<>(addedPharmacy, HttpStatus.CREATED);
+    }
+
+    @PostMapping(value = "/alldrugswithoutalergies", consumes = "application/json")
+    @PreAuthorize("hasRole('DERMATOLOGIST') || hasRole('PHARMACIST')")
+    public ResponseEntity<List<DrugDTO>> addDrug(@RequestBody DrugWithoutAlergiesDTO drugWithoutAlergiesDTO) {
+        List<DrugDTO> drugDTO = drugService.getDrugsForPhatientWithoutAlergies(drugWithoutAlergiesDTO.getPaatientID());
+        return new ResponseEntity<>(drugDTO, HttpStatus.OK);
     }
 }

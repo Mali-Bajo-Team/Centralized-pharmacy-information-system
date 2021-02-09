@@ -226,3 +226,6 @@ insert into working_times(consultant_id,pharmacy_id, monday_start, monday_end, s
 -- INSERT DRUG REQUESTS
 insert into drug_request (consultant_id, pharmacy_id, drug_code, timestamp) values (9, 1, 'aspirin', '2020-10-14');
 insert into drug_request (consultant_id, pharmacy_id, drug_code, timestamp) values (9, 1, 'brufen', '2020-12-14');
+
+insert into allergies (patient_id, drug_code) values (2,'brufen');
+insert into allergies (patient_id, drug_code) values (2,'aspirin');

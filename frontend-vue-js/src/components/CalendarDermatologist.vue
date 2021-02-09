@@ -166,14 +166,14 @@
               </v-stepper-step>
 
               <v-stepper-content step="1">
-                <v-card color="grey lighten-1" class="mb-12" height="200px">
+                <v-card color="grey lighten-3" class="mb-12" height="200px">
                   <v-textarea v-model="report" color="teal">
                     <template v-slot:label>
                       <div>Report</div>
                     </template>
                   </v-textarea>
                 </v-card>
-                <v-btn color="primary" @click="e6 = 2"> Continue </v-btn>
+                <v-btn color="primary" @click="e6 = 2, getDrugsWithoutAllergies()"> Continue </v-btn>
                 <v-btn
                   text
                   @click="
@@ -187,15 +187,40 @@
               </v-stepper-content>
 
               <v-stepper-step :complete="e6 > 2" step="2">
-                Prescribe medicine
+                Prescribe drug
               </v-stepper-step>
 
               <v-stepper-content step="2">
-                <v-card
-                  color="grey lighten-1"
-                  class="mb-12"
-                  height="200px"
-                ></v-card>
+                <v-card color="grey lighten-3" class="mb-12" height="400px">
+                  <!-- CHOOSE DRUG FOR PERSCRIBE -->
+                  <h4 class="mt-10 ml-n primary--text">
+                    Choose drug (listed drugs was filtered from allergens)
+                  </h4>
+                  <v-select
+                    v-model="drugsWithoutAllergies"
+                    :items="drugsWithoutAllergies"
+                    item-text="name"
+                    item-value="typeOfDrug"
+                    label="Select drug"
+                    persistent-hint
+                    return-object
+                    outlined
+                    single-line
+                    v-bind:value="valueDrugsWithoutAllergies"
+                    v-on:input="onInputWithoutAllergies"
+                    @click="alertDrugsWithoutAllergies = false"
+                  ></v-select>
+                  <v-alert
+                    :value="alertDrugsWithoutAllergies"
+                    color="pink"
+                    dark
+                    border="top"
+                    icon="mdi-account"
+                    transition="scale-transition"
+                  >
+                    You must choose pharmacy!
+                  </v-alert>
+                </v-card>
                 <v-btn color="primary" @click="e6 = 3"> Continue </v-btn>
                 <v-btn
                   text
@@ -288,6 +313,10 @@ export default {
     consultants: [],
     response: null,
     consultationId: null,
+    drugsWithoutAllergies: [],
+    alertDrugsWithoutAllergies: false,
+    valueDrugsWithoutAllergies: null,
+
     type: "month",
     types: ["month", "week", "day", "4day"],
     mode: "stack",
@@ -345,6 +374,27 @@ export default {
     },
   },
   methods: {
+    getDrugsWithoutAllergies() {
+      this.axios
+        .post(
+          process.env.VUE_APP_BACKEND_URL + "api/drugs/alldrugswithoutalergies",
+          { paatientID: this.patientId },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then((resp) => {
+          this.drugsWithoutAllergies = resp.data;
+        });
+    },
+    onInputWithoutAllergies(valueDrugsWithoutAllergies) {
+      this.$emit("input", valueDrugsWithoutAllergies);
+      this.valueDrugsWithoutAllergies = valueDrugsWithoutAllergies;
+      this.alertDrugsWithoutAllergies = false;
+      console.log(valueDrugsWithoutAllergies);
+    },
     addPenaltie() {
       this.axios
         .post(
@@ -357,7 +407,7 @@ export default {
           }
         )
         .then(() => {
-                    this.$router.go();
+          this.$router.go();
         });
     },
     handleSelectItem(item) {

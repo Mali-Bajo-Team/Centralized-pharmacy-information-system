@@ -1,10 +1,11 @@
 package com.pharmacy.cpis.drugservice.service.impl;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
+import com.pharmacy.cpis.pharmacyservice.repository.IPharmacyRepository;
+import com.pharmacy.cpis.pharmacyservice.service.IPharmacyService;
+import com.pharmacy.cpis.userservice.model.users.Patient;
+import com.pharmacy.cpis.userservice.repository.IPatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,6 +52,10 @@ public class DrugService implements IDrugService {
 
 	@Autowired
 	private IAvailableDrugRepository availableDrugRepository;
+
+	@Autowired
+	private IPatientRepository patientRepository;
+
 
 	@Override
 	public Drug registerDrug(DrugRegisterDTO drug) {
@@ -156,5 +161,31 @@ public class DrugService implements IDrugService {
 
 	public Collection<DrugForm> findAllDrugForms() {
 		return drugFormRepository.findAll();
+	}
+
+	@Override
+	public List<DrugDTO> getDrugsForPhatientWithoutAlergies(Long patientID) {
+
+		List<Drug> allDrugs = drugRepository.findAll();
+		List<Drug> allDrugsWithoutAlergies = new ArrayList<>(allDrugs);
+
+		Patient patient = patientRepository.getOne(patientID);
+		Set<Drug> allAllergies = patient.getAllergies();
+
+		for(Drug drug: allDrugs){
+			for(Drug allergies: allAllergies){
+				if(drug.getCode().equals(allergies.getCode())){
+					allDrugsWithoutAlergies.remove(drug);
+				}
+			}
+		}
+
+		List<DrugDTO> allDrugsWithoutAlergiesDTOs = new ArrayList<>();
+		//Convert to dto
+		for(Drug d: allDrugsWithoutAlergies){
+			allDrugsWithoutAlergiesDTOs.add(new DrugDTO(d));
+		}
+
+		return allDrugsWithoutAlergiesDTOs;
 	}
 }
