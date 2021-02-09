@@ -21,4 +21,6 @@ public interface IWorkingTimesService {
 	boolean consultationFitsIntoWorkingTime(Long consultantId, Long pharmacyId, DateRange consultationTime);
 
 	List<Pharmacy> dermatologistWorkingPharmacies(Long consultantID);
+
+	Pharmacy dermatologistWorkingPharmacy(Long consultantID);
 }

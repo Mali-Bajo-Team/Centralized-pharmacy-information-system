@@ -126,4 +126,17 @@ public class WorkingTimesService implements IWorkingTimesService {
 		return  dermatlogistWorkingPharmacy;
 	}
 
+	@Override
+	public Pharmacy dermatologistWorkingPharmacy(Long consultantID) {
+		Pharmacy dermatlogistWorkingPharmacy = new Pharmacy();
+		List<WorkingTimes> workingTimes = workingTimesRepository.findAll();
+
+		for (WorkingTimes wt : workingTimes) {
+			if(wt.getConsultant().getId().equals(consultantID)){
+				return dermatlogistWorkingPharmacy;
+			}
+		}
+
+		return  dermatlogistWorkingPharmacy;
+	}
 }
