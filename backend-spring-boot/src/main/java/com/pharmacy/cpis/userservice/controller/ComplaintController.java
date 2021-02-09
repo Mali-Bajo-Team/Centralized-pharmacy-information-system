@@ -1,5 +1,7 @@
 package com.pharmacy.cpis.userservice.controller;
 
+import com.pharmacy.cpis.pharmacyservice.dto.PharmacyDTO;
+import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
 import com.pharmacy.cpis.scheduleservice.service.IConsultationService;
 import com.pharmacy.cpis.userservice.dto.ComplaintDTO;
 import com.pharmacy.cpis.userservice.dto.ConsultantDTO;
@@ -51,10 +53,12 @@ public class ComplaintController {
 
     @PostMapping("/pharmacies")
 //    @PreAuthorize("hasRole('PATIENT')")
-    public ResponseEntity<Void> getAllPossiblePharmaciesForComplaint(@RequestBody PatientEmailDTO patientEmail){
+    public ResponseEntity< List<PharmacyDTO>> getAllPossiblePharmaciesForComplaint(@RequestBody PatientEmailDTO patientEmail){
         Patient patient = patientService.findByEmail(patientEmail.getEmail());
-        consultationService.findAllPatientPharmacies(patient);
-        return new ResponseEntity<>(HttpStatus.OK);
+        List<PharmacyDTO> pharmacies = new ArrayList<>();
+        for(Pharmacy pharmacy: consultationService.findAllPatientPharmacies(patient))
+            pharmacies.add(new PharmacyDTO(pharmacy));
+        return new ResponseEntity<>(pharmacies,HttpStatus.OK);
     }
     @GetMapping()
     @PreAuthorize("hasRole('ADMIN')")
