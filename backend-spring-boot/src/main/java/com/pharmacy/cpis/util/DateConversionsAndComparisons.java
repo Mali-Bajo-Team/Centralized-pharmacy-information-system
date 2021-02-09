@@ -10,7 +10,7 @@ import java.util.Date;
 public class DateConversionsAndComparisons {
 
 	// number ranges from 1 (Sunday) to 7 (Saturday).
-	public static int getDayNumberOld(Date date) {
+	public static int getDayOfWeek(Date date) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		return cal.get(Calendar.DAY_OF_WEEK);
@@ -77,6 +77,16 @@ public class DateConversionsAndComparisons {
 
 		if (compareDatesWithoutTime(dr1.getStart(), dr2.getEnd()) <= 0
 				&& compareDatesWithoutTime(dr1.getEnd(), dr2.getEnd()) >= 0)
+			return true;
+
+		return false;
+	}
+
+	public static boolean overlaps(DateRange dr1, DateRange dr2) {
+		if (dr1.getStart().compareTo(dr2.getStart()) <= 0 && dr1.getEnd().compareTo(dr2.getStart()) > 0)
+			return true;
+
+		if (dr1.getStart().compareTo(dr2.getEnd()) < 0 && dr1.getEnd().compareTo(dr2.getEnd()) >= 0)
 			return true;
 
 		return false;
