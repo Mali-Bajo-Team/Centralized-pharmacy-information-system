@@ -28,6 +28,7 @@ import DermatologistPatientsearch from './../pages/dermatologist/patientsearch/P
 import SystemAdmin from './../pages/systemadmin/Container';
 import SystemAdminLanding from './../pages/systemadmin/landing/Landing';
 import SystemAdminLoyaltyProgram from './../pages/systemadmin/loyaltyprogram/LoyaltyProgram';
+import SystemAdminComplaints from './../pages/systemadmin/complaints/Complaints';
 
 import PharmacyAdmin from './../pages/pharmacyadmin/Container';
 import PharmacyAdminLanding from './../pages/pharmacyadmin/landing/Landing';
@@ -202,6 +203,11 @@ const routes = [
                 name: 'systemadminpharmacies',
                 path: 'systemadminpharmacies'
             },
+            {
+                component: SystemAdminComplaints,
+                name: 'systemadmincomplaints',
+                path: 'systemadmincomplaints'
+            }
         ]
     },
     {

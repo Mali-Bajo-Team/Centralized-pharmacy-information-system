@@ -8,7 +8,7 @@
           v-for="order in allOrders"
           :key="order.id"
         >
-          <!-- Row for title -->
+          <!-- Row for title & make offer dialog-->
           <v-row align="center">
             <v-card-title>
               <h3 class="ml-3">{{ order.pharmacy.name }}</h3>
@@ -81,7 +81,7 @@
             </v-dialog>
             <!-- End of the make offer -->
           </v-row>
-          <!-- End of the row for the title -->
+          <!-- End of the row for the title & make offer button(dialog) -->
           <!-- Row for order details -->
           <v-row>
             <v-card-actions>

@@ -1,5 +1,7 @@
 package com.pharmacy.cpis.userservice.dto;
 
+import com.pharmacy.cpis.userservice.model.users.Consultant;
+
 public class ConsultantDTO {
     private String email;
     private String name;
@@ -45,6 +47,16 @@ public class ConsultantDTO {
 
     }
 
+    public ConsultantDTO(Consultant consultant){
+        this.setEmail(consultant.getAccount().getEmail());
+        this.setName(consultant.getName());
+        this.setLastName(consultant.getSurname());
+        this.setPhoneNumber(consultant.getPhoneNumber());
+        this.setLocation(consultant.getAddress() + ", " + consultant.getCity());
+        this.setCity(consultant.getCity());
+        this.setCountry(consultant.getCountry());
+    }
+
     public ConsultantDTO(String email,String name,String lastName,String phoneNumber,String location,String city,String country) {
         this.email = email;this.name = name;this.lastName = lastName;this.phoneNumber = phoneNumber;this.location = location;  this.city = city;this.country = country;
     }
@@ -57,6 +69,8 @@ public class ConsultantDTO {
         this.city = city;
         this.country = country;
     }
+
+    public void setEmail(String email) {this.email = email; }
 
     public String getEmail() {
         return email;
