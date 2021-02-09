@@ -10,4 +10,5 @@ public interface IReservationRepository extends JpaRepository<Reservation, Long>
 
 Collection<Reservation> findAllByPharmacyIdAndDrugCode(Long pharmacyId, String drugCode);
 
+
 }

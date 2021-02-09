@@ -79,6 +79,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
 
+
+
                 // For every other request the user must be authenticated
                 .anyRequest().authenticated().and()
                 // For development purposes include configuration for CORS from the WebConfig class
