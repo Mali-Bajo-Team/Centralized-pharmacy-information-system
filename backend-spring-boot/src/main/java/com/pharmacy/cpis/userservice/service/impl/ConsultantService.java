@@ -1,6 +1,9 @@
 package com.pharmacy.cpis.userservice.service.impl;
 
 import com.pharmacy.cpis.scheduleservice.model.consultations.Consultation;
+import com.pharmacy.cpis.scheduleservice.model.consultations.ConsultationReport;
+import com.pharmacy.cpis.scheduleservice.repository.IConsultationReportRepository;
+import com.pharmacy.cpis.scheduleservice.service.IConsultationReportService;
 import com.pharmacy.cpis.userservice.dto.ExaminitedPatientDTO;
 import com.pharmacy.cpis.userservice.dto.UserRegisterDTO;
 import com.pharmacy.cpis.userservice.model.users.*;
@@ -32,6 +35,8 @@ public class ConsultantService implements IConsultantService {
     @Autowired
     private IUserRepository userRepository;
 
+    @Autowired
+    private IConsultationReportRepository consultationReportRepository;
 
     // TODO: Think about how to improve DRY, because this is similar as patient registration service
     // only difference is that this is for dermatologist :/
@@ -78,22 +83,42 @@ public class ConsultantService implements IConsultantService {
 
     @Override
     public Set<ExaminitedPatientDTO> getExaminitedPatients(Long consultantID){
-        Consultant consultant = consultantRepository.getOne(consultantID);
+//        Consultant consultant = consultantRepository.getOne(consultantID);
+//
+//       Set<Consultation> allConsultations = consultant.getConsultations();
+//       Set<Patient> exainitedPatients = new HashSet<>();
+//       Set<ExaminitedPatientDTO> exeaminitedPatientDTOs = new HashSet<>();
+//
+//        for (Consultation c: allConsultations) {
+//            ExaminitedPatientDTO exeaminitedPatientDTO = new ExaminitedPatientDTO();
+//
+//            if(c.getTime().getStart().before(new Date())) {
+//                exeaminitedPatientDTO.setName(c.getPatient().getName());
+//                exeaminitedPatientDTO.setSurname(c.getPatient().getSurname());
+//                exeaminitedPatientDTO.setExaminitedDate(c.getTime().getStart());
+//
+//                exainitedPatients.add(c.getPatient());
+//                exeaminitedPatientDTOs.add(exeaminitedPatientDTO);
+//            }
+//        }
 
-       Set<Consultation> allConsultations = consultant.getConsultations();
-       Set<Patient> exainitedPatients = new HashSet<>();
-       Set<ExaminitedPatientDTO> exeaminitedPatientDTOs = new HashSet<>();
+        Consultant consultant = consultantRepository.getOne(consultantID);
+        List<ConsultationReport> consultationReports = consultationReportRepository.findAll();
+        Set<Consultation> allConsultations = consultant.getConsultations();
+        Set<Patient> exainitedPatients = new HashSet<>();
+        Set<ExaminitedPatientDTO> exeaminitedPatientDTOs = new HashSet<>();
 
         for (Consultation c: allConsultations) {
-            ExaminitedPatientDTO exeaminitedPatientDTO = new ExaminitedPatientDTO();
+            for(ConsultationReport cr: consultationReports) {
+                ExaminitedPatientDTO exeaminitedPatientDTO = new ExaminitedPatientDTO();
+                if (c.getId().equals(cr.getConsultation().getId())) {
+                    exeaminitedPatientDTO.setName(c.getPatient().getName());
+                    exeaminitedPatientDTO.setSurname(c.getPatient().getSurname());
+                    exeaminitedPatientDTO.setExaminitedDate(c.getTime().getStart());
 
-            if(c.getTime().getStart().before(new Date())) {
-                exeaminitedPatientDTO.setName(c.getPatient().getName());
-                exeaminitedPatientDTO.setSurname(c.getPatient().getSurname());
-                exeaminitedPatientDTO.setExaminitedDate(c.getTime().getStart());
-
-                exainitedPatients.add(c.getPatient());
-                exeaminitedPatientDTOs.add(exeaminitedPatientDTO);
+                    exainitedPatients.add(c.getPatient());
+                    exeaminitedPatientDTOs.add(exeaminitedPatientDTO);
+                }
             }
         }
 
