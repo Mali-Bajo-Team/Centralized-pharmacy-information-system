@@ -356,9 +356,8 @@ export default {
             },
           }
         )
-        .then((resp) => {
-          //succes dialog
-          console.log(resp);
+        .then(() => {
+                    this.$router.go();
         });
     },
     handleSelectItem(item) {
