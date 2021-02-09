@@ -7,6 +7,7 @@ import com.pharmacy.cpis.drugservice.repository.IReservationRepository;
 import com.pharmacy.cpis.drugservice.service.IAvailableDrugService;
 import com.pharmacy.cpis.drugservice.service.IReservationService;
 import com.pharmacy.cpis.pharmacyservice.service.IPharmacyService;
+import com.pharmacy.cpis.userservice.service.EmailService;
 import com.pharmacy.cpis.userservice.service.IPatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,9 @@ public class ReservationService implements IReservationService {
     @Autowired
     private IAvailableDrugService availableDrugService;
 
+    @Autowired
+    private EmailService emailService;
+
     @Override
     public Reservation saveReservation(DrugReservationDTO reservationDTO) {
         Reservation reservation=new Reservation();
@@ -42,6 +46,14 @@ public class ReservationService implements IReservationService {
 
         availableDrugService.updateAmount(reservationDTO.getPharmacyID(),reservationDTO.getDrugCode(),reservationDTO.getAmount());
 
+        try {
+            System.out.println("Sending mail in process ..");
+            emailService.sendConfirmReservationOfDrugEmailAsync(reservationDTO.getPatientEmail(),
+                    reservationDTO, reservation);
+
+        } catch (Exception e) {
+            System.out.println("Error during sending email: " + e.getMessage());
+        }
 
         return reservationRepository.save(reservation);
     }
