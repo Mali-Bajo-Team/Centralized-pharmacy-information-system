@@ -22,4 +22,7 @@ public interface IWorkingTimesService {
 	
 	WorkingTimes getByConsultantAndPharmacy(Long pharmacyId, Long consultantId);
 
+	List<Pharmacy> dermatologistWorkingPharmacies(Long consultantID);
+
+	Pharmacy dermatologistWorkingPharmacy(Long consultantID);
 }

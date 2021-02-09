@@ -103,6 +103,14 @@ public class Pharmacy {
 		this.subscribers = subscribers;
 	}
 
+	public void addSubscriber(Patient patient){
+		this.subscribers.add(patient);
+	}
+
+	public void removeSubscriber(Patient patient){
+		this.subscribers.removeIf(subscribedPatient -> (subscribedPatient.getId().equals(patient.getId())));
+	}
+
 	public Set<AvailableDrug> getAvailableDrugs() {
 		return availableDrugs;
 	}

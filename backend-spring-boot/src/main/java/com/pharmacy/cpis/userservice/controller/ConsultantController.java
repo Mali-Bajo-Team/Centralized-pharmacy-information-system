@@ -31,7 +31,7 @@ public class ConsultantController {
     private IUserService userService;
 
     @PostMapping(value = "/examinitedpatients")
-    @PreAuthorize("hasRole('PHARMACIST')")
+    @PreAuthorize("hasRole('PHARMACIST') || hasRole('DERMATOLOGIST')")
     @EmployeeAccountActive
     public ResponseEntity<Set<ExaminitedPatientDTO>> getExaminitedPatients(@RequestBody ExaminitedPatientDTO examinitedPatientDTO) {
 

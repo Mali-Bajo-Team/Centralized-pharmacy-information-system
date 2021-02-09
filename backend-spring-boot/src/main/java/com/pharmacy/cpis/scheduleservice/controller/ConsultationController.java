@@ -104,7 +104,7 @@ public class ConsultationController {
 	}
 
 	@PostMapping("/scheduleconsultation")
-	@PreAuthorize("hasRole('PHARMACIST')")
+	@PreAuthorize("hasRole('PHARMACIST') || hasRole('DERMATOLOGIST')")
 	public ResponseEntity<ScheduleExaminationDTO> scheduleConsultation(
 			@RequestBody ScheduleExaminationDTO scheduleExaminationDTO) throws InterruptedException {
 

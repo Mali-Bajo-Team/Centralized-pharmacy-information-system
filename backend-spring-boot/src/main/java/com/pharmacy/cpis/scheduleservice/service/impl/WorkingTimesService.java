@@ -1,5 +1,6 @@
 package com.pharmacy.cpis.scheduleservice.service.impl;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -108,6 +109,34 @@ public class WorkingTimesService implements IWorkingTimesService {
 	}
 
 	@Override
+
+	public List<Pharmacy> dermatologistWorkingPharmacies(Long consultantID) {
+		List<Pharmacy> dermatlogistWorkingPharmacy = new ArrayList<>();
+		List<WorkingTimes> workingTimes = workingTimesRepository.findAll();
+
+		for (WorkingTimes wt : workingTimes) {
+			if(wt.getConsultant().getId().equals(consultantID)){
+				dermatlogistWorkingPharmacy.add(wt.getPharmacy());
+			}
+		}
+
+		return  dermatlogistWorkingPharmacy;
+	}
+
+	@Override
+	public Pharmacy dermatologistWorkingPharmacy(Long consultantID) {
+		Pharmacy dermatlogistWorkingPharmacy = new Pharmacy();
+		List<WorkingTimes> workingTimes = workingTimesRepository.findAll();
+
+		for (WorkingTimes wt : workingTimes) {
+			if(wt.getConsultant().getId().equals(consultantID)){
+				return dermatlogistWorkingPharmacy;
+			}
+		}
+
+		return  dermatlogistWorkingPharmacy;
+	}
+
 	public WorkingTimes getByConsultantAndPharmacy(Long pharmacyId, Long consultantId) {
 		WorkingTimes workingTimes = workingTimesRepository.findByPharmacyIdAndConsultantId(pharmacyId, consultantId)
 				.orElse(null);
@@ -117,5 +146,6 @@ public class WorkingTimesService implements IWorkingTimesService {
 
 		return workingTimes;
 	}
+
 
 }
