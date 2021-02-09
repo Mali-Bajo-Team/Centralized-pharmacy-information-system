@@ -8,4 +8,6 @@ public interface IPatientService {
     List<Patient> findAllPatient();
 
     Patient findByEmail(String email);
+
+    Patient addPenaltie(String email);
 }

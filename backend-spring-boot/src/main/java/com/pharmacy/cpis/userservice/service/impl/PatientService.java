@@ -31,4 +31,19 @@ public class PatientService implements IPatientService {
          return patientRepository.findById(userAccount.getPerson().getId()).orElse(null);
 
     }
+
+    @Override
+    public Patient addPenaltie(String email){
+
+        UserAccount userAccount= userAccountRepository.findByEmail(email);
+        Patient patient = patientRepository.findById(userAccount.getPerson().getId()).orElse(null);
+        if(patient.getPenalties() == null){
+            patient.setPenalties(1);
+        }else{
+            patient.setPenalties(patient.getPenalties() + 1);
+        }
+        patientRepository.save(patient);
+
+        return patient;
+    }
 }
