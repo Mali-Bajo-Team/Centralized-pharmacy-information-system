@@ -15,4 +15,5 @@ public interface IConsultantService {
     Set<ExaminitedPatientDTO> getExaminitedPatients(Long consultantID);
 
     Consultant findByEmail(String email);
+
 }

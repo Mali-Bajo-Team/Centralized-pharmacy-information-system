@@ -27,6 +27,10 @@ import com.pharmacy.cpis.util.exceptions.PSBadRequestException;
 import com.pharmacy.cpis.util.exceptions.PSConflictException;
 import com.pharmacy.cpis.util.exceptions.PSNotFoundException;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 @Service
 public class ConsultationService implements IConsultationService {
 
@@ -159,6 +163,43 @@ public class ConsultationService implements IConsultationService {
 
 		if (interval.getStart().compareTo(limit) <= 0)
 			throw new PSBadRequestException("Consultations must be scheduled at least 24 hours in advance.");
+	}
+
+    @Override
+    public List<Consultant> findAllPatientConsultants(Patient patient) {
+        List<Consultant> allPatientConsultants = new ArrayList<>();
+        for(Consultation consultation : consultationRepository.findAllByPatient(patient)){
+			boolean alreadyExistConsultant = false;
+			for(Consultant consultant :allPatientConsultants){
+				if(consultant.getId().equals(consultation.getConsultant().getId())){
+					alreadyExistConsultant = true;
+					break;
+				}
+			}
+			if(!alreadyExistConsultant)
+				allPatientConsultants.add(consultation.getConsultant());
+		}
+        return allPatientConsultants;
+    }
+
+	@Override
+	/*
+	 Find all pharmacies where patient had a consultation
+	 */
+	public List<Pharmacy> findAllPatientPharmacies(Patient patient) {
+		List<Pharmacy> allPatientPharmacies = new ArrayList<>();
+		for(Consultation consultation : consultationRepository.findAllByPatient(patient)){
+			boolean alreadyExistPharmacy = false;
+			for(Pharmacy pharmacy : allPatientPharmacies){
+				if(pharmacy.getId().equals(consultation.getPharmacy().getId())){
+					alreadyExistPharmacy = true;
+					break;
+				}
+			}
+			if(!alreadyExistPharmacy)
+				allPatientPharmacies.add(consultation.getPharmacy());
+		}
+		return allPatientPharmacies;
 	}
 
 }

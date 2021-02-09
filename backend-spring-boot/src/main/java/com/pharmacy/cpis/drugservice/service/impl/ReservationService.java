@@ -8,6 +8,8 @@ import com.pharmacy.cpis.drugservice.repository.IReservationRepository;
 import com.pharmacy.cpis.drugservice.service.IAvailableDrugService;
 import com.pharmacy.cpis.drugservice.service.IReservationService;
 import com.pharmacy.cpis.pharmacyservice.service.IPharmacyService;
+import com.pharmacy.cpis.scheduleservice.model.consultations.Consultation;
+import com.pharmacy.cpis.userservice.model.users.Patient;
 import com.pharmacy.cpis.userservice.service.EmailService;
 import com.pharmacy.cpis.userservice.service.IPatientService;
 import com.pharmacy.cpis.drugservice.dto.ReservationDTO;
@@ -25,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -135,6 +138,23 @@ public class ReservationService implements IReservationService {
         sendDrugPurchase(reservation);
 
         return reservationDTO;
+    }
+
+    @Override
+    public List<Pharmacy> findAllPatientPharmacies(Patient patient) {
+        List<Pharmacy> allPatientPharmacies = new ArrayList<>();
+        for(Reservation reservation : reservationRepository.findAllByPatient(patient)){
+            boolean alreadyExistPharmacy = false;
+            for(Pharmacy pharmacy : allPatientPharmacies){
+                if(pharmacy.getId().equals(reservation.getPharmacy().getId())){
+                    alreadyExistPharmacy = true;
+                    break;
+                }
+            }
+            if(!alreadyExistPharmacy)
+                allPatientPharmacies.add(reservation.getPharmacy());
+        }
+        return allPatientPharmacies;
     }
 
     private void sendDrugPurchase(Reservation reservation) {

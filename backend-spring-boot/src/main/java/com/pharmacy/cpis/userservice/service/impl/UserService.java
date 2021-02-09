@@ -2,6 +2,7 @@ package com.pharmacy.cpis.userservice.service.impl;
 
 import java.util.List;
 
+import com.pharmacy.cpis.util.exceptions.PSNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -52,14 +53,8 @@ public class UserService implements IUserService {
 
 	@Override
 	public void activatePatientAccount(Long userId) {
-		// a userAcc must exist
 		UserAccount userAccForUpdate = userRepository.findById(userId).orElseGet(null);
-
-		if (userAccForUpdate == null) {
-			// TODO: Throw exception
-			return;
-		}
-
+		if (userAccForUpdate == null) throw new PSNotFoundException("Not found account for update");
 		userAccForUpdate.setActive(true);
 		userRepository.save(userAccForUpdate);
 	}
