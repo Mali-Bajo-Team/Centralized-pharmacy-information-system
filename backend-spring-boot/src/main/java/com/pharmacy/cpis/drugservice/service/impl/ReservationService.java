@@ -109,7 +109,6 @@ public class ReservationService implements IReservationService {
                     reservationDTO.setPhatientName(reservation.getPatient().getName());
                     reservationDTO.setPharmacyName(reservation.getPharmacy().getName());
                     //send mail
-                    
                     String phatientEmail = userRepository.getOne(reservation.getPatient().getId()).getEmail();
                     try {
                         emailService.sendConfirmDisepnsingToPatientAsync(reservationDTO.getPhatientName(), phatientEmail, reservation);
