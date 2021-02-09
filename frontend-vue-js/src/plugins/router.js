@@ -13,6 +13,7 @@ import Pharmacies from './../pages/guest/pharmacies/Pharmacies';
 import Patient from './../pages/patient/Container';
 import PatientLanding from './../pages/patient/landing/Landing';
 import PatientProfile from './../pages/patient/profile/Profile';
+import Subscriptions from './../pages/patient/subscriptions/Subscriptions';
 
 import Pharmacist from './../pages/pharmacist/Container';
 import PharmacistLanding from './../pages/pharmacist/landing/Landing';
@@ -107,6 +108,11 @@ const routes = [
                 component: Pharmacies,
                 name: 'patientpharmacies',
                 path: 'patientpharmacies'
+            },
+            {
+                component: Subscriptions,
+                name: 'subscriptions',
+                path: 'subscriptions'
             }
         ]
     },
