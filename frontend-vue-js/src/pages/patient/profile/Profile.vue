@@ -199,7 +199,7 @@ import { getParsedToken } from "./../../../util/token";
 export default {
   data: () => ({
     possibleConsultantsForComplaint: [],
-    possiblePharmacyForComplaint: [],
+    possiblePharmaciesForComplaint: [],
 
     complaintDTO: {
       content: "",
@@ -246,6 +246,46 @@ export default {
         this.patientFormDTO.city = this.patient.city;
         this.patientFormDTO.country = this.patient.country;
         this.patientFormDTO.phoneNumber = this.patient.phoneNumber;
+      })
+      .catch((error) => {
+        alert("Error: " + error);
+      });
+
+    this.axios
+      .post(
+        process.env.VUE_APP_BACKEND_URL +
+          process.env.VUE_APP_PATIENT_CONSULTANTS_ENDPOINT,
+        {
+          email: getParsedToken().sub,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+          },
+        }
+      )
+      .then((resp) => {
+        this.possibleConsultantsForComplaint = resp.data;
+      })
+      .catch((error) => {
+        alert("Error: " + error);
+      });
+
+    this.axios
+      .post(
+        process.env.VUE_APP_BACKEND_URL +
+          process.env.VUE_APP_PATIENT_PHARMACIES_ENDPOINT,
+        {
+          email: getParsedToken().sub,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+          },
+        }
+      )
+      .then((resp) => {
+        this.possiblePharmaciesForComplaint = resp.data;
       })
       .catch((error) => {
         alert("Error: " + error);
