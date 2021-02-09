@@ -61,8 +61,7 @@ public class ReservationService implements IReservationService {
     private ILoyaltyProgramService loyaltyProgramService;
     @Autowired
     private IUserRepository userRepository;
-    @Autowired
-    private EmailService emailService;
+
     @Override
     public Reservation saveReservation(DrugReservationDTO reservationDTO) {
         Reservation reservation=new Reservation();

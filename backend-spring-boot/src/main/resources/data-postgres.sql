@@ -16,7 +16,7 @@ insert into user_authority (user_id, authority_id) values (1, 2);
 
 -- INSERT ONE PATIENT
 insert into person (discriminator, address, city, country, name, surname, phone_number,loyalty_points) values ('Patient', 'Jovana Jovanovica 12', 'Novi Sad', 'Srbija', 'Dragana', 'Mororović', '0661352720',50);
-insert into user_account (email, password, is_active, person_id, needs_password_change) values ('pufke1998@gmail.com', '$2a$10$Ys8dHFGzcjM.Rn2VbB.rhuSQc/Ye7rawUgWCxE7.kco.x9EE4eYUa', true, 2, false);
+insert into user_account (email, password, is_active, person_id, needs_password_change) values ('cpisuser+dragana@gmail.com', '$2a$10$Ys8dHFGzcjM.Rn2VbB.rhuSQc/Ye7rawUgWCxE7.kco.x9EE4eYUa', true, 2, false);
 -- Password for patient account is: dragana
 insert into user_authority (user_id, authority_id) values (2, 1);
 
