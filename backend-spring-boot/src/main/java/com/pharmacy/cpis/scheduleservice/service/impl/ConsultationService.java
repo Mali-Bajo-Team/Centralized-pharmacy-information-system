@@ -1,8 +1,6 @@
 package com.pharmacy.cpis.scheduleservice.service.impl;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +25,6 @@ import com.pharmacy.cpis.util.exceptions.PSBadRequestException;
 import com.pharmacy.cpis.util.exceptions.PSConflictException;
 import com.pharmacy.cpis.util.exceptions.PSNotFoundException;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -85,7 +82,13 @@ public class ConsultationService implements IConsultationService {
 		consultationDataRange.setEnd(DateConversionsAndComparisons.getUtilDate(consultation.getEndDate()));
 
 		Consultant consultant = consultantRepository.getOne(consultation.getConsultantId());
-		Pharmacy consultantWorkingPharmacy = workingTimesService.consultantWorkingPharmacy(consultant.getId());
+		Pharmacy consultantWorkingPharmacy;
+
+		if(Objects.isNull(consultation.getPharmacyID())) {
+			consultantWorkingPharmacy = workingTimesService.consultantWorkingPharmacy(consultant.getId());
+		}else{
+			consultantWorkingPharmacy = pharmacyRepository.getOne(consultation.getPharmacyID());
+		}
 
 		Consultation consultationForSchedule = new Consultation();
 		consultationForSchedule.setConsultant(consultant);
@@ -99,6 +102,7 @@ public class ConsultationService implements IConsultationService {
 
 		return consultationForSchedule;
 	}
+
 
 	@Override
 	public Consultation addPredefined(Long pharmacyId, AddPredefinedConsultationDTO consultationInfo) {

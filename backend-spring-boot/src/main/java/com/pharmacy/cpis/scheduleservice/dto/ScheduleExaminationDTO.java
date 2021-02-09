@@ -13,12 +13,12 @@ public class ScheduleExaminationDTO {
     private String patientSurname;
     private Long patientId;
     private Long consultantId;
-
+    private Long pharmacyID;
     public ScheduleExaminationDTO() {
     }
 
 
-    public ScheduleExaminationDTO(String consultantEmail, Long id, String startDate, String endDate, String patientName, String patientSurname, Long patientId, Long consultantId) {
+    public ScheduleExaminationDTO(String consultantEmail, Long id, String startDate, String endDate, String patientName, String patientSurname, Long patientId, Long consultantId, Long pharmacyID) {
         super();
         this.id = id;
         this.startDate = startDate;
@@ -28,6 +28,15 @@ public class ScheduleExaminationDTO {
         this.patientId = patientId;
         this.consultantId = consultantId;
         this.consultantEmail = consultantEmail;
+        this.pharmacyID = pharmacyID;
+    }
+
+    public Long getPharmacyID() {
+        return pharmacyID;
+    }
+
+    public void setPharmacyID(Long pharmacyID) {
+        this.pharmacyID = pharmacyID;
     }
 
     public String getConsultantEmail() {

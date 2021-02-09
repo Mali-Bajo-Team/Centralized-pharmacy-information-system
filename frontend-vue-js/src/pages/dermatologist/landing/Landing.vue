@@ -88,7 +88,9 @@
               You must choose user!
             </v-alert>
             <!-- CHOOSE PHARRMACY -->
-              <h4 class="mt-10 ml-n primary--text">Choose pharmacy for examination</h4>
+            <h4 class="mt-10 ml-n primary--text">
+              Choose pharmacy for examination
+            </h4>
             <v-select
               v-model="pharmaciesForDermatologist"
               :items="pharmaciesForDermatologist"
@@ -99,7 +101,20 @@
               return-object
               outlined
               single-line
+              v-bind:value="valuePharmacy"
+              v-on:input="onInputPharmacy"
+              @click = "alertPharmacy = false"
             ></v-select>
+             <v-alert
+              :value="alertPharmacy"
+              color="pink"
+              dark
+              border="top"
+              icon="mdi-account"
+              transition="scale-transition"
+            >
+              You must choose pharmacy!
+            </v-alert>
           </div>
         </v-row>
         <v-row>
@@ -263,6 +278,7 @@ export default {
     valueStartTime: null,
     valueEndTime: null,
     valueDate: null,
+    valuePharmacy: null,
     isLoading: false,
     items: [],
     model: null,
@@ -275,6 +291,7 @@ export default {
     examinitedPatients: [],
     vacationRequestDateRange: [],
     pharmaciesForDermatologist: [],
+    alertPharmacy: false,
     headers: [
       {
         text: "Patient name",
@@ -317,11 +334,10 @@ export default {
         });
       });
 
-      //Get pharmacies for phatient
-       this.axios
+    //Get pharmacies for phatient
+    this.axios
       .post(
-        process.env.VUE_APP_BACKEND_URL +
-         "api/pharmacies/allfordermatologist" ,
+        process.env.VUE_APP_BACKEND_URL + "api/pharmacies/allfordermatologist",
         { dermatologistEmail: email },
         {
           headers: {
@@ -331,7 +347,6 @@ export default {
       )
       .then((resp) => {
         this.pharmaciesForDermatologist = resp.data;
-
       });
   },
   methods: {
@@ -354,6 +369,12 @@ export default {
       this.alertDate = false;
       console.log(valueDate);
     },
+    onInputPharmacy(valuePharmacy) {
+      this.$emit("input", valuePharmacy);
+      this.valuePharmacy = valuePharmacy;
+      this.alertDate = false;
+      console.log(valuePharmacy);
+    },
     scheduleConsultation() {
       var token = parseJwt(localStorage.getItem("JWT-CPIS"));
       var email = token.sub;
@@ -361,7 +382,7 @@ export default {
         this.selectedPatient === null ||
         this.valueDate === null ||
         this.examinationStartTime === null ||
-        this.examinationEndTime === null
+        this.examinationEndTime === null || this.valuePharmacy === null
       ) {
         if (this.selectedPatient === null) {
           this.alertUser = true;
@@ -375,6 +396,9 @@ export default {
         if (this.examinationEndTime === null) {
           this.alertEndTime = true;
         }
+        if (this.valuePharmacy === null) {
+          this.alertPharmacy = true;
+        }
       } else {
         this.axios
           .post(
@@ -386,6 +410,7 @@ export default {
                 this.valueDate + " " + this.examinationStartTime + ":00",
               endDate: this.valueDate + " " + this.examinationEndTime + ":00",
               patientId: this.selectedPatient,
+              pharmacyID: this.valuePharmacy.id,
             },
             {
               headers: {
