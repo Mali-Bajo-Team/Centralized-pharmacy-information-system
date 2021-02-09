@@ -13,9 +13,11 @@ pool:
 
 steps:
   - task: Bash@3
+    env: 
+      API_KEY: $(HEROKU_API_KEY)
     displayName: 'Deploy to Heroku'
     inputs:
       targetType: 'inline'
       script: |
-        git remote add heroku-backend https://heroku:a191be3d-3484-49dc-a542-8f47c02c1ad9@git.heroku.com/isa-2020-tim29-backend.git
+        git remote add heroku-backend https://heroku:$(API_KEY)@git.heroku.com/isa-2020-tim29-backend.git
         git push heroku-backend `git subtree split --prefix backend-spring-boot HEAD`:refs/heads/main --force
