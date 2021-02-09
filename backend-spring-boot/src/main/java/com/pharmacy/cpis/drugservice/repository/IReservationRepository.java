@@ -8,7 +8,7 @@ import com.pharmacy.cpis.drugservice.model.drugsales.Reservation;
 
 public interface IReservationRepository extends JpaRepository<Reservation, Long> {
 
-	Collection<Reservation> findAllByPharmacyIdAndDrugCode(Long pharmacyId, String drugCode);
+Collection<Reservation> findAllByPharmacyIdAndDrugCode(Long pharmacyId, String drugCode);
 
 
 }
