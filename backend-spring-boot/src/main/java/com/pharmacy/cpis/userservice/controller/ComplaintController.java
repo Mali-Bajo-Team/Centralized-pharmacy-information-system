@@ -42,7 +42,7 @@ public class ComplaintController {
     private IPatientService patientService;
 
     @PostMapping("/consultants")
-//    @PreAuthorize("hasRole('PATIENT')")
+    @PreAuthorize("hasRole('PATIENT')")
     public ResponseEntity<List<ConsultantDTO>> getAllPossibleConsultantsForComplaint(@RequestBody PatientEmailDTO patientEmail){
         Patient patient = patientService.findByEmail(patientEmail.getEmail());
         List<ConsultantDTO> consultants = new ArrayList<>();
@@ -52,7 +52,7 @@ public class ComplaintController {
     }
 
     @PostMapping("/pharmacies")
-//    @PreAuthorize("hasRole('PATIENT')")
+    @PreAuthorize("hasRole('PATIENT')")
     public ResponseEntity< List<PharmacyDTO>> getAllPossiblePharmaciesForComplaint(@RequestBody PatientEmailDTO patientEmail){
         Patient patient = patientService.findByEmail(patientEmail.getEmail());
         List<PharmacyDTO> pharmacies = new ArrayList<>();
@@ -77,7 +77,7 @@ public class ComplaintController {
     }
 
     @PostMapping()
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ComplaintDTO> createComplaint(@RequestBody CreateComplaintDTO complaintDTO){
         Complaint complaint = complaintService.createComplaint(complaintDTO);
         return new ResponseEntity<>(new ComplaintDTO(complaint),HttpStatus.OK);

@@ -76,10 +76,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/drugs/availabledrugs").permitAll()
                 .antMatchers("/api/drugs/types").permitAll()
                 .antMatchers("/api/drugs/forms").permitAll()
-
-                // TODO: Delete this after postman testing
-                .antMatchers("/api/complaints/**").permitAll()
-
+                
 
                 // For every other request the user must be authenticated
                 .anyRequest().authenticated().and()

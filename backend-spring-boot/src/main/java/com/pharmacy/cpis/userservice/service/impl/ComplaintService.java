@@ -86,7 +86,6 @@ public class ComplaintService implements IComplaintService {
       consultations, drug reservation, ePrescription
      */
     public List<Pharmacy> findAllPatientPharmacies(Patient patient) {
-        // TODO: add pharmacies from prescribed ePrescription
         List<Pharmacy> allPatientPharmacies = new ArrayList<>(consultationService.findAllPatientPharmacies(patient));
         for(Pharmacy pharmacy : reservationService.findAllPatientPharmacies(patient)){
             boolean alreadyAdded = false;
