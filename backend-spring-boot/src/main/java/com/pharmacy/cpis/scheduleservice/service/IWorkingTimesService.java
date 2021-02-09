@@ -19,5 +19,7 @@ public interface IWorkingTimesService {
 			Date examinationTime);
 
 	boolean consultationFitsIntoWorkingTime(Long consultantId, Long pharmacyId, DateRange consultationTime);
+	
+	WorkingTimes getByConsultantAndPharmacy(Long pharmacyId, Long consultantId);
 
 }
