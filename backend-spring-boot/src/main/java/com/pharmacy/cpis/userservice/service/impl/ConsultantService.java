@@ -42,6 +42,7 @@ public class ConsultantService implements IConsultantService {
     @Autowired
     private IConsultantRepository consultantRepository;
 
+    
     @Autowired
     private IUserRepository userRepository;
 
