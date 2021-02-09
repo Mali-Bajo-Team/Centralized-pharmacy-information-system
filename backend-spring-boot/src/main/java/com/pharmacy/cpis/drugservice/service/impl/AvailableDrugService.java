@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
-import com.pharmacy.cpis.util.exceptions.PSBadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +26,7 @@ import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
 import com.pharmacy.cpis.pharmacyservice.repository.IPharmacyRepository;
 import com.pharmacy.cpis.util.CollectionUtil;
 import com.pharmacy.cpis.util.DateConversionsAndComparisons;
+import com.pharmacy.cpis.util.exceptions.PSBadRequestException;
 import com.pharmacy.cpis.util.exceptions.PSConflictException;
 import com.pharmacy.cpis.util.exceptions.PSNotFoundException;
 
@@ -112,6 +112,9 @@ public class AvailableDrugService implements IAvailableDrugService {
 		if (hasActiveOrders(pharmacyId, drugCode))
 			throw new PSConflictException("The requestes drug cannot be deleted because of unfinished orders.");
 
+		for (Price price : availableDrug.getPrices()) {
+			priceRepository.delete(price);
+		}
 		availableDrugRepository.delete(availableDrug);
 	}
 
@@ -173,13 +176,14 @@ public class AvailableDrugService implements IAvailableDrugService {
 	}
 
 	@Override
-	public AvailableDrug updateAmount(Long pharmacyId,String drugCode,Integer amount) {
-		AvailableDrug availableDrug= availableDrugRepository.findByPharmacyIdAndDrugCode(pharmacyId,drugCode).orElse(null);
-		if(availableDrug==null)
+	public AvailableDrug updateAmount(Long pharmacyId, String drugCode, Integer amount) {
+		AvailableDrug availableDrug = availableDrugRepository.findByPharmacyIdAndDrugCode(pharmacyId, drugCode)
+				.orElse(null);
+		if (availableDrug == null)
 			throw new PSBadRequestException("There is no available drug.");
 
-		int amountOfDrug=availableDrug.getAvailableAmount()-amount;
-		if(amountOfDrug<0){
+		int amountOfDrug = availableDrug.getAvailableAmount() - amount;
+		if (amountOfDrug < 0) {
 			throw new PSBadRequestException("There is no available drug in requested amount.");
 		}
 		availableDrug.setAvailableAmount(amountOfDrug);
