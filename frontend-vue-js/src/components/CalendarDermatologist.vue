@@ -138,6 +138,7 @@
             color="primary"
             text
             @click="
+             getDrugsWithoutAllergies();
               questionDialog = false;
               reportDialog = true;
             "
@@ -173,7 +174,7 @@
                     </template>
                   </v-textarea>
                 </v-card>
-                <v-btn color="primary" @click="e6 = 2, getDrugsWithoutAllergies()"> Continue </v-btn>
+                <v-btn color="primary" @click="e6 = 2"> Continue </v-btn>
                 <v-btn
                   text
                   @click="
@@ -197,7 +198,7 @@
                     Choose drug (listed drugs was filtered from allergens)
                   </h4>
                   <v-select
-                    v-model="drugsWithoutAllergies"
+                    v-model="selecteddrugWithoutAllergies"
                     :items="drugsWithoutAllergies"
                     item-text="name"
                     item-value="typeOfDrug"
@@ -313,7 +314,8 @@ export default {
     consultants: [],
     response: null,
     consultationId: null,
-    drugsWithoutAllergies: [],
+    selecteddrugWithoutAllergies: null,
+    drugsWithoutAllergies: null,
     alertDrugsWithoutAllergies: false,
     valueDrugsWithoutAllergies: null,
 
