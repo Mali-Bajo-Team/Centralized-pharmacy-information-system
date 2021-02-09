@@ -88,11 +88,7 @@ public class WorkingTimesService implements IWorkingTimesService {
 
 	@Override
 	public boolean consultationFitsIntoWorkingTime(Long consultantId, Long pharmacyId, DateRange consultationTime) {
-		WorkingTimes workingTimes = workingTimesRepository.findByPharmacyIdAndConsultantId(pharmacyId, consultantId)
-				.orElse(null);
-
-		if (workingTimes == null)
-			throw new PSBadRequestException("The requested consultant doesn't work for the requested pharmacy.");
+		WorkingTimes workingTimes = getByConsultantAndPharmacy(pharmacyId, consultantId);
 
 		switch (DateConversionsAndComparisons.getDayOfWeek(consultationTime.getStart())) {
 		case Calendar.SUNDAY:
@@ -113,6 +109,7 @@ public class WorkingTimesService implements IWorkingTimesService {
 	}
 
 	@Override
+
 	public List<Pharmacy> dermatologistWorkingPharmacies(Long consultantID) {
 		List<Pharmacy> dermatlogistWorkingPharmacy = new ArrayList<>();
 		List<WorkingTimes> workingTimes = workingTimesRepository.findAll();
@@ -139,4 +136,16 @@ public class WorkingTimesService implements IWorkingTimesService {
 
 		return  dermatlogistWorkingPharmacy;
 	}
+
+	public WorkingTimes getByConsultantAndPharmacy(Long pharmacyId, Long consultantId) {
+		WorkingTimes workingTimes = workingTimesRepository.findByPharmacyIdAndConsultantId(pharmacyId, consultantId)
+				.orElse(null);
+
+		if (workingTimes == null)
+			throw new PSBadRequestException("The requested consultant doesn't work for the requested pharmacy.");
+
+		return workingTimes;
+	}
+
+
 }

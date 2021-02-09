@@ -19,6 +19,7 @@ import com.pharmacy.cpis.userservice.dto.JwtAuthenticationRequest;
 import com.pharmacy.cpis.userservice.dto.UserRegisterDTO;
 import com.pharmacy.cpis.userservice.dto.UserTokenState;
 import com.pharmacy.cpis.userservice.model.users.Consultant;
+import com.pharmacy.cpis.userservice.model.users.ConsultantType;
 import com.pharmacy.cpis.userservice.model.users.Supplier;
 import com.pharmacy.cpis.userservice.model.users.SystemAdministrator;
 import com.pharmacy.cpis.userservice.model.users.UserAccount;
@@ -89,7 +90,7 @@ public class AuthenticationController {
         if (consultantService.existsByEmail(dermatologist.getEmail()))
             throw new PSConflictException("The email is already taken.");
 
-        Consultant addedConsultant = consultantService.registerDermatologist(dermatologist);
+        Consultant addedConsultant = consultantService.registerConsultant(dermatologist, ConsultantType.DERMATOLOGIST);
         return new ResponseEntity<>(addedConsultant, HttpStatus.CREATED);
     }
 
