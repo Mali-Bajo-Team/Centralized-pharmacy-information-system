@@ -218,7 +218,9 @@
                 color="red lighten-3"
                 dark
                 depressed
-                @click="showComplaintPart = !showComplaintPart, resetComplaintDTO()"
+                @click="
+                  (showComplaintPart = !showComplaintPart), resetComplaintDTO()
+                "
                 ><v-icon dark left> mdi-minus-circle </v-icon>
                 Close
               </v-btn>
@@ -343,6 +345,25 @@ export default {
         );
         this.resetComplaintDTO();
       }
+
+      this.axios
+        .post(
+          process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_COMPLAINTS_ENDPOINT,
+          this.complaintDTO,
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then(() => {
+          alert("Success created a complaint");
+          this.resetComplaintDTO();
+        })
+        .catch((error) => {
+          alert("Error: " + error);
+        });
     },
   },
 };
