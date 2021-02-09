@@ -1,5 +1,6 @@
 package com.pharmacy.cpis.scheduleservice.service.impl;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -109,6 +110,20 @@ public class WorkingTimesService implements IWorkingTimesService {
 		default:
 			return checkDay(consultationTime.getStart(), consultationTime.getEnd(), workingTimes.getSaturday());
 		}
+	}
+
+	@Override
+	public List<Pharmacy> dermatologistWorkingPharmacies(Long consultantID) {
+		List<Pharmacy> dermatlogistWorkingPharmacy = new ArrayList<>();
+		List<WorkingTimes> workingTimes = workingTimesRepository.findAll();
+
+		for (WorkingTimes wt : workingTimes) {
+			if(wt.getConsultant().getId().equals(consultantID)){
+				dermatlogistWorkingPharmacy.add(wt.getPharmacy());
+				return  dermatlogistWorkingPharmacy;
+			}
+		}
+		return  dermatlogistWorkingPharmacy;
 	}
 
 }

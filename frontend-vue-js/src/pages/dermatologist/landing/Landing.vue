@@ -90,10 +90,10 @@
             <!-- CHOOSE PHARRMACY -->
               <h4 class="mt-10 ml-n primary--text">Choose pharmacy for examination</h4>
             <v-select
-              v-model="items"
-              :items="items"
+              v-model="pharmaciesForDermatologist"
+              :items="pharmaciesForDermatologist"
               item-text="name"
-              item-value="lastName"
+              item-value="location"
               label="Select pharmacy"
               persistent-hint
               return-object
@@ -274,6 +274,7 @@ export default {
     searchExaminitedUsers: "",
     examinitedPatients: [],
     vacationRequestDateRange: [],
+    pharmaciesForDermatologist: [],
     headers: [
       {
         text: "Patient name",
@@ -314,6 +315,23 @@ export default {
             .toISOString()
             .substring(0, 10);
         });
+      });
+
+      //Get pharmacies for phatient
+       this.axios
+      .post(
+        process.env.VUE_APP_BACKEND_URL +
+         "api/pharmacies/allfordermatologist" ,
+        { dermatologistEmail: email },
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+          },
+        }
+      )
+      .then((resp) => {
+        this.pharmaciesForDermatologist = resp.data;
+
       });
   },
   methods: {
