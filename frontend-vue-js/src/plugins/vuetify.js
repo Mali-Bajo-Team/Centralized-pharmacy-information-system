@@ -9,8 +9,8 @@ export default new Vuetify({
     theme: {
       themes: {
         light: {
-          primary: colors.teal.base,
-          secondary: colors.teal.lighten3,
+          primary: colors.red.base,
+          secondary: colors.red.lighten3,
           accent: colors.yellow.base,
         },
       },
