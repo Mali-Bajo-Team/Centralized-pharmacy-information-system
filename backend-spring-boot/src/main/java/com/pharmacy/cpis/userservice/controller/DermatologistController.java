@@ -1,6 +1,9 @@
 package com.pharmacy.cpis.userservice.controller;
 
 import java.util.Collection;
+import java.util.Date;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,12 +22,14 @@ import com.pharmacy.cpis.scheduleservice.model.workschedule.WorkingTimes;
 import com.pharmacy.cpis.scheduleservice.service.IWorkingTimesService;
 import com.pharmacy.cpis.userservice.dto.ConsultantWithBusyTimesDTO;
 import com.pharmacy.cpis.userservice.dto.ConsultantWithPharmaciesDTO;
+import com.pharmacy.cpis.userservice.dto.EmployDermatologistDTO;
 import com.pharmacy.cpis.userservice.model.users.Consultant;
 import com.pharmacy.cpis.userservice.model.users.ConsultantType;
 import com.pharmacy.cpis.userservice.model.users.UserAccount;
 import com.pharmacy.cpis.userservice.service.IConsultantService;
 import com.pharmacy.cpis.userservice.service.IPharmacyEmployeeService;
 import com.pharmacy.cpis.util.CollectionUtil;
+import com.pharmacy.cpis.util.DateConversionsAndComparisons;
 import com.pharmacy.cpis.util.aspects.EmployeeAccountActive;
 import com.pharmacy.cpis.util.exceptions.PSForbiddenException;
 import com.pharmacy.cpis.util.exceptions.PSNotFoundException;
@@ -61,6 +68,21 @@ public class DermatologistController {
 				consultant -> new ConsultantWithPharmaciesDTO(consultant));
 
 		return ResponseEntity.ok(mapped);
+	}
+
+	@PostMapping(consumes = "application/json")
+	@PreAuthorize("hasRole('PHARMACY_ADMIN')")
+	@EmployeeAccountActive
+	public ResponseEntity<Void> employ(Authentication authentication,
+			@RequestBody @Valid EmployDermatologistDTO details) {
+		UserAccount user = (UserAccount) authentication.getPrincipal();
+
+		if (user.getPharmacyId() == null)
+			throw new PSForbiddenException("You are not authorized to administrate a pharmacy.");
+
+		pharmacyEmployeeService.employDermatologist(user.getPharmacyId(), details);
+
+		return ResponseEntity.noContent().build();
 	}
 
 	@GetMapping("/notemployees")
