@@ -1,14 +1,19 @@
 package com.pharmacy.cpis.drugservice.service.impl;
 
+
+import com.pharmacy.cpis.drugservice.dto.DrugReservationDTO;
+import com.pharmacy.cpis.drugservice.model.drugsales.Reservation;
+import com.pharmacy.cpis.drugservice.repository.IDrugRepository;
+import com.pharmacy.cpis.drugservice.repository.IReservationRepository;
+import com.pharmacy.cpis.drugservice.service.IAvailableDrugService;
+import com.pharmacy.cpis.drugservice.service.IReservationService;
+import com.pharmacy.cpis.pharmacyservice.service.IPharmacyService;
+import com.pharmacy.cpis.userservice.service.EmailService;
+import com.pharmacy.cpis.userservice.service.IPatientService;
 import com.pharmacy.cpis.drugservice.dto.ReservationDTO;
 import com.pharmacy.cpis.drugservice.model.drugsales.*;
 import com.pharmacy.cpis.drugservice.repository.IDrugPurchaseRepository;
-import com.pharmacy.cpis.drugservice.repository.IReservationRepository;
-import com.pharmacy.cpis.drugservice.service.IAvailableDrugService;
-import com.pharmacy.cpis.drugservice.service.IDrugPurchaseService;
-import com.pharmacy.cpis.drugservice.service.IReservationService;
 import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
-import com.pharmacy.cpis.pharmacyservice.service.IPharmacyService;
 import com.pharmacy.cpis.scheduleservice.model.workschedule.WorkingTimes;
 import com.pharmacy.cpis.userservice.model.loyaltyprogram.UserCategory;
 import com.pharmacy.cpis.userservice.model.users.Consultant;
@@ -27,22 +32,61 @@ import java.util.List;
 
 @Service
 public class ReservationService implements IReservationService {
+
     @Autowired
     private IReservationRepository reservationRepository;
+
     @Autowired
-    private IConsultantService consultantService;
+    private IDrugRepository drugRepository;
+
+    @Autowired
+    private IPatientService patientService;
+
     @Autowired
     private IPharmacyService pharmacyService;
-    @Autowired
-    private IDrugPurchaseRepository drugPurchaseRepository;
+
     @Autowired
     private IAvailableDrugService availableDrugService;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private IConsultantService consultantService;
+
+    @Autowired
+    private IDrugPurchaseRepository drugPurchaseRepository;
+
     @Autowired
     private ILoyaltyProgramService loyaltyProgramService;
     @Autowired
     private IUserRepository userRepository;
     @Autowired
     private EmailService emailService;
+    @Override
+    public Reservation saveReservation(DrugReservationDTO reservationDTO) {
+        Reservation reservation=new Reservation();
+        reservation.setAmount(reservationDTO.getAmount());
+        reservation.setDeadline(reservationDTO.getDeadline());
+        reservation.setPatient(patientService.findByEmail(reservationDTO.getPatientEmail()));
+        reservation.setDateOfCreation(reservationDTO.getDateOfCreation());
+        reservation.setPharmacy(pharmacyService.getById(reservationDTO.getPharmacyID()));
+        reservation.setDrug(drugRepository.findByCode(reservationDTO.getDrugCode()));
+        reservation.setIsPickedUp(false);
+
+        availableDrugService.updateAmount(reservationDTO.getPharmacyID(),reservationDTO.getDrugCode(),reservationDTO.getAmount());
+
+        try {
+            System.out.println("Sending mail in process ..");
+            emailService.sendConfirmReservationOfDrugEmailAsync(reservationDTO.getPatientEmail(),
+                    reservationDTO, reservation);
+
+        } catch (Exception e) {
+            System.out.println("Error during sending email: " + e.getMessage());
+        }
+
+        return reservationRepository.save(reservation);
+    }
     @Override
     public ReservationDTO isReservationValid(ReservationDTO reservationDTO) {
         Reservation reservation = reservationRepository.getOne(reservationDTO.getReservationID());
@@ -140,4 +184,5 @@ public class ReservationService implements IReservationService {
         }
         return new Pharmacy();
     }
+
 }

@@ -25,4 +25,6 @@ public interface IAvailableDrugService {
 
 	void addPrice(Long pharmacyId, String drugCode, AddDrugPriceDTO priceInfo);
 
+	AvailableDrug updateAmount(Long pharmacyId,String drugCode,Integer amount);
+
 }
