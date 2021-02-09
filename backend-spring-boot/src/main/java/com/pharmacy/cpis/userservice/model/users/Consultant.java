@@ -1,12 +1,18 @@
 package com.pharmacy.cpis.userservice.model.users;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+
 import com.pharmacy.cpis.scheduleservice.model.consultations.Consultation;
 import com.pharmacy.cpis.scheduleservice.model.workschedule.Vacation;
 import com.pharmacy.cpis.scheduleservice.model.workschedule.WorkingTimes;
 import com.pharmacy.cpis.userservice.model.ratings.ConsultantRating;
-
-import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 @DiscriminatorValue("Consultant")
@@ -64,6 +70,18 @@ public class Consultant extends Person {
 
 	public void setRatings(Set<ConsultantRating> ratings) {
 		this.ratings = ratings;
+	}
+	
+	public Double getAverageRating() {
+		if (ratings.isEmpty())
+			return 0.0;
+
+		double sum = 0;
+		for (ConsultantRating rating : ratings) {
+			sum = sum + rating.getRating().getRating();
+		}
+
+		return sum / ratings.size();
 	}
 
 }

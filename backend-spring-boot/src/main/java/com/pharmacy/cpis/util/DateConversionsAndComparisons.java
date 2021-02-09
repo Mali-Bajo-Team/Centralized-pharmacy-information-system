@@ -92,4 +92,20 @@ public class DateConversionsAndComparisons {
 		return false;
 	}
 
+	public static boolean overlapsWithoutDates(DateRange dr1, DateRange dr2) {
+		if (compareTimesWithoutDates(dr1.getStart(), dr2.getStart()) <= 0
+				&& compareTimesWithoutDates(dr1.getEnd(), dr2.getStart()) > 0)
+			return true;
+
+		if (compareTimesWithoutDates(dr1.getStart(), dr2.getEnd()) < 0
+				&& compareTimesWithoutDates(dr1.getEnd(), dr2.getEnd()) >= 0)
+			return true;
+
+		return false;
+	}
+
+	public static Date getTime(Date dateTime) {
+		return new Date(dateTime.getTime() % (24 * 60 * 60 * 1000L));
+	}
+
 }
