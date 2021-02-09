@@ -2,7 +2,10 @@ package com.pharmacy.cpis.pharmacyservice.service.impl;
 
 import java.util.List;
 
+import com.pharmacy.cpis.userservice.model.users.Patient;
+import com.pharmacy.cpis.userservice.repository.IPatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +42,9 @@ public class PharmacyService implements IPharmacyService {
 	@Autowired
 	private IUserRepository userRepository;
 
+	@Autowired
+	private IPatientRepository patientRepository;
+
 	@Override
 	public Pharmacy getById(Long id) {
 		Pharmacy pharmacy = pharmacyRepository.findById(id).orElse(null);
@@ -68,6 +74,34 @@ public class PharmacyService implements IPharmacyService {
 	@Override
 	public List<Pharmacy> findAll() {
 		return pharmacyRepository.findAll();
+	}
+
+	@Override
+	public void subscribePatientOnPharmacyPromotions(String patientEmail, Long pharmacyId) {
+		Pharmacy pharmacy = pharmacyRepository.findById(pharmacyId).orElse(null);
+		Long patientId = userRepository.findByEmail(patientEmail).getPerson().getId();
+		if(patientId == null) throw new PSNotFoundException("That person does not exist");
+
+		Patient patient = patientRepository.findById(patientId).orElse(null);
+		if(pharmacy == null || patient == null) throw new PSNotFoundException("Not found that pharmacy or patient");
+		pharmacy.addSubscriber(patient);
+		patient.addSubscription(pharmacy);
+		pharmacyRepository.save(pharmacy);
+		patientRepository.save(patient);
+	}
+
+	@Override
+	public void unsubscribePatientOnPharmacyPromotions(String patientEmail, Long pharmacyId) {
+		Pharmacy pharmacy = pharmacyRepository.findById(pharmacyId).orElse(null);
+		Long patientId = userRepository.findByEmail(patientEmail).getPerson().getId();
+		if(patientId == null) throw new PSNotFoundException("That person does not exist");
+
+		Patient patient = patientRepository.findById(patientId).orElse(null);
+		if(pharmacy == null || patient == null) throw new PSNotFoundException("Not found that pharmacy or patient");
+		pharmacy.removeSubscriber(patient);
+		patient.removeSubscription(pharmacy);
+		pharmacyRepository.save(pharmacy);
+		patientRepository.save(patient);
 	}
 
 	@Override

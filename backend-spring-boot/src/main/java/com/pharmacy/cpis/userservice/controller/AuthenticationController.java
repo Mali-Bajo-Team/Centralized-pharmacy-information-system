@@ -79,7 +79,7 @@ public class AuthenticationController {
 	}
 
 	private void redirectToLoginPage(HttpServletResponse httpServletResponse) {
-		String projectUrl = env.getProperty("APP_FRONT") + env.getProperty("FRONT_PORT") + "/";
+		String projectUrl = env.getProperty("APP_FRONT") + "/";
 		httpServletResponse.setHeader("Location", projectUrl);
 		httpServletResponse.setStatus(302);
 	}
