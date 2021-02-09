@@ -168,6 +168,42 @@
                 v-model="complaintDTO.content"
                 label="Describe your problem"
               ></v-textarea>
+
+              <v-select
+                :items="possiblePharmaciesForComplaint"
+                item-value="id"
+                item-text="name"
+                v-model="complaintDTO.pharmacyId"
+                outlined
+                label="Select pharmacy"
+              >
+               <template slot="selection" slot-scope="data">
+                  <!-- HTML that describe how select should render selected items -->
+                  {{ data.item.name }} 
+                </template>
+                <template slot="item" slot-scope="data">
+                  <!-- HTML that describe how select should render items when the select is open -->
+                  {{ data.item.name }} ,  {{ data.item.location }}
+                </template>
+              </v-select>
+
+              <v-select
+                :items="possibleConsultantsForComplaint"
+                item-value="email"
+                item-text="email"
+                v-model="complaintDTO.consultantId"
+                outlined
+                label="Select dermatologist/pharmacist"
+              >
+                <template slot="selection" slot-scope="data">
+                  <!-- HTML that describe how select should render selected items -->
+                  {{ data.item.name }}  {{ data.item.lastName }} 
+                </template>
+                <template slot="item" slot-scope="data">
+                  <!-- HTML that describe how select should render items when the select is open -->
+                  {{ data.item.name }}  {{ data.item.lastName }} , {{data.item.email}}
+                </template>
+              </v-select>
             </v-form>
             <!-- End of the form for making a response -->
             <!-- Buttons to confirm/cancel -->
@@ -198,6 +234,7 @@
 import { getParsedToken } from "./../../../util/token";
 export default {
   data: () => ({
+    selectedAccussed: {},
     possibleConsultantsForComplaint: [],
     possiblePharmaciesForComplaint: [],
 
@@ -266,6 +303,7 @@ export default {
       )
       .then((resp) => {
         this.possibleConsultantsForComplaint = resp.data;
+        this.possibleConsultantsForComplaint.push("None");
       })
       .catch((error) => {
         alert("Error: " + error);
@@ -286,6 +324,7 @@ export default {
       )
       .then((resp) => {
         this.possiblePharmaciesForComplaint = resp.data;
+        this.possiblePharmaciesForComplaint.push("None");
       })
       .catch((error) => {
         alert("Error: " + error);
