@@ -147,6 +147,7 @@ insert into user_authority (user_id, authority_id) values (9, 5);
 insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (20,1,'2021-02-03 10:23','2021-02-03 11:00',9,2,1);
 insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (25,1,'2021-02-04 11:23','2021-02-04 13:20',9,2,1);
 insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (30,1,'2021-02-05 13:23','2021-02-05 14:00',9,4,2);
+insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (30,1,'2021-03-05 13:23','2021-03-05 14:00',9,2,2);
 
 -- INSERT DERMATOLOGIST WORKING TIME
 insert into working_times(consultant_id,pharmacy_id, monday_start, monday_end, tuesday_start, tuesday_end, wednesday_start,wednesday_end,thursday_start,thursday_end,friday_start,friday_end) values (9,1, '2021-02-03 10:00', '2021-02-03 18:00','2021-02-03 10:00', '2021-02-03 18:00', '2021-02-03 10:00', '2021-02-03 18:00','2021-02-03 10:00', '2021-02-03 18:00', '2021-02-03 10:00', '2021-02-03 17:00');

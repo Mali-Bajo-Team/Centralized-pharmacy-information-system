@@ -25,7 +25,7 @@ public class Consultation {
 	@ManyToOne(optional = false)
 	private Pharmacy pharmacy;
 
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	private Consultant consultant;
 
 	@ManyToOne(optional = true, fetch = FetchType.LAZY)

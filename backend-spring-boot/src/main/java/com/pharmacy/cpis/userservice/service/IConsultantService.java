@@ -21,5 +21,5 @@ public interface IConsultantService {
 	Collection<Consultant> getByType(ConsultantType type);
 	
 	Collection<Consultant> getByTypeAndPharmacy(ConsultantType type, Long pharmacyId);
-
+	
 }

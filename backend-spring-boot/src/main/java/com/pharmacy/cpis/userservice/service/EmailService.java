@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
+import com.pharmacy.cpis.userservice.model.complaints.Complaint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.MailException;
@@ -49,6 +50,20 @@ public class EmailService {
 		mail.setSubject("Activate account [CPis]");
 		mail.setText("Hello " + user.getName() + "," + " activate your account on this link: "
 				+ env.getProperty("APP_HOST") + env.getProperty("server.port") + endPointForAccountActivation);
+		javaMailSender.send(mail);
+
+		System.out.println("Email was send!");
+	}
+
+	@Async
+	public void sendComplaintResponseEmailAsync(Complaint complaint) throws MailException, InterruptedException {
+		System.out.println("Email sending...\n\n");
+
+		SimpleMailMessage mail = new SimpleMailMessage();
+		mail.setTo(complaint.getCreator().getAccount().getEmail());
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Response on your complaint");
+		mail.setText(complaint.getResponse());
 		javaMailSender.send(mail);
 
 		System.out.println("Email was send!");
