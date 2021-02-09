@@ -27,7 +27,7 @@ import com.pharmacy.cpis.util.CollectionUtil;
 import com.pharmacy.cpis.util.aspects.EmployeeAccountActive;
 
 @RestController
-@RequestMapping(value = "api/vacationrequst")
+@RequestMapping(value = "api/vacationrequest")
 public class VacationRequestController {
 	@Autowired
 	private IVacationRequestService vacationRequestService;

@@ -24,16 +24,9 @@ public class LoyaltyProgramController {
     @GetMapping()
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<LoyaltyProgramDTO>> getLoyaltyPrograms(){
-
-        List<LoyaltyProgram> loyaltyPrograms = loyaltyProgramService.findAll();
-
-        // convert loyalties to dto
         List<LoyaltyProgramDTO> loyaltyProgramDTOS = new ArrayList<>();
-        for(LoyaltyProgram loyaltyProgram : loyaltyPrograms){
-            LoyaltyProgramDTO loyaltyProgramDTO = new LoyaltyProgramDTO(loyaltyProgram);
-            loyaltyProgramDTOS.add(loyaltyProgramDTO);
-        }
-
+        for(LoyaltyProgram loyaltyProgram : loyaltyProgramService.findAll())
+            loyaltyProgramDTOS.add(new LoyaltyProgramDTO(loyaltyProgram));
         return new ResponseEntity<>(loyaltyProgramDTOS, HttpStatus.OK);
     }
 

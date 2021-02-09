@@ -10,7 +10,7 @@ import java.util.Set;
 public class PharmacyDTO {
 
     private Long id;
-    @NotEmpty(message = "Name is required.")
+
     private String name;
 
     private String location;
