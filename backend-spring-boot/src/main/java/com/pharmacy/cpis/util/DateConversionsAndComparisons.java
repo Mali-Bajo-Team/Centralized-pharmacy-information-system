@@ -25,12 +25,12 @@ public class DateConversionsAndComparisons {
 		return (t1 - t2);
 	}
 
-	public static int compareDatesWithoutTime(Date d1, Date d2) {
-		int t1;
-		int t2;
+	public static long compareDatesWithoutTime(Date d1, Date d2) {
+		long t1;
+		long t2;
 
-		t1 = (int) (d1.getTime() - d1.getTime() % (24 * 60 * 60 * 1000L));
-		t2 = (int) (d2.getTime() - d2.getTime() % (24 * 60 * 60 * 1000L));
+		t1 = d1.getTime() - d1.getTime() % (24 * 60 * 60 * 1000L);
+		t2 = d2.getTime() - d2.getTime() % (24 * 60 * 60 * 1000L);
 		return (t1 - t2);
 	}
 
@@ -68,6 +68,18 @@ public class DateConversionsAndComparisons {
 		}
 
 		return retVal;
+	}
+
+	public static boolean overlapsWithoutTime(DateRange dr1, DateRange dr2) {
+		if (compareDatesWithoutTime(dr1.getStart(), dr2.getStart()) <= 0
+				&& compareDatesWithoutTime(dr1.getEnd(), dr2.getStart()) >= 0)
+			return true;
+
+		if (compareDatesWithoutTime(dr1.getStart(), dr2.getEnd()) <= 0
+				&& compareDatesWithoutTime(dr1.getEnd(), dr2.getEnd()) >= 0)
+			return true;
+
+		return false;
 	}
 
 }

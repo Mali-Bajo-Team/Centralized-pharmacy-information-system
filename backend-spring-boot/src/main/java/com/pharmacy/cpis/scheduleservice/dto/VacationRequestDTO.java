@@ -7,6 +7,7 @@ import com.pharmacy.cpis.scheduleservice.model.workschedule.VacationRequestStatu
 
 public class VacationRequestDTO {
 
+	private Long id;
 	private String consultantEmail;
 	private String consultantName;
 	private String consultantSurname;
@@ -17,6 +18,7 @@ public class VacationRequestDTO {
 
 	public VacationRequestDTO(VacationRequest request) {
 		super();
+		this.id = request.getId();
 		this.consultantEmail = request.getConsultant().getAccount().getEmail();
 		this.consultantName = request.getConsultant().getName();
 		this.consultantSurname = request.getConsultant().getSurname();
@@ -24,6 +26,10 @@ public class VacationRequestDTO {
 		this.end = request.getDateRange().getEnd();
 		this.status = request.getStatus();
 		this.response = request.getResponse();
+	}
+
+	public Long getId() {
+		return id;
 	}
 
 	public String getConsultantEmail() {
