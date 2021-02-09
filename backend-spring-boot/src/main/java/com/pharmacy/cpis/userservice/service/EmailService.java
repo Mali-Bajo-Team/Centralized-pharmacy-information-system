@@ -49,7 +49,7 @@ public class EmailService {
 		mail.setFrom(env.getProperty("spring.mail.username"));
 		mail.setSubject("Activate account [CPis]");
 		mail.setText("Hello " + user.getName() + "," + " activate your account on this link: "
-				+ env.getProperty("APP_HOST") + env.getProperty("server.port") + endPointForAccountActivation);
+				+ env.getProperty("APP_HOST") + endPointForAccountActivation);
 		javaMailSender.send(mail);
 
 		System.out.println("Email was send!");

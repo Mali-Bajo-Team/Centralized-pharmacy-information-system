@@ -235,16 +235,21 @@
                               <v-text-field
                                 type="date"
                                 label="Deadline to pickup drug"
+                                v-model="formAmountAndDeadlineDTO.deadline"
+
                               >
                               </v-text-field>
-                              <v-text-field type="number" label="Amount">
+                              <v-text-field type="number" label="Amount"
+                                 v-model="formAmountAndDeadlineDTO.amount"
+
+                              >
                               </v-text-field>
                             </v-form>
                             <v-card-actions>
                               <v-spacer></v-spacer>
                               <v-btn
                                 color="primary"
-                                @click="makeReservation(pharmacy)"
+                                @click="makeReservation(pharmacy,drug)"
                                 ><v-icon dark left>
                                   mdi-checkbox-marked-circle
                                 </v-icon>
@@ -273,6 +278,7 @@
 <script>
 
 import { getParsedToken } from "./../../../util/token"
+import { getStringDateFromMilliseconds, getTodayDateString } from "./../../../util/dateHandler";
 
 export default {
   data: () => ({
@@ -282,6 +288,10 @@ export default {
     marks: ["1", "2", "3", "4", "5"],
     drugs: [],
     searchDrugField: "",
+    formAmountAndDeadlineDTO: {
+      amount: 0,
+      deadline:"",
+    },
   }),
   mounted() {
     this.axios
@@ -324,17 +334,58 @@ export default {
           this.allTypeOfDrugs.push(drugType.name);
         }
       });
+     
   },
+  
   methods: {
+    isDateValid() {
+      var todayDate = Date.parse(getTodayDateString());
+      var deadlineDate = Date.parse(getStringDateFromMilliseconds(this.formAmountAndDeadlineDTO.deadline));
+      if (todayDate > deadlineDate) return false;
+      return true;
+    },
     isPatient(){
       if(getParsedToken().role == "PATIENT") return true;
       return false;
     },
-    makeReservation(pharmacy) {
-      alert(
-        "Simulation of reservation, there is go some ajax call \n" +
-          pharmacy.pharmacyName
-      );
+    makeReservation(pharmacy,drug) {
+      if(!this.isDateValid()){
+        alert("The date is past.");
+        return;
+      }
+      if(this.formAmountAndDeadlineDTO.amount<1){
+        alert("The value of amount must be positive.");
+        return;
+      }else{
+        this.axios
+          .post(
+          process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_DRUG_RESERVATION_ENDPOINT,
+          {
+            deadline: this.formAmountAndDeadlineDTO.deadline,
+            amount: this.formAmountAndDeadlineDTO.amount,
+            patientEmail: getParsedToken().sub,
+            drugCode: drug.code, 
+            pharmacyID:pharmacy.id,
+
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then(() => {
+          
+           alert("Successfuly");
+          
+        })
+        .catch((error) => {
+          
+          alert("Error: " + error);
+        });
+      }
+       
     },
     getDrugPharmacies(drug) {
       if (drug.availableDrugs != null) {
@@ -351,16 +402,16 @@ export default {
         )
         .then((response) => {
           drug.availableDrugs = [];
-          let counterOfAvailableDrugs = 0;
+          
           for (let availableDrugTemp of response.data) {
             let tempObj = {
-              id: counterOfAvailableDrugs,
+              id: availableDrugTemp.pharmacyID,
               pharmacyName: availableDrugTemp.pharmacyName,
               priceOfDrug: availableDrugTemp.priceOfDrug,
               showMakeReservation: false,
             };
             drug.availableDrugs.push(tempObj);
-            counterOfAvailableDrugs = counterOfAvailableDrugs + 1;
+           
           }
           drug.showPharmacies = !drug.showPharmacies;
         })

@@ -65,6 +65,14 @@ public class Patient extends Person {
 		this.subscriptions = subscriptions;
 	}
 
+	public void addSubscription(Pharmacy subscription){
+		this.subscriptions.add(subscription);
+	}
+
+	public void removeSubscription(Pharmacy subscription){
+		this.subscriptions.removeIf(pharmacy -> (pharmacy.getId().equals(subscription.getId())));
+	}
+
 	public Set<Consultation> getConsultations() {
 		return consultations;
 	}
