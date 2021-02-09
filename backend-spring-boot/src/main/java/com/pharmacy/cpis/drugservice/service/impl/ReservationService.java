@@ -69,7 +69,7 @@ public class ReservationService implements IReservationService {
         reservation.setAmount(reservationDTO.getAmount());
         reservation.setDeadline(reservationDTO.getDeadline());
         reservation.setPatient(patientService.findByEmail(reservationDTO.getPatientEmail()));
-        reservation.setDateOfCreation(reservationDTO.getDateOfCreation());
+        reservation.setDateOfCreation(new Date());
         reservation.setPharmacy(pharmacyService.getById(reservationDTO.getPharmacyID()));
         reservation.setDrug(drugRepository.findByCode(reservationDTO.getDrugCode()));
         reservation.setIsPickedUp(false);
