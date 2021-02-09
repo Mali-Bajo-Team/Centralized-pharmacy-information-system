@@ -1,8 +1,15 @@
 package com.pharmacy.cpis.userservice.service.impl;
 
+import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
+import com.pharmacy.cpis.pharmacyservice.repository.IPharmacyRepository;
 import com.pharmacy.cpis.userservice.dto.ComplaintDTO;
+import com.pharmacy.cpis.userservice.dto.CreateComplaintDTO;
 import com.pharmacy.cpis.userservice.model.complaints.Complaint;
+import com.pharmacy.cpis.userservice.model.users.Consultant;
+import com.pharmacy.cpis.userservice.model.users.Patient;
 import com.pharmacy.cpis.userservice.repository.IComplaintRepository;
+import com.pharmacy.cpis.userservice.repository.IConsultantRepository;
+import com.pharmacy.cpis.userservice.repository.IPatientRepository;
 import com.pharmacy.cpis.userservice.repository.IUserRepository;
 import com.pharmacy.cpis.userservice.service.IComplaintService;
 import com.pharmacy.cpis.util.exceptions.PSBadRequestException;
@@ -21,6 +28,15 @@ public class ComplaintService implements IComplaintService {
     @Autowired
     private IUserRepository userRepository;
 
+    @Autowired
+    private IConsultantRepository consultantRepository;
+
+    @Autowired
+    private IPharmacyRepository pharmacyRepository;
+
+    @Autowired
+    private IPatientRepository patientRepository;
+
     @Override
     public List<Complaint> findAllComplaints() {
         return complaintRepository.findAll();
@@ -30,6 +46,28 @@ public class ComplaintService implements IComplaintService {
     public Complaint updateComplaintResponse(ComplaintDTO complaintDTO) {
         Complaint complaint = getComplaint(complaintDTO);
         complaint.setResponse(complaintDTO.getResponse());
+        return complaintRepository.save(complaint);
+    }
+
+    @Override
+    public Complaint createComplaint(CreateComplaintDTO complaintDTO) {
+        Complaint complaint = new Complaint();
+        complaint.setResponse("Waiting on reply");
+        complaint.setCreationTimestamp(new Date());
+        complaint.setContent(complaintDTO.getContent());
+        Patient creator = patientRepository.findById(complaintDTO.getCreatorId()).orElse(null);
+        if(creator == null) throw new PSBadRequestException("There is no patient with that data");
+        complaint.setCreator(creator);
+        if(complaintDTO.getConsultantId() != null){
+            Consultant consultant = consultantRepository.findById(complaintDTO.getConsultantId()).orElse(null);
+            if(consultant == null) throw new PSBadRequestException("There is no consultant with that data");
+            complaint.setConsultant(consultant);
+        }
+        if(complaintDTO.getPharmacyId() != null){
+            Pharmacy pharmacy = pharmacyRepository.findById(complaintDTO.getPharmacyId()).orElse(null);
+            if(pharmacy == null) throw new PSBadRequestException("There is no pharmacy with that data");
+            complaint.setPharmacy(pharmacy);
+        }
         return complaintRepository.save(complaint);
     }
 

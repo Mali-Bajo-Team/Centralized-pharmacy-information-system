@@ -1,6 +1,7 @@
 package com.pharmacy.cpis.userservice.controller;
 
 import com.pharmacy.cpis.userservice.dto.ComplaintDTO;
+import com.pharmacy.cpis.userservice.dto.CreateComplaintDTO;
 import com.pharmacy.cpis.userservice.model.complaints.Complaint;
 import com.pharmacy.cpis.userservice.service.IComplaintService;
 import com.sun.mail.iap.Response;
@@ -21,7 +22,7 @@ public class ComplaintController {
     private IComplaintService complaintService;
 
     @GetMapping()
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<ComplaintDTO>> getAllComplaints(){
         List<ComplaintDTO> complaintDTOS = new ArrayList<>();
         for(Complaint complaint:  complaintService.findAllComplaints())
@@ -30,10 +31,16 @@ public class ComplaintController {
     }
 
     @PutMapping()
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ComplaintDTO> updateComplaintResponse(@RequestBody ComplaintDTO complaintDTO){
         Complaint complaint = complaintService.updateComplaintResponse(complaintDTO);
         return new ResponseEntity<>(new ComplaintDTO(complaint),HttpStatus.OK);
     }
 
+    @PostMapping()
+//    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ComplaintDTO> createComplaint(@RequestBody CreateComplaintDTO complaintDTO){
+        Complaint complaint = complaintService.createComplaint(complaintDTO);
+        return new ResponseEntity<>(new ComplaintDTO(complaint),HttpStatus.OK);
+    }
 }
