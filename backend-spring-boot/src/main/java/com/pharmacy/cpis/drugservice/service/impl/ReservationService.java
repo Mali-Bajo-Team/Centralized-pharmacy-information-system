@@ -71,7 +71,7 @@ public class ReservationService implements IReservationService {
                     String phatientEmail = userRepository.getOne(reservation.getPatient().getId()).getEmail();
                     try {
                         emailService.sendConfirmDisepnsingToPatientAsync(reservationDTO.getPhatientName(), phatientEmail, reservation);
-                    } catch (InterruptedException e) {
+                    } catch (Exception e) {
                         System.out.println("Error sending cinfirm mail for dispensing drug");
                     }
 
