@@ -167,12 +167,17 @@ insert into ordered_drug(amount, drug_code, order_id) values (50, 'aspirin', 2);
 insert into offer(price, shipment_date, status, order_id, supplier_id) values (15, '2021-02-03 12:00', 0, 1, 10);
 
 
+--INSERT RESERVATION FOR DRUG
+insert into reservation(amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id)
+ values (15,'2021-02-08','2021-02-10',false,'brufen',4,1);
+
+
 --INSERT RESERVATION (Drug reservation)
-insert into reservation(id,amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (1,4,'2021-02-05 12:00','2021-02-09 12:00',false,'brufen',2,1);
-insert into reservation(id,amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (2,3,'2021-03-06 12:00','2021-02-09 04:00',false,'brufen',4,2);
-insert into reservation(id,amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (3,6,'2021-03-06 12:00','2021-02-08 12:00',false,'brufen',2,1);
-insert into reservation(id,amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (4,5,'2021-03-06 12:00','2021-02-10 12:00',false,'brufen',4,2);
-insert into reservation(id,amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (5,4,'2021-03-04 12:00','2021-02-09 12:00',false,'brufen',2,2);
+insert into reservation(amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (4,'2021-02-05 12:00','2021-02-09 12:00',false,'brufen',2,1);
+insert into reservation(amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (3,'2021-03-06 12:00','2021-02-09 04:00',false,'brufen',4,2);
+insert into reservation(amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (6,'2021-03-06 12:00','2021-02-08 12:00',false,'brufen',2,1);
+insert into reservation(amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (5,'2021-03-06 12:00','2021-02-10 12:00',false,'brufen',4,2);
+insert into reservation(amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (4,'2021-03-04 12:00','2021-02-09 12:00',false,'brufen',2,2);
 
 --INSERT COMPLAINT ( only patient who had a consultation can make a complaint about consultant)
 insert into complaint(content, creation_timestamp, response, consultant_id, creator_id)
@@ -183,3 +188,4 @@ insert into complaint(content, creation_timestamp, response,  creator_id, pharma
 values('Very expensive one','2021-05-05 12:00', 'Waiting on reply', 2,1);
 insert into complaint(content, creation_timestamp, response, consultant_id, creator_id)
 values('Omg, there is no need for this type of conversation...','2021-03-03 12:00', 'Waiting on reply', 9,4);
+
