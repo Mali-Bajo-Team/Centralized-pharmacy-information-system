@@ -22,6 +22,7 @@ import com.pharmacy.cpis.scheduleservice.dto.VacationReviewDTO;
 import com.pharmacy.cpis.scheduleservice.model.workschedule.VacationRequest;
 import com.pharmacy.cpis.scheduleservice.service.IVacationRequestService;
 import com.pharmacy.cpis.userservice.model.users.UserAccount;
+import com.pharmacy.cpis.userservice.service.EmailService;
 import com.pharmacy.cpis.util.CollectionUtil;
 import com.pharmacy.cpis.util.aspects.EmployeeAccountActive;
 
@@ -30,6 +31,9 @@ import com.pharmacy.cpis.util.aspects.EmployeeAccountActive;
 public class VacationRequestController {
 	@Autowired
 	private IVacationRequestService vacationRequestService;
+
+	@Autowired
+	EmailService emailService;
 
 	@PostMapping("/createrequest")
 	@PreAuthorize("hasRole('PHARMACIST')")
@@ -62,7 +66,13 @@ public class VacationRequestController {
 			@RequestBody @Valid VacationReviewDTO response, Authentication authentication) {
 		UserAccount user = (UserAccount) authentication.getPrincipal();
 
-		vacationRequestService.reject(user, id, response.getResponse());
+		VacationRequest request = vacationRequestService.reject(user, id, response.getResponse());
+
+		try {
+			emailService.sendVacationRejectedEmailAsync(request.getConsultant().getAccount().getEmail(), request);
+		} catch (Exception e) {
+			System.out.println("Email sending failed.");
+		}
 
 		return ResponseEntity.noContent().build();
 	}
@@ -74,7 +84,13 @@ public class VacationRequestController {
 			@RequestBody @Valid VacationReviewDTO response, Authentication authentication) {
 		UserAccount user = (UserAccount) authentication.getPrincipal();
 
-		vacationRequestService.accept(user, id, response.getResponse());
+		VacationRequest request = vacationRequestService.accept(user, id, response.getResponse());
+
+		try {
+			emailService.sendVacationApprovedEmailAsync(request.getConsultant().getAccount().getEmail(), request);
+		} catch (Exception e) {
+			System.out.println("Email sending failed.");
+		}
 
 		return ResponseEntity.noContent().build();
 	}
