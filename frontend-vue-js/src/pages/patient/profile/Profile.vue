@@ -125,7 +125,7 @@
     </v-card>
     <!-- End of the card for the base info about patient -->
     <!-- Card for the complaints -->
-    <v-card width="600px" class="mx-auto">
+    <v-card width="600px" class="mx-auto mb-14">
       <v-row justify="end">
         <v-card-subtitle class="ml-5 mr-5">
           Dear {{ patient.name }}, if you have some complain on some of the
@@ -154,10 +154,10 @@
 
             <v-card-text class="ml-2">
               Dear {{ patient.name }}, we are so sorry to hear that you have
-              somme issue. Because of that, there is
-              area where you can enter what's bothering you. Besides that,
-              please inform us on who you want complain, pharmacies, pharmacist
-              or dermatologist, and which one.
+              somme issue. Because of that, there is area where you can enter
+              what's bothering you. Besides that, please inform us on who you
+              want complain, pharmacies, pharmacist or dermatologist, and which
+              one.
             </v-card-text>
 
             <!-- Form for making a response -->
@@ -170,6 +170,23 @@
               ></v-textarea>
             </v-form>
             <!-- End of the form for making a response -->
+            <!-- Buttons to confirm/cancel -->
+            <v-card-actions class="pb-4 mr-4">
+              <v-spacer> </v-spacer>
+              <v-btn color="success" dark depressed @click="confirmComplaint()">
+                <v-icon dark left> mdi-checkbox-marked-circle </v-icon>
+                Confirm
+              </v-btn>
+              <v-btn
+                color="red lighten-3"
+                dark
+                depressed
+                @click="showComplaintPart = !showComplaintPart"
+                ><v-icon dark left> mdi-minus-circle </v-icon>
+                Close
+              </v-btn>
+            </v-card-actions>
+            <!-- Buttons to confirm/cancel-->
           </div>
         </v-expand-transition>
       </v-row>
@@ -230,6 +247,11 @@ export default {
       .catch((error) => {
         alert("Error: " + error);
       });
+  },
+  methods: {
+    confirmComplaint() {
+      alert("simulate confirm");
+    },
   },
 };
 </script>
