@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.pharmacy.cpis.pharmacyservice.dto.PharmaciesForDermatologistDTO;
 import com.pharmacy.cpis.scheduleservice.service.IWorkingTimesService;
+import com.pharmacy.cpis.userservice.dto.PatientEmailDTO;
 import com.pharmacy.cpis.userservice.model.users.UserAccount;
 import com.pharmacy.cpis.userservice.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,24 +41,34 @@ public class PharmacyController {
 	@GetMapping("/{id}")
 	@PreAuthorize("hasRole('PATIENT')")
 	public ResponseEntity<PharmacyDetailsDTO> getPharmacyById(@PathVariable(required = true) Long id) {
-
 		Pharmacy pharmacy = pharmacyService.getById(id);
-
 		return ResponseEntity.ok(new PharmacyDetailsDTO(pharmacy));
 	}
 
+	@PostMapping("/{id}/subscribe")
+	//TODO: add auth after postman testing
+	@PreAuthorize("hasRole('PATIENT')")
+	public ResponseEntity<Void> subscribeOnPharmacyPromotions(@PathVariable(required = true) Long id, @RequestBody PatientEmailDTO patientEmailDTO) {
+		pharmacyService.subscribePatientOnPharmacyPromotions(patientEmailDTO.getEmail(),id);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@PostMapping("/{id}/unsubscribe")
+	//TODO: add auth after postman testing
+	@PreAuthorize("hasRole('PATIENT')")
+	public ResponseEntity<Void> unsubscribeOnPharmacyPromotions(@PathVariable(required = true) Long id, @RequestBody PatientEmailDTO patientEmailDTO) {
+		pharmacyService.unsubscribePatientOnPharmacyPromotions(patientEmailDTO.getEmail(),id);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+
 	@GetMapping("/all")
 	public ResponseEntity<List<PharmacyDTO>> getAllPharmacies() {
-
 		List<Pharmacy> pharmacies = pharmacyService.findAll();
-
-		// convert pharmacies to DTOs
 		List<PharmacyDTO> pharmaciesDTO = new ArrayList<>();
 		for (Pharmacy pharmacy : pharmacies) {
-			PharmacyDTO dtoPharmacy = new PharmacyDTO(pharmacy);
-			pharmaciesDTO.add(dtoPharmacy);
+			pharmaciesDTO.add(new PharmacyDTO(pharmacy));
 		}
-
 		return new ResponseEntity<>(pharmaciesDTO, HttpStatus.OK);
 	}
 
@@ -72,16 +83,11 @@ public class PharmacyController {
 	@PreAuthorize("hasRole('DERMATOLOGIST')")
 	public ResponseEntity<List<PharmacyDTO>> getAllPharmaciesWhereWorkingDermatolgoist(@RequestBody PharmaciesForDermatologistDTO pharmaciesForDermatologistDTO) {
 		UserAccount userAccount = userService.findByEmail(pharmaciesForDermatologistDTO.getDermatologistEmail());
-
 		List<Pharmacy> pharmacies = workingTimesService.dermatologistWorkingPharmacies(userAccount.getId());
-
-		// convert pharmacies to DTOs
 		List<PharmacyDTO> pharmaciesDTO = new ArrayList<>();
 		for (Pharmacy pharmacy : pharmacies) {
-			PharmacyDTO dtoPharmacy = new PharmacyDTO(pharmacy);
-			pharmaciesDTO.add(dtoPharmacy);
+			pharmaciesDTO.add(new PharmacyDTO(pharmacy));
 		}
-
 		return new ResponseEntity<>(pharmaciesDTO, HttpStatus.OK);
 	}
 
