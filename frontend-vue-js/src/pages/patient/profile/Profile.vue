@@ -127,36 +127,51 @@
     <!-- Card for the complaints -->
     <v-card width="600px" class="mx-auto">
       <v-row justify="end">
-      <v-card-subtitle class="ml-5 mr-5">
-        Dear {{ patient.name }}, if you have some complaint on some
-        pharmacist/dermatologist or even a pharmacist, fell free to inform us.
-      </v-card-subtitle>
+        <v-card-subtitle class="ml-5 mr-5">
+          Dear {{ patient.name }}, if you have some complain on some of the
+          pharmacist/dermatologist or even a pharmacy, fell free to inform us.
+        </v-card-subtitle>
 
-      <v-card-actions class="mr-2 mb-2">
-        <v-btn color="orange lighten-2" text> Make complain </v-btn>
+        <v-card-actions class="mr-2 mb-2">
+          <v-btn color="orange lighten-2" text> Make complain </v-btn>
 
-        <v-spacer></v-spacer>
+          <v-spacer></v-spacer>
 
-        <v-btn class="mr-5" icon @click="showComplaintPart = !showComplaintPart">
-          <v-icon>{{
-            showComplaintPart ? "mdi-chevron-up" : "mdi-chevron-down"
-          }}</v-icon>
-        </v-btn>
-      </v-card-actions>
+          <v-btn
+            class="mr-5"
+            icon
+            @click="showComplaintPart = !showComplaintPart"
+          >
+            <v-icon>{{
+              showComplaintPart ? "mdi-chevron-up" : "mdi-chevron-down"
+            }}</v-icon>
+          </v-btn>
+        </v-card-actions>
 
-      <v-expand-transition>
-        <div class="pa-3" v-show="showComplaintPart">
-          <v-divider></v-divider>
+        <v-expand-transition>
+          <div class="pa-3" v-show="showComplaintPart">
+            <v-divider></v-divider>
 
-          <v-card-text>
-            I'm a thing. But, like most politicians, he promised more than he
-            could deliver. You won't have time for sleeping, soldier, not with
-            all the bed making you'll be doing. Then we'll go with that data
-            file! Hey, you add a one and two zeros to that or we walk! You're
-            going to do his laundry? I've got to find a way to escape.
-          </v-card-text>
-        </div>
-      </v-expand-transition>
+            <v-card-text class="ml-2">
+              Dear {{ patient.name }}, we are so sorry to hear that you have
+              somme issue. Because of that, there is
+              area where you can enter what's bothering you. Besides that,
+              please inform us on who you want complain, pharmacies, pharmacist
+              or dermatologist, and which one.
+            </v-card-text>
+
+            <!-- Form for making a response -->
+            <v-form class="ma-5">
+              <v-textarea
+                full-width
+                outlined
+                v-model="complaintDTO.content"
+                label="Describe your problem"
+              ></v-textarea>
+            </v-form>
+            <!-- End of the form for making a response -->
+          </div>
+        </v-expand-transition>
       </v-row>
     </v-card>
     <!-- End of the card for the complaints -->
@@ -166,6 +181,12 @@
 import { getParsedToken } from "./../../../util/token";
 export default {
   data: () => ({
+    complaintDTO: {
+      content: "",
+      consultantId: null,
+      creatorId: null,
+      pharmacyId: null,
+    },
     showComplaintPart: false,
     patient: {},
     patientFormDTO: {
