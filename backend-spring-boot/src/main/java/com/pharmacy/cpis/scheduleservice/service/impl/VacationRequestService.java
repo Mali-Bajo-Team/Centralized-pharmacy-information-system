@@ -126,7 +126,7 @@ public class VacationRequestService implements IVacationRequestService {
 		return CollectionUtil.findAll(requests, request -> canInteractWith(admin, request));
 	}
 
-	private Boolean canInteractWith(UserAccount user, VacationRequest request) {
+	private boolean canInteractWith(UserAccount user, VacationRequest request) {
 		if (user.getRole().equals("ADMIN"))
 			return request.getConsultant().getType().equals(ConsultantType.DERMATOLOGIST);
 		else {
@@ -134,7 +134,7 @@ public class VacationRequestService implements IVacationRequestService {
 		}
 	}
 
-	private Boolean isPharmacistAndWorksForPharmacy(Consultant consultant, Long pharmacyId) {
+	private boolean isPharmacistAndWorksForPharmacy(Consultant consultant, Long pharmacyId) {
 		if (!consultant.getType().equals(ConsultantType.PHARMACIST))
 			return false;
 

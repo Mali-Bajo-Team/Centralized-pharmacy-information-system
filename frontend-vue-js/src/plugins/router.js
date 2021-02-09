@@ -18,6 +18,7 @@ import Pharmacist from './../pages/pharmacist/Container';
 import PharmacistLanding from './../pages/pharmacist/landing/Landing';
 import PharmacistProfile from './../pages/pharmacist/profile/Profile';
 import PharmacistPatientsearch from './../pages/pharmacist/patientsearch/Patientsearch.vue';
+import DispensingDrugs from './../pages/pharmacist/dispensing/Dispensingdrugs.vue';
 
 import Dermatologist from './../pages/dermatologist/Container';
 import DermatologistLanding from './../pages/dermatologist/landing/Landing';
@@ -136,6 +137,11 @@ const routes = [
                 component: Drugs,
                 name: 'pharmacistdrugs',
                 path: 'pharmacistdrugs'
+            },
+            {
+                component: DispensingDrugs,
+                name: 'dispensingdrugs',
+                path: 'dispensingdrugs'
             }
         ]
     },

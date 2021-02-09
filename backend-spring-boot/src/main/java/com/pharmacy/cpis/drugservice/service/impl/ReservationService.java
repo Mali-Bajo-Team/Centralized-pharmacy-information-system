@@ -17,6 +17,7 @@ import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
 import com.pharmacy.cpis.scheduleservice.model.workschedule.WorkingTimes;
 import com.pharmacy.cpis.userservice.model.loyaltyprogram.UserCategory;
 import com.pharmacy.cpis.userservice.model.users.Consultant;
+import com.pharmacy.cpis.userservice.repository.IUserRepository;
 import com.pharmacy.cpis.userservice.service.IConsultantService;
 import com.pharmacy.cpis.userservice.service.ILoyaltyProgramService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,8 @@ public class ReservationService implements IReservationService {
 
     @Autowired
     private ILoyaltyProgramService loyaltyProgramService;
+    @Autowired
+    private IUserRepository userRepository;
 
     @Override
     public Reservation saveReservation(DrugReservationDTO reservationDTO) {
@@ -96,14 +99,25 @@ public class ReservationService implements IReservationService {
         Pharmacy pharmacy = findPharmacyWhereConsultantWork(consultant.getId());
         if(pharmacy.getId().equals(reservation.getPharmacy().getId())){
             if(reservationRepository.existsById(reservationDTO.getReservationID()) && reservation.getDeadline().compareTo(dateBefore24h) > 0){
-                isValid = true;
-                reservationDTO.setValid(isValid);
-                reservationDTO.setAmount(reservation.getAmount());
-                reservationDTO.setDateOfCreation(reservation.getDateOfCreation());
-                reservationDTO.setDeadLine(reservation.getDeadline());
-                reservationDTO.setPhatientName(reservation.getPatient().getName());
-                reservationDTO.setPharmacyName(reservation.getPharmacy().getName());
-                return reservationDTO;
+
+                if(Boolean.FALSE.equals(reservation.getIsPickedUp())) {
+                    isValid = true;
+                    reservationDTO.setValid(isValid);
+                    reservationDTO.setAmount(reservation.getAmount());
+                    reservationDTO.setDateOfCreation(reservation.getDateOfCreation());
+                    reservationDTO.setDeadLine(reservation.getDeadline());
+                    reservationDTO.setPhatientName(reservation.getPatient().getName());
+                    reservationDTO.setPharmacyName(reservation.getPharmacy().getName());
+                    //send mail
+                    String phatientEmail = userRepository.getOne(reservation.getPatient().getId()).getEmail();
+                    try {
+                        emailService.sendConfirmDisepnsingToPatientAsync(reservationDTO.getPhatientName(), phatientEmail, reservation);
+                    } catch (Exception e) {
+                        System.err.println("Error sending cinfirm mail for dispensing drug");
+                    }
+
+                    return reservationDTO;
+                }
             }
         }
 
@@ -145,8 +159,6 @@ public class ReservationService implements IReservationService {
         Double priceWithoutDiscount = availableDrug.findPrice(reservation.getDateOfCreation()).getPrice();
         UserCategory userCategory = loyaltyProgramService.findUserCategoryByLoyaltyPoints(reservation.getPatient().getLoyaltyPoints());
         Double discount = userCategory.getReservationDiscount();
-
-        System.out.println("POPUST JE AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA " + discount);
 
         if(discount != 0){
             priceWithDiscount = (priceWithoutDiscount -(priceWithoutDiscount*(discount/100))) * reservation.getAmount();

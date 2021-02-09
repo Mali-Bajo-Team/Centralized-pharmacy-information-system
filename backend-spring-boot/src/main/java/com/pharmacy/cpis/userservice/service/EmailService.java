@@ -74,10 +74,27 @@ public class EmailService {
 	}
 
 	@Async
+	public void sendConfirmDisepnsingToPatientAsync(String userName, String phatientEmail,
+												  Reservation reservation) throws MailException, InterruptedException {
+		System.out.println("Email sending...\n\n");
+
+		SimpleMailMessage mail = new SimpleMailMessage();
+
+		mail.setTo(phatientEmail);
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Confirmation dispensing drug [CPis]");
+		mail.setText("Hello " + userName + "," + " your drug is successfully  dispensed. " + " Pharmacy where drug dispensed is " +
+				reservation.getPharmacy().getName() +  " ,amount of Drug "  + reservation.getDrug().getName() + " ,amount is " + reservation.getAmount() +".");
+		javaMailSender.send(mail);
+
+		System.out.println("Email was send!");
+	}
+
+	@Async
 	public void sendPromotionEmailAsync(String email, Promotion promotion) {
 		System.out.println("Email sending...\n\n");
 
-		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.YYYY");
+		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 		LocalDate start = LocalDate.ofInstant(Instant.ofEpochMilli(promotion.getValidityPeriod().getStart().getTime()),
 				ZoneId.systemDefault());
 		LocalDate end = LocalDate.ofInstant(Instant.ofEpochMilli(promotion.getValidityPeriod().getEnd().getTime()),
@@ -141,7 +158,7 @@ public class EmailService {
 	public void sendVacationRejectedEmailAsync(String email, VacationRequest request) {
 		System.out.println("Email sending...\n\n");
 
-		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.YYYY");
+		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 		LocalDate start = LocalDate.ofInstant(Instant.ofEpochMilli(request.getDateRange().getStart().getTime()),
 				ZoneId.systemDefault());
 		LocalDate end = LocalDate.ofInstant(Instant.ofEpochMilli(request.getDateRange().getEnd().getTime()),
@@ -169,7 +186,7 @@ public class EmailService {
 	public void sendVacationApprovedEmailAsync(String email, VacationRequest request) {
 		System.out.println("Email sending...\n\n");
 
-		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.YYYY");
+		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 		LocalDate start = LocalDate.ofInstant(Instant.ofEpochMilli(request.getDateRange().getStart().getTime()),
 				ZoneId.systemDefault());
 		LocalDate end = LocalDate.ofInstant(Instant.ofEpochMilli(request.getDateRange().getEnd().getTime()),
