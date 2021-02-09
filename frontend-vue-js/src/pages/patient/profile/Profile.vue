@@ -177,13 +177,13 @@
                 outlined
                 label="Select pharmacy"
               >
-               <template slot="selection" slot-scope="data">
+                <template slot="selection" slot-scope="data">
                   <!-- HTML that describe how select should render selected items -->
-                  {{ data.item.name }} 
+                  {{ data.item.name }}
                 </template>
                 <template slot="item" slot-scope="data">
                   <!-- HTML that describe how select should render items when the select is open -->
-                  {{ data.item.name }} ,  {{ data.item.location }}
+                  {{ data.item.name }} , {{ data.item.location }}
                 </template>
               </v-select>
 
@@ -197,11 +197,12 @@
               >
                 <template slot="selection" slot-scope="data">
                   <!-- HTML that describe how select should render selected items -->
-                  {{ data.item.name }}  {{ data.item.lastName }} 
+                  {{ data.item.name }} {{ data.item.lastName }}
                 </template>
                 <template slot="item" slot-scope="data">
                   <!-- HTML that describe how select should render items when the select is open -->
-                  {{ data.item.name }}  {{ data.item.lastName }} , {{data.item.email}}
+                  {{ data.item.name }} {{ data.item.lastName }} ,
+                  {{ data.item.email }}
                 </template>
               </v-select>
             </v-form>
@@ -217,7 +218,7 @@
                 color="red lighten-3"
                 dark
                 depressed
-                @click="showComplaintPart = !showComplaintPart"
+                @click="showComplaintPart = !showComplaintPart, resetComplaintDTO()"
                 ><v-icon dark left> mdi-minus-circle </v-icon>
                 Close
               </v-btn>
@@ -240,8 +241,8 @@ export default {
     complaintDTO: {
       content: "",
       consultantEmail: null,
-      patientEmail:getParsedToken().sub,
-    pharmacyId: null,
+      patientEmail: getParsedToken().sub,
+      pharmacyId: null,
     },
     showComplaintPart: false,
     patient: {},
@@ -302,9 +303,6 @@ export default {
       )
       .then((resp) => {
         this.possibleConsultantsForComplaint = resp.data;
-        this.possibleConsultantsForComplaint.push({
-          name: "None",lastName:'None',email: 'None'
-          });
       })
       .catch((error) => {
         alert("Error: " + error);
@@ -325,17 +323,26 @@ export default {
       )
       .then((resp) => {
         this.possiblePharmaciesForComplaint = resp.data;
-        this.possiblePharmaciesForComplaint.push({
-          id: 0, name: "None", location: "None"
-        });
       })
       .catch((error) => {
         alert("Error: " + error);
       });
   },
   methods: {
+    resetComplaintDTO() {
+      this.complaintDTO.pharmacyId = null;
+      this.complaintDTO.consultantEmail = null;
+    },
     confirmComplaint() {
-      alert("simulate confirm");
+      if (
+        this.complaintDTO.pharmacyId != null &&
+        this.complaintDTO.consultantEmail != null
+      ) {
+        alert(
+          "Please select pharmacy or dermatologist/pharmacist, you cant make a two complaint at same time"
+        );
+        this.resetComplaintDTO();
+      }
     },
   },
 };
