@@ -1,4 +1,5 @@
-﻿# Centralized-pharmacy-information-system
+[![Build Status](https://dev.azure.com/milanatodorovic/ISA/_apis/build/status/Pufke.ISA?branchName=develop)](https://dev.azure.com/milanatodorovic/ISA/_build/latest?definitionId=22&branchName=develop)
+## Centralized-pharmacy-information-system
 
 | Our members          | 
 | -------------------- | 
@@ -7,7 +8,11 @@
 | Nemanja Pualić       | 
 | Vladislav Maksimović | 
 
-## Help
+### Heroku deployment
+- Frontend: (https://isa-2020-tim29.herokuapp.com/)[https://isa-2020-tim29.herokuapp.com/]
+- Backend: (https://isa-2020-tim29-backend.herokuapp.com/)[https://isa-2020-tim29-backend.herokuapp.com/]
+
+### Help
 
 <details>
   <summary> Instalation Guide for IDEA Intelij Maven </summary>
