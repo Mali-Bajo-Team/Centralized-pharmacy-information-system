@@ -175,6 +175,8 @@ public class AvailableDrugService implements IAvailableDrugService {
 	@Override
 	public AvailableDrug updateAmount(Long pharmacyId,String drugCode,Integer amount) {
 		AvailableDrug availableDrug= availableDrugRepository.findByPharmacyIdAndDrugCode(pharmacyId,drugCode).orElse(null);
+		if(availableDrug==null)
+			throw new PSBadRequestException("There is no available drug.");
 
 		int amountOfDrug=availableDrug.getAvailableAmount()-amount;
 		if(amountOfDrug<0){
