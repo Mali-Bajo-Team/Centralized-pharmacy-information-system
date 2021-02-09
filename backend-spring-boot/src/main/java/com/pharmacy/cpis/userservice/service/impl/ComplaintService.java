@@ -71,7 +71,7 @@ public class ComplaintService implements IComplaintService {
         complaint.setCreator(creator);
 
         if(complaintDTO.getConsultantEmail() != null && !complaintDTO.getConsultantEmail().equals("")){
-            Long consultantId = userRepository.findByEmail(complaintDTO.getPatientEmail()).getPerson().getId();
+            Long consultantId = userRepository.findByEmail(complaintDTO.getConsultantEmail()).getPerson().getId();
             if(consultantId == null) throw new PSBadRequestException("There is no consultant with that data");
             Consultant consultant = consultantRepository.findById(consultantId).orElse(null);
             if(consultant == null) throw new PSBadRequestException("There is no consultant with that data");
