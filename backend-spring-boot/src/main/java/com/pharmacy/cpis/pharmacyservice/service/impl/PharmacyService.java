@@ -84,8 +84,8 @@ public class PharmacyService implements IPharmacyService {
 
 		Patient patient = patientRepository.findById(patientId).orElse(null);
 		if(pharmacy == null || patient == null) throw new PSNotFoundException("Not found that pharmacy or patient");
-		pharmacy.getSubscribers().add(patient);
-		patient.getSubscriptions().add(pharmacy);
+		pharmacy.addSubscriber(patient);
+		patient.addSubscription(pharmacy);
 		pharmacyRepository.save(pharmacy);
 		patientRepository.save(patient);
 	}
