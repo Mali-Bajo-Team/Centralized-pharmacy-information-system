@@ -12,9 +12,11 @@ import com.pharmacy.cpis.pharmacyservice.service.IPharmacyService;
 import com.pharmacy.cpis.scheduleservice.model.workschedule.WorkingTimes;
 import com.pharmacy.cpis.userservice.model.loyaltyprogram.UserCategory;
 import com.pharmacy.cpis.userservice.model.users.Consultant;
+import com.pharmacy.cpis.userservice.repository.IUserRepository;
 import com.pharmacy.cpis.userservice.service.EmailService;
 import com.pharmacy.cpis.userservice.service.IConsultantService;
 import com.pharmacy.cpis.userservice.service.ILoyaltyProgramService;
+import com.pharmacy.cpis.userservice.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +39,8 @@ public class ReservationService implements IReservationService {
     private IAvailableDrugService availableDrugService;
     @Autowired
     private ILoyaltyProgramService loyaltyProgramService;
-
+    @Autowired
+    private IUserRepository userRepository;
     @Autowired
     private EmailService emailService;
     @Override
@@ -64,8 +67,13 @@ public class ReservationService implements IReservationService {
                     reservationDTO.setDeadLine(reservation.getDeadline());
                     reservationDTO.setPhatientName(reservation.getPatient().getName());
                     reservationDTO.setPharmacyName(reservation.getPharmacy().getName());
-                 
-                 //   emailService.sendConfirmDisepnsingToPatientAsync(reservation.get().);
+                    //send mail
+                    String phatientEmail = userRepository.getOne(reservation.getPatient().getId()).getEmail();
+                    try {
+                        emailService.sendConfirmDisepnsingToPatientAsync(reservationDTO.getPhatientName(), phatientEmail, reservation);
+                    } catch (InterruptedException e) {
+                        System.out.println("Error sending cinfirm mail for dispensing drug");
+                    }
 
                     return reservationDTO;
                 }

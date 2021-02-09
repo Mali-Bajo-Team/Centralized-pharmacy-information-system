@@ -76,7 +76,7 @@ public class EmailService {
 		mail.setTo(phatientEmail);
 		mail.setFrom(env.getProperty("spring.mail.username"));
 		mail.setSubject("Confirmation dispensing drug [CPis]");
-		mail.setText("Hello " + userName + "," + " your drug is succesfully dispensed. " + " Pharmacy where drug dispensed is " +
+		mail.setText("Hello " + userName + "," + " your drug is successfully  dispensed. " + " Pharmacy where drug dispensed is " +
 				reservation.getPharmacy().getName() +  " ,amount of Drug "  + reservation.getDrug().getName() + " ,amount is " + reservation.getAmount() +".");
 		javaMailSender.send(mail);
 
