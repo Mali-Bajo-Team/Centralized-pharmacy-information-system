@@ -3,7 +3,9 @@ package com.pharmacy.cpis.pharmacyservice.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pharmacy.cpis.pharmacyservice.dto.PharmaciesForDermatologistDTO;
+import com.pharmacy.cpis.drugservice.dto.DrugCodeAndAmountDTO;
+import com.pharmacy.cpis.drugservice.service.IAvailableDrugService;
+import com.pharmacy.cpis.pharmacyservice.dto.*;
 import com.pharmacy.cpis.scheduleservice.service.IWorkingTimesService;
 import com.pharmacy.cpis.userservice.dto.PatientEmailDTO;
 import com.pharmacy.cpis.userservice.model.users.UserAccount;
@@ -19,9 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pharmacy.cpis.pharmacyservice.dto.PharmacyDTO;
-import com.pharmacy.cpis.pharmacyservice.dto.PharmacyDetailsDTO;
-import com.pharmacy.cpis.pharmacyservice.dto.PharmacyRegisterDTO;
 import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
 import com.pharmacy.cpis.pharmacyservice.service.IPharmacyService;
 
@@ -37,6 +36,9 @@ public class PharmacyController {
 
 	@Autowired
 	private IWorkingTimesService workingTimesService;
+
+	@Autowired
+	private IAvailableDrugService availableDrugService;
 
 	@GetMapping("/{id}")
 	@PreAuthorize("hasRole('PATIENT')")
@@ -89,4 +91,11 @@ public class PharmacyController {
 		return new ResponseEntity<>(pharmaciesDTO, HttpStatus.OK);
 	}
 
+	//findPharmaciesWithRequiredDrugsAmount
+	@PostMapping(value = "/requireddrugs")
+	// TODO: add auth
+	public ResponseEntity<List<PharmacyTotalPriceDTO>> findPharmaciesWithRequiredDrugsAmount(@RequestBody List<DrugCodeAndAmountDTO> drugCodeAndAmountDTOS){
+		List<PharmacyTotalPriceDTO> pharmacyTotalPriceDTOS = availableDrugService.findPharmaciesWithRequiredDrugsAmount(drugCodeAndAmountDTOS);
+		return new ResponseEntity<>(pharmacyTotalPriceDTOS,HttpStatus.OK);
+	}
 }
