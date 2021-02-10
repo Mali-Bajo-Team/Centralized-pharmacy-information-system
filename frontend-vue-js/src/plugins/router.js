@@ -11,6 +11,7 @@ import Drugs from './../pages/guest/drugs/Drugs';
 import Pharmacies from './../pages/guest/pharmacies/Pharmacies';
 
 import Patient from './../pages/patient/Container';
+import Consultations from './../pages/patient/consultations/Consultations';
 import PatientLanding from './../pages/patient/landing/Landing';
 import PatientProfile from './../pages/patient/profile/Profile';
 import PatientReservations from './../pages/patient/reservation/DrugReservation';
@@ -127,6 +128,11 @@ const routes = [
                 component: EPrescription,
                 name: 'eprescription',
                 path: 'eprescription'
+            },
+            {
+                component: Consultations,
+                name: 'patientconsultations',
+                path: 'patientconsultations'
             }
         ]
     },

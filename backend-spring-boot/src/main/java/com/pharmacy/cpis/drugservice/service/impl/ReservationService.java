@@ -75,17 +75,16 @@ public class ReservationService implements IReservationService {
         reservation.setIsPickedUp(false);
 
         availableDrugService.updateAmount(reservationDTO.getPharmacyID(),reservationDTO.getDrugCode(),reservationDTO.getAmount());
-
+        Reservation savedReservation = reservationRepository.save(reservation);
         try {
             System.out.println("Sending mail in process ..");
             emailService.sendConfirmReservationOfDrugEmailAsync(reservationDTO.getPatientEmail(),
-                    reservationDTO, reservation);
+                    reservationDTO, savedReservation);
 
         } catch (Exception e) {
             System.out.println("Error during sending email: " + e.getMessage());
         }
-
-        return reservationRepository.save(reservation);
+        return savedReservation;
     }
     @Override
     public ReservationDTO isReservationValid(ReservationDTO reservationDTO) {
