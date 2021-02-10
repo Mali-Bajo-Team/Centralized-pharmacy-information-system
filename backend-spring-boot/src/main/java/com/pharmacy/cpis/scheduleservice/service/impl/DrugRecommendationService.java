@@ -1,5 +1,9 @@
 package com.pharmacy.cpis.scheduleservice.service.impl;
 
+import com.pharmacy.cpis.drugservice.dto.AlternateDrugDTO;
+import com.pharmacy.cpis.drugservice.dto.DrugDTO;
+import com.pharmacy.cpis.drugservice.dto.DrugSpecificationDTO;
+import com.pharmacy.cpis.drugservice.model.drug.Drug;
 import com.pharmacy.cpis.drugservice.repository.IDrugRepository;
 import com.pharmacy.cpis.drugservice.service.IAvailableDrugService;
 import com.pharmacy.cpis.scheduleservice.dto.DrugRecommendationDTO;
@@ -15,7 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class DrugRecommendationService implements IDrugRecommendationService {
@@ -61,13 +67,26 @@ public class DrugRecommendationService implements IDrugRecommendationService {
     public DrugRecommendationDTO isDrugAvailable(DrugRecommendationDTO drugRecommendationDTO) {
 
         Consultation consultation = consultationRepository.getOne(drugRecommendationDTO.getConsultationID());
+        Drug drug = drugRepository.getOne(drugRecommendationDTO.getDrugCode());
 
         if(availableDrugService.checkIsAvailableinPharmacy(consultation.getPharmacy().getId(),drugRecommendationDTO.getDrugCode()) != null){
             drugRecommendationDTO.setAvailable(true);
             return drugRecommendationDTO;
         }
-        drugRecommendationDTO.setAvailable(false);
-        return drugRecommendationDTO;
 
+        Set<Drug> alternateDrugs = drug.getAlternateDrugs();
+        Set<AlternateDrugDTO> alternateDrugsDTOs = new HashSet<>();
+
+        for (Drug alterDrug: alternateDrugs) {
+            AlternateDrugDTO alternateDrugDTO = new AlternateDrugDTO();
+            alternateDrugDTO.setName(alterDrug.getName());
+            alternateDrugDTO.setCode(alterDrug.getCode());
+            alternateDrugDTO.setDrugSpecificationDTO(new DrugSpecificationDTO(alterDrug.getSpecification()));
+            alternateDrugsDTOs.add(alternateDrugDTO);
+        }
+
+        drugRecommendationDTO.setAlternateDrugsDTO(alternateDrugsDTOs);
+
+        return drugRecommendationDTO;
     }
 }

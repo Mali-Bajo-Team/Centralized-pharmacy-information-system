@@ -491,7 +491,9 @@ export default {
             this.alertIsDrugAvailable = false;
             this.succesIsDrugAvailable = true;
           } else {
+              this.drugsWithoutAllergies = response.data.alternateDrugsDTO;
             this.alertIsDrugAvailable = true;
+             this.succesIsDrugAvailable = false;
           }
         });
     },

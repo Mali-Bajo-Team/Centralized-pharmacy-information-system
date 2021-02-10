@@ -234,3 +234,4 @@ insert into drug_request (consultant_id, pharmacy_id, drug_code, timestamp) valu
 insert into allergies (patient_id, drug_code) values (2,'brufen');
 insert into allergies (patient_id, drug_code) values (2,'aspirin');
 
+insert into alternate_drugs(drug_code, alternate_drug_code) values('amfetamin','brufen');

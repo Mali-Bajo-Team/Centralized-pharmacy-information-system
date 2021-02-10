@@ -1,7 +1,9 @@
 package com.pharmacy.cpis.scheduleservice.dto;
 
-import com.pharmacy.cpis.drugservice.model.drug.Drug;
-import com.pharmacy.cpis.scheduleservice.model.consultations.ConsultationReport;
+import com.pharmacy.cpis.drugservice.dto.AlternateDrugDTO;
+import com.pharmacy.cpis.drugservice.dto.DrugDTO;
+
+import java.util.Set;
 
 public class DrugRecommendationDTO {
     private Integer duration;
@@ -12,11 +14,12 @@ public class DrugRecommendationDTO {
     private Long consultationID;
     private String consultantEmail;
     private Boolean isAvailable;
+    private Set<AlternateDrugDTO> alternateDrugsDTO;
 
     public DrugRecommendationDTO() {
     }
 
-    public DrugRecommendationDTO(Integer duration, String consultationReport, String drugCode, Long drugID, Long patientID, Long consultationID, String consultantEmail, Boolean isAvailable) {
+    public DrugRecommendationDTO(Integer duration, String consultationReport, String drugCode, Long drugID, Long patientID, Long consultationID, String consultantEmail, Boolean isAvailable, Set<AlternateDrugDTO> alternateDrugsDTO) {
         this.duration = duration;
         this.consultationReport = consultationReport;
         this.drugCode = drugCode;
@@ -25,6 +28,7 @@ public class DrugRecommendationDTO {
         this.consultationID = consultationID;
         this.consultantEmail = consultantEmail;
         this.isAvailable = isAvailable;
+        this.alternateDrugsDTO = alternateDrugsDTO;
     }
 
     public Integer getDuration() {
@@ -90,4 +94,14 @@ public class DrugRecommendationDTO {
     public void setAvailable(Boolean available) {
         isAvailable = available;
     }
+
+    public Set<AlternateDrugDTO> getAlternateDrugsDTO() {
+        return alternateDrugsDTO;
+    }
+
+    public void setAlternateDrugsDTO(Set<AlternateDrugDTO> alternateDrugsDTO) {
+        this.alternateDrugsDTO = alternateDrugsDTO;
+    }
+
+
 }
