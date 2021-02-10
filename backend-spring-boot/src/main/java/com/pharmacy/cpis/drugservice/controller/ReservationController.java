@@ -2,7 +2,6 @@ package com.pharmacy.cpis.drugservice.controller;
 
 
 import com.pharmacy.cpis.drugservice.dto.DrugReservationDTO;
-import com.pharmacy.cpis.drugservice.model.drug.Drug;
 import com.pharmacy.cpis.drugservice.model.drugsales.Reservation;
 import com.pharmacy.cpis.drugservice.dto.ReservationDTO;
 import com.pharmacy.cpis.drugservice.service.IReservationService;
