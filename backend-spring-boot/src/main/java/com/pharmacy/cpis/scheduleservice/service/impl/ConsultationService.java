@@ -1,13 +1,14 @@
 package com.pharmacy.cpis.scheduleservice.service.impl;
 
-import java.util.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
 import com.pharmacy.cpis.pharmacyservice.repository.IPharmacyRepository;
@@ -86,9 +87,9 @@ public class ConsultationService implements IConsultationService {
 		Consultant consultant = consultantRepository.getOne(consultation.getConsultantId());
 		Pharmacy consultantWorkingPharmacy;
 
-		if(Objects.isNull(consultation.getPharmacyID())) {
+		if (Objects.isNull(consultation.getPharmacyID())) {
 			consultantWorkingPharmacy = workingTimesService.consultantWorkingPharmacy(consultant.getId());
-		}else{
+		} else {
 			consultantWorkingPharmacy = pharmacyRepository.getOne(consultation.getPharmacyID());
 		}
 
@@ -105,10 +106,10 @@ public class ConsultationService implements IConsultationService {
 		return consultationForSchedule;
 	}
 
-
 	@Override
+	@Transactional
 	public Consultation addPredefined(Long pharmacyId, AddPredefinedConsultationDTO consultationInfo) {
-		Consultant consultant = consultantRepository.findById(consultationInfo.getConsultantId()).orElse(null);
+		Consultant consultant = consultantRepository.findLockedById(consultationInfo.getConsultantId()).orElse(null);
 		if (consultant == null)
 			throw new PSNotFoundException("The requested consultant does not exist.");
 
@@ -123,20 +124,6 @@ public class ConsultationService implements IConsultationService {
 		validateTimeIntervalForConsultation(consultation.getTime());
 
 		return consultationRepository.save(consultation);
-	}
-
-	private void checkConsultantAvailability(Long pharmacyId, Consultant consultant, DateRange interval) {
-		if (!workingTimesService.consultationFitsIntoWorkingTime(consultant.getId(), pharmacyId, interval))
-			throw new PSConflictException("Consultation doesn't fit into the consultants working time.");
-
-		if (hasOverlappingConsultations(consultant, interval, ConsultationStatus.PREDEFINED))
-			throw new PSConflictException("Consultant already has a predefined consultation in the time period.");
-
-		if (hasOverlappingConsultations(consultant, interval, ConsultationStatus.SCHEDULED))
-			throw new PSConflictException("Consultant already has a scheduled consultation in the time period.");
-
-		if (hasOverlappingVacations(consultant, interval))
-			throw new PSConflictException("Consultant already has a scheduled vacation in the time period.");
 	}
 
 	private Consultation initializeConsultation(AddPredefinedConsultationDTO consultationInfo, Pharmacy pharmacy,
@@ -156,6 +143,20 @@ public class ConsultationService implements IConsultationService {
 		}
 
 		return consultation;
+	}
+
+	private void checkConsultantAvailability(Long pharmacyId, Consultant consultant, DateRange interval) {
+		if (!workingTimesService.consultationFitsIntoWorkingTime(consultant.getId(), pharmacyId, interval))
+			throw new PSConflictException("Consultation doesn't fit into the consultants working time.");
+
+		if (hasOverlappingConsultations(consultant, interval, ConsultationStatus.PREDEFINED))
+			throw new PSConflictException("Consultant already has a predefined consultation in the time period.");
+
+		if (hasOverlappingConsultations(consultant, interval, ConsultationStatus.SCHEDULED))
+			throw new PSConflictException("Consultant already has a scheduled consultation in the time period.");
+
+		if (hasOverlappingVacations(consultant, interval))
+			throw new PSConflictException("Consultant already has a scheduled vacation in the time period.");
 	}
 
 	private boolean hasOverlappingConsultations(Consultant consultant, DateRange interval, ConsultationStatus status) {
