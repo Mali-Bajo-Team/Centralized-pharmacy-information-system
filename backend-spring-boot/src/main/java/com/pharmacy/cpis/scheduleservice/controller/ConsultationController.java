@@ -189,5 +189,15 @@ public class ConsultationController {
 		}
 		return new ResponseEntity<>(consultations, HttpStatus.OK);
 	}
+	@PostMapping(value = "/patient/pharmacist")
+//	@PreAuthorize("hasRole('PATIENT')")
+	public ResponseEntity<List<ConsultationDTO>> findAllPharmacistConsultationByPatientAndStatus(@RequestBody PatientEmailDTO patientEmailDTO){
+		List<ConsultationDTO> consultations = new ArrayList<>();
+		for(Consultation consultation : consultationService.findAllConsultationByPatientAndStatus(patientEmailDTO, ConsultationStatus.SCHEDULED, ConsultantType.PHARMACIST)){
+			consultations.add(new ConsultationDTO(consultation));
+		}
+		return new ResponseEntity<>(consultations, HttpStatus.OK);
+	}
+
 
 }
