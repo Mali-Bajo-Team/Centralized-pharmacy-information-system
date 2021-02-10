@@ -66,6 +66,7 @@ public class DrugRecommendationService implements IDrugRecommendationService {
         consultation.setStatus(ConsultationStatus.FINISHED);
         consultationRepository.save(consultation);
 
+        availableDrugService.updateAmount(consultation.getPharmacy().getId(),drugRecommendationDTO.getDrugCode(),1);
         return drugRecommendationDTO;
     }
 

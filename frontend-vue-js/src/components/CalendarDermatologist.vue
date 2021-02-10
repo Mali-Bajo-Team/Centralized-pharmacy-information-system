@@ -115,7 +115,7 @@
     </v-sheet>
 
     <!-- Start QUESTION DIALOG -->
-    <v-dialog v-model="questionDialog" persistent max-width="600px">
+    <v-dialog v-model="questionDialog" persistent max-width="1000px">
       <v-card>
         <v-card-title>
           <span class="headline">Examination report for {{ name }}</span>
@@ -195,7 +195,7 @@
                 <v-card color="grey lighten-3" class="mb-12" height="600px">
                   <!-- CHOOSE DRUG FOR PERSCRIBE -->
                   <h4 class="ml-n primary--text">
-                    Choose drug (listed drugs was filtered from allergens)
+                    Choose {{alternateDrugTxt}} (listed drugs was filtered from allergens)
                   </h4>
                   <v-select
                     class="ml-16 mr-16"
@@ -203,7 +203,7 @@
                     :items="drugsWithoutAllergies"
                     item-text="name"
                     item-value="typeOfDrug"
-                    label="Select drug"
+                    label="Select drug/alternate drug"
                     persistent-hint
                     return-object
                     outlined
@@ -212,7 +212,7 @@
                     v-on:input="onInputWithoutAllergies"
                     @click="alertDrugsWithoutAllergies = false"
                   ></v-select>
-                  <h4 class="mt-2 ml-n primary--text">
+                  <h4 class=" ml-n primary--text">
                     Determine the duration of therapy
                   </h4>
                   <v-text-field
@@ -277,14 +277,14 @@
                   </v-btn>
 
                   <v-alert
-                    :value="alertDrugsWithoutAllergies"
-                    color="pink"
+                    :value="succDrugsWithoutAllergies"
+                    color="green"
                     dark
                     border="top"
                     icon="mdi-account"
                     transition="scale-transition"
                   >
-                    You must choose pharmacy!
+                   Drug is Successfully prescribed!!
                   </v-alert>
                 </v-card>
                 <v-btn color="primary" @click="e6 = 3"> Continue </v-btn>
@@ -381,13 +381,14 @@ export default {
     consultationId: null,
     selecteddrugWithoutAllergies: null,
     drugsWithoutAllergies: null,
-    alertDrugsWithoutAllergies: false,
+    succDrugsWithoutAllergies: false,
     valueDrugsWithoutAllergies: null,
     drugSpecification: "",
     isPerscribeButtonDisabled: true,
     succesIsDrugAvailable: false,
     alertIsDrugAvailable: false,
     durationOfPerscirbe: null,
+    alternateDrugTxt : "drug",
 
     type: "month",
     types: ["month", "week", "day", "4day"],
@@ -465,7 +466,7 @@ export default {
           }
         )
         .then(() => {
-        
+        this.succDrugsWithoutAllergies = true;
         });
     },
     checkDrugAvailability() {
@@ -490,10 +491,12 @@ export default {
           if (isDrugAvailable) {
             this.alertIsDrugAvailable = false;
             this.succesIsDrugAvailable = true;
+    
           } else {
               this.drugsWithoutAllergies = response.data.alternateDrugsDTO;
             this.alertIsDrugAvailable = true;
              this.succesIsDrugAvailable = false;
+                     this.alternateDrugTxt = " ALTERNATE DRUG "
           }
         });
     },
