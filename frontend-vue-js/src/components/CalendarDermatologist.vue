@@ -227,7 +227,30 @@
                   <v-btn class="ml-16" depressed color="primary" @click="checkDrugAvailability">
                    CHECK
                   </v-btn>
-                 
+                  <v-alert
+                    :value="alertIsDrugAvailable"
+                    color="pink"
+                    dark
+                    border="top"
+                    icon="mdi-account"
+                    transition="scale-transition"
+                  >         
+                    Drug is not available you can perscribe one of alternate drugs and perscribe it!
+                  </v-alert>
+                           <v-alert
+                    :value="succesIsDrugAvailable"
+                    color="green"
+                    dark
+                    border="top"
+                    icon="mdi-account"
+                    transition="scale-transition"
+                  >
+                   Drug is available, you can perscribe it!
+                  </v-alert>
+   <h4 class="ml-n mt-6 primary--text">Perscirbe drug</h4>
+                      <v-btn :disabled="!isPerscribeButtonDisabled" class="ml-16" depressed color="primary" @click="prescribeDrug">
+                   PERSCRIBE
+                  </v-btn>
 
                   <v-alert
                     :value="alertDrugsWithoutAllergies"
@@ -337,6 +360,9 @@ export default {
     alertDrugsWithoutAllergies: false,
     valueDrugsWithoutAllergies: null,
     drugSpecification: "",
+    isPerscribeButtonDisabled: true,
+    succesIsDrugAvailable: false,
+    alertIsDrugAvailable: false,
 
     type: "month",
     types: ["month", "week", "day", "4day"],
@@ -395,20 +421,31 @@ export default {
     },
   },
   methods: {
-    checkDrugAvailability(){
-       this.axios
+    checkDrugAvailability() {
+      this.axios
         .post(
-          process.env.VUE_APP_BACKEND_URL + "api/drugrecommendation/checkbeforerecommend",
-          { paatientID: this.patientId,
-          consultationID: this.consultationId  , drugCode : this.selecteddrugWithoutAllergies.code },
+          process.env.VUE_APP_BACKEND_URL +
+            "api/drugrecommendation/checkbeforerecommend",
+          {
+            paatientID: this.patientId,
+            consultationID: this.consultationId,
+            drugCode: this.selecteddrugWithoutAllergies.code,
+          },
           {
             headers: {
               Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
             },
           }
         )
-        .then(() => {
+        .then((response) => {
+           var isDrugAvailable = response.data.available;
 
+           if(isDrugAvailable){
+              this.alertIsDrugAvailable = false;
+              this.succesIsDrugAvailable = true;
+           }else{
+              this.alertIsDrugAvailable = true;
+           }
         });
     },
     showDescription() {
@@ -449,7 +486,7 @@ export default {
       this.axios
         .post(
           process.env.VUE_APP_BACKEND_URL + "api/patient/addpenaltie",
-          { phatientID: this.patientId},
+          { phatientID: this.patientId },
           {
             headers: {
               Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
