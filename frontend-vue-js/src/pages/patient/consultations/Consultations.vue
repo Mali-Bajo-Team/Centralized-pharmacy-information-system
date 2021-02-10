@@ -14,8 +14,8 @@
               <h4 class="ml-3">
                 {{ consultation.pharmacyName }} ,
                 {{ consultation.consultantName }}
-                {{ consultation.consultantSurname }} , 
-                {{ convertMsToString(consultation.startDate)}}
+                {{ consultation.consultantSurname }} ,
+                {{ convertMsToString(consultation.startDate) }}
               </h4>
             </v-card-subtitle>
             <v-spacer></v-spacer>
@@ -37,6 +37,9 @@
                       dark
                       small
                       color="red lighten-2"
+                      v-if="
+                        isAvailableCancelConsultation(consultation.startDate)
+                      "
                       @click="setConsultationForCancel(consultation)"
                     >
                       <v-icon dark> mdi-delete </v-icon>
@@ -97,8 +100,9 @@
 <script>
 import { getParsedToken } from "./../../../util/token";
 import {
-  getStringDateFromMilliseconds,
+  getStringDateWithTimeFromMilliseconds,
   getTodayDateString,
+  isAvailableToCancelConsultation,
 } from "./../../../util/dateHandler";
 
 export default {
@@ -106,11 +110,19 @@ export default {
     patientConsultations: [],
   }),
   methods: {
-    convertMsToString(ms) {
-      return getStringDateFromMilliseconds(ms);
+    isAvailableCancelConsultation(consultationDate) {
+      if (isAvailableToCancelConsultation(consultationDate)) {
+        return true;
+      }
+      console.log("not valid date !!");
+
+      return false;
     },
-    getTodayDateInString(){
-        return getTodayDateString();
+    convertMsToString(ms) {
+      return getStringDateWithTimeFromMilliseconds(ms);
+    },
+    getTodayDateInString() {
+      return getTodayDateString();
     },
     setConsultationForCancel(consultation) {
       console.log("set consultation for deleting simulation: " + consultation);
