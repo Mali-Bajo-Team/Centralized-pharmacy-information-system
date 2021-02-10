@@ -20,6 +20,7 @@ public class DrugOrder {
 	private Date timestamp;
 
 	@Column(nullable = false)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date deadline;
 
 	@Column(nullable = false)

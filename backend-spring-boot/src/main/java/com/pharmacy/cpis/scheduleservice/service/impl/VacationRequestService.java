@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pharmacy.cpis.scheduleservice.dto.AddVacationRequestDTO;
 import com.pharmacy.cpis.scheduleservice.model.consultations.Consultation;
@@ -59,6 +60,7 @@ public class VacationRequestService implements IVacationRequestService {
 	}
 
 	@Override
+	@Transactional
 	public VacationRequest reject(UserAccount user, Long id, String response) {
 		VacationRequest request = vacationRequestRepository.findById(id).orElse(null);
 		if (request == null)
@@ -77,6 +79,7 @@ public class VacationRequestService implements IVacationRequestService {
 	}
 
 	@Override
+	@Transactional
 	public VacationRequest accept(UserAccount user, Long id, String response) {
 		VacationRequest request = vacationRequestRepository.findById(id).orElse(null);
 		if (request == null)
