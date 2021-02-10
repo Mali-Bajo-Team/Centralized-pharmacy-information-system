@@ -7,6 +7,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.pharmacy.cpis.scheduleservice.repository.IConsultationRepository;
+import com.pharmacy.cpis.userservice.dto.ConsultantPredefinedExamDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,6 +53,8 @@ public class ConsultationController {
 	private IUserService userService;
 	@Autowired
 	private EmailService emailService;
+	@Autowired
+	private IConsultationRepository consultationRepository;
 
 	@GetMapping
 	@PreAuthorize("hasRole('PHARMACIST')")
@@ -88,7 +92,9 @@ public class ConsultationController {
 	@PostMapping("/consultantpredefinedexaminations")
 	@PreAuthorize("hasRole('PHARMACIST')|| hasRole('DERMATOLOGIST')")
 	public ResponseEntity<List<ConsultationDTO>> getAllPredefinedConsultationsForConsultant(
-			@RequestBody ConsultantDTO consultantDTO) {
+			@RequestBody ConsultantPredefinedExamDTO consultantPredefinedExamDTO) {
+
+		Consultation consultationWhereIsExamination = consultationRepository.getOne(consultantPredefinedExamDTO.getConsultationID());
 
 		List<Consultation> consultations = consultationService.findAll();
 		List<ConsultationDTO> ConsultationDTOs = new ArrayList<>();
@@ -96,7 +102,8 @@ public class ConsultationController {
 				.getPrincipal();
 
 		for (Consultation c : consultations) {
-			if (loggedPharmacist.getId().equals(c.getConsultant().getId()) && c.getStatus().equals(ConsultationStatus.PREDEFINED)) {
+			if (loggedPharmacist.getId().equals(c.getConsultant().getId()) && c.getStatus().equals(ConsultationStatus.PREDEFINED) &&
+					consultationWhereIsExamination.getPharmacy().getId().equals(c.getPharmacy().getId())) {
 				ConsultationDTOs.add(new ConsultationDTO(c));
 			}
 		}

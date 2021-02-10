@@ -307,7 +307,7 @@
               </v-stepper-step>
 
               <v-stepper-content step="3">
-                <v-card color="grey lighten-3" class="mb-12" height="200px">
+                <v-card color="grey lighten-3" class="mb-12" height="600px">
                   <h4 class="ml-n primary--text">
                     Choose predefined examination termin, or define new one
                   </h4>
@@ -553,7 +553,9 @@ export default {
         .post(
           process.env.VUE_APP_BACKEND_URL +
             "api/consultations/consultantpredefinedexaminations",
-          { email: email },
+          { email: email,
+            consultationID : this.consultationId,
+          },
           {
             headers: {
               Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
@@ -562,7 +564,6 @@ export default {
         )
         .then((resp) => {
           this.predefinedDate = resp.data;
-
           //Convert dates
            for (let i = 0; i < this.predefinedDate.length; i++) {
              this.predefinedDate[i].startDate = getStringDateWithTimeFromMilliseconds( this.predefinedDate[i].startDate);
