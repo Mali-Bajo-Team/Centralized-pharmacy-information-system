@@ -139,6 +139,7 @@
             text
             @click="
               getDrugsWithoutAllergies();
+              getPredefinedDates();
               questionDialog = false;
               reportDialog = true;
             "
@@ -195,7 +196,8 @@
                 <v-card color="grey lighten-3" class="mb-12" height="600px">
                   <!-- CHOOSE DRUG FOR PERSCRIBE -->
                   <h4 class="ml-n primary--text">
-                    Choose {{alternateDrugTxt}} (listed drugs was filtered from allergens)
+                    Choose {{ alternateDrugTxt }} (listed drugs was filtered
+                    from allergens)
                   </h4>
                   <v-select
                     class="ml-16 mr-16"
@@ -212,7 +214,7 @@
                     v-on:input="onInputWithoutAllergies"
                     @click="alertDrugsWithoutAllergies = false"
                   ></v-select>
-                  <h4 class=" ml-n primary--text">
+                  <h4 class="ml-n primary--text">
                     Determine the duration of therapy
                   </h4>
                   <v-text-field
@@ -284,7 +286,7 @@
                     icon="mdi-account"
                     transition="scale-transition"
                   >
-                   Drug is Successfully prescribed!!
+                    Drug is Successfully prescribed!!
                   </v-alert>
                 </v-card>
                 <v-btn color="primary" @click="e6 = 3"> Continue </v-btn>
@@ -299,17 +301,31 @@
                   Cancel
                 </v-btn>
               </v-stepper-content>
-
+              <!-- SCHEDULE AN ADITIONAL EXAMINATIOn -->
               <v-stepper-step :complete="e6 > 3" step="3">
                 Schedule an additional examination
               </v-stepper-step>
 
               <v-stepper-content step="3">
-                <v-card
-                  color="grey lighten-1"
-                  class="mb-12"
-                  height="200px"
-                ></v-card>
+                <v-card color="grey lighten-3" class="mb-12" height="200px">
+                  <h4 class="ml-n primary--text">
+                    Choose predefined examination termin, or define new one
+                  </h4>
+                  <v-select
+                    class="ml-16 mr-16"
+                    v-model="selectpredefinedDate"
+                    :items="predefinedDate"
+                    item-text="startDate"
+                    item-value="startDate"
+                    label="Select date"
+                    persistent-hint
+                    return-object
+                    outlined
+                    single-line
+                    v-bind:value="valuePredefinedDate"
+                    v-on:input="onInputPredefinedDate"
+                  ></v-select>
+                </v-card>
                 <v-btn color="primary" @click="e6 = 4"> Continue </v-btn>
                 <v-btn
                   text
@@ -388,7 +404,10 @@ export default {
     succesIsDrugAvailable: false,
     alertIsDrugAvailable: false,
     durationOfPerscirbe: null,
-    alternateDrugTxt : "drug",
+    alternateDrugTxt: "drug",
+    selectpredefinedDate: null,
+    predefinedDate: null,
+    valuePredefinedDate: null,
 
     type: "month",
     types: ["month", "week", "day", "4day"],
@@ -450,14 +469,13 @@ export default {
     prescribeDrug() {
       this.axios
         .post(
-          process.env.VUE_APP_BACKEND_URL +
-            "api/drugrecommendation/recommend",
+          process.env.VUE_APP_BACKEND_URL + "api/drugrecommendation/recommend",
           {
             patientID: this.patientId,
             consultationID: this.consultationId,
             drugCode: this.selecteddrugWithoutAllergies.code,
             duration: parseInt(this.durationOfPerscirbe),
-            consultationReport: this.report
+            consultationReport: this.report,
           },
           {
             headers: {
@@ -466,7 +484,7 @@ export default {
           }
         )
         .then(() => {
-        this.succDrugsWithoutAllergies = true;
+          this.succDrugsWithoutAllergies = true;
         });
     },
     checkDrugAvailability() {
@@ -491,12 +509,11 @@ export default {
           if (isDrugAvailable) {
             this.alertIsDrugAvailable = false;
             this.succesIsDrugAvailable = true;
-    
           } else {
-              this.drugsWithoutAllergies = response.data.alternateDrugsDTO;
+            this.drugsWithoutAllergies = response.data.alternateDrugsDTO;
             this.alertIsDrugAvailable = true;
-             this.succesIsDrugAvailable = false;
-                     this.alternateDrugTxt = " ALTERNATE DRUG "
+            this.succesIsDrugAvailable = false;
+            this.alternateDrugTxt = " ALTERNATE DRUG ";
           }
         });
     },
@@ -528,11 +545,40 @@ export default {
           this.drugsWithoutAllergies = resp.data;
         });
     },
+    getPredefinedDates() {
+      var token = parseJwt(localStorage.getItem("JWT-CPIS"));
+      var email = token.sub;
+
+      this.axios
+        .post(
+          process.env.VUE_APP_BACKEND_URL +
+            "api/consultations/consultantpredefinedexaminations",
+          { email: email },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then((resp) => {
+          this.predefinedDate = resp.data;
+
+          //Convert dates
+           for (let i = 0; i < this.predefinedDate.length; i++) {
+             this.predefinedDate[i].startDate = getStringDateWithTimeFromMilliseconds( this.predefinedDate[i].startDate);
+           }
+        });
+    },
     onInputWithoutAllergies(valueDrugsWithoutAllergies) {
       this.$emit("input", valueDrugsWithoutAllergies);
       this.valueDrugsWithoutAllergies = valueDrugsWithoutAllergies;
       this.alertDrugsWithoutAllergies = false;
       console.log(valueDrugsWithoutAllergies);
+    },
+    onInputPredefinedDate(valuePredefinedDate) {
+      this.$emit("input", valuePredefinedDate);
+      this.valuePredefinedDate = valuePredefinedDate;
+      console.log(valuePredefinedDate);
     },
     addPenaltie() {
       this.axios
