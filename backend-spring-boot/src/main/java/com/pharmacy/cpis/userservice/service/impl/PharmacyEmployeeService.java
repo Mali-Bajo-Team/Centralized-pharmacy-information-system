@@ -18,6 +18,7 @@ import com.pharmacy.cpis.userservice.dto.EmployDermatologistDTO;
 import com.pharmacy.cpis.userservice.dto.EmployPharmacistDTO;
 import com.pharmacy.cpis.userservice.model.users.Consultant;
 import com.pharmacy.cpis.userservice.model.users.ConsultantType;
+import com.pharmacy.cpis.userservice.repository.IConsultantRepository;
 import com.pharmacy.cpis.userservice.repository.IUserRepository;
 import com.pharmacy.cpis.userservice.service.IConsultantService;
 import com.pharmacy.cpis.userservice.service.IPharmacyEmployeeService;
@@ -39,6 +40,9 @@ public class PharmacyEmployeeService implements IPharmacyEmployeeService {
 
 	@Autowired
 	private IConsultationRepository consultationRepository;
+
+	@Autowired
+	private IConsultantRepository consultantRepository;
 
 	@Autowired
 	private IConsultantService consultantService;
@@ -68,8 +72,9 @@ public class PharmacyEmployeeService implements IPharmacyEmployeeService {
 		if (pharmacy == null)
 			throw new PSNotFoundException("The requested pharmacy does not exist.");
 
-		Consultant consultant = consultantService.getByIdAndType(details.getDermatologistId(),
-				ConsultantType.DERMATOLOGIST);
+		Consultant consultant = consultantRepository.findLockedById(details.getDermatologistId()).orElse(null);
+		if (consultant == null || !consultant.getType().equals(ConsultantType.DERMATOLOGIST))
+			throw new PSNotFoundException("The requested dermatologist does not exist.");
 
 		if (!doesntWorkInPharmacy(consultant, pharmacyId))
 			throw new PSConflictException("The consultant already works for the pharmacy.");
