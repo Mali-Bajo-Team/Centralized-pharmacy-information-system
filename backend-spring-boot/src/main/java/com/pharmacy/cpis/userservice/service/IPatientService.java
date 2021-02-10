@@ -11,5 +11,8 @@ public interface IPatientService {
 
     Patient findByEmail(String email);
 
+    Patient addPenaltie(String email, Long consultationID);
+
     Set<Pharmacy> findPatientSubscriptions(String patientEmail);
+
 }

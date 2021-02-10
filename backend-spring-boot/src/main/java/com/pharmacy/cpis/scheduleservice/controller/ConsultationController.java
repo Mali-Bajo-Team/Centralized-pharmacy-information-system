@@ -77,7 +77,7 @@ public class ConsultationController {
 				.getPrincipal();
 
 		for (Consultation c : consultations) {
-			if (loggedPharmacist.getId().equals(c.getConsultant().getId())) {
+			if (loggedPharmacist.getId().equals(c.getConsultant().getId()) && c.getStatus().equals(ConsultationStatus.SCHEDULED)) {
 				ConsultationDTOs.add(new ConsultationDTO(c));
 			}
 		}

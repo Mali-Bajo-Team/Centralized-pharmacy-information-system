@@ -16,7 +16,7 @@ public class Patient extends Person {
 	@Column
 	private Integer penalties;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "allergies", inverseJoinColumns = @JoinColumn(name = "drug_code", referencedColumnName = "code"))
 	private Set<Drug> allergies;
 

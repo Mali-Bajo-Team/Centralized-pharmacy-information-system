@@ -21,7 +21,9 @@ public interface IAvailableDrugService {
 
 	AvailableDrug getByPharmacyAndDrug(Long pharmacyId, String drugCode);
 
-	Collection<DrugPriceDTO> getPrice(Long pharmacyId, String drugCode, Date start, Date end);
+    AvailableDrug checkIsAvailableinPharmacy(Long pharmacyId, String drugCode);
+
+    Collection<DrugPriceDTO> getPrice(Long pharmacyId, String drugCode, Date start, Date end);
 
 	void addPrice(Long pharmacyId, String drugCode, AddDrugPriceDTO priceInfo);
 
