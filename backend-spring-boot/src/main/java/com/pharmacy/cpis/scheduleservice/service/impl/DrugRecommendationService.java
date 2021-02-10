@@ -5,6 +5,7 @@ import com.pharmacy.cpis.drugservice.service.IAvailableDrugService;
 import com.pharmacy.cpis.scheduleservice.dto.DrugRecommendationDTO;
 import com.pharmacy.cpis.scheduleservice.model.consultations.Consultation;
 import com.pharmacy.cpis.scheduleservice.model.consultations.ConsultationReport;
+import com.pharmacy.cpis.scheduleservice.model.consultations.ConsultationStatus;
 import com.pharmacy.cpis.scheduleservice.model.prescriptions.DrugRecommendation;
 import com.pharmacy.cpis.scheduleservice.repository.IConsultationReportRepository;
 import com.pharmacy.cpis.scheduleservice.repository.IConsultationRepository;
@@ -49,7 +50,10 @@ public class DrugRecommendationService implements IDrugRecommendationService {
         drugRecommendation.setDuration(drugRecommendationDTO.getDuration());
 
         drugRecommendationRepository.save(drugRecommendation);
-        //SACUVAJ I CONSULATTION REPORT
+
+        consultation.setStatus(ConsultationStatus.FINISHED);
+        consultationRepository.save(consultation);
+
         return drugRecommendationDTO;
     }
 
