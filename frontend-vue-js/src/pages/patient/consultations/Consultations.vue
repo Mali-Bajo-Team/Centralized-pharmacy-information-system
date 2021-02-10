@@ -108,6 +108,10 @@ import {
 export default {
   data: () => ({
     patientConsultations: [],
+    consultationDTO: {
+      email: "",
+      consultationId: 0,
+    },
   }),
   methods: {
     isAvailableCancelConsultation(consultationDate) {
@@ -125,10 +129,36 @@ export default {
       return getTodayDateString();
     },
     setConsultationForCancel(consultation) {
-      console.log("set consultation for deleting simulation: " + consultation);
+      this.consultationDTO.email = consultation.consultantEmail;
+      this.consultationDTO.id = consultation.id;
     },
     confirmCancelConsultation() {
-      console.log("simulation of cancel consultation");
+       this.axios
+        .delete(
+          process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_PATIENT_CANCEL_CONSULTATION_ENDPOINT,
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+            data: {
+                email: this.consultationDTO.email,
+                consultationId: this.consultationDTO.id
+            },
+          }
+        )
+        .then(() => {
+          alert("Successfully cancelled consultation.");
+            for(let tempConsultation of this.patientConsultations){
+                if(tempConsultation.id == this.consultationDTO.id){
+                    this.patientConsultations.pop(tempConsultation);
+                    break;
+                }
+            }
+        })
+        .catch((error) => {
+          alert(error);
+        });
     },
   },
   mounted() {
