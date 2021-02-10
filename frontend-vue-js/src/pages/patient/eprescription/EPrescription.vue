@@ -17,6 +17,51 @@
           </v-form>
         </v-card>
         <!--End of the upload of the QR code card -->
+        <v-card class="mt-5">
+          <!--Toolbar of the card-->
+          <v-toolbar color="primary" dark dense flat>
+            <v-toolbar-title class="body-2"> Sort pharmacies categories </v-toolbar-title>
+          </v-toolbar>
+          <!--End of toolbar of the card-->
+          <v-form class="ma-4 ml-2">
+            <v-row class="ml-6 mb-6">
+              <v-switch
+                v-model="sortByPrice"
+                label="price"
+                color="indigo"
+                value="indigo"
+                hide-details
+              ></v-switch>
+              <v-switch
+              class="ml-11"
+                v-model="sortByRating"
+                label="rating"
+                color="indigo"
+                value="indigo"
+                hide-details
+              ></v-switch>
+            </v-row>
+            <v-divider></v-divider>
+             <v-row class="ml-6 mt-2 pb-6">
+              <v-switch
+                v-model="sortByLocation"
+                label="location"
+                color="indigo"
+                value="indigo"
+                hide-details
+              ></v-switch>
+              <v-switch
+               class="ml-6"
+                v-model="sortByName"
+                label="name"
+                color="indigo"
+                value="indigo"
+                hide-details
+              ></v-switch>
+            </v-row>
+
+          </v-form>
+        </v-card>
       </v-col>
       <!-- Left column for qr-code-upload, filter & search -->
 
@@ -34,6 +79,9 @@
               <h3>{{ pharmacy.pharmacyName }}</h3>
             </v-card-subtitle>
             <v-spacer></v-spacer>
+            <v-chip small class="ml-4" color="teal" text-color="white" pill>
+              {{ pharmacy.totalPrice }} €
+            </v-chip>
             <!-- Buy confirmation dialog -->
             <v-dialog
               v-model="pharmacy.showConfirmDialog"
@@ -68,7 +116,7 @@
                 <!-- End of toolbar of the card -->
                 <br />
                 <v-form class="ma-5">
-                  <p>cao</p>
+                  <p>Make some confirmation question ...</p>
                 </v-form>
                 <v-card-actions>
                   <v-spacer></v-spacer>
@@ -125,6 +173,10 @@ export default {
   components: { QrcodeCapture },
   data() {
     return {
+      sortByRating: false,
+      sortByPrice: false,
+      sortByLocation: false,
+      sortByName: false,
       readedQr: {},
       pharmaciesWithRequiredDrugsAmount: [],
     };
