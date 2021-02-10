@@ -68,7 +68,7 @@ public class ReservationController {
 
         return new ResponseEntity<>(reservationDTO, HttpStatus.OK);
     }
-    @DeleteMapping(value = "/drugreservation", consumes = "application/json")
+    @DeleteMapping(value = "/drug", consumes = "application/json")
     //@PreAuthorize("hasRole('PATIENT')")
     public ResponseEntity<Void> cancelDrugReservation(@RequestBody DrugReservationDTO drugReservationDTO){
 

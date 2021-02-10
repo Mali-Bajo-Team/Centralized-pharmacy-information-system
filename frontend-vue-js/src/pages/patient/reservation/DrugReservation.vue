@@ -6,10 +6,14 @@
       v-for="reservation in reservations"
       :key="reservation.reservationId"
     >
-      <v-card-title>Reservation {{reservation.reservationId}}</v-card-title>
+      <v-card-title>Reservation {{ reservation.reservationId }}</v-card-title>
       <v-row>
         <v-col xl="8" md="8" sm="12">
-          <v-card-text>{{reservation.drugName}}, {{reservation.pharmacyName}}, {{reservation.amount}}, {{convertMsToString(reservation.deadline)}}</v-card-text>
+          <v-card-text
+            >{{ reservation.drugName }}, {{ reservation.pharmacyName }},
+            {{ reservation.amount }},
+            {{ convertMsToString(reservation.deadline) }}</v-card-text
+          >
           <v-spacer></v-spacer>
         </v-col>
         <v-col>
@@ -24,6 +28,7 @@
               dark
               small
               color="red lighten-2"
+              @click="cancelDrugReservation(reservation)"
             >
               <v-icon dark>mdi-delete</v-icon></v-btn
             >
@@ -35,13 +40,11 @@
 </template>
 
 <script>
-
 import { getStringDateFromMilliseconds } from "./../../../util/dateHandler";
 import { getParsedToken } from "./../../../util/token";
 export default {
   data: () => ({
     reservations: [],
-
   }),
   mounted() {
     this.axios
@@ -58,17 +61,41 @@ export default {
         }
       )
       .then((resp) => {
-        this.reservations=resp.data;
-        
+        this.reservations = resp.data;
       })
       .catch((error) => {
         alert("Error: " + error);
       });
   },
-  methods:{
-     convertMsToString(ms) {
+  methods: {
+    convertMsToString(ms) {
       return getStringDateFromMilliseconds(ms);
     },
-  }
+    cancelDrugReservation(reservation) {
+      alert("Pozvana funkcija" + reservation.reservationId);
+      this.axios
+        .delete(
+          process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_PATIENT_CANCELLED_RESERVATIONS_ENDPOINT,
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+            data: {
+              reservationId: reservation.reservationId,
+              pharmacyID: reservation.pharmacyID,
+              drugCode: reservation.drugCode,
+              amount: reservation.amount,
+            },
+          }
+        )
+        .then(() => {
+          alert("Successfully cancelled reservation.");
+        })
+        .catch((error) => {
+          alert(error);
+        });
+    },
+  },
 };
 </script>
