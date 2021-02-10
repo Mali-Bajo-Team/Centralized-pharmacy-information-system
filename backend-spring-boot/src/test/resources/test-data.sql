@@ -133,10 +133,7 @@ insert into available_drug(available_amount, default_price, drug_code, pharmacy_
 values(100, 15, 'aspirin', 1, 0);
 insert into available_drug(available_amount, default_price, drug_code, pharmacy_id, version)
 values(2, 5, 'aspirin', 2, 0);
-insert into available_drug(available_amount, default_price, drug_code, pharmacy_id, version)
-values(100, 15, 'kreatin', 1, 0);
-insert into available_drug(available_amount, default_price, drug_code, pharmacy_id, version)
-values(2, 5, 'kreatin', 2, 0);
+
 
 -- INSERT ONE DERMATOLOGIST
 insert into person (discriminator, address, city, country, name, surname, phone_number, type) values ('Consultant', 'Svetislava Pesica 20', 'Novi Sad', 'Srbija', 'Miroslav', 'Jovanovic', '0635212365', 1);
@@ -148,16 +145,13 @@ insert into consultation (price,status,start_date,end_date,consultant_id,patient
 insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (25,1,'2021-02-04 11:23','2021-02-04 13:20',9,2,1);
 insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (30,1,'2021-02-05 13:23','2021-02-05 14:00',9,4,2);
 insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (30,1,'2021-03-05 13:23','2021-03-05 14:00',9,2,2);
-insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (30,0,'2021-03-09 13:23','2021-03-05 14:00',9,2,1);
-insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (30,0,'2021-03-10 13:23','2021-03-05 14:00',9,2,2);
-insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (30,0,'2021-03-11 13:23','2021-03-05 14:00',9,2,1);
-insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (30,0,'2021-03-12 13:23','2021-03-05 14:00',9,2,2);
--- insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 1);
--- insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 2);
--- insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 3);
--- insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 4);
--- insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 5);
--- insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 6);
+
+insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 1);
+insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 2);
+insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 3);
+insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 4);
+insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 5);
+insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 6);
 
 -- INSERT DERMATOLOGIST WORKING TIME
 insert into working_times(consultant_id,pharmacy_id, monday_start, monday_end, tuesday_start, tuesday_end, wednesday_start,wednesday_end,thursday_start,thursday_end,friday_start,friday_end) values (9,1, '2021-02-03 10:00', '2021-02-03 18:00','2021-02-03 10:00', '2021-02-03 18:00', '2021-02-03 10:00', '2021-02-03 18:00','2021-02-03 10:00', '2021-02-03 18:00', '2021-02-03 10:00', '2021-02-03 17:00');
@@ -234,8 +228,3 @@ insert into working_times(consultant_id,pharmacy_id, monday_start, monday_end, s
 insert into drug_request (consultant_id, pharmacy_id, drug_code, timestamp) values (9, 1, 'aspirin', '2020-10-14');
 insert into drug_request (consultant_id, pharmacy_id, drug_code, timestamp) values (9, 1, 'brufen', '2020-12-14');
 
-insert into allergies (patient_id, drug_code) values (2,'brufen');
-insert into allergies (patient_id, drug_code) values (2,'aspirin');
-
-insert into alternate_drugs(drug_code, alternate_drug_code) values('amfetamin','brufen');
-insert into alternate_drugs(drug_code, alternate_drug_code) values('amfetamin','kreatin');

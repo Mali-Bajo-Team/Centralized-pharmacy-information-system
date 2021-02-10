@@ -21,7 +21,7 @@
                 <sonar.organization>pufke</sonar.organization>
                 <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
-
+	
 	<dependencies>
 
 		<!-- Wrapper around entity manager -->
@@ -75,25 +75,25 @@
 			<optional>true</optional>
 		</dependency>
 
-<!--		Driver for H2 base, so we don't have to use the right one, comment out when we want H2 base -->
-<!--		<dependency>-->
-<!--			<groupId>com.h2database</groupId>-->
-<!--			<artifactId>h2</artifactId>-->
-<!--			<scope>runtime</scope>-->
-<!--		</dependency>-->
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
 		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter</artifactId>
-			<version>RELEASE</version>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -104,6 +104,21 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			
+			<plugin>
+			    <groupId>org.jacoco</groupId>
+			    <artifactId>jacoco-maven-plugin</artifactId>
+			    <version>0.8.5</version>
+			    <executions>
+			     <execution>
+			      <id>report</id>
+			      <goals>
+			       <goal>report</goal>
+			      </goals>
+			      <phase>verify</phase>
+			     </execution>
+			    </executions>
+		   </plugin>
 		</plugins>
 	</build>
 

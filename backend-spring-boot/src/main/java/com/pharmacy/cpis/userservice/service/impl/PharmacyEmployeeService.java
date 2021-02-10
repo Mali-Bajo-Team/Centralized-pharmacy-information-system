@@ -159,7 +159,7 @@ public class PharmacyEmployeeService implements IPharmacyEmployeeService {
 		if (employment == null)
 			throw new PSBadRequestException("The requested consultant doesn't work for the requested pharmacy.");
 
-		if (hasUnfinishedConsultations(employment.getConsultant()))
+		if (hasUnfinishedConsultations(employment.getConsultant(), pharmacyId))
 			throw new PSConflictException("The consultant still has unfinished consultations and cannot be fired.");
 
 		if (employment.getConsultant().getType().equals(ConsultantType.PHARMACIST))
@@ -168,10 +168,14 @@ public class PharmacyEmployeeService implements IPharmacyEmployeeService {
 		workingTimesRepository.delete(employment);
 	}
 
-	private boolean hasUnfinishedConsultations(Consultant consultant) {
-		if (!consultationRepository.findAllByConsultantAndStatus(consultant, ConsultationStatus.SCHEDULED).isEmpty())
+	private boolean hasUnfinishedConsultations(Consultant consultant, Long pharmacyId) {
+		if (!consultationRepository
+				.findAllByPharmacyIdAndConsultantAndStatus(pharmacyId, consultant, ConsultationStatus.SCHEDULED)
+				.isEmpty())
 			return true;
-		if (!consultationRepository.findAllByConsultantAndStatus(consultant, ConsultationStatus.PREDEFINED).isEmpty())
+		if (!consultationRepository
+				.findAllByPharmacyIdAndConsultantAndStatus(pharmacyId, consultant, ConsultationStatus.PREDEFINED)
+				.isEmpty())
 			return true;
 
 		return false;

@@ -17,6 +17,7 @@ public class LoyaltyProgram {
 	private Boolean isActive;
 
 	@Column(name = "active_until")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date activeUntil;
 
 	@Column(nullable = false)

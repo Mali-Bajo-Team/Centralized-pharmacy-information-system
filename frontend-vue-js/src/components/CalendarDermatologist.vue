@@ -139,6 +139,7 @@
             text
             @click="
               getDrugsWithoutAllergies();
+              getPredefinedDates();
               questionDialog = false;
               reportDialog = true;
             "
@@ -195,7 +196,8 @@
                 <v-card color="grey lighten-3" class="mb-12" height="600px">
                   <!-- CHOOSE DRUG FOR PERSCRIBE -->
                   <h4 class="ml-n primary--text">
-                    Choose {{alternateDrugTxt}} (listed drugs was filtered from allergens)
+                    Choose {{ alternateDrugTxt }} (listed drugs was filtered
+                    from allergens)
                   </h4>
                   <v-select
                     class="ml-16 mr-16"
@@ -212,7 +214,7 @@
                     v-on:input="onInputWithoutAllergies"
                     @click="alertDrugsWithoutAllergies = false"
                   ></v-select>
-                  <h4 class=" ml-n primary--text">
+                  <h4 class="ml-n primary--text">
                     Determine the duration of therapy
                   </h4>
                   <v-text-field
@@ -284,7 +286,7 @@
                     icon="mdi-account"
                     transition="scale-transition"
                   >
-                   Drug is Successfully prescribed!!
+                    Drug is Successfully prescribed!!
                   </v-alert>
                 </v-card>
                 <v-btn color="primary" @click="e6 = 3"> Continue </v-btn>
@@ -299,17 +301,166 @@
                   Cancel
                 </v-btn>
               </v-stepper-content>
-
+              <!-- SCHEDULE AN ADITIONAL EXAMINATIOn -->
               <v-stepper-step :complete="e6 > 3" step="3">
                 Schedule an additional examination
               </v-stepper-step>
 
               <v-stepper-content step="3">
-                <v-card
-                  color="grey lighten-1"
-                  class="mb-12"
-                  height="200px"
-                ></v-card>
+                <v-card color="grey lighten-3" class="mb-12" height="2100px">
+                  <h4 class="ml-n primary--text">
+                    Choose predefined examination date and time
+                  </h4>
+                  <v-select
+                    class="ml-16 mr-16"
+                    v-model="selectpredefinedDate"
+                    :items="predefinedDate"
+                    item-text="startDate"
+                    item-value="startDate"
+                    label="Select one predefined date"
+                    persistent-hint
+                    return-object
+                    outlined
+                    single-line
+                    v-bind:value="valuePredefinedDate"
+                    v-on:input="onInputPredefinedDate"
+                  ></v-select>
+                  <v-btn
+                    depressed
+                    class="ml-16"
+                    @click="scheduleConsultation"
+                    color="primary"
+                  >
+                    Schedule
+                  </v-btn>
+                  <v-alert
+                    :value="scheduleSucces"
+                    color="green"
+                    dark
+                    border="top"
+                    icon="mdi-account"
+                    transition="scale-transition"
+                  >
+                    Successfully scheduled
+                  </v-alert>
+                    <v-alert
+                      :value="scheduleAlert"
+                      color="pink"
+                      dark
+                      border="top"
+                      icon="mdi-account"
+                      transition="scale-transition"
+                    >
+                      The schedule must match the working hours of the
+                      pharmacist. The appointment should not be prepared with
+                      another examination or consultation that the patient has
+                      scheduled (in any pharmacy). And also it is not possible
+                      to schedule consultations in the past.
+                    </v-alert>
+                  <h4 class="ml-n mt-10 primary--text">
+                    Define new examination date and time
+                  </h4>
+                  <!-- DEFINE DATE CALENDAR -->
+                  <div class="mr-16 ml-16">
+                    <h4 class="ml-n primary--text">
+                      Define date for new examination
+                    </h4>
+                    <v-date-picker
+                      class="ml-"
+                      v-model="picker"
+                      v-bind:value="valueDate"
+                      v-on:input="onInputDate"
+                      color="primary lighten-1"
+                    ></v-date-picker>
+                    <v-alert
+                      :value="alertDate"
+                      color="pink"
+                      dark
+                      border="top"
+                      icon="mdi-account"
+                      transition="scale-transition"
+                    >
+                      You must pick date!
+                    </v-alert>
+                  </div>
+                  <!-- DEFINE START TIME -->
+                  <div class="mr-10 mb-8 ml-16 mt-6">
+                    <h4 class="ml-n primary--text">
+                      Define starting time for examination
+                    </h4>
+                    <v-time-picker
+                      v-bind:value="valueStartTime"
+                      v-on:input="onInputStartTime"
+                      format="ampm"
+                      color="primary lighten-1"
+                    ></v-time-picker>
+                    <v-alert
+                      :value="alertStartTime"
+                      color="pink"
+                      dark
+                      border="top"
+                      icon="mdi-account"
+                      transition="scale-transition"
+                    >
+                      You must pick start date!
+                    </v-alert>
+                  </div>
+                  <!-- DEFINE END TIME -->
+                  <div class="ml-16">
+                    <h4 class="ml-n mt-6 primary--text">
+                      Choose ending time for examination
+                    </h4>
+                    <v-time-picker
+                      v-bind:value="valueEndTime"
+                      v-on:input="onInputEndTime"
+                      format="ampm"
+                      color="primary lighten-1"
+                    ></v-time-picker>
+
+                    <v-alert
+                      :value="alertEndTime"
+                      color="pink"
+                      dark
+                      border="top"
+                      icon="mdi-account"
+                      transition="scale-transition"
+                    >
+                      You must pick end time!
+                    </v-alert>
+                    <v-btn
+                      depressed
+                      class="mt-5"
+                      @click="scheduleConsultation"
+                      color="primary"
+                    >
+                      Schedule
+                    </v-btn>
+                    <v-alert
+                      :value="scheduleSucces"
+                      color="green"
+                      dark
+                      border="top"
+                      icon="mdi-account"
+                      transition="scale-transition"
+                    >
+                      Successfully scheduled
+                    </v-alert>
+                    <v-alert
+                      :value="scheduleAlert"
+                      color="pink"
+                      dark
+                      border="top"
+                      icon="mdi-account"
+                      transition="scale-transition"
+                    >
+                      The schedule must match the working hours of the
+                      pharmacist. The appointment should not be prepared with
+                      another examination or consultation that the patient has
+                      scheduled (in any pharmacy). And also it is not possible
+                      to schedule consultations in the past.
+                    </v-alert>
+                  </div>
+                </v-card>
                 <v-btn color="primary" @click="e6 = 4"> Continue </v-btn>
                 <v-btn
                   text
@@ -325,11 +476,6 @@
 
               <v-stepper-step step="4"> Submit </v-stepper-step>
               <v-stepper-content step="4">
-                <v-card
-                  color="grey lighten-1"
-                  class="mb-12"
-                  height="200px"
-                ></v-card>
                 <v-btn
                   color="primary"
                   @click="
@@ -338,16 +484,6 @@
                   "
                 >
                   Submit
-                </v-btn>
-                <v-btn
-                  text
-                  @click="
-                    questionDialog = true;
-                    reportDialog = false;
-                    e6 = 1;
-                  "
-                >
-                  Cancel
                 </v-btn>
               </v-stepper-content>
             </v-stepper>
@@ -364,6 +500,7 @@ import { getStringDateWithTimeFromMilliseconds } from "./../util/dateHandler";
 
 export default {
   data: () => ({
+    picker: new Date().toISOString().substr(0, 10),
     selectedPharmacy: null,
     isLoading: false,
     items: [],
@@ -388,8 +525,22 @@ export default {
     succesIsDrugAvailable: false,
     alertIsDrugAvailable: false,
     durationOfPerscirbe: null,
-    alternateDrugTxt : "drug",
+    alternateDrugTxt: "drug",
+    selectpredefinedDate: null,
+    predefinedDate: null,
+    valuePredefinedDate: null,
 
+    pharmacyID: null,
+    valueStartTime: null,
+    valueEndTime: null,
+    valueDate: null,
+    alertDate: false,
+    alertStartTime: false,
+    alertEndTime: false,
+    examinationStartTime: null,
+    examinationEndTime: null,
+    scheduleSucces: false,
+    scheduleAlert: false,
     type: "month",
     types: ["month", "week", "day", "4day"],
     mode: "stack",
@@ -447,17 +598,110 @@ export default {
     },
   },
   methods: {
+    onInputStartTime(valueStartTime) {
+      this.$emit("input", valueStartTime);
+      this.examinationStartTime = valueStartTime;
+      this.alertStartTime = false;
+      console.log(this.examinationStartTime);
+    },
+    onInputEndTime(valueEndTime) {
+      this.$emit("input", valueEndTime);
+      this.examinationEndTime = valueEndTime;
+      this.alertEndTime = false;
+      console.log(this.examinationEndTime);
+    },
+    onInputPredefinedDate(valuePredefinedDate) {
+      this.$emit("input", valuePredefinedDate);
+      this.valuePredefinedDate = valuePredefinedDate;
+      console.log(
+        "AAAAAAA" +
+          getStringDateWithTimeFromMilliseconds(valuePredefinedDate.startDate)
+      );
+      this.valueDate = getStringDateWithTimeFromMilliseconds(
+        valuePredefinedDate.startDate
+      ).substring(0, 10);
+      this.examinationStartTime = getStringDateWithTimeFromMilliseconds(
+        valuePredefinedDate.startDate
+      ).substring(11, 16);
+      this.examinationEndTime = getStringDateWithTimeFromMilliseconds(
+        valuePredefinedDate.endDate
+      ).substring(11, 16);
+
+      console.log(valuePredefinedDate);
+    },
+    onInputDate(valueDate) {
+      this.$emit("input", valueDate);
+      this.valueDate = valueDate;
+      this.alertDate = false;
+      console.log(this.valueDate);
+    },
+    scheduleConsultation() {
+      var token = parseJwt(localStorage.getItem("JWT-CPIS"));
+      var email = token.sub;
+      if (
+        this.selectedPatient === null ||
+        this.valueDate === null ||
+        this.examinationStartTime === null ||
+        this.examinationEndTime === null ||
+        this.pharmacyID === null
+      ) {
+        if (this.selectedPatient === null) {
+          this.alertUser = true;
+        }
+        if (this.valueDate === null) {
+          this.alertDate = true;
+        }
+        if (this.examinationStartTime === null) {
+          this.alertStartTime = true;
+        }
+        if (this.examinationEndTime === null) {
+          this.alertEndTime = true;
+        }
+        if (this.pharmacyID === null) {
+          this.alertPharmacy = true;
+        }
+      } else {
+        this.axios
+          .post(
+            process.env.VUE_APP_BACKEND_URL +
+              process.env.VUE_APP_CONSULTATIONS_SCHEDULE,
+            {
+              consultantEmail: email,
+              startDate:
+                this.valueDate + " " + this.examinationStartTime + ":00",
+              endDate: this.valueDate + " " + this.examinationEndTime + ":00",
+              patientId: this.patientId,
+              pharmacyID: this.pharmacyID,
+            },
+            {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+              },
+            }
+          )
+          .then((resp) => {
+            this.pharmacist = resp.data;
+            this.scheduleAlert = false;
+            this.scheduleSucces = true;
+          })
+          .catch((error) => {
+            this.errorMessage = error.message;
+            console.error("There was an error!", error);
+            this.scheduleAlert = true;
+            this.scheduleSucces = false;
+          });
+      }
+    },
     prescribeDrug() {
       this.axios
         .post(
-          process.env.VUE_APP_BACKEND_URL +
-            "api/drugrecommendation/recommend",
+          process.env.VUE_APP_BACKEND_URL + "api/drugrecommendation/recommend",
           {
             patientID: this.patientId,
             consultationID: this.consultationId,
             drugCode: this.selecteddrugWithoutAllergies.code,
             duration: parseInt(this.durationOfPerscirbe),
-            consultationReport: this.report
+            consultationReport: this.report,
           },
           {
             headers: {
@@ -466,7 +710,7 @@ export default {
           }
         )
         .then(() => {
-        this.succDrugsWithoutAllergies = true;
+          this.succDrugsWithoutAllergies = true;
         });
     },
     checkDrugAvailability() {
@@ -491,12 +735,11 @@ export default {
           if (isDrugAvailable) {
             this.alertIsDrugAvailable = false;
             this.succesIsDrugAvailable = true;
-    
           } else {
-              this.drugsWithoutAllergies = response.data.alternateDrugsDTO;
+            this.drugsWithoutAllergies = response.data.alternateDrugsDTO;
             this.alertIsDrugAvailable = true;
-             this.succesIsDrugAvailable = false;
-                     this.alternateDrugTxt = " ALTERNATE DRUG "
+            this.succesIsDrugAvailable = false;
+            this.alternateDrugTxt = " ALTERNATE DRUG ";
           }
         });
     },
@@ -528,6 +771,33 @@ export default {
           this.drugsWithoutAllergies = resp.data;
         });
     },
+    getPredefinedDates() {
+      var token = parseJwt(localStorage.getItem("JWT-CPIS"));
+      var email = token.sub;
+
+      this.axios
+        .post(
+          process.env.VUE_APP_BACKEND_URL +
+            "api/consultations/consultantpredefinedexaminations",
+          { email: email, consultationID: this.consultationId },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then((resp) => {
+          this.predefinedDate = resp.data;
+          //Convert dates
+          for (let i = 0; i < this.predefinedDate.length; i++) {
+            this.predefinedDate[
+              i
+            ].startDate = getStringDateWithTimeFromMilliseconds(
+              this.predefinedDate[i].startDate
+            );
+          }
+        });
+    },
     onInputWithoutAllergies(valueDrugsWithoutAllergies) {
       this.$emit("input", valueDrugsWithoutAllergies);
       this.valueDrugsWithoutAllergies = valueDrugsWithoutAllergies;
@@ -556,8 +826,9 @@ export default {
       this.name = event.event.name;
       this.patientId = event.event.patientId;
       this.consultationId = event.event.id;
+      this.pharmacyID = event.event.pharmacyID;
       this.questionDialog = true;
-      console.log(event.event.id);
+      console.log(event.event);
     },
     getEvents() {
       var token = parseJwt(localStorage.getItem("JWT-CPIS"));
@@ -604,6 +875,7 @@ export default {
                 timed: 1,
                 patientId: this.consultants[i].patientId,
                 id: this.consultants[i].id,
+                pharmacyID: this.consultants[i].pharmacyID,
               });
             }
             this.events = events;
@@ -649,6 +921,7 @@ export default {
                   timed: 1,
                   patientId: this.consultants[i].patientId,
                   id: this.consultants[i].id,
+                  pharmacyID: this.consultants[i].pharmacyID,
                 });
               }
             }

@@ -11,6 +11,7 @@ public class EPrescription {
 	@Id
 	private String code;
 
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private Date creationDate;
 

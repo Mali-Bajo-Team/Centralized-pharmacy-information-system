@@ -4,12 +4,16 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Embeddable
 public class DateRange {
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false, name = "start_date")
 	private Date start;
 
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false, name = "end_date")
 	private Date end;
 
