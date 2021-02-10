@@ -190,6 +190,17 @@ public class AvailableDrugService implements IAvailableDrugService {
 		return availableDrug;
 	}
 
+    @Override
+    public AvailableDrug checkIsAvailableinPharmacy(Long pharmacyId, String drugCode) {
+        AvailableDrug availableDrug = availableDrugRepository.findByPharmacyIdAndDrugCode(pharmacyId, drugCode)
+                .orElse(null);
+
+        if (availableDrug == null)
+            return null;
+
+        return availableDrug;
+    }
+
 	@Override
 	public Collection<DrugPriceDTO> getPrice(Long pharmacyId, String drugCode, Date start, Date end) {
 		AvailableDrug availableDrug = availableDrugRepository.findByPharmacyIdAndDrugCode(pharmacyId, drugCode)

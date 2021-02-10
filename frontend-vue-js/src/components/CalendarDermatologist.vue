@@ -115,7 +115,7 @@
     </v-sheet>
 
     <!-- Start QUESTION DIALOG -->
-    <v-dialog v-model="questionDialog" persistent max-width="600px">
+    <v-dialog v-model="questionDialog" persistent max-width="1000px">
       <v-card>
         <v-card-title>
           <span class="headline">Examination report for {{ name }}</span>
@@ -127,13 +127,18 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" text @click="questionDialog = false">
+          <v-btn
+            color="primary"
+            text
+            @click="addPenaltie(), (questionDialog = false)"
+          >
             The patient did not show up
           </v-btn>
           <v-btn
             color="primary"
             text
             @click="
+              getDrugsWithoutAllergies();
               questionDialog = false;
               reportDialog = true;
             "
@@ -162,7 +167,7 @@
               </v-stepper-step>
 
               <v-stepper-content step="1">
-                <v-card color="grey lighten-1" class="mb-12" height="200px">
+                <v-card color="grey lighten-3" class="mb-12" height="200px">
                   <v-textarea v-model="report" color="teal">
                     <template v-slot:label>
                       <div>Report</div>
@@ -183,15 +188,105 @@
               </v-stepper-content>
 
               <v-stepper-step :complete="e6 > 2" step="2">
-                Prescribe medicine
+                Prescribe drug
               </v-stepper-step>
 
               <v-stepper-content step="2">
-                <v-card
-                  color="grey lighten-1"
-                  class="mb-12"
-                  height="200px"
-                ></v-card>
+                <v-card color="grey lighten-3" class="mb-12" height="600px">
+                  <!-- CHOOSE DRUG FOR PERSCRIBE -->
+                  <h4 class="ml-n primary--text">
+                    Choose {{alternateDrugTxt}} (listed drugs was filtered from allergens)
+                  </h4>
+                  <v-select
+                    class="ml-16 mr-16"
+                    v-model="selecteddrugWithoutAllergies"
+                    :items="drugsWithoutAllergies"
+                    item-text="name"
+                    item-value="typeOfDrug"
+                    label="Select drug/alternate drug"
+                    persistent-hint
+                    return-object
+                    outlined
+                    single-line
+                    v-bind:value="valueDrugsWithoutAllergies"
+                    v-on:input="onInputWithoutAllergies"
+                    @click="alertDrugsWithoutAllergies = false"
+                  ></v-select>
+                  <h4 class=" ml-n primary--text">
+                    Determine the duration of therapy
+                  </h4>
+                  <v-text-field
+                    solo
+                    class="mr-16 ml-16"
+                    label="Duration of therapy"
+                    v-model="durationOfPerscirbe"
+                  ></v-text-field>
+                  <!-- DRUG SPECIFICATION -->
+                  <h4 class="ml-n primary--text">Drug specification</h4>
+                  <v-btn
+                    class="ml-16"
+                    depressed
+                    color="primary"
+                    @click="showDescription"
+                  >
+                    Show
+                  </v-btn>
+                  <h3 class="mt-1 mb-6 ml-2 BLACK--text">
+                    {{ drugSpecification }}
+                  </h3>
+                  <h4 class="ml-n primary--text">
+                    Check the availability of the drug in the current pharmacy
+                  </h4>
+                  <v-btn
+                    class="ml-16"
+                    depressed
+                    color="primary"
+                    @click="checkDrugAvailability"
+                  >
+                    CHECK
+                  </v-btn>
+                  <v-alert
+                    :value="alertIsDrugAvailable"
+                    color="pink"
+                    dark
+                    border="top"
+                    icon="mdi-pill"
+                    transition="scale-transition"
+                  >
+                    Drug is not available in current pharmacy, you can perscribe
+                    one of alternate drugs and perscribe it!
+                  </v-alert>
+                  <v-alert
+                    :value="succesIsDrugAvailable"
+                    color="green"
+                    dark
+                    border="top"
+                    icon="mdi-account"
+                    transition="scale-transition"
+                  >
+                    Drug is available, you can perscribe it!
+                  </v-alert>
+                  <h4 class="ml-n mt-6 primary--text">Perscirbe drug</h4>
+                  <v-btn
+                    class="ml-16"
+                    depressed
+                    color="primary"
+                    @click="prescribeDrug"
+                  >
+                    PERSCRIBE
+                  </v-btn>
+
+                  <v-alert
+                    :value="succDrugsWithoutAllergies"
+                    color="green"
+                    dark
+                    border="top"
+                    icon="mdi-account"
+                    transition="scale-transition"
+                  >
+                   Drug is Successfully prescribed!!
+                  </v-alert>
+                </v-card>
                 <v-btn color="primary" @click="e6 = 3"> Continue </v-btn>
                 <v-btn
                   text
@@ -265,6 +360,8 @@
 </template>
 
 <script>
+import { getStringDateWithTimeFromMilliseconds } from "./../util/dateHandler";
+
 export default {
   data: () => ({
     selectedPharmacy: null,
@@ -281,6 +378,18 @@ export default {
     reportDialog: false,
     consultants: [],
     response: null,
+    consultationId: null,
+    selecteddrugWithoutAllergies: null,
+    drugsWithoutAllergies: null,
+    succDrugsWithoutAllergies: false,
+    valueDrugsWithoutAllergies: null,
+    drugSpecification: "",
+    isPerscribeButtonDisabled: true,
+    succesIsDrugAvailable: false,
+    alertIsDrugAvailable: false,
+    durationOfPerscirbe: null,
+    alternateDrugTxt : "drug",
+
     type: "month",
     types: ["month", "week", "day", "4day"],
     mode: "stack",
@@ -338,14 +447,117 @@ export default {
     },
   },
   methods: {
+    prescribeDrug() {
+      this.axios
+        .post(
+          process.env.VUE_APP_BACKEND_URL +
+            "api/drugrecommendation/recommend",
+          {
+            patientID: this.patientId,
+            consultationID: this.consultationId,
+            drugCode: this.selecteddrugWithoutAllergies.code,
+            duration: parseInt(this.durationOfPerscirbe),
+            consultationReport: this.report
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then(() => {
+        this.succDrugsWithoutAllergies = true;
+        });
+    },
+    checkDrugAvailability() {
+      this.axios
+        .post(
+          process.env.VUE_APP_BACKEND_URL +
+            "api/drugrecommendation/checkbeforerecommend",
+          {
+            patientID: this.patientId,
+            consultationID: this.consultationId,
+            drugCode: this.selecteddrugWithoutAllergies.code,
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then((response) => {
+          var isDrugAvailable = response.data.available;
+
+          if (isDrugAvailable) {
+            this.alertIsDrugAvailable = false;
+            this.succesIsDrugAvailable = true;
+    
+          } else {
+              this.drugsWithoutAllergies = response.data.alternateDrugsDTO;
+            this.alertIsDrugAvailable = true;
+             this.succesIsDrugAvailable = false;
+                     this.alternateDrugTxt = " ALTERNATE DRUG "
+          }
+        });
+    },
+    showDescription() {
+      this.drugSpecification =
+        "Manufacturer is " +
+        this.selecteddrugWithoutAllergies.drugSpecificationDTO.manufacturer +
+        ". Contraindications of drug are " +
+        this.selecteddrugWithoutAllergies.drugSpecificationDTO
+          .contraindications +
+        " . Recommended daily dose is " +
+        this.selecteddrugWithoutAllergies.drugSpecificationDTO
+          .recommendedDailyDose +
+        " . Ingredients are " +
+        this.selecteddrugWithoutAllergies.drugSpecificationDTO.ingredients;
+    },
+    getDrugsWithoutAllergies() {
+      this.axios
+        .post(
+          process.env.VUE_APP_BACKEND_URL + "api/drugs/alldrugswithoutalergies",
+          { paatientID: this.patientId },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then((resp) => {
+          this.drugsWithoutAllergies = resp.data;
+        });
+    },
+    onInputWithoutAllergies(valueDrugsWithoutAllergies) {
+      this.$emit("input", valueDrugsWithoutAllergies);
+      this.valueDrugsWithoutAllergies = valueDrugsWithoutAllergies;
+      this.alertDrugsWithoutAllergies = false;
+      console.log(valueDrugsWithoutAllergies);
+    },
+    addPenaltie() {
+      this.axios
+        .post(
+          process.env.VUE_APP_BACKEND_URL + "api/patient/addpenaltie",
+          { phatientID: this.patientId },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then(() => {
+          this.$router.go();
+        });
+    },
     handleSelectItem(item) {
       this.selectedPharmacy = item.id;
     },
     showExaminationDialog(event) {
       this.name = event.event.name;
       this.patientId = event.event.patientId;
+      this.consultationId = event.event.id;
       this.questionDialog = true;
-      console.log(event);
+      console.log(event.event.id);
     },
     getEvents() {
       var token = parseJwt(localStorage.getItem("JWT-CPIS"));
@@ -373,16 +585,25 @@ export default {
                 name:
                   " Patient: " +
                   this.consultants[i].patientName +
-                  " " +
+                  "    " +
                   this.consultants[i].patientSurname +
-                  ", Pharmacy: " +
+                  ". Pharmacy: " +
                   this.consultants[i].pharmacyName +
-                  " ",
+                  " " +
+                  " Start: " +
+                  getStringDateWithTimeFromMilliseconds(
+                    this.consultants[i].startDate
+                  ) +
+                  ". End: " +
+                  getStringDateWithTimeFromMilliseconds(
+                    this.consultants[i].endDate
+                  ),
                 start: this.consultants[i].startDate,
                 end: this.consultants[i].endDate,
                 color: "primary",
                 timed: 1,
                 patientId: this.consultants[i].patientId,
+                id: this.consultants[i].id,
               });
             }
             this.events = events;
@@ -409,16 +630,25 @@ export default {
                   name:
                     " Patient: " +
                     this.consultants[i].patientName +
-                    " " +
+                    "    " +
                     this.consultants[i].patientSurname +
-                    ", Pharmacy: " +
+                    ". Pharmacy: " +
                     this.consultants[i].pharmacyName +
-                    " ",
+                    " " +
+                    " Start: " +
+                    getStringDateWithTimeFromMilliseconds(
+                      this.consultants[i].startDate
+                    ) +
+                    ". End: " +
+                    getStringDateWithTimeFromMilliseconds(
+                      this.consultants[i].endDate
+                    ),
                   start: this.consultants[i].startDate,
                   end: this.consultants[i].endDate,
                   color: "primary",
                   timed: 1,
                   patientId: this.consultants[i].patientId,
+                  id: this.consultants[i].id,
                 });
               }
             }
