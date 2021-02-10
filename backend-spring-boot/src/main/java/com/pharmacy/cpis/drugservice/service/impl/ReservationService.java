@@ -8,7 +8,7 @@ import com.pharmacy.cpis.drugservice.repository.IReservationRepository;
 import com.pharmacy.cpis.drugservice.service.IAvailableDrugService;
 import com.pharmacy.cpis.drugservice.service.IReservationService;
 import com.pharmacy.cpis.pharmacyservice.service.IPharmacyService;
-import com.pharmacy.cpis.scheduleservice.model.consultations.Consultation;
+import com.pharmacy.cpis.userservice.dto.PatientEmailDTO;
 import com.pharmacy.cpis.userservice.model.users.Patient;
 import com.pharmacy.cpis.userservice.service.EmailService;
 import com.pharmacy.cpis.userservice.service.IPatientService;
@@ -155,6 +155,12 @@ public class ReservationService implements IReservationService {
                 allPatientPharmacies.add(reservation.getPharmacy());
         }
         return allPatientPharmacies;
+    }
+
+    @Override
+    public List<Reservation> findAllPatientReservations(PatientEmailDTO patientEmailDTO) {
+        Patient patient = patientService.findByEmail(patientEmailDTO.getEmail());
+        return reservationRepository.findAllByPatient(patient);
     }
 
     private void sendDrugPurchase(Reservation reservation) {

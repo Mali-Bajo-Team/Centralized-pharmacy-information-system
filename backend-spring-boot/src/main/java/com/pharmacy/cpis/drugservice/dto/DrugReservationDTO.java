@@ -1,11 +1,13 @@
 package com.pharmacy.cpis.drugservice.dto;
 
 import com.pharmacy.cpis.drugservice.model.drugsales.Reservation;
+import com.pharmacy.cpis.userservice.dto.PatientEmailDTO;
 
 import java.util.Date;
 
 public class DrugReservationDTO {
 
+    private Long reservationId;
     private Integer amount;
     private Date dateOfCreation;
     private Date deadline;
@@ -17,13 +19,14 @@ public class DrugReservationDTO {
 
     }
 
-    public DrugReservationDTO(Integer amount, Date dateOfCreation, Date deadline, String patientEmail, String drugCode, Long pharmacyID) {
+    public DrugReservationDTO(Integer amount, Date dateOfCreation, Date deadline, String patientEmail, String drugCode, Long pharmacyID, Long reservationId) {
         this.amount = amount;
         this.dateOfCreation = dateOfCreation;
         this.deadline = deadline;
         this.patientEmail = patientEmail;
         this.drugCode = drugCode;
         this.pharmacyID = pharmacyID;
+        this.reservationId=reservationId;
     }
     public DrugReservationDTO(Reservation reservation){
         this.setAmount(reservation.getAmount());
@@ -32,6 +35,7 @@ public class DrugReservationDTO {
         this.setPatientEmail(reservation.getPatient().getAccount().getEmail());
         this.setPharmacyID(reservation.getPharmacy().getId());
         this.setDateOfCreation(reservation.getDateOfCreation());
+        this.setReservationId(reservation.getId());
 
     }
 
@@ -81,5 +85,13 @@ public class DrugReservationDTO {
 
     public void setPharmacyID(Long pharmacyID) {
         this.pharmacyID = pharmacyID;
+    }
+
+    public Long getReservationId() {
+        return reservationId;
+    }
+
+    public void setReservationId(Long reservationId) {
+        this.reservationId = reservationId;
     }
 }
