@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.pharmacy.cpis.drugservice.dto.DrugWithoutAlergiesDTO;
-import com.pharmacy.cpis.drugservice.dto.DrugCodeAndAmountDTO;
-import com.pharmacy.cpis.drugservice.service.IAvailableDrugService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pharmacy.cpis.drugservice.dto.DrugDTO;
 import com.pharmacy.cpis.drugservice.dto.DrugRegisterDTO;
+import com.pharmacy.cpis.drugservice.dto.DrugWithoutAlergiesDTO;
 import com.pharmacy.cpis.drugservice.dto.PharmacyDrugPriceDTO;
 import com.pharmacy.cpis.drugservice.model.drug.Drug;
 import com.pharmacy.cpis.drugservice.model.drug.DrugClass;
 import com.pharmacy.cpis.drugservice.model.drug.DrugForm;
 import com.pharmacy.cpis.drugservice.model.drugsales.AvailableDrug;
 import com.pharmacy.cpis.drugservice.service.IDrugService;
-import com.pharmacy.cpis.pharmacyservice.service.IPharmacyService;
 
 @RestController
 @RequestMapping(value = "api/drugs")
@@ -33,9 +30,6 @@ public class DrugController {
 
     @Autowired
     private IDrugService drugService;
-
-    @Autowired
-    private IPharmacyService pharmacyService;
 
     @GetMapping()
     public ResponseEntity<List<DrugDTO>> getAllDrugs() {
