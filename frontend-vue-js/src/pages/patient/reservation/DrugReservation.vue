@@ -91,6 +91,12 @@ export default {
         )
         .then(() => {
           alert("Successfully cancelled reservation.");
+          for(let tempReservation of this.reservations){
+            if(tempReservation.reservationId==reservation.reservationId){
+              this.reservations.pop(tempReservation);
+              break;
+            }
+          }
         })
         .catch((error) => {
           alert(error);
