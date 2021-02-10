@@ -35,6 +35,10 @@ export default {
         to:"/patient/patientpharmacies"
       },
       {
+        title:"Reservations",
+        to:"/patient/drugreservation"
+       },
+       {
         title: "Subscriptions",
         to: "/patient/subscriptions"
       },
