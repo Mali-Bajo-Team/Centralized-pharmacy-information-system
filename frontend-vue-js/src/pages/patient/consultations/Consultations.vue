@@ -28,7 +28,23 @@ export default {
       .then((resp) => {
         console.log("success get of the patient dermatologist consultations");
         for (let consultation of resp.data) {
-          this.patientConsultations.push(consultation);
+          let tempObj = {
+            showCancelConsultationDialog: false,
+            consultantEmail: consultation.consultantEmail,
+            consultantId: consultation.consultantId,
+            consultantName: consultation.consultantName,
+            consultantSurname: consultation.consultantSurname,
+            endDate: consultation.endDate,
+            id: consultation.id,
+            patientId: consultation.patientId,
+            patientName: consultation.patientName,
+            patientSurname: consultation.patientSurname,
+            pharmacyID: consultation.pharmacyID,
+            pharmacyName: consultation.pharmacyName,
+            price: consultation.price,
+            startDate: consultation.startDate,
+          };
+          this.patientConsultations.push(tempObj);
         }
       })
       .catch((error) => {
@@ -51,7 +67,23 @@ export default {
       .then((resp) => {
         console.log("success get of the patient pharmacist consultations");
         for (let consultation of resp.data) {
-          this.patientConsultations.push(consultation);
+          let tempObj = {
+            showCancelConsultationDialog: false,
+            consultantEmail: consultation.consultantEmail,
+            consultantId: consultation.consultantId,
+            consultantName: consultation.consultantName,
+            consultantSurname: consultation.consultantSurname,
+            endDate: consultation.endDate,
+            id: consultation.id,
+            patientId: consultation.patientId,
+            patientName: consultation.patientName,
+            patientSurname: consultation.patientSurname,
+            pharmacyID: consultation.pharmacyID,
+            pharmacyName: consultation.pharmacyName,
+            price: consultation.price,
+            startDate: consultation.startDate,
+          };
+          this.patientConsultations.push(tempObj);
         }
       })
       .catch((error) => {
