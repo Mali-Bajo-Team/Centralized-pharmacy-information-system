@@ -4,6 +4,11 @@ import com.pharmacy.cpis.drugservice.dto.AlternateDrugDTO;
 import com.pharmacy.cpis.drugservice.dto.DrugDTO;
 import com.pharmacy.cpis.drugservice.dto.DrugSpecificationDTO;
 import com.pharmacy.cpis.drugservice.model.drug.Drug;
+import com.pharmacy.cpis.drugservice.model.drugsales.AvailableDrug;
+import com.pharmacy.cpis.drugservice.model.drugsales.DrugPurchase;
+import com.pharmacy.cpis.drugservice.model.drugsales.DrugPurchaseType;
+import com.pharmacy.cpis.drugservice.model.drugsales.Reservation;
+import com.pharmacy.cpis.drugservice.repository.IDrugPurchaseRepository;
 import com.pharmacy.cpis.drugservice.repository.IDrugRepository;
 import com.pharmacy.cpis.drugservice.service.IAvailableDrugService;
 import com.pharmacy.cpis.scheduleservice.dto.DrugRecommendationDTO;
@@ -15,16 +20,15 @@ import com.pharmacy.cpis.scheduleservice.repository.IConsultationReportRepositor
 import com.pharmacy.cpis.scheduleservice.repository.IConsultationRepository;
 import com.pharmacy.cpis.scheduleservice.repository.IDrugRecommendationRepository;
 import com.pharmacy.cpis.scheduleservice.service.IDrugRecommendationService;
+import com.pharmacy.cpis.userservice.model.loyaltyprogram.UserCategory;
 import com.pharmacy.cpis.userservice.model.users.Patient;
 import com.pharmacy.cpis.userservice.repository.IPatientRepository;
+import com.pharmacy.cpis.userservice.service.ILoyaltyProgramService;
 import com.pharmacy.cpis.userservice.service.IPatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class DrugRecommendationService implements IDrugRecommendationService {
@@ -42,6 +46,12 @@ public class DrugRecommendationService implements IDrugRecommendationService {
 
     @Autowired
     private IConsultationReportRepository consultationReportRepository;
+
+    @Autowired
+    private IDrugPurchaseRepository drugPurchaseRepository;
+
+    @Autowired
+    private ILoyaltyProgramService loyaltyProgramService;
 
     @Autowired
     private IPatientRepository patientRepository;
@@ -67,9 +77,35 @@ public class DrugRecommendationService implements IDrugRecommendationService {
         consultationRepository.save(consultation);
 
         availableDrugService.updateAmount(consultation.getPharmacy().getId(),drugRecommendationDTO.getDrugCode(),1);
+
+        DrugPurchase drugPurchase = new DrugPurchase();
+        drugPurchase.setType(DrugPurchaseType.RECOMMENDATION);
+        drugPurchase.setTimestamp(new Date());
+        drugPurchase.setPrice(calculatePriceDrugPurchaseWithDiscount(drugRecommendationDTO,consultation));
+        drugPurchase.setPharmacy(consultation.getPharmacy());
+        drugPurchase.setPatient(consultation.getPatient());
+        drugPurchase.setDrug(drugRepository.getOne(drugRecommendationDTO.getDrugCode()));
+        drugPurchase.setAmount(1);
+
+        drugPurchaseRepository.save(drugPurchase);
         return drugRecommendationDTO;
     }
 
+    private Double calculatePriceDrugPurchaseWithDiscount(DrugRecommendationDTO drugRecommendationDTO, Consultation consultation) {
+        Double priceWithDiscount;
+
+        AvailableDrug availableDrug = availableDrugService.getByPharmacyAndDrug(consultation.getPharmacy().getId(), drugRecommendationDTO.getDrugCode());
+        Double priceWithoutDiscount = availableDrug.findPrice(new Date()).getPrice();
+        UserCategory userCategory = loyaltyProgramService.findUserCategoryByLoyaltyPoints(consultation.getPatient().getLoyaltyPoints());
+        Double discount = userCategory.getReservationDiscount();
+
+        if(discount != 0){
+            priceWithDiscount = (priceWithoutDiscount -(priceWithoutDiscount*(discount/100))) * 1;
+        }else{
+            priceWithDiscount =priceWithoutDiscount;
+        }
+        return priceWithDiscount;
+    }
     @Override
     public DrugRecommendationDTO isDrugAvailable(DrugRecommendationDTO drugRecommendationDTO) {
 
