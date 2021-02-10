@@ -1,11 +1,9 @@
 package com.pharmacy.cpis.scheduleservice.service.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
+import com.pharmacy.cpis.userservice.dto.PatientEmailDTO;
+import com.pharmacy.cpis.userservice.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,6 +46,9 @@ public class ConsultationService implements IConsultationService {
 
 	@Autowired
 	private IPharmacyRepository pharmacyRepository;
+
+	@Autowired
+	private IUserRepository userRepository;
 
 	@Override
 	public Collection<Consultation> findByPharmacyAndStatus(Long pharmacyId, ConsultationStatus status) {
@@ -218,6 +219,20 @@ public class ConsultationService implements IConsultationService {
 				allPatientPharmacies.add(consultation.getPharmacy());
 		}
 		return allPatientPharmacies;
+	}
+
+	@Override
+	public Set<Consultation> findAllConsultationByPatientAndStatus(PatientEmailDTO patientEmailDTO, ConsultationStatus status, ConsultantType consultantType) {
+		Long patientId = userRepository.findByEmail(patientEmailDTO.getEmail()).getPerson().getId();
+		Patient patient = patientRepository.findById(patientId).orElse(null);
+		if(patient == null) throw new PSNotFoundException("Not found that patient");
+		Set<Consultation> consultations = new HashSet<>();
+		for(Consultation consultation : consultationRepository.findAllByPatientAndStatus(patient,status)){
+			if(consultation.getConsultant().getType().equals(consultantType)){
+				consultations.add(consultation);
+			}
+		}
+		return consultations;
 	}
 
 }

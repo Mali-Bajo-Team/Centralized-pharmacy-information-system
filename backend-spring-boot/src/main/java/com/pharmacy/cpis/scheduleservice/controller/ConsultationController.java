@@ -7,6 +7,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.pharmacy.cpis.userservice.dto.PatientEmailDTO;
+import com.pharmacy.cpis.userservice.model.users.ConsultantType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -176,6 +178,16 @@ public class ConsultationController {
 				consultation -> new ConsultationDTO(consultation));
 
 		return ResponseEntity.ok(mapped);
+	}
+
+	@PostMapping(value = "/patient/dermatologist")
+//	@PreAuthorize("hasRole('PATIENT')")
+	public ResponseEntity<List<ConsultationDTO>> findAllDermatologistConsultationByPatientAndStatus(@RequestBody PatientEmailDTO patientEmailDTO){
+		List<ConsultationDTO> consultations = new ArrayList<>();
+		for(Consultation consultation : consultationService.findAllConsultationByPatientAndStatus(patientEmailDTO, ConsultationStatus.SCHEDULED, ConsultantType.DERMATOLOGIST)){
+			consultations.add(new ConsultationDTO(consultation));
+		}
+		return new ResponseEntity<>(consultations, HttpStatus.OK);
 	}
 
 }
