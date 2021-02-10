@@ -12,6 +12,17 @@ public class AddWorkingDayDTO {
 	@NotNull(message = "End of shift is required.")
 	private Date end;
 
+	public AddWorkingDayDTO() {
+		super();
+	}
+
+	public AddWorkingDayDTO(@NotNull(message = "Start of shift is required.") Date start,
+			@NotNull(message = "End of shift is required.") Date end) {
+		super();
+		this.start = start;
+		this.end = end;
+	}
+
 	public Date getStart() {
 		return start;
 	}

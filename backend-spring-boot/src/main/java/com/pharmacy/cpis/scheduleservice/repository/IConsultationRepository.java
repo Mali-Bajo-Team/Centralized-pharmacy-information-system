@@ -14,7 +14,12 @@ import com.pharmacy.cpis.userservice.model.users.Consultant;
 public interface IConsultationRepository extends JpaRepository<Consultation, Long> {
 
 	Collection<Consultation> findAllByConsultantAndStatus(Consultant consultant, ConsultationStatus status);
+
 	Set<Consultation> findAllByPatient(Patient patient);
+
 	Collection<Consultation> findAllByPharmacyIdAndStatus(Long pharmacyId, ConsultationStatus status);
+
+	Collection<Consultation> findAllByPharmacyIdAndConsultantAndStatus(Long pharmacyId, Consultant consultant,
+			ConsultationStatus status);
 
 }

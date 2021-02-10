@@ -68,7 +68,6 @@ public class OfferService implements IOfferService {
 	}
 
 	@Override
-	@Transactional
 	public Offer saveOffer(SupplierOfferDTO offerDTO) {
 		Supplier supplier = supplierService.getLoggedSupplier();
 		if (supplier == null)
@@ -95,6 +94,8 @@ public class OfferService implements IOfferService {
 		return offerRepository.save(offer);
 	}
 
+	@Override
+	@Transactional
 	public void accept(UserAccount user, Long offerId) {
 		PharmacyAdministrator admin = pharmacyAdminRepository.findByAccount(user).orElse(null);
 		if (admin == null)
