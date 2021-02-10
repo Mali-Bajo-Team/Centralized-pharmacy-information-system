@@ -17,6 +17,19 @@ public class AddOrderedDrugDTO {
 	@Min(value = 0, message = "Default price of ordered drug must be positive.")
 	private Double defaultPrice;
 
+	public AddOrderedDrugDTO() {
+		super();
+	}
+
+	public AddOrderedDrugDTO(@NotEmpty(message = "Ordered drug code is required.") String code,
+			@NotNull(message = "Amount of ordered drug is required.") @Min(value = 1, message = "Amount of ordered drug must be positive.") Integer amount,
+			@NotNull(message = "Default price of ordered drug is required.") @Min(value = 0, message = "Default price of ordered drug must be positive.") Double defaultPrice) {
+		super();
+		this.code = code;
+		this.amount = amount;
+		this.defaultPrice = defaultPrice;
+	}
+
 	public String getCode() {
 		return code;
 	}
