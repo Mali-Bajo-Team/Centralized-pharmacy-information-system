@@ -206,7 +206,7 @@ public class ConsultationController {
 	}
 
 	@PostMapping(value = "/patient/dermatologist")
-//	@PreAuthorize("hasRole('PATIENT')")
+	@PreAuthorize("hasRole('PATIENT')")
 	public ResponseEntity<List<ConsultationDTO>> findAllDermatologistConsultationByPatientAndStatus(@RequestBody PatientEmailDTO patientEmailDTO){
 		List<ConsultationDTO> consultations = new ArrayList<>();
 		for(Consultation consultation : consultationService.findAllConsultationByPatientAndStatus(patientEmailDTO, ConsultationStatus.SCHEDULED, ConsultantType.DERMATOLOGIST)){
@@ -215,7 +215,7 @@ public class ConsultationController {
 		return new ResponseEntity<>(consultations, HttpStatus.OK);
 	}
 	@PostMapping(value = "/patient/pharmacist")
-//	@PreAuthorize("hasRole('PATIENT')")
+	@PreAuthorize("hasRole('PATIENT')")
 	public ResponseEntity<List<ConsultationDTO>> findAllPharmacistConsultationByPatientAndStatus(@RequestBody PatientEmailDTO patientEmailDTO){
 		List<ConsultationDTO> consultations = new ArrayList<>();
 		for(Consultation consultation : consultationService.findAllConsultationByPatientAndStatus(patientEmailDTO, ConsultationStatus.SCHEDULED, ConsultantType.PHARMACIST)){
@@ -225,7 +225,7 @@ public class ConsultationController {
 	}
 
 	@DeleteMapping(value = "/patient/consultant", consumes = "application/json")
-	//@PreAuthorize("hasRole('PATIENT')")
+	@PreAuthorize("hasRole('PATIENT')")
 	public ResponseEntity<Void> cancelDrugReservation(@RequestBody PatientCancelConsultationDTO patientCancelConsultationDTO){
 		consultationService.cancelConsultation(patientCancelConsultationDTO);
 		return new ResponseEntity<>(HttpStatus.OK);
