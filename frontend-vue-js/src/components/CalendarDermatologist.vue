@@ -309,7 +309,7 @@
               <v-stepper-content step="3">
                 <v-card color="grey lighten-3" class="mb-12" height="1600px">
                   <h4 class="ml-n primary--text">
-                    Choose predefined examination termin, or define new one
+                    Choose predefined examination date and time
                   </h4>
                   <v-select
                     class="ml-16 mr-16"
@@ -317,7 +317,7 @@
                     :items="predefinedDate"
                     item-text="startDate"
                     item-value="startDate"
-                    label="Select date"
+                    label="Select one predefined date"
                     persistent-hint
                     return-object
                     outlined
@@ -325,8 +325,14 @@
                     v-bind:value="valuePredefinedDate"
                     v-on:input="onInputPredefinedDate"
                   ></v-select>
+                     <v-btn depressed class="ml-16" @click="scheduleConsultation" color="primary">
+            Schedule
+          </v-btn>
+           <h4 class="ml-n mt-10 primary--text">
+                    Define new examination date and time
+                  </h4>
                   <!-- DEFINE DATE CALENDAR -->
-                  <div class="mr-16 ml-16 mt-6">
+                  <div class="mr-16 ml-16">
                     <h4 class="ml-n primary--text">
                       Define date for new examination
                     </h4>
@@ -391,7 +397,7 @@
             >
               You must pick end time!
             </v-alert>
-                     <v-btn depressed @click="scheduleConsultation" color="primary">
+                     <v-btn depressed class="mt-5" @click="scheduleConsultation" color="primary">
             Schedule
           </v-btn>
           <v-alert
