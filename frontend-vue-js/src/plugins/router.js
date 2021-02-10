@@ -14,6 +14,8 @@ import Patient from './../pages/patient/Container';
 import PatientLanding from './../pages/patient/landing/Landing';
 import PatientProfile from './../pages/patient/profile/Profile';
 import PatientReservations from './../pages/patient/reservation/ReservationOfDrug';
+import Subscriptions from './../pages/patient/subscriptions/Subscriptions';
+
 
 import Pharmacist from './../pages/pharmacist/Container';
 import PharmacistLanding from './../pages/pharmacist/landing/Landing';
@@ -114,6 +116,12 @@ const routes = [
                 name: 'drugreservation',
                 path:'drugreservation'
             },
+            {
+                component: Subscriptions,
+                name: 'subscriptions',
+                path: 'subscriptions'
+            }
+
         ]
     },
     {
