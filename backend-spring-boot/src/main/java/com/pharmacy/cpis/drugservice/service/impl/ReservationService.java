@@ -129,6 +129,7 @@ public class ReservationService implements IReservationService {
         return reservationDTO;
     }
 
+
     @Override
     public ReservationDTO dispensingMedicine(ReservationDTO reservationDTO) {
         Reservation reservation = reservationRepository.getOne(reservationDTO.getReservationID());
@@ -161,6 +162,11 @@ public class ReservationService implements IReservationService {
     public List<Reservation> findAllPatientReservations(PatientEmailDTO patientEmailDTO) {
         Patient patient = patientService.findByEmail(patientEmailDTO.getEmail());
         return reservationRepository.findAllByPatient(patient);
+    }
+
+    @Override
+    public void removeReservation(Long reservationId) {
+        reservationRepository.deleteById(reservationId);
     }
 
     private void sendDrugPurchase(Reservation reservation) {

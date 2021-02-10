@@ -21,4 +21,6 @@ public interface IReservationService {
     List<Pharmacy> findAllPatientPharmacies(Patient patient);
 
     List<Reservation> findAllPatientReservations(PatientEmailDTO patientEmailDTO);
+
+    void removeReservation(Long reservationId);
 }

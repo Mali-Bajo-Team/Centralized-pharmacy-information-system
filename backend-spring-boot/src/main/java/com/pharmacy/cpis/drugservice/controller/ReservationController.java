@@ -4,6 +4,7 @@ package com.pharmacy.cpis.drugservice.controller;
 import com.pharmacy.cpis.drugservice.dto.DrugReservationDTO;
 import com.pharmacy.cpis.drugservice.model.drugsales.Reservation;
 import com.pharmacy.cpis.drugservice.dto.ReservationDTO;
+import com.pharmacy.cpis.drugservice.service.IAvailableDrugService;
 import com.pharmacy.cpis.drugservice.service.IReservationService;
 import com.pharmacy.cpis.userservice.dto.PatientEmailDTO;
 import com.pharmacy.cpis.util.aspects.EmployeeAccountActive;
@@ -21,6 +22,9 @@ import java.util.List;
 public class ReservationController {
     @Autowired
     private IReservationService reservationService;
+
+    @Autowired
+    private IAvailableDrugService availableDrugService;
 
     @PreAuthorize("hasRole('PATIENT')")
     @PostMapping(value = "/drug")
@@ -64,6 +68,15 @@ public class ReservationController {
 
         return new ResponseEntity<>(reservationDTO, HttpStatus.OK);
     }
+    @DeleteMapping(value = "/drugreservation", consumes = "application/json")
+    //@PreAuthorize("hasRole('PATIENT')")
+    public ResponseEntity<Void> cancelDrugReservation(@RequestBody DrugReservationDTO drugReservationDTO){
+
+        reservationService.removeReservation(drugReservationDTO.getReservationId());
+        availableDrugService.updateAmount(drugReservationDTO.getPharmacyID(),drugReservationDTO.getDrugCode(),-drugReservationDTO.getAmount());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
 
 }
