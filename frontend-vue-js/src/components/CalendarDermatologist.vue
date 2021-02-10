@@ -233,6 +233,16 @@
                   >
                     Show
                   </v-btn>
+                    <v-alert
+                    :value="alertselectDrug"
+                    color="pink"
+                    dark
+                    border="top"
+                    icon="mdi-account"
+                    transition="scale-transition"
+                  >
+                   You must select drug!
+                  </v-alert>
                   <h3 class="mt-1 mb-6 ml-2 BLACK--text">
                     {{ drugSpecification }}
                   </h3>
@@ -500,6 +510,7 @@ import { getStringDateWithTimeFromMilliseconds } from "./../util/dateHandler";
 
 export default {
   data: () => ({
+    alertselectDrug: false,
     picker: new Date().toISOString().substr(0, 10),
     selectedPharmacy: null,
     isLoading: false,
@@ -744,6 +755,9 @@ export default {
         });
     },
     showDescription() {
+     
+      if(this.valueDrugsWithoutAllergies != null){
+         this.alertselectDrug = false;
       this.drugSpecification =
         "Manufacturer is " +
         this.selecteddrugWithoutAllergies.drugSpecificationDTO.manufacturer +
@@ -755,6 +769,9 @@ export default {
           .recommendedDailyDose +
         " . Ingredients are " +
         this.selecteddrugWithoutAllergies.drugSpecificationDTO.ingredients;
+      }else{
+        this.alertselectDrug = true;
+      }
     },
     getDrugsWithoutAllergies() {
       this.axios
