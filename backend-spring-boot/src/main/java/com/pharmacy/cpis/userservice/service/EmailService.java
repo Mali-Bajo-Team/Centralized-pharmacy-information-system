@@ -147,7 +147,7 @@ public class EmailService {
 		mail.setText("Hello " + patientEmail + "," + " your reservation of drug "+reservation.getDrug().getName()+" is succesfully scheduled in "+reservation.getPharmacy().getName()+"."+
 				"Deadline to pick up the drug is "+drugReservationDTO.getDeadline()+".The amount of drug you made reservation for is "+
 				drugReservationDTO.getAmount()+
-				" mg.Id of your reservation is "+reservation.getId());
+				".Id of your reservation is "+reservation.getId());
 		javaMailSender.send(mail);
 
 		System.out.println("Email was sent!");
