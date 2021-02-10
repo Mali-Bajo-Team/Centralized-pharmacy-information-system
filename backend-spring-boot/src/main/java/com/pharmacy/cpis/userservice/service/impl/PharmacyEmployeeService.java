@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
 import com.pharmacy.cpis.pharmacyservice.repository.IPharmacyRepository;
@@ -17,6 +18,7 @@ import com.pharmacy.cpis.userservice.dto.EmployDermatologistDTO;
 import com.pharmacy.cpis.userservice.dto.EmployPharmacistDTO;
 import com.pharmacy.cpis.userservice.model.users.Consultant;
 import com.pharmacy.cpis.userservice.model.users.ConsultantType;
+import com.pharmacy.cpis.userservice.repository.IConsultantRepository;
 import com.pharmacy.cpis.userservice.repository.IUserRepository;
 import com.pharmacy.cpis.userservice.service.IConsultantService;
 import com.pharmacy.cpis.userservice.service.IPharmacyEmployeeService;
@@ -40,12 +42,16 @@ public class PharmacyEmployeeService implements IPharmacyEmployeeService {
 	private IConsultationRepository consultationRepository;
 
 	@Autowired
+	private IConsultantRepository consultantRepository;
+
+	@Autowired
 	private IConsultantService consultantService;
 
 	@Autowired
 	private IPharmacyRepository pharmacyRepository;
 
 	@Override
+	@Transactional
 	public WorkingTimes employPharmacist(Long pharmacyId, EmployPharmacistDTO details) {
 		Pharmacy pharmacy = pharmacyRepository.findById(pharmacyId).orElse(null);
 		if (pharmacy == null)
@@ -60,13 +66,15 @@ public class PharmacyEmployeeService implements IPharmacyEmployeeService {
 	}
 
 	@Override
+	@Transactional
 	public WorkingTimes employDermatologist(Long pharmacyId, EmployDermatologistDTO details) {
 		Pharmacy pharmacy = pharmacyRepository.findById(pharmacyId).orElse(null);
 		if (pharmacy == null)
 			throw new PSNotFoundException("The requested pharmacy does not exist.");
 
-		Consultant consultant = consultantService.getByIdAndType(details.getDermatologistId(),
-				ConsultantType.DERMATOLOGIST);
+		Consultant consultant = consultantRepository.findLockedById(details.getDermatologistId()).orElse(null);
+		if (consultant == null || !consultant.getType().equals(ConsultantType.DERMATOLOGIST))
+			throw new PSNotFoundException("The requested dermatologist does not exist.");
 
 		if (!doesntWorkInPharmacy(consultant, pharmacyId))
 			throw new PSConflictException("The consultant already works for the pharmacy.");
@@ -143,6 +151,7 @@ public class PharmacyEmployeeService implements IPharmacyEmployeeService {
 	}
 
 	@Override
+	@Transactional
 	public void fireConsultant(Long pharmacyId, Long consultantId) {
 		WorkingTimes employment = workingTimesRepository.findByPharmacyIdAndConsultantId(pharmacyId, consultantId)
 				.orElse(null);

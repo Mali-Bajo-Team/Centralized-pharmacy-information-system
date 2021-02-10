@@ -6,6 +6,7 @@ import com.pharmacy.cpis.drugservice.dto.*;
 import com.pharmacy.cpis.pharmacyservice.dto.PharmacyTotalPriceDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pharmacy.cpis.drugservice.model.drug.Drug;
 import com.pharmacy.cpis.drugservice.model.drugprocurement.DrugOrder;
@@ -56,9 +57,10 @@ public class AvailableDrugService implements IAvailableDrugService {
         return pharmacy.getAvailableDrugs();
     }
 
-    public Collection<AvailableDrug> searchByPharmacy(Long pharmacyId, DrugSearchDTO searchDTO) {
-        Collection<AvailableDrug> drugs = getByPharmacy(pharmacyId);
 
+	@Override
+	public Collection<AvailableDrug> searchByPharmacy(Long pharmacyId, DrugSearchDTO searchDTO) {
+		Collection<AvailableDrug> drugs = getByPharmacy(pharmacyId);
         if (searchDTO.getName() != null)
             drugs = CollectionUtil.findAll(drugs, drug -> drug.getDrug().getName().contains(searchDTO.getName()));
         if (searchDTO.getCode() != null)
@@ -73,10 +75,11 @@ public class AvailableDrugService implements IAvailableDrugService {
         return drugs;
     }
 
-    public AvailableDrug addToPharmacy(Long pharmacyId, AddAvailableDrugDTO drugInfo) {
-        Pharmacy pharmacy = pharmacyRepository.findById(pharmacyId).orElse(null);
-        if (pharmacy == null)
-            throw new PSNotFoundException("The requested pharmacy does not exist.");
+	@Override
+	public AvailableDrug addToPharmacy(Long pharmacyId, AddAvailableDrugDTO drugInfo) {
+		Pharmacy pharmacy = pharmacyRepository.findById(pharmacyId).orElse(null);
+		if (pharmacy == null)
+			throw new PSNotFoundException("The requested pharmacy does not exist.");
 
         Drug drug = drugRepository.findById(drugInfo.getCode()).orElse(null);
         if (drug == null)
@@ -95,97 +98,22 @@ public class AvailableDrugService implements IAvailableDrugService {
         return availableDrugRepository.save(availableDrug);
     }
 
-    public void deleteFromPharmacy(Long pharmacyId, String drugCode) {
-        AvailableDrug availableDrug = availableDrugRepository.findByPharmacyIdAndDrugCode(pharmacyId, drugCode)
-                .orElse(null);
+	@Override
+	public void deleteFromPharmacy(Long pharmacyId, String drugCode) {
+		AvailableDrug availableDrug = availableDrugRepository.findByPharmacyIdAndDrugCode(pharmacyId, drugCode)
+				.orElse(null);
 
         if (availableDrug == null)
             throw new PSConflictException("The requested drug is not available in the requested pharmacy.");
 
-        if (hasActiveReservations(pharmacyId, drugCode))
-            throw new PSConflictException("The requestes drug cannot be deleted because of unfinished reservations.");
+    		if (hasActiveReservations(pharmacyId, drugCode))
+			throw new PSConflictException("The requestes drug cannot be deleted because of unfinished reservations.");
 
-        if (hasActiveOrders(pharmacyId, drugCode))
-            throw new PSConflictException("The requestes drug cannot be deleted because of unfinished orders.");
+		if (hasActiveOrders(pharmacyId, drugCode))
+			throw new PSConflictException("The requestes drug cannot be deleted because of unfinished orders.");
 
-        for (Price price : availableDrug.getPrices()) {
-            priceRepository.delete(price);
-        }
-        availableDrugRepository.delete(availableDrug);
-    }
-
-    private boolean hasActiveReservations(Long pharmacyId, String drugCode) {
-        return CollectionUtil.contains(reservationRepository.findAllByPharmacyIdAndDrugCode(pharmacyId, drugCode),
-                res -> !res.getIsPickedUp());
-    }
-
-    private boolean hasActiveOrders(Long pharmacyId, String drugCode) {
-        Collection<DrugOrder> orders = drugOrderRepository.findAllByPharmacyId(pharmacyId);
-        orders = CollectionUtil.findAll(orders, order -> !order.getStatus().equals(DrugOrderStatus.FINISHED));
-
-        for (DrugOrder order : orders) {
-            if (CollectionUtil.contains(order.getOrderedDrugs(), drug -> drug.getDrug().getCode().equals(drugCode)))
-                return true;
-        }
-
-        return false;
-    }
-
-    public AvailableDrug getByPharmacyAndDrug(Long pharmacyId, String drugCode) {
-        AvailableDrug availableDrug = availableDrugRepository.findByPharmacyIdAndDrugCode(pharmacyId, drugCode)
-                .orElse(null);
-
-        if (availableDrug == null)
-            throw new PSConflictException("The requested drug is not available in the requested pharmacy.");
-
-        return availableDrug;
-    }
-
-    public Collection<DrugPriceDTO> getPrice(Long pharmacyId, String drugCode, Date start, Date end) {
-        AvailableDrug availableDrug = availableDrugRepository.findByPharmacyIdAndDrugCode(pharmacyId, drugCode)
-                .orElse(null);
-
-        if (availableDrug == null)
-            throw new PSConflictException("The requested drug is not available in the requested pharmacy.");
-
-        Collection<DrugPriceDTO> prices = new ArrayList<>();
-
-        for (Date date : DateConversionsAndComparisons.getDatesBetween(start, end)) {
-            prices.add(new DrugPriceDTO(date, availableDrug.findPrice(date).getPrice()));
-        }
-
-        return prices;
-    }
-
-    public void addPrice(Long pharmacyId, String drugCode, AddDrugPriceDTO priceInfo) {
-        AvailableDrug availableDrug = availableDrugRepository.findByPharmacyIdAndDrugCode(pharmacyId, drugCode)
-                .orElse(null);
-
-        if (availableDrug == null)
-            throw new PSConflictException("The requested drug is not available in the requested pharmacy.");
-
-        for (Date date : DateConversionsAndComparisons.getDatesBetween(priceInfo.getStart(), priceInfo.getEnd())) {
-            Price price = availableDrug.findPrice(date);
-            price.setPrice(priceInfo.getPrice());
-            priceRepository.save(price);
-        }
-    }
-
-    @Override
-    public AvailableDrug updateAmount(Long pharmacyId, String drugCode, Integer amount) {
-        AvailableDrug availableDrug = availableDrugRepository.findByPharmacyIdAndDrugCode(pharmacyId, drugCode)
-                .orElse(null);
-        if (availableDrug == null)
-            throw new PSBadRequestException("There is no available drug.");
-
-        int amountOfDrug = availableDrug.getAvailableAmount() - amount;
-        if (amountOfDrug < 0) {
-            throw new PSBadRequestException("There is no available drug in requested amount.");
-        }
-        availableDrug.setAvailableAmount(amountOfDrug);
-
-        return availableDrugRepository.save(availableDrug);
-    }
+		availableDrugRepository.delete(availableDrug);
+	}
 
     @Override
     public List<PharmacyTotalPriceDTO> findPharmaciesWithRequiredDrugsAmount(List<DrugCodeAndAmountDTO> drugCodeAndAmountDTOS) {
@@ -232,4 +160,83 @@ public class AvailableDrugService implements IAvailableDrugService {
         }
         return -1;
     }
+
+
+	private boolean hasActiveReservations(Long pharmacyId, String drugCode) {
+		return CollectionUtil.contains(reservationRepository.findAllByPharmacyIdAndDrugCode(pharmacyId, drugCode),
+				res -> !res.getIsPickedUp());
+	}
+
+	private boolean hasActiveOrders(Long pharmacyId, String drugCode) {
+		Collection<DrugOrder> orders = drugOrderRepository.findAllByPharmacyId(pharmacyId);
+		orders = CollectionUtil.findAll(orders, order -> !order.getStatus().equals(DrugOrderStatus.FINISHED));
+
+		for (DrugOrder order : orders) {
+			if (CollectionUtil.contains(order.getOrderedDrugs(), drug -> drug.getDrug().getCode().equals(drugCode)))
+				return true;
+		}
+
+		return false;
+	}
+
+	@Override
+	public AvailableDrug getByPharmacyAndDrug(Long pharmacyId, String drugCode) {
+		AvailableDrug availableDrug = availableDrugRepository.findByPharmacyIdAndDrugCode(pharmacyId, drugCode)
+				.orElse(null);
+
+		if (availableDrug == null)
+			throw new PSConflictException("The requested drug is not available in the requested pharmacy.");
+
+		return availableDrug;
+	}
+
+	@Override
+	public Collection<DrugPriceDTO> getPrice(Long pharmacyId, String drugCode, Date start, Date end) {
+		AvailableDrug availableDrug = availableDrugRepository.findByPharmacyIdAndDrugCode(pharmacyId, drugCode)
+				.orElse(null);
+
+		if (availableDrug == null)
+			throw new PSConflictException("The requested drug is not available in the requested pharmacy.");
+
+		Collection<DrugPriceDTO> prices = new ArrayList<>();
+
+		for (Date date : DateConversionsAndComparisons.getDatesBetween(start, end)) {
+			prices.add(new DrugPriceDTO(date, availableDrug.findPrice(date).getPrice()));
+		}
+
+		return prices;
+	}
+
+	@Override
+	@Transactional
+	public void addPrice(Long pharmacyId, String drugCode, AddDrugPriceDTO priceInfo) {
+		AvailableDrug availableDrug = availableDrugRepository.findByPharmacyIdAndDrugCode(pharmacyId, drugCode)
+				.orElse(null);
+
+		if (availableDrug == null)
+			throw new PSConflictException("The requested drug is not available in the requested pharmacy.");
+
+		for (Date date : DateConversionsAndComparisons.getDatesBetween(priceInfo.getStart(), priceInfo.getEnd())) {
+			Price price = availableDrug.findPrice(date);
+			price.setPrice(priceInfo.getPrice());
+			priceRepository.save(price);
+		}
+	}
+
+	@Override
+	public AvailableDrug updateAmount(Long pharmacyId, String drugCode, Integer amount) {
+		AvailableDrug availableDrug = availableDrugRepository.findByPharmacyIdAndDrugCode(pharmacyId, drugCode)
+				.orElse(null);
+		if (availableDrug == null)
+			throw new PSBadRequestException("There is no available drug.");
+
+		int amountOfDrug = availableDrug.getAvailableAmount() - amount;
+		if (amountOfDrug < 0) {
+			throw new PSBadRequestException("There is no available drug in requested amount.");
+		}
+		availableDrug.setAvailableAmount(amountOfDrug);
+
+		return availableDrugRepository.save(availableDrug);
+	}
+
 }

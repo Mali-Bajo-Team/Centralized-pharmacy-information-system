@@ -125,14 +125,14 @@ insert into drug_specification(additional_notes, contraindications, manufacturer
 values('Slow one', 'None', 'Zenica KP Dom', false, 5, 'kreatin');
 
 --INSERT AVAILABLE DRUG
-insert into available_drug(available_amount, default_price, drug_code, pharmacy_id)
-values(10, 10, 'brufen', 1);
-insert into available_drug(available_amount, default_price, drug_code, pharmacy_id)
-values(15, 8, 'brufen', 2);
-insert into available_drug(available_amount, default_price, drug_code, pharmacy_id)
-values(100, 15, 'aspirin', 1);
-insert into available_drug(available_amount, default_price, drug_code, pharmacy_id)
-values(2, 5, 'aspirin', 2);
+insert into available_drug(available_amount, default_price, drug_code, pharmacy_id, version)
+values(10, 10, 'brufen', 1, 0);
+insert into available_drug(available_amount, default_price, drug_code, pharmacy_id, version)
+values(15, 8, 'brufen', 2, 0);
+insert into available_drug(available_amount, default_price, drug_code, pharmacy_id, version)
+values(100, 15, 'aspirin', 1, 0);
+insert into available_drug(available_amount, default_price, drug_code, pharmacy_id, version)
+values(2, 5, 'aspirin', 2, 0);
 
 
 -- INSERT ONE DERMATOLOGIST

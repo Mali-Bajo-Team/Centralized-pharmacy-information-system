@@ -3,6 +3,7 @@ package com.pharmacy.cpis.drugservice.model.drugsales;
 import java.util.Date;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.Version;
 
 import com.pharmacy.cpis.drugservice.model.drug.Drug;
 import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
@@ -22,6 +24,10 @@ public class AvailableDrug {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@Version
+	@Column(nullable = false)
+	private Long version;
 
 	@Column(nullable = false)
 	private Integer availableAmount;
@@ -35,7 +41,7 @@ public class AvailableDrug {
 	@ManyToOne(optional = false)
 	private Pharmacy pharmacy;
 
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "drug")
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "drug", cascade = CascadeType.ALL)
 	private Set<Price> prices;
 
 	public AvailableDrug() {
@@ -88,6 +94,10 @@ public class AvailableDrug {
 
 	public void setPrices(Set<Price> prices) {
 		this.prices = prices;
+	}
+
+	public Long getVersion() {
+		return version;
 	}
 
 	@Override
