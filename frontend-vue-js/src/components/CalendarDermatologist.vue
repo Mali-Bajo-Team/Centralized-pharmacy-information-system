@@ -224,7 +224,7 @@
                     {{ drugSpecification }}
                   </h3>
                    <h4 class="ml-n primary--text">Check the availability of the drug in the current pharmacy</h4>
-                  <v-btn class="ml-16" depressed color="primary" @click="showDescription">
+                  <v-btn class="ml-16" depressed color="primary" @click="checkDrugAvailability">
                    CHECK
                   </v-btn>
                  
@@ -395,6 +395,22 @@ export default {
     },
   },
   methods: {
+    checkDrugAvailability(){
+       this.axios
+        .post(
+          process.env.VUE_APP_BACKEND_URL + "api/drugrecommendation/checkbeforerecommend",
+          { paatientID: this.patientId,
+          consultationID: this.consultationId  , drugCode : this.selecteddrugWithoutAllergies.code },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then((resp) => {
+          this.drugsWithoutAllergies = resp.data;
+        });
+    },
     showDescription() {
       this.drugSpecification =
         "Manufacturer is " +
@@ -433,7 +449,7 @@ export default {
       this.axios
         .post(
           process.env.VUE_APP_BACKEND_URL + "api/patient/addpenaltie",
-          { phatientID: this.patientId, consultationID: this.consultationId },
+          { phatientID: this.patientId},
           {
             headers: {
               Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),

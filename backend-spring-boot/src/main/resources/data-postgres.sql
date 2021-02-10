@@ -133,7 +133,10 @@ insert into available_drug(available_amount, default_price, drug_code, pharmacy_
 values(100, 15, 'aspirin', 1, 0);
 insert into available_drug(available_amount, default_price, drug_code, pharmacy_id, version)
 values(2, 5, 'aspirin', 2, 0);
-
+insert into available_drug(available_amount, default_price, drug_code, pharmacy_id, version)
+values(100, 15, 'kreatin', 1, 0);
+insert into available_drug(available_amount, default_price, drug_code, pharmacy_id, version)
+values(2, 5, 'kreatin', 2, 0);
 
 -- INSERT ONE DERMATOLOGIST
 insert into person (discriminator, address, city, country, name, surname, phone_number, type) values ('Consultant', 'Svetislava Pesica 20', 'Novi Sad', 'Srbija', 'Miroslav', 'Jovanovic', '0635212365', 1);
