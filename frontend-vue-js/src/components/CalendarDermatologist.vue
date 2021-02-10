@@ -197,7 +197,8 @@
                   <h4 class="ml-n primary--text">
                     Choose drug (listed drugs was filtered from allergens)
                   </h4>
-                  <v-select class="ml-16 mr-16"
+                  <v-select
+                    class="ml-16 mr-16"
                     v-model="selecteddrugWithoutAllergies"
                     :items="drugsWithoutAllergies"
                     item-text="name"
@@ -212,32 +213,50 @@
                     @click="alertDrugsWithoutAllergies = false"
                   ></v-select>
                   <h4 class="mt-2 ml-n primary--text">
-                    Determine the duration of therapy 
+                    Determine the duration of therapy
                   </h4>
-                   <v-text-field solo class="mr-16 ml-16" label="Duration of therapy"></v-text-field>
+                  <v-text-field
+                    solo
+                    class="mr-16 ml-16"
+                    label="Duration of therapy"
+                    v-model="durationOfPerscirbe"
+                  ></v-text-field>
                   <!-- DRUG SPECIFICATION -->
                   <h4 class="ml-n primary--text">Drug specification</h4>
-                  <v-btn class="ml-16" depressed color="primary" @click="showDescription">
+                  <v-btn
+                    class="ml-16"
+                    depressed
+                    color="primary"
+                    @click="showDescription"
+                  >
                     Show
                   </v-btn>
                   <h3 class="mt-1 mb-6 ml-2 BLACK--text">
                     {{ drugSpecification }}
                   </h3>
-                   <h4 class="ml-n primary--text">Check the availability of the drug in the current pharmacy</h4>
-                  <v-btn class="ml-16" depressed color="primary" @click="checkDrugAvailability">
-                   CHECK
+                  <h4 class="ml-n primary--text">
+                    Check the availability of the drug in the current pharmacy
+                  </h4>
+                  <v-btn
+                    class="ml-16"
+                    depressed
+                    color="primary"
+                    @click="checkDrugAvailability"
+                  >
+                    CHECK
                   </v-btn>
                   <v-alert
                     :value="alertIsDrugAvailable"
                     color="pink"
                     dark
                     border="top"
-                    icon="mdi-account"
+                    icon="mdi-pill"
                     transition="scale-transition"
-                  >         
-                    Drug is not available you can perscribe one of alternate drugs and perscribe it!
+                  >
+                    Drug is not available in current pharmacy, you can perscribe
+                    one of alternate drugs and perscribe it!
                   </v-alert>
-                           <v-alert
+                  <v-alert
                     :value="succesIsDrugAvailable"
                     color="green"
                     dark
@@ -245,11 +264,16 @@
                     icon="mdi-account"
                     transition="scale-transition"
                   >
-                   Drug is available, you can perscribe it!
+                    Drug is available, you can perscribe it!
                   </v-alert>
-   <h4 class="ml-n mt-6 primary--text">Perscirbe drug</h4>
-                      <v-btn :disabled="!isPerscribeButtonDisabled" class="ml-16" depressed color="primary" @click="prescribeDrug">
-                   PERSCRIBE
+                  <h4 class="ml-n mt-6 primary--text">Perscirbe drug</h4>
+                  <v-btn
+                    class="ml-16"
+                    depressed
+                    color="primary"
+                    @click="prescribeDrug"
+                  >
+                    PERSCRIBE
                   </v-btn>
 
                   <v-alert
@@ -363,6 +387,7 @@ export default {
     isPerscribeButtonDisabled: true,
     succesIsDrugAvailable: false,
     alertIsDrugAvailable: false,
+    durationOfPerscirbe: null,
 
     type: "month",
     types: ["month", "week", "day", "4day"],
@@ -421,13 +446,35 @@ export default {
     },
   },
   methods: {
+    prescribeDrug() {
+      this.axios
+        .post(
+          process.env.VUE_APP_BACKEND_URL +
+            "api/drugrecommendation/recommend",
+          {
+            patientID: this.patientId,
+            consultationID: this.consultationId,
+            drugCode: this.selecteddrugWithoutAllergies.code,
+            duration: parseInt(this.durationOfPerscirbe),
+            consultationReport: this.report
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then(() => {
+        
+        });
+    },
     checkDrugAvailability() {
       this.axios
         .post(
           process.env.VUE_APP_BACKEND_URL +
             "api/drugrecommendation/checkbeforerecommend",
           {
-            paatientID: this.patientId,
+            patientID: this.patientId,
             consultationID: this.consultationId,
             drugCode: this.selecteddrugWithoutAllergies.code,
           },
@@ -438,14 +485,14 @@ export default {
           }
         )
         .then((response) => {
-           var isDrugAvailable = response.data.available;
+          var isDrugAvailable = response.data.available;
 
-           if(isDrugAvailable){
-              this.alertIsDrugAvailable = false;
-              this.succesIsDrugAvailable = true;
-           }else{
-              this.alertIsDrugAvailable = true;
-           }
+          if (isDrugAvailable) {
+            this.alertIsDrugAvailable = false;
+            this.succesIsDrugAvailable = true;
+          } else {
+            this.alertIsDrugAvailable = true;
+          }
         });
     },
     showDescription() {

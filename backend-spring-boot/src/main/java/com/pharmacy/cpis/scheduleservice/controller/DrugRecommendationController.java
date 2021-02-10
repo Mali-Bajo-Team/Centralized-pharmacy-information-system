@@ -35,7 +35,7 @@ public class DrugRecommendationController {
             @RequestBody DrugRecommendationDTO drugRecommendationDTO) {
 
         DrugRecommendationDTO drugRecommendationDTOForReturn = new DrugRecommendationDTO();
-        drugRecommendationDTOForReturn = drugRecommendationService.recommendDrug(drugRecommendationDTO);
+        drugRecommendationDTOForReturn = drugRecommendationService.isDrugAvailable(drugRecommendationDTO);
 
         return new ResponseEntity<>(drugRecommendationDTOForReturn, HttpStatus.OK);
     }

@@ -4,4 +4,6 @@ import com.pharmacy.cpis.scheduleservice.dto.DrugRecommendationDTO;
 
 public interface IDrugRecommendationService {
     DrugRecommendationDTO recommendDrug(DrugRecommendationDTO drugRecommendationDTO);
+
+    DrugRecommendationDTO isDrugAvailable(DrugRecommendationDTO drugRecommendationDTO);
 }

@@ -5,7 +5,7 @@ import com.pharmacy.cpis.scheduleservice.model.consultations.ConsultationReport;
 
 public class DrugRecommendationDTO {
     private Integer duration;
-    private ConsultationReport consultationReport;
+    private String consultationReport;
     private String drugCode;
     private Long drugID;
     private Long patientID;
@@ -16,7 +16,7 @@ public class DrugRecommendationDTO {
     public DrugRecommendationDTO() {
     }
 
-    public DrugRecommendationDTO(Integer duration, ConsultationReport consultationReport, String drugCode, Long drugID, Long patientID, Long consultationID, String consultantEmail, Boolean isAvailable) {
+    public DrugRecommendationDTO(Integer duration, String consultationReport, String drugCode, Long drugID, Long patientID, Long consultationID, String consultantEmail, Boolean isAvailable) {
         this.duration = duration;
         this.consultationReport = consultationReport;
         this.drugCode = drugCode;
@@ -35,11 +35,11 @@ public class DrugRecommendationDTO {
         this.duration = duration;
     }
 
-    public ConsultationReport getConsultationReport() {
+    public String getConsultationReport() {
         return consultationReport;
     }
 
-    public void setConsultationReport(ConsultationReport consultationReport) {
+    public void setConsultationReport(String consultationReport) {
         this.consultationReport = consultationReport;
     }
 
