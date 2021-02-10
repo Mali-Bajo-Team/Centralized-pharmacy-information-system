@@ -307,7 +307,7 @@
               </v-stepper-step>
 
               <v-stepper-content step="3">
-                <v-card color="grey lighten-3" class="mb-12" height="1600px">
+                <v-card color="grey lighten-3" class="mb-12" height="1750px">
                   <h4 class="ml-n primary--text">
                     Choose predefined examination date and time
                   </h4>
@@ -589,6 +589,16 @@ export default {
       this.alertEndTime = false;
       console.log(  this.examinationEndTime);
     },
+      onInputPredefinedDate(valuePredefinedDate) {
+      this.$emit("input", valuePredefinedDate);
+      this.valuePredefinedDate = valuePredefinedDate;
+      console.log( "AAAAAAA"+getStringDateWithTimeFromMilliseconds(valuePredefinedDate.startDate));
+      this.valueDate = getStringDateWithTimeFromMilliseconds(valuePredefinedDate.startDate).substring(0,10);
+      this.examinationStartTime = getStringDateWithTimeFromMilliseconds(valuePredefinedDate.startDate).substring(11,16);
+      this.examinationEndTime = getStringDateWithTimeFromMilliseconds(valuePredefinedDate.endDate).substring(11,16);
+  
+      console.log(valuePredefinedDate);
+    },
     onInputDate(valueDate) {
       this.$emit("input", valueDate);
       this.valueDate = valueDate;
@@ -762,11 +772,6 @@ export default {
       this.valueDrugsWithoutAllergies = valueDrugsWithoutAllergies;
       this.alertDrugsWithoutAllergies = false;
       console.log(valueDrugsWithoutAllergies);
-    },
-    onInputPredefinedDate(valuePredefinedDate) {
-      this.$emit("input", valuePredefinedDate);
-      this.valuePredefinedDate = valuePredefinedDate;
-      console.log(valuePredefinedDate);
     },
     addPenaltie() {
       this.axios
