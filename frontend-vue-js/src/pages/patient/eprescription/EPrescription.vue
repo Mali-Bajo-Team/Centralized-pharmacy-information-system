@@ -34,15 +34,32 @@ export default {
   components: { QrcodeCapture },
   data() {
     return {
-      result: {},
+      readedQr: {},
+      pharmaciesWithRequiredDrugsAmount: [],
     };
   },
 
   methods: {
-    onDecode(result) {
-      this.result = JSON.parse(result);
-      console.log(this.result);
-      //TODO: Make ajax call to get available pharmacies where he can buy all drugs he want 
+    onDecode(readedQr) {
+      this.readedQr = JSON.parse(readedQr);
+      console.log(this.readedQr);
+      this.axios
+        .post(
+          process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_PHARMACIES_REQUIRED_DRUGS,
+          this.readedQr,
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then((resp) => {
+          this.pharmaciesWithRequiredDrugsAmount = resp.data;
+        })
+        .catch((error) => {
+          alert("Error: " + error);
+        });
     },
   },
 };
