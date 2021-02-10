@@ -1,16 +1,124 @@
 <template>
   <v-container>
-    <h3>Consultations</h3>
+    <v-row>
+      <v-col>
+        <v-card
+          elevation="4"
+          class="pa-4 ml-16 mr-16 mb-10"
+          v-for="consultation in patientConsultations"
+          :key="consultation.id"
+        >
+          <!-- Row for title & cancel consulation dialog-->
+          <v-row align="center">
+            <v-card-subtitle>
+              <h4 class="ml-3">
+                {{ consultation.pharmacyName }} ,
+                {{ consultation.consultantName }}
+                {{ consultation.consultantSurname }} , 
+                {{ convertMsToString(consultation.startDate)}}
+              </h4>
+            </v-card-subtitle>
+            <v-spacer></v-spacer>
+            <!-- Make a response dialog -->
+            <v-dialog
+              v-model="consultation.showCancelConsultationDialog"
+              width="500"
+              :retain-focus="false"
+            >
+              <template #activator="{ on: dialog }">
+                <v-tooltip bottom>
+                  <template #activator="{ on: tooltip }">
+                    <v-btn
+                      v-on="{ ...tooltip, ...dialog }"
+                      elevation="0"
+                      left
+                      class="ma-5"
+                      fab
+                      dark
+                      small
+                      color="red lighten-2"
+                      @click="setConsultationForCancel(consultation)"
+                    >
+                      <v-icon dark> mdi-delete </v-icon>
+                    </v-btn>
+                  </template>
+                  <span> Cancel consultation </span>
+                </v-tooltip>
+              </template>
+              <v-card>
+                <!--Toolbar of the card-->
+                <v-toolbar color="primary" dark dense flat>
+                  <v-toolbar-title class="body-2">
+                    <h3>Cancel consultation</h3>
+                  </v-toolbar-title>
+                </v-toolbar>
+                <!-- End of the toolbar of the card -->
+                <v-card-text class="pa-5">
+                  <br />
+                  Are you sure you want cancel consultation on
+                  {{ consultation.pharmacyName }} ,
+                  {{ consultation.consultantName }}
+                  {{ consultation.consultantSurname }}
+                </v-card-text>
+
+                <v-card-actions class="pb-4">
+                  <v-spacer> </v-spacer>
+                  <v-btn
+                    color="success"
+                    dark
+                    depressed
+                    @click="confirmCancelConsultation()"
+                  >
+                    <v-icon dark left> mdi-checkbox-marked-circle </v-icon>
+                    Confirm
+                  </v-btn>
+                  <v-btn
+                    color="red lighten-3"
+                    dark
+                    depressed
+                    @click="
+                      consultation.showCancelConsultationDialog = !consultation.showCancelConsultationDialog
+                    "
+                    ><v-icon dark left> mdi-minus-circle </v-icon>
+                    Close
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+            <!-- End of the make response dialog -->
+          </v-row>
+          <!-- End of the row for title & cancel consulation dialog-->
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script>
 import { getParsedToken } from "./../../../util/token";
+import {
+  getStringDateFromMilliseconds,
+  getTodayDateString,
+} from "./../../../util/dateHandler";
+
 export default {
   data: () => ({
     patientConsultations: [],
   }),
-  methods: {},
+  methods: {
+    convertMsToString(ms) {
+      return getStringDateFromMilliseconds(ms);
+    },
+    getTodayDateInString(){
+        return getTodayDateString();
+    },
+    setConsultationForCancel(consultation) {
+      console.log("set consultation for deleting simulation: " + consultation);
+    },
+    confirmCancelConsultation() {
+      console.log("simulation of cancel consultation");
+    },
+  },
   mounted() {
     this.axios
       .post(
