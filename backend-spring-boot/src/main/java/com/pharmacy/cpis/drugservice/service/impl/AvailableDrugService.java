@@ -112,9 +112,6 @@ public class AvailableDrugService implements IAvailableDrugService {
 		if (hasActiveOrders(pharmacyId, drugCode))
 			throw new PSConflictException("The requestes drug cannot be deleted because of unfinished orders.");
 
-		for (Price price : availableDrug.getPrices()) {
-			priceRepository.delete(price);
-		}
 		availableDrugRepository.delete(availableDrug);
 	}
 

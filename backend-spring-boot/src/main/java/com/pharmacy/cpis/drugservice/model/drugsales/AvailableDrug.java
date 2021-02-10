@@ -3,6 +3,7 @@ package com.pharmacy.cpis.drugservice.model.drugsales;
 import java.util.Date;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -35,7 +36,7 @@ public class AvailableDrug {
 	@ManyToOne(optional = false)
 	private Pharmacy pharmacy;
 
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "drug")
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "drug", cascade = CascadeType.ALL)
 	private Set<Price> prices;
 
 	public AvailableDrug() {

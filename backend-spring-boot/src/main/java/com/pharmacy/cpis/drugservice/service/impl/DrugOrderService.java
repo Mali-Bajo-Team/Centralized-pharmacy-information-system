@@ -102,10 +102,6 @@ public class DrugOrderService implements IDrugOrderService {
 		if (!order.getStatus().equals(DrugOrderStatus.WAITING_FOR_OFFERS))
 			throw new PSConflictException("Drug order cannot be deleted because it already has offers.");
 
-		for (OrderedDrug orderedDrug : order.getOrderedDrugs()) {
-			orderedDrugRepository.delete(orderedDrug);
-		}
-
 		drugOrderRepository.delete(order);
 	}
 
