@@ -2,6 +2,7 @@ package com.pharmacy.cpis.scheduleservice.service.impl;
 
 import java.util.*;
 
+import com.pharmacy.cpis.scheduleservice.dto.PatientCancelConsultationDTO;
 import com.pharmacy.cpis.userservice.dto.PatientEmailDTO;
 import com.pharmacy.cpis.userservice.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -233,6 +234,14 @@ public class ConsultationService implements IConsultationService {
 			}
 		}
 		return consultations;
+	}
+
+	@Override
+	public void cancelConsultation(PatientCancelConsultationDTO patientCancelConsultationDTO) {
+		Consultation consultation = consultationRepository.findById(patientCancelConsultationDTO.getConsultationId()).orElse(null);
+		if(consultation == null) throw new PSNotFoundException("Not found that consultation");
+		consultation.setStatus(ConsultationStatus.CANCELLED);
+		consultationRepository.save(consultation);
 	}
 
 }

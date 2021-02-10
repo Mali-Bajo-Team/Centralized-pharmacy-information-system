@@ -1,6 +1,7 @@
 package com.pharmacy.cpis.scheduleservice.service;
 
 import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
+import com.pharmacy.cpis.scheduleservice.dto.PatientCancelConsultationDTO;
 import com.pharmacy.cpis.scheduleservice.dto.ScheduleExaminationDTO;
 import com.pharmacy.cpis.scheduleservice.model.consultations.Consultation;
 import com.pharmacy.cpis.userservice.dto.PatientEmailDTO;
@@ -37,5 +38,7 @@ public interface IConsultationService {
     List<Pharmacy> findAllPatientPharmacies(Patient patient);
 
     Set<Consultation> findAllConsultationByPatientAndStatus(PatientEmailDTO patientEmailDTO, ConsultationStatus status, ConsultantType consultantType);
+
+    void cancelConsultation(PatientCancelConsultationDTO patientCancelConsultationDTO);
 
 }
