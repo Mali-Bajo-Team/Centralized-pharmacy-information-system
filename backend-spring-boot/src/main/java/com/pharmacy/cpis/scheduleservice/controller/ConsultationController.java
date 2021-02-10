@@ -85,6 +85,25 @@ public class ConsultationController {
 		return new ResponseEntity<>(ConsultationDTOs, HttpStatus.OK);
 	}
 
+	@PostMapping("/consultantpredefinedexaminations")
+	@PreAuthorize("hasRole('PHARMACIST')|| hasRole('DERMATOLOGIST')")
+	public ResponseEntity<List<ConsultationDTO>> getAllPredefinedConsultationsForConsultant(
+			@RequestBody ConsultantDTO consultantDTO) {
+
+		List<Consultation> consultations = consultationService.findAll();
+		List<ConsultationDTO> ConsultationDTOs = new ArrayList<>();
+		UserAccount loggedPharmacist = (UserAccount) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+
+		for (Consultation c : consultations) {
+			if (loggedPharmacist.getId().equals(c.getConsultant().getId()) && c.getStatus().equals(ConsultationStatus.PREDEFINED)) {
+				ConsultationDTOs.add(new ConsultationDTO(c));
+			}
+		}
+
+		return new ResponseEntity<>(ConsultationDTOs, HttpStatus.OK);
+	}
+
 	@PostMapping("/loggedconsultant")
 	@PreAuthorize("hasRole('PHARMACIST')|| hasRole('DERMATOLOGIST')")
 	public ResponseEntity<ConsultantDTO> getLoggedConsultant(@RequestBody ConsultantDTO consultantDTO) {
