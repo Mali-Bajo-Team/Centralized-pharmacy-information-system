@@ -42,6 +42,10 @@ export default {
         title: "Subscriptions",
         to: "/patient/subscriptions"
       },
+      {
+        title: "EPrescription",
+        to: "/patient/eprescription"
+      }
     ],
   }),
 };

@@ -15,6 +15,8 @@ import PatientLanding from './../pages/patient/landing/Landing';
 import PatientProfile from './../pages/patient/profile/Profile';
 import PatientReservations from './../pages/patient/reservation/DrugReservation';
 import Subscriptions from './../pages/patient/subscriptions/Subscriptions';
+import EPrescription from './../pages/patient/eprescription/EPrescription';
+
 
 
 import Pharmacist from './../pages/pharmacist/Container';
@@ -121,7 +123,11 @@ const routes = [
                 name: 'subscriptions',
                 path: 'subscriptions'
             },
-
+            {
+                component: EPrescription,
+                name: 'eprescription',
+                path: 'eprescription'
+            }
         ]
     },
     {

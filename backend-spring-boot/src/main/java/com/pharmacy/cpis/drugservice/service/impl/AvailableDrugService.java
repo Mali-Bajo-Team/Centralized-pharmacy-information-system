@@ -1,17 +1,13 @@
 package com.pharmacy.cpis.drugservice.service.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 
+import com.pharmacy.cpis.drugservice.dto.*;
+import com.pharmacy.cpis.pharmacyservice.dto.PharmacyTotalPriceDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pharmacy.cpis.drugservice.dto.AddAvailableDrugDTO;
-import com.pharmacy.cpis.drugservice.dto.AddDrugPriceDTO;
-import com.pharmacy.cpis.drugservice.dto.DrugPriceDTO;
-import com.pharmacy.cpis.drugservice.dto.DrugSearchDTO;
 import com.pharmacy.cpis.drugservice.model.drug.Drug;
 import com.pharmacy.cpis.drugservice.model.drugprocurement.DrugOrder;
 import com.pharmacy.cpis.drugservice.model.drugprocurement.DrugOrderStatus;
@@ -34,50 +30,50 @@ import com.pharmacy.cpis.util.exceptions.PSNotFoundException;
 @Service
 public class AvailableDrugService implements IAvailableDrugService {
 
-	@Autowired
-	private IAvailableDrugRepository availableDrugRepository;
+    @Autowired
+    private IAvailableDrugRepository availableDrugRepository;
 
-	@Autowired
-	private IPharmacyRepository pharmacyRepository;
+    @Autowired
+    private IPharmacyRepository pharmacyRepository;
 
-	@Autowired
-	private IDrugRepository drugRepository;
+    @Autowired
+    private IDrugRepository drugRepository;
 
-	@Autowired
-	private IReservationRepository reservationRepository;
+    @Autowired
+    private IReservationRepository reservationRepository;
 
-	@Autowired
-	private IPriceRepository priceRepository;
+    @Autowired
+    private IPriceRepository priceRepository;
 
-	@Autowired
-	private IDrugOrderRepository drugOrderRepository;
+    @Autowired
+    private IDrugOrderRepository drugOrderRepository;
 
-	public Collection<AvailableDrug> getByPharmacy(Long pharmacyId) {
-		Pharmacy pharmacy = pharmacyRepository.findById(pharmacyId).orElse(null);
+    public Collection<AvailableDrug> getByPharmacy(Long pharmacyId) {
+        Pharmacy pharmacy = pharmacyRepository.findById(pharmacyId).orElse(null);
 
-		if (pharmacy == null)
-			throw new PSNotFoundException("The requested pharmacy does not exist.");
+        if (pharmacy == null)
+            throw new PSNotFoundException("The requested pharmacy does not exist.");
 
-		return pharmacy.getAvailableDrugs();
-	}
+        return pharmacy.getAvailableDrugs();
+    }
+
 
 	@Override
 	public Collection<AvailableDrug> searchByPharmacy(Long pharmacyId, DrugSearchDTO searchDTO) {
 		Collection<AvailableDrug> drugs = getByPharmacy(pharmacyId);
+        if (searchDTO.getName() != null)
+            drugs = CollectionUtil.findAll(drugs, drug -> drug.getDrug().getName().contains(searchDTO.getName()));
+        if (searchDTO.getCode() != null)
+            drugs = CollectionUtil.findAll(drugs, drug -> drug.getDrug().getCode().contains(searchDTO.getCode()));
+        if (searchDTO.getDrugClassId() != null)
+            drugs = CollectionUtil.findAll(drugs,
+                    drug -> drug.getDrug().getDrugClass().getId().equals(searchDTO.getDrugClassId()));
+        if (searchDTO.getDrugFormId() != null)
+            drugs = CollectionUtil.findAll(drugs,
+                    drug -> drug.getDrug().getDrugForm().getId().equals(searchDTO.getDrugFormId()));
 
-		if (searchDTO.getName() != null)
-			drugs = CollectionUtil.findAll(drugs, drug -> drug.getDrug().getName().contains(searchDTO.getName()));
-		if (searchDTO.getCode() != null)
-			drugs = CollectionUtil.findAll(drugs, drug -> drug.getDrug().getCode().contains(searchDTO.getCode()));
-		if (searchDTO.getDrugClassId() != null)
-			drugs = CollectionUtil.findAll(drugs,
-					drug -> drug.getDrug().getDrugClass().getId().equals(searchDTO.getDrugClassId()));
-		if (searchDTO.getDrugFormId() != null)
-			drugs = CollectionUtil.findAll(drugs,
-					drug -> drug.getDrug().getDrugForm().getId().equals(searchDTO.getDrugFormId()));
-
-		return drugs;
-	}
+        return drugs;
+    }
 
 	@Override
 	public AvailableDrug addToPharmacy(Long pharmacyId, AddAvailableDrugDTO drugInfo) {
@@ -85,32 +81,32 @@ public class AvailableDrugService implements IAvailableDrugService {
 		if (pharmacy == null)
 			throw new PSNotFoundException("The requested pharmacy does not exist.");
 
-		Drug drug = drugRepository.findById(drugInfo.getCode()).orElse(null);
-		if (drug == null)
-			throw new PSNotFoundException("The requested drug does not exist.");
+        Drug drug = drugRepository.findById(drugInfo.getCode()).orElse(null);
+        if (drug == null)
+            throw new PSNotFoundException("The requested drug does not exist.");
 
-		if (CollectionUtil.contains(pharmacy.getAvailableDrugs(),
-				available -> available.getDrug().getCode().equals(drug.getCode())))
-			throw new PSConflictException("The requested drug is already available in the requested pharmacy.");
+        if (CollectionUtil.contains(pharmacy.getAvailableDrugs(),
+                available -> available.getDrug().getCode().equals(drug.getCode())))
+            throw new PSConflictException("The requested drug is already available in the requested pharmacy.");
 
-		AvailableDrug availableDrug = new AvailableDrug();
-		availableDrug.setPharmacy(pharmacy);
-		availableDrug.setDrug(drug);
-		availableDrug.setDefaultPrice(drugInfo.getDefaultPrice());
-		availableDrug.setAvailableAmount(0);
+        AvailableDrug availableDrug = new AvailableDrug();
+        availableDrug.setPharmacy(pharmacy);
+        availableDrug.setDrug(drug);
+        availableDrug.setDefaultPrice(drugInfo.getDefaultPrice());
+        availableDrug.setAvailableAmount(0);
 
-		return availableDrugRepository.save(availableDrug);
-	}
+        return availableDrugRepository.save(availableDrug);
+    }
 
 	@Override
 	public void deleteFromPharmacy(Long pharmacyId, String drugCode) {
 		AvailableDrug availableDrug = availableDrugRepository.findByPharmacyIdAndDrugCode(pharmacyId, drugCode)
 				.orElse(null);
 
-		if (availableDrug == null)
-			throw new PSConflictException("The requested drug is not available in the requested pharmacy.");
+        if (availableDrug == null)
+            throw new PSConflictException("The requested drug is not available in the requested pharmacy.");
 
-		if (hasActiveReservations(pharmacyId, drugCode))
+    		if (hasActiveReservations(pharmacyId, drugCode))
 			throw new PSConflictException("The requestes drug cannot be deleted because of unfinished reservations.");
 
 		if (hasActiveOrders(pharmacyId, drugCode))
@@ -118,6 +114,53 @@ public class AvailableDrugService implements IAvailableDrugService {
 
 		availableDrugRepository.delete(availableDrug);
 	}
+
+    @Override
+    public List<PharmacyTotalPriceDTO> findPharmaciesWithRequiredDrugsAmount(List<DrugCodeAndAmountDTO> drugCodeAndAmountDTOS) {
+        List<PharmacyTotalPriceDTO> pharmaciesWithRequiredDrugs = new ArrayList<>();
+        for (Pharmacy pharmacy : pharmacyRepository.findAll()) {
+            double totalPharmacyPriceForRequiredDrugsAmount = getTotalPharmacyPriceForRequiredDrugsAmount(pharmacy, drugCodeAndAmountDTOS);
+            if (totalPharmacyPriceForRequiredDrugsAmount != -1 && !isPharmacyAlreadyAdded(pharmaciesWithRequiredDrugs, pharmacy)) {
+                pharmaciesWithRequiredDrugs.add(new PharmacyTotalPriceDTO(pharmacy, totalPharmacyPriceForRequiredDrugsAmount));
+            }
+
+        }
+        return pharmaciesWithRequiredDrugs;
+    }
+
+    private boolean isPharmacyAlreadyAdded(List<PharmacyTotalPriceDTO> pharmaciesWithRequiredDrugs, Pharmacy newPharmacy) {
+        for (PharmacyTotalPriceDTO pharmacy : pharmaciesWithRequiredDrugs) {
+            if (pharmacy.getPharmacyId().equals(newPharmacy.getId()))
+                return true;
+        }
+        return false;
+    }
+
+    private double getTotalPharmacyPriceForRequiredDrugsAmount(Pharmacy pharmacy, List<DrugCodeAndAmountDTO> drugCodeAndAmountDTOS) {
+        double totalPrice = -1;
+        for (DrugCodeAndAmountDTO drugCodeAndAmountDTO : drugCodeAndAmountDTOS) {
+            double priceForRequiredDrugAmount = getPharmacyPriceForRequiredDrugAmount(pharmacy, drugCodeAndAmountDTO);
+            if (priceForRequiredDrugAmount == -1) {
+                return -1;
+            } else {
+                if (totalPrice == -1) totalPrice = 0;    // Only for init purpose, to start from zero, not -1
+                totalPrice += priceForRequiredDrugAmount;
+            }
+
+        }
+        return totalPrice;
+    }
+
+    private double getPharmacyPriceForRequiredDrugAmount(Pharmacy pharmacy, DrugCodeAndAmountDTO drugCodeAndAmountDTO) {
+        for (AvailableDrug availableDrug : pharmacy.getAvailableDrugs()) {
+            if (availableDrug.getDrug().getCode().equals(drugCodeAndAmountDTO.getDrugCode()) && availableDrug.getAvailableAmount() >= drugCodeAndAmountDTO.getAmount()) {
+                return drugCodeAndAmountDTO.getAmount() * availableDrug.getDefaultPrice();
+                //TODO: Calculate discount if that is even a required ?
+            }
+        }
+        return -1;
+    }
+
 
 	private boolean hasActiveReservations(Long pharmacyId, String drugCode) {
 		return CollectionUtil.contains(reservationRepository.findAllByPharmacyIdAndDrugCode(pharmacyId, drugCode),
