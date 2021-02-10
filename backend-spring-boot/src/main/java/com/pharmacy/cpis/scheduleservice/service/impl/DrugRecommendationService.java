@@ -15,6 +15,9 @@ import com.pharmacy.cpis.scheduleservice.repository.IConsultationReportRepositor
 import com.pharmacy.cpis.scheduleservice.repository.IConsultationRepository;
 import com.pharmacy.cpis.scheduleservice.repository.IDrugRecommendationRepository;
 import com.pharmacy.cpis.scheduleservice.service.IDrugRecommendationService;
+import com.pharmacy.cpis.userservice.model.users.Patient;
+import com.pharmacy.cpis.userservice.repository.IPatientRepository;
+import com.pharmacy.cpis.userservice.service.IPatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +42,9 @@ public class DrugRecommendationService implements IDrugRecommendationService {
 
     @Autowired
     private IConsultationReportRepository consultationReportRepository;
+
+    @Autowired
+    private IPatientRepository patientRepository;
     @Override
     public DrugRecommendationDTO recommendDrug(DrugRecommendationDTO drugRecommendationDTO) {
         Consultation consultation = consultationRepository.getOne(drugRecommendationDTO.getConsultationID());
@@ -68,6 +74,7 @@ public class DrugRecommendationService implements IDrugRecommendationService {
 
         Consultation consultation = consultationRepository.getOne(drugRecommendationDTO.getConsultationID());
         Drug drug = drugRepository.getOne(drugRecommendationDTO.getDrugCode());
+        Patient patient = patientRepository.getOne(drugRecommendationDTO.getPatientID());
 
         if(availableDrugService.checkIsAvailableinPharmacy(consultation.getPharmacy().getId(),drugRecommendationDTO.getDrugCode()) != null){
             drugRecommendationDTO.setAvailable(true);
@@ -76,13 +83,16 @@ public class DrugRecommendationService implements IDrugRecommendationService {
 
         Set<Drug> alternateDrugs = drug.getAlternateDrugs();
         Set<AlternateDrugDTO> alternateDrugsDTOs = new HashSet<>();
+        Set<Drug> allergis = patient.getAllergies();
 
         for (Drug alterDrug: alternateDrugs) {
-            AlternateDrugDTO alternateDrugDTO = new AlternateDrugDTO();
-            alternateDrugDTO.setName(alterDrug.getName());
-            alternateDrugDTO.setCode(alterDrug.getCode());
-            alternateDrugDTO.setDrugSpecificationDTO(new DrugSpecificationDTO(alterDrug.getSpecification()));
-            alternateDrugsDTOs.add(alternateDrugDTO);
+            if(!allergis.contains(alterDrug)){
+                AlternateDrugDTO alternateDrugDTO = new AlternateDrugDTO();
+                alternateDrugDTO.setName(alterDrug.getName());
+                alternateDrugDTO.setCode(alterDrug.getCode());
+                alternateDrugDTO.setDrugSpecificationDTO(new DrugSpecificationDTO(alterDrug.getSpecification()));
+                alternateDrugsDTOs.add(alternateDrugDTO);
+            }
         }
 
         drugRecommendationDTO.setAlternateDrugsDTO(alternateDrugsDTOs);

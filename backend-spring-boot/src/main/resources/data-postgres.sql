@@ -235,3 +235,4 @@ insert into allergies (patient_id, drug_code) values (2,'brufen');
 insert into allergies (patient_id, drug_code) values (2,'aspirin');
 
 insert into alternate_drugs(drug_code, alternate_drug_code) values('amfetamin','brufen');
+insert into alternate_drugs(drug_code, alternate_drug_code) values('amfetamin','kreatin');
