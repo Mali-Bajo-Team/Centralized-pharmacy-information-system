@@ -1,4 +1,7 @@
 package com.pharmacy.cpis.userservice.controller;
+import com.pharmacy.cpis.pharmacyservice.dto.PharmacyDTO;
+import com.pharmacy.cpis.pharmacyservice.dto.PharmacyDetailsDTO;
+import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
 import com.pharmacy.cpis.userservice.dto.PatientEmailDTO;
 import com.pharmacy.cpis.userservice.dto.PatientProfileDTO;
 import com.pharmacy.cpis.userservice.dto.PenaltieDTO;
@@ -13,6 +16,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
@@ -32,6 +38,7 @@ public class PatientController {
         return new ResponseEntity<>(new PatientProfileDTO(patient,patientEmail,loyaltyProgramService), HttpStatus.OK);
     }
 
+
     @PostMapping("/addpenaltie")
     @PreAuthorize("hasRole('PHARMACIST') || hasRole('DERMATOLOGIST')")
     public  ResponseEntity<PenaltieDTO> addPenaltie(@RequestBody PenaltieDTO penaltieDTO) {
@@ -40,6 +47,16 @@ public class PatientController {
         Patient patient = patientService.addPenaltie(userAccount.getEmail() , penaltieDTO.getConsultationID());
 
         return new ResponseEntity<>(penaltieDTO, HttpStatus.OK);
+    }
+  
+    @PostMapping("/subscriptions")
+    @PreAuthorize("hasRole('PATIENT')")
+    public  ResponseEntity<List<PharmacyDTO>> getPatientSubscriptions(@RequestBody PatientEmailDTO patientEmail) {
+        List<PharmacyDTO> pharmacyDTOS = new ArrayList<>();
+        for(Pharmacy pharmacy : patientService.findPatientSubscriptions(patientEmail.getEmail()))
+            pharmacyDTOS.add(new PharmacyDTO(pharmacy));
+        return new ResponseEntity<>(pharmacyDTOS,HttpStatus.OK);
+
     }
 
 }

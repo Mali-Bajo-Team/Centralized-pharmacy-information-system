@@ -34,6 +34,14 @@ export default {
         title: "Pharmacies",
         to:"/patient/patientpharmacies"
       },
+      {
+        title: "Subscriptions",
+        to: "/patient/subscriptions"
+      },
+      {
+        title: "EPrescription",
+        to: "/patient/eprescription"
+      }
     ],
   }),
 };
