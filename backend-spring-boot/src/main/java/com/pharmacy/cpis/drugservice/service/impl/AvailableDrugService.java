@@ -6,6 +6,7 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pharmacy.cpis.drugservice.dto.AddAvailableDrugDTO;
 import com.pharmacy.cpis.drugservice.dto.AddDrugPriceDTO;
@@ -60,6 +61,7 @@ public class AvailableDrugService implements IAvailableDrugService {
 		return pharmacy.getAvailableDrugs();
 	}
 
+	@Override
 	public Collection<AvailableDrug> searchByPharmacy(Long pharmacyId, DrugSearchDTO searchDTO) {
 		Collection<AvailableDrug> drugs = getByPharmacy(pharmacyId);
 
@@ -77,6 +79,7 @@ public class AvailableDrugService implements IAvailableDrugService {
 		return drugs;
 	}
 
+	@Override
 	public AvailableDrug addToPharmacy(Long pharmacyId, AddAvailableDrugDTO drugInfo) {
 		Pharmacy pharmacy = pharmacyRepository.findById(pharmacyId).orElse(null);
 		if (pharmacy == null)
@@ -99,6 +102,7 @@ public class AvailableDrugService implements IAvailableDrugService {
 		return availableDrugRepository.save(availableDrug);
 	}
 
+	@Override
 	public void deleteFromPharmacy(Long pharmacyId, String drugCode) {
 		AvailableDrug availableDrug = availableDrugRepository.findByPharmacyIdAndDrugCode(pharmacyId, drugCode)
 				.orElse(null);
@@ -132,6 +136,7 @@ public class AvailableDrugService implements IAvailableDrugService {
 		return false;
 	}
 
+	@Override
 	public AvailableDrug getByPharmacyAndDrug(Long pharmacyId, String drugCode) {
 		AvailableDrug availableDrug = availableDrugRepository.findByPharmacyIdAndDrugCode(pharmacyId, drugCode)
 				.orElse(null);
@@ -142,6 +147,7 @@ public class AvailableDrugService implements IAvailableDrugService {
 		return availableDrug;
 	}
 
+	@Override
 	public Collection<DrugPriceDTO> getPrice(Long pharmacyId, String drugCode, Date start, Date end) {
 		AvailableDrug availableDrug = availableDrugRepository.findByPharmacyIdAndDrugCode(pharmacyId, drugCode)
 				.orElse(null);
@@ -158,6 +164,8 @@ public class AvailableDrugService implements IAvailableDrugService {
 		return prices;
 	}
 
+	@Override
+	@Transactional
 	public void addPrice(Long pharmacyId, String drugCode, AddDrugPriceDTO priceInfo) {
 		AvailableDrug availableDrug = availableDrugRepository.findByPharmacyIdAndDrugCode(pharmacyId, drugCode)
 				.orElse(null);

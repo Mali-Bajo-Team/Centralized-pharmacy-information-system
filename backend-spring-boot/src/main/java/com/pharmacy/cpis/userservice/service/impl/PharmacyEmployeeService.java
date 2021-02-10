@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
 import com.pharmacy.cpis.pharmacyservice.repository.IPharmacyRepository;
@@ -46,6 +47,7 @@ public class PharmacyEmployeeService implements IPharmacyEmployeeService {
 	private IPharmacyRepository pharmacyRepository;
 
 	@Override
+	@Transactional
 	public WorkingTimes employPharmacist(Long pharmacyId, EmployPharmacistDTO details) {
 		Pharmacy pharmacy = pharmacyRepository.findById(pharmacyId).orElse(null);
 		if (pharmacy == null)
@@ -60,6 +62,7 @@ public class PharmacyEmployeeService implements IPharmacyEmployeeService {
 	}
 
 	@Override
+	@Transactional
 	public WorkingTimes employDermatologist(Long pharmacyId, EmployDermatologistDTO details) {
 		Pharmacy pharmacy = pharmacyRepository.findById(pharmacyId).orElse(null);
 		if (pharmacy == null)
@@ -143,6 +146,7 @@ public class PharmacyEmployeeService implements IPharmacyEmployeeService {
 	}
 
 	@Override
+	@Transactional
 	public void fireConsultant(Long pharmacyId, Long consultantId) {
 		WorkingTimes employment = workingTimesRepository.findByPharmacyIdAndConsultantId(pharmacyId, consultantId)
 				.orElse(null);

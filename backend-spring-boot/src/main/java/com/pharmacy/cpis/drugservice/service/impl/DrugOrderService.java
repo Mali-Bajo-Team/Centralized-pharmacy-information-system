@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pharmacy.cpis.drugservice.dto.AddDrugOrderDTO;
 import com.pharmacy.cpis.drugservice.dto.AddOrderedDrugDTO;
@@ -65,6 +66,7 @@ public class DrugOrderService implements IDrugOrderService {
 	}
 
 	@Override
+	@Transactional
 	public DrugOrder add(UserAccount creator, AddDrugOrderDTO drugOrder) {
 		PharmacyAdministrator admin = pharmacyAdminRepository.findByAccount(creator).orElse(null);
 
@@ -81,13 +83,14 @@ public class DrugOrderService implements IDrugOrderService {
 		DrugOrder saved = drugOrderRepository.save(newDrugOrder);
 
 		for (AddOrderedDrugDTO orderedDrugDTO : drugOrder.getOrderedDrugs()) {
-			addDrugToOder(saved, orderedDrugDTO);
+			addDrugToOrder(saved, orderedDrugDTO);
 		}
 
 		return saved;
 	}
 
 	@Override
+	@Transactional
 	public void delete(UserAccount user, Long orderId) {
 		PharmacyAdministrator admin = pharmacyAdminRepository.findByAccount(user).orElse(null);
 
@@ -105,6 +108,8 @@ public class DrugOrderService implements IDrugOrderService {
 		drugOrderRepository.delete(order);
 	}
 
+	@Override
+	@Transactional
 	public void update(UserAccount user, Long orderId, AddDrugOrderDTO orderUpdate) {
 		PharmacyAdministrator admin = pharmacyAdminRepository.findByAccount(user).orElse(null);
 
@@ -118,7 +123,7 @@ public class DrugOrderService implements IDrugOrderService {
 
 		if (!order.getStatus().equals(DrugOrderStatus.WAITING_FOR_OFFERS))
 			throw new PSConflictException("Drug order cannot be updated because it already has offers.");
-		
+
 		order.setDeadline(orderUpdate.getDeadline());
 		order = drugOrderRepository.save(order);
 
@@ -127,11 +132,11 @@ public class DrugOrderService implements IDrugOrderService {
 		}
 
 		for (AddOrderedDrugDTO orderedDrugDTO : orderUpdate.getOrderedDrugs()) {
-			addDrugToOder(order, orderedDrugDTO);
+			addDrugToOrder(order, orderedDrugDTO);
 		}
 	}
 
-	private void addDrugToOder(DrugOrder order, AddOrderedDrugDTO orderedDrugDTO) {
+	private void addDrugToOrder(DrugOrder order, AddOrderedDrugDTO orderedDrugDTO) {
 		Drug drug = drugRepository.findById(orderedDrugDTO.getCode()).orElse(null);
 
 		if (drug == null)

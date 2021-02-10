@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pharmacy.cpis.drugservice.dto.SupplierOfferDTO;
 import com.pharmacy.cpis.drugservice.model.drugprocurement.DrugOrder;
@@ -67,6 +68,7 @@ public class OfferService implements IOfferService {
 	}
 
 	@Override
+	@Transactional
 	public Offer saveOffer(SupplierOfferDTO offerDTO) {
 		Supplier supplier = supplierService.getLoggedSupplier();
 		if (supplier == null)
