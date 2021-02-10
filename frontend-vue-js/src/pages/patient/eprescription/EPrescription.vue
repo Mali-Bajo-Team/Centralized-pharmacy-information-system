@@ -42,6 +42,7 @@ export default {
     onDecode(result) {
       this.result = JSON.parse(result);
       console.log(this.result);
+      //TODO: Make ajax call to get available pharmacies where he can buy all drugs he want 
     },
   },
 };

@@ -1,16 +1,11 @@
 package com.pharmacy.cpis.drugservice.service.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 
+import com.pharmacy.cpis.drugservice.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.pharmacy.cpis.drugservice.dto.AddAvailableDrugDTO;
-import com.pharmacy.cpis.drugservice.dto.AddDrugPriceDTO;
-import com.pharmacy.cpis.drugservice.dto.DrugPriceDTO;
-import com.pharmacy.cpis.drugservice.dto.DrugSearchDTO;
 import com.pharmacy.cpis.drugservice.model.drug.Drug;
 import com.pharmacy.cpis.drugservice.model.drugprocurement.DrugOrder;
 import com.pharmacy.cpis.drugservice.model.drugprocurement.DrugOrderStatus;
@@ -191,4 +186,38 @@ public class AvailableDrugService implements IAvailableDrugService {
 		return availableDrugRepository.save(availableDrug);
 	}
 
+	@Override
+	public List<Pharmacy> findPharmaciesWithRequiredDrugsAmount(List<DrugCodeAndAmountDTO> drugCodeAndAmountDTOS) {
+		List<Pharmacy> allPharmacies = pharmacyRepository.findAll();
+		List<Pharmacy> pharmaciesWithRequiredDrugs = new ArrayList<>();
+		for(Pharmacy pharmacy :allPharmacies){
+			if(pharmacyHaveRequiredDrugsAmount(pharmacy, drugCodeAndAmountDTOS) && !isPharmacyAlreadyAdded(pharmaciesWithRequiredDrugs, pharmacy))
+				pharmaciesWithRequiredDrugs.add(pharmacy);
+		}
+		return pharmaciesWithRequiredDrugs;
+	}
+
+	private boolean isPharmacyAlreadyAdded(List<Pharmacy> pharmaciesWithRequiredDrugs, Pharmacy newPharmacy) {
+		for(Pharmacy pharmacy : pharmaciesWithRequiredDrugs){
+			if(pharmacy.getId().equals(newPharmacy.getId()))
+				return true;
+		}
+		return false;
+	}
+
+	private boolean pharmacyHaveRequiredDrugsAmount(Pharmacy pharmacy, List<DrugCodeAndAmountDTO> drugCodeAndAmountDTOS){
+		for(DrugCodeAndAmountDTO drugCodeAndAmountDTO: drugCodeAndAmountDTOS){
+			if(!pharmacyHaveRequiredDrugAmount(pharmacy, drugCodeAndAmountDTO))
+				return false;
+		}
+		return true;
+	}
+
+	private boolean pharmacyHaveRequiredDrugAmount(Pharmacy pharmacy, DrugCodeAndAmountDTO drugCodeAndAmountDTO){
+		for(AvailableDrug availableDrug : pharmacy.getAvailableDrugs()){
+			if(availableDrug.getDrug().getCode().equals(drugCodeAndAmountDTO.getDrugCode()) && availableDrug.getAvailableAmount() >= drugCodeAndAmountDTO.getAmount())
+				return true;
+		}
+		return false;
+	}
 }

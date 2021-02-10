@@ -3,6 +3,8 @@ package com.pharmacy.cpis.pharmacyservice.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pharmacy.cpis.drugservice.dto.DrugCodeAndAmountDTO;
+import com.pharmacy.cpis.drugservice.service.IAvailableDrugService;
 import com.pharmacy.cpis.pharmacyservice.dto.PharmaciesForDermatologistDTO;
 import com.pharmacy.cpis.scheduleservice.service.IWorkingTimesService;
 import com.pharmacy.cpis.userservice.dto.PatientEmailDTO;
@@ -37,6 +39,9 @@ public class PharmacyController {
 
 	@Autowired
 	private IWorkingTimesService workingTimesService;
+
+	@Autowired
+	private IAvailableDrugService availableDrugService;
 
 	@GetMapping("/{id}")
 	@PreAuthorize("hasRole('PATIENT')")
@@ -89,4 +94,11 @@ public class PharmacyController {
 		return new ResponseEntity<>(pharmaciesDTO, HttpStatus.OK);
 	}
 
+	//findPharmaciesWithRequiredDrugsAmount
+	@PostMapping(value = "/requireddrugs")
+	// TODO: add auth
+	public ResponseEntity<Void> findPharmaciesWithRequiredDrugsAmount(@RequestBody List<DrugCodeAndAmountDTO> drugCodeAndAmountDTOS){
+		availableDrugService.findPharmaciesWithRequiredDrugsAmount(drugCodeAndAmountDTOS);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 }

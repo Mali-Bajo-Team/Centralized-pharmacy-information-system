@@ -2,12 +2,11 @@ package com.pharmacy.cpis.drugservice.service;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
-import com.pharmacy.cpis.drugservice.dto.AddAvailableDrugDTO;
-import com.pharmacy.cpis.drugservice.dto.AddDrugPriceDTO;
-import com.pharmacy.cpis.drugservice.dto.DrugPriceDTO;
-import com.pharmacy.cpis.drugservice.dto.DrugSearchDTO;
+import com.pharmacy.cpis.drugservice.dto.*;
 import com.pharmacy.cpis.drugservice.model.drugsales.AvailableDrug;
+import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
 
 public interface IAvailableDrugService {
 
@@ -26,5 +25,7 @@ public interface IAvailableDrugService {
 	void addPrice(Long pharmacyId, String drugCode, AddDrugPriceDTO priceInfo);
 
 	AvailableDrug updateAmount(Long pharmacyId,String drugCode,Integer amount);
+
+	List<Pharmacy> findPharmaciesWithRequiredDrugsAmount(List<DrugCodeAndAmountDTO> drugCodeAndAmountDTOS);
 
 }
