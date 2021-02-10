@@ -192,12 +192,12 @@
               </v-stepper-step>
 
               <v-stepper-content step="2">
-                <v-card color="grey lighten-3" class="mb-12" height="400px">
+                <v-card color="grey lighten-3" class="mb-12" height="600px">
                   <!-- CHOOSE DRUG FOR PERSCRIBE -->
-                  <h4 class="mt-10 ml-n primary--text">
+                  <h4 class="ml-n primary--text">
                     Choose drug (listed drugs was filtered from allergens)
                   </h4>
-                  <v-select
+                  <v-select class="ml-16 mr-16"
                     v-model="selecteddrugWithoutAllergies"
                     :items="drugsWithoutAllergies"
                     item-text="name"
@@ -211,11 +211,24 @@
                     v-on:input="onInputWithoutAllergies"
                     @click="alertDrugsWithoutAllergies = false"
                   ></v-select>
+                  <h4 class="mt-2 ml-n primary--text">
+                    Determine the duration of therapy 
+                  </h4>
+                   <v-text-field solo class="mr-16 ml-16" label="Duration of therapy"></v-text-field>
+                  <!-- DRUG SPECIFICATION -->
                   <h4 class="ml-n primary--text">Drug specification</h4>
-                  <v-btn depressed color="primary" @click="showDescription">
-                    Show specification
+                  <v-btn class="ml-16" depressed color="primary" @click="showDescription">
+                    Show
                   </v-btn>
-                  <h3 class="mt-5 ml-2 primary--text">{{ drugSpecification }}</h3>
+                  <h3 class="mt-1 mb-6 ml-2 BLACK--text">
+                    {{ drugSpecification }}
+                  </h3>
+                   <h4 class="ml-n primary--text">Check the availability of the drug in the current pharmacy</h4>
+                  <v-btn class="ml-16" depressed color="primary" @click="showDescription">
+                   CHECK
+                  </v-btn>
+                 
+
                   <v-alert
                     :value="alertDrugsWithoutAllergies"
                     color="pink"
