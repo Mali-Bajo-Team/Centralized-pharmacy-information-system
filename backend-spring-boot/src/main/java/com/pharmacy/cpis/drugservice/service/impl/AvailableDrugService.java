@@ -3,6 +3,7 @@ package com.pharmacy.cpis.drugservice.service.impl;
 import java.util.*;
 
 import com.pharmacy.cpis.drugservice.dto.*;
+import com.pharmacy.cpis.pharmacyservice.dto.PharmacyTotalPriceDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -187,22 +188,21 @@ public class AvailableDrugService implements IAvailableDrugService {
     }
 
     @Override
-    public List<Pharmacy> findPharmaciesWithRequiredDrugsAmount(List<DrugCodeAndAmountDTO> drugCodeAndAmountDTOS) {
-        List<Pharmacy> allPharmacies = pharmacyRepository.findAll();
-        List<Pharmacy> pharmaciesWithRequiredDrugs = new ArrayList<>();
-        for (Pharmacy pharmacy : allPharmacies) {
+    public List<PharmacyTotalPriceDTO> findPharmaciesWithRequiredDrugsAmount(List<DrugCodeAndAmountDTO> drugCodeAndAmountDTOS) {
+        List<PharmacyTotalPriceDTO> pharmaciesWithRequiredDrugs = new ArrayList<>();
+        for (Pharmacy pharmacy : pharmacyRepository.findAll()) {
             double totalPharmacyPriceForRequiredDrugsAmount = getTotalPharmacyPriceForRequiredDrugsAmount(pharmacy, drugCodeAndAmountDTOS);
             if (totalPharmacyPriceForRequiredDrugsAmount != -1 && !isPharmacyAlreadyAdded(pharmaciesWithRequiredDrugs, pharmacy)) {
-                pharmaciesWithRequiredDrugs.add(pharmacy);
+                pharmaciesWithRequiredDrugs.add(new PharmacyTotalPriceDTO(pharmacy, totalPharmacyPriceForRequiredDrugsAmount));
             }
 
         }
         return pharmaciesWithRequiredDrugs;
     }
 
-    private boolean isPharmacyAlreadyAdded(List<Pharmacy> pharmaciesWithRequiredDrugs, Pharmacy newPharmacy) {
-        for (Pharmacy pharmacy : pharmaciesWithRequiredDrugs) {
-            if (pharmacy.getId().equals(newPharmacy.getId()))
+    private boolean isPharmacyAlreadyAdded(List<PharmacyTotalPriceDTO> pharmaciesWithRequiredDrugs, Pharmacy newPharmacy) {
+        for (PharmacyTotalPriceDTO pharmacy : pharmaciesWithRequiredDrugs) {
+            if (pharmacy.getPharmacyId().equals(newPharmacy.getId()))
                 return true;
         }
         return false;

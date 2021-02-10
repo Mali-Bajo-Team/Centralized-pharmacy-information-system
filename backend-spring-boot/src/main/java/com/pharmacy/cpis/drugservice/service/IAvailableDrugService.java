@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.pharmacy.cpis.drugservice.dto.*;
 import com.pharmacy.cpis.drugservice.model.drugsales.AvailableDrug;
+import com.pharmacy.cpis.pharmacyservice.dto.PharmacyTotalPriceDTO;
 import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
 
 public interface IAvailableDrugService {
@@ -26,6 +27,6 @@ public interface IAvailableDrugService {
 
 	AvailableDrug updateAmount(Long pharmacyId,String drugCode,Integer amount);
 
-	List<Pharmacy> findPharmaciesWithRequiredDrugsAmount(List<DrugCodeAndAmountDTO> drugCodeAndAmountDTOS);
+	List<PharmacyTotalPriceDTO> findPharmaciesWithRequiredDrugsAmount(List<DrugCodeAndAmountDTO> drugCodeAndAmountDTOS);
 
 }
