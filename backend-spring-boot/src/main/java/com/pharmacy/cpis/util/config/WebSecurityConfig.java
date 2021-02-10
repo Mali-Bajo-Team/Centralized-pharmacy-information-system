@@ -80,7 +80,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/reservation/patient").permitAll()
                 .antMatchers("/api/reservation/drug").permitAll()
 
-
                 //TODO: Delete this after postman testing
                 .antMatchers("/api/pharmacies/requireddrugs").permitAll()
 

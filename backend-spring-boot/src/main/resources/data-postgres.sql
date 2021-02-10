@@ -228,3 +228,11 @@ insert into working_times(consultant_id,pharmacy_id, monday_start, monday_end, s
 insert into drug_request (consultant_id, pharmacy_id, drug_code, timestamp) values (9, 1, 'aspirin', '2020-10-14');
 insert into drug_request (consultant_id, pharmacy_id, drug_code, timestamp) values (9, 1, 'brufen', '2020-12-14');
 
+--INSERT PREDEFINED CONSULTATIONS
+insert into consultation (price,status,start_date,end_date,consultant_id,pharmacy_id)
+ values (20,0,'2021-02-03 19:00:00','2021-02-03 19:30:00',11,2);
+
+insert into consultation (price,status,start_date,end_date,consultant_id,pharmacy_id)
+values (20,0,'2021-02-03 10:00:00','2021-02-03 10:30:00',9,1);
+insert into consultation (price,status,start_date,end_date,consultant_id,pharmacy_id)
+values (20,0,'2021-02-03 10:00:00','2021-02-03 10:30:00',9,2);
