@@ -307,7 +307,7 @@
               </v-stepper-step>
 
               <v-stepper-content step="3">
-                <v-card color="grey lighten-3" class="mb-12" height="1750px">
+                <v-card color="grey lighten-3" class="mb-12" height="2100px">
                   <h4 class="ml-n primary--text">
                     Choose predefined examination date and time
                   </h4>
@@ -325,20 +325,39 @@
                     v-bind:value="valuePredefinedDate"
                     v-on:input="onInputPredefinedDate"
                   ></v-select>
-                     <v-btn depressed class="ml-16" @click="scheduleConsultation" color="primary">
-            Schedule
-          </v-btn>
+                  <v-btn
+                    depressed
+                    class="ml-16"
+                    @click="scheduleConsultation"
+                    color="primary"
+                  >
+                    Schedule
+                  </v-btn>
+                  <v-alert
+                    :value="scheduleSucces"
+                    color="green"
+                    dark
+                    border="top"
+                    icon="mdi-account"
+                    transition="scale-transition"
+                  >
+                    Successfully scheduled
+                  </v-alert>
                     <v-alert
-            :value="scheduleSucces"
-            color="green"
-            dark
-            border="top"
-            icon="mdi-account"
-            transition="scale-transition"
-          >
-            Successfully scheduled
-          </v-alert>
-           <h4 class="ml-n mt-10 primary--text">
+                      :value="scheduleAlert"
+                      color="pink"
+                      dark
+                      border="top"
+                      icon="mdi-account"
+                      transition="scale-transition"
+                    >
+                      The schedule must match the working hours of the
+                      pharmacist. The appointment should not be prepared with
+                      another examination or consultation that the patient has
+                      scheduled (in any pharmacy). And also it is not possible
+                      to schedule consultations in the past.
+                    </v-alert>
+                  <h4 class="ml-n mt-10 primary--text">
                     Define new examination date and time
                   </h4>
                   <!-- DEFINE DATE CALENDAR -->
@@ -346,7 +365,8 @@
                     <h4 class="ml-n primary--text">
                       Define date for new examination
                     </h4>
-                    <v-date-picker class="ml-"
+                    <v-date-picker
+                      class="ml-"
                       v-model="picker"
                       v-bind:value="valueDate"
                       v-on:input="onInputDate"
@@ -363,77 +383,83 @@
                       You must pick date!
                     </v-alert>
                   </div>
-                   <!-- DEFINE START TIME -->
-          <div class="mr-10 mb-8 ml-16 mt-6">
-            <h4 class="ml-n primary--text">
-              Define starting time for examination
-            </h4>
-            <v-time-picker
-              v-bind:value="valueStartTime"
-              v-on:input="onInputStartTime"
-              format="ampm"
-              color="primary lighten-1"
-            ></v-time-picker>
-            <v-alert
-              :value="alertStartTime"
-              color="pink"
-              dark
-              border="top"
-              icon="mdi-account"
-              transition="scale-transition"
-            >
-              You must pick start date!
-            </v-alert>
-          </div>
-          <!-- DEFINE END TIME -->
-          <div class="ml-16">
-            <h4 class="ml-n mt-6 primary--text">
-              Choose ending time for examination
-            </h4>
-            <v-time-picker
-              v-bind:value="valueEndTime"
-              v-on:input="onInputEndTime"
-              format="ampm"
-              color="primary lighten-1"
-            ></v-time-picker>
+                  <!-- DEFINE START TIME -->
+                  <div class="mr-10 mb-8 ml-16 mt-6">
+                    <h4 class="ml-n primary--text">
+                      Define starting time for examination
+                    </h4>
+                    <v-time-picker
+                      v-bind:value="valueStartTime"
+                      v-on:input="onInputStartTime"
+                      format="ampm"
+                      color="primary lighten-1"
+                    ></v-time-picker>
+                    <v-alert
+                      :value="alertStartTime"
+                      color="pink"
+                      dark
+                      border="top"
+                      icon="mdi-account"
+                      transition="scale-transition"
+                    >
+                      You must pick start date!
+                    </v-alert>
+                  </div>
+                  <!-- DEFINE END TIME -->
+                  <div class="ml-16">
+                    <h4 class="ml-n mt-6 primary--text">
+                      Choose ending time for examination
+                    </h4>
+                    <v-time-picker
+                      v-bind:value="valueEndTime"
+                      v-on:input="onInputEndTime"
+                      format="ampm"
+                      color="primary lighten-1"
+                    ></v-time-picker>
 
-            <v-alert
-              :value="alertEndTime"
-              color="pink"
-              dark
-              border="top"
-              icon="mdi-account"
-              transition="scale-transition"
-            >
-              You must pick end time!
-            </v-alert>
-                     <v-btn depressed class="mt-5" @click="scheduleConsultation" color="primary">
-            Schedule
-          </v-btn>
-          <v-alert
-            :value="scheduleSucces"
-            color="green"
-            dark
-            border="top"
-            icon="mdi-account"
-            transition="scale-transition"
-          >
-            Successfully scheduled
-          </v-alert>
-          <v-alert
-            :value="scheduleAlert"
-            color="pink"
-            dark
-            border="top"
-            icon="mdi-account"
-            transition="scale-transition"
-          >
-            The schedule must match the working hours of the pharmacist. The
-            appointment should not be prepared with another examination or
-            consultation that the patient has scheduled (in any pharmacy). And
-            also it is not possible to schedule consultations in the past.
-          </v-alert>
-          </div>
+                    <v-alert
+                      :value="alertEndTime"
+                      color="pink"
+                      dark
+                      border="top"
+                      icon="mdi-account"
+                      transition="scale-transition"
+                    >
+                      You must pick end time!
+                    </v-alert>
+                    <v-btn
+                      depressed
+                      class="mt-5"
+                      @click="scheduleConsultation"
+                      color="primary"
+                    >
+                      Schedule
+                    </v-btn>
+                    <v-alert
+                      :value="scheduleSucces"
+                      color="green"
+                      dark
+                      border="top"
+                      icon="mdi-account"
+                      transition="scale-transition"
+                    >
+                      Successfully scheduled
+                    </v-alert>
+                    <v-alert
+                      :value="scheduleAlert"
+                      color="pink"
+                      dark
+                      border="top"
+                      icon="mdi-account"
+                      transition="scale-transition"
+                    >
+                      The schedule must match the working hours of the
+                      pharmacist. The appointment should not be prepared with
+                      another examination or consultation that the patient has
+                      scheduled (in any pharmacy). And also it is not possible
+                      to schedule consultations in the past.
+                    </v-alert>
+                  </div>
                 </v-card>
                 <v-btn color="primary" @click="e6 = 4"> Continue </v-btn>
                 <v-btn
@@ -450,7 +476,6 @@
 
               <v-stepper-step step="4"> Submit </v-stepper-step>
               <v-stepper-content step="4">
-
                 <v-btn
                   color="primary"
                   @click="
@@ -460,7 +485,6 @@
                 >
                   Submit
                 </v-btn>
-        
               </v-stepper-content>
             </v-stepper>
           </v-container>
@@ -505,7 +529,7 @@ export default {
     selectpredefinedDate: null,
     predefinedDate: null,
     valuePredefinedDate: null,
-    
+
     pharmacyID: null,
     valueStartTime: null,
     valueEndTime: null,
@@ -516,7 +540,7 @@ export default {
     examinationStartTime: null,
     examinationEndTime: null,
     scheduleSucces: false,
-    scheduleAlert:false,
+    scheduleAlert: false,
     type: "month",
     types: ["month", "week", "day", "4day"],
     mode: "stack",
@@ -574,42 +598,52 @@ export default {
     },
   },
   methods: {
-      onInputStartTime(valueStartTime) {
+    onInputStartTime(valueStartTime) {
       this.$emit("input", valueStartTime);
       this.examinationStartTime = valueStartTime;
       this.alertStartTime = false;
-       console.log(this.examinationStartTime);
+      console.log(this.examinationStartTime);
     },
     onInputEndTime(valueEndTime) {
       this.$emit("input", valueEndTime);
       this.examinationEndTime = valueEndTime;
       this.alertEndTime = false;
-      console.log(  this.examinationEndTime);
+      console.log(this.examinationEndTime);
     },
-      onInputPredefinedDate(valuePredefinedDate) {
+    onInputPredefinedDate(valuePredefinedDate) {
       this.$emit("input", valuePredefinedDate);
       this.valuePredefinedDate = valuePredefinedDate;
-      console.log( "AAAAAAA"+getStringDateWithTimeFromMilliseconds(valuePredefinedDate.startDate));
-      this.valueDate = getStringDateWithTimeFromMilliseconds(valuePredefinedDate.startDate).substring(0,10);
-      this.examinationStartTime = getStringDateWithTimeFromMilliseconds(valuePredefinedDate.startDate).substring(11,16);
-      this.examinationEndTime = getStringDateWithTimeFromMilliseconds(valuePredefinedDate.endDate).substring(11,16);
-  
+      console.log(
+        "AAAAAAA" +
+          getStringDateWithTimeFromMilliseconds(valuePredefinedDate.startDate)
+      );
+      this.valueDate = getStringDateWithTimeFromMilliseconds(
+        valuePredefinedDate.startDate
+      ).substring(0, 10);
+      this.examinationStartTime = getStringDateWithTimeFromMilliseconds(
+        valuePredefinedDate.startDate
+      ).substring(11, 16);
+      this.examinationEndTime = getStringDateWithTimeFromMilliseconds(
+        valuePredefinedDate.endDate
+      ).substring(11, 16);
+
       console.log(valuePredefinedDate);
     },
     onInputDate(valueDate) {
       this.$emit("input", valueDate);
       this.valueDate = valueDate;
       this.alertDate = false;
-      console.log( this.valueDate);
+      console.log(this.valueDate);
     },
-      scheduleConsultation() {
+    scheduleConsultation() {
       var token = parseJwt(localStorage.getItem("JWT-CPIS"));
       var email = token.sub;
       if (
         this.selectedPatient === null ||
         this.valueDate === null ||
         this.examinationStartTime === null ||
-        this.examinationEndTime === null || this.pharmacyID === null
+        this.examinationEndTime === null ||
+        this.pharmacyID === null
       ) {
         if (this.selectedPatient === null) {
           this.alertUser = true;
@@ -841,7 +875,7 @@ export default {
                 timed: 1,
                 patientId: this.consultants[i].patientId,
                 id: this.consultants[i].id,
-                 pharmacyID: this.consultants[i].pharmacyID
+                pharmacyID: this.consultants[i].pharmacyID,
               });
             }
             this.events = events;
@@ -887,7 +921,7 @@ export default {
                   timed: 1,
                   patientId: this.consultants[i].patientId,
                   id: this.consultants[i].id,
-                  pharmacyID: this.consultants[i].pharmacyID
+                  pharmacyID: this.consultants[i].pharmacyID,
                 });
               }
             }
