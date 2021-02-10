@@ -328,6 +328,16 @@
                      <v-btn depressed class="ml-16" @click="scheduleConsultation" color="primary">
             Schedule
           </v-btn>
+                    <v-alert
+            :value="scheduleSucces"
+            color="green"
+            dark
+            border="top"
+            icon="mdi-account"
+            transition="scale-transition"
+          >
+            Successfully scheduled
+          </v-alert>
            <h4 class="ml-n mt-10 primary--text">
                     Define new examination date and time
                   </h4>
@@ -440,11 +450,7 @@
 
               <v-stepper-step step="4"> Submit </v-stepper-step>
               <v-stepper-content step="4">
-                <v-card
-                  color="grey lighten-1"
-                  class="mb-12"
-                  height="200px"
-                ></v-card>
+
                 <v-btn
                   color="primary"
                   @click="
@@ -454,16 +460,7 @@
                 >
                   Submit
                 </v-btn>
-                <v-btn
-                  text
-                  @click="
-                    questionDialog = true;
-                    reportDialog = false;
-                    e6 = 1;
-                  "
-                >
-                  Cancel
-                </v-btn>
+        
               </v-stepper-content>
             </v-stepper>
           </v-container>
