@@ -41,7 +41,7 @@ export default {
        {
         title: "Subscriptions",
         to: "/patient/subscriptions"
-      }
+      },
     ],
   }),
 };
