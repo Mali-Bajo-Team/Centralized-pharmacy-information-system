@@ -407,8 +407,8 @@ export default {
             },
           }
         )
-        .then((resp) => {
-          this.drugsWithoutAllergies = resp.data;
+        .then(() => {
+
         });
     },
     showDescription() {
