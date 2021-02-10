@@ -32,17 +32,7 @@ public class PharmacyDetailsDTO {
 	}
 
 	public PharmacyDetailsDTO(Pharmacy pharmacy, String patientEmail) {
-		super();
-		this.name = pharmacy.getName();
-		this.description = pharmacy.getDescription();
-		this.latitude = pharmacy.getLocation().getLatitude();
-		this.longitude = pharmacy.getLocation().getLongitude();
-		this.street = pharmacy.getLocation().getStreet();
-		this.city = pharmacy.getLocation().getCity();
-		this.country = pharmacy.getLocation().getCountry();
-		this.rating = pharmacy.getAverageRating();
-		this.dermatologistConsultationPrice = pharmacy.getDermatologistConsultationPrice();
-		this.pharmacistConsultationPrice = pharmacy.getPharmacistConsultationPrice();
+		this(pharmacy);
 		this.subscribed = CollectionUtil.contains(pharmacy.getSubscribers(),
 				sub -> sub.getAccount().getEmail().equals(patientEmail));
 	}
