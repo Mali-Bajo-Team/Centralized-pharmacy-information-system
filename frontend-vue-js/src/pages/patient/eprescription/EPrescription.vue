@@ -11,7 +11,7 @@
           </v-toolbar>
           <!--End of the toolbar of the card-->
 
-          <v-card-subtitle class="ma-1" > Upload your QR code</v-card-subtitle>
+          <v-card-subtitle class="ma-1"> Upload your QR code</v-card-subtitle>
           <v-form class="pa-5">
             <qrcode-capture @decode="onDecode" />
           </v-form>
@@ -34,14 +34,14 @@ export default {
   components: { QrcodeCapture },
   data() {
     return {
-      result: "",
+      result: {},
     };
   },
 
   methods: {
     onDecode(result) {
-      this.result = result;
-      console.log(result);
+      this.result = JSON.parse(result);
+      console.log(this.result);
     },
   },
 };
