@@ -20,7 +20,7 @@ export default {
     links: [
       {
         title: "Home",
-        to: "/",
+        to: "/"
       },
       {
         title: "Drugs",
@@ -38,6 +38,23 @@ export default {
         title: "Register",
         to: "register",
       },
+      {
+        title: "Tabs",
+        children: [
+          {
+            title: "Example",
+            to: "/"
+          },
+          {
+            title: "With",
+            to: "/"
+          },
+          {
+            title: "Children",
+            to: "/"
+          }
+        ],
+      }
     ],
   }),
 };
