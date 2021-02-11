@@ -34,18 +34,13 @@ public class ReservationController {
     }
 
     @PostMapping("/patient")
-
-   // @PreAuthorize("hasRole('PATIENT')")
+    @PreAuthorize("hasRole('PATIENT')")
     public ResponseEntity<List<DrugReservationDTO>> getAllPatientReservations(@RequestBody PatientEmailDTO patientEmailDTO) {
-
         List<Reservation> reservations= reservationService.findAllPatientReservations(patientEmailDTO);
         List<DrugReservationDTO> drugReservationDTOs=new ArrayList<>();
-
         for(Reservation reservation: reservations){
             drugReservationDTOs.add(new DrugReservationDTO(reservation));
         }
-
-
         return new ResponseEntity<>(drugReservationDTOs,HttpStatus.OK);
     }
 
@@ -53,9 +48,7 @@ public class ReservationController {
     @EmployeeAccountActive
     @PostMapping(value = "/isvalid")
     public ResponseEntity<ReservationDTO> getDrugPharmaciesPrices(@RequestBody ReservationDTO reservationDTO){
-
         ReservationDTO reservationDTOforReturn = reservationService.isReservationValid(reservationDTO);
-
         return new ResponseEntity<>(reservationDTOforReturn, HttpStatus.OK);
     }
 
@@ -63,15 +56,12 @@ public class ReservationController {
     @EmployeeAccountActive
     @PostMapping(value = "/dispense")
     public ResponseEntity<ReservationDTO> dispensingMedicine(@RequestBody ReservationDTO reservationDTO){
-
         reservationService.dispensingMedicine(reservationDTO);
-
         return new ResponseEntity<>(reservationDTO, HttpStatus.OK);
     }
     @DeleteMapping(value = "/drug", consumes = "application/json")
-    //@PreAuthorize("hasRole('PATIENT')")
+    @PreAuthorize("hasRole('PATIENT')")
     public ResponseEntity<Void> cancelDrugReservation(@RequestBody DrugReservationDTO drugReservationDTO){
-
         reservationService.removeReservation(drugReservationDTO.getReservationId());
         availableDrugService.updateAmount(drugReservationDTO.getPharmacyID(),drugReservationDTO.getDrugCode(),-drugReservationDTO.getAmount());
         return new ResponseEntity<>(HttpStatus.OK);

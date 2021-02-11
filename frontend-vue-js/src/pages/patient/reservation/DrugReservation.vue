@@ -20,6 +20,7 @@
           <v-card-actions class="pb-4">
             <v-spacer> </v-spacer>
             <v-btn
+              v-if="isAvailableCancelReservation(reservation.deadline)"
               elevation="0"
               left
               top
@@ -40,8 +41,12 @@
 </template>
 
 <script>
-import { getStringDateFromMilliseconds } from "./../../../util/dateHandler";
 import { getParsedToken } from "./../../../util/token";
+import {
+  getStringDateWithTimeFromMilliseconds,
+  isAvailableToCancelConsultation,
+} from "./../../../util/dateHandler";
+
 export default {
   data: () => ({
     reservations: [],
@@ -69,10 +74,17 @@ export default {
   },
   methods: {
     convertMsToString(ms) {
-      return getStringDateFromMilliseconds(ms);
+      return getStringDateWithTimeFromMilliseconds(ms);
+    },
+    isAvailableCancelReservation(reservationDeadlineDate) {
+      if (isAvailableToCancelConsultation(reservationDeadlineDate)) {
+        return true;
+      }
+      console.log("not valid date !!");
+
+      return false;
     },
     cancelDrugReservation(reservation) {
-      alert("Pozvana funkcija" + reservation.reservationId);
       this.axios
         .delete(
           process.env.VUE_APP_BACKEND_URL +
@@ -91,12 +103,13 @@ export default {
         )
         .then(() => {
           alert("Successfully cancelled reservation.");
+          let tempReservations = [];
           for(let tempReservation of this.reservations){
-            if(tempReservation.reservationId==reservation.reservationId){
-              this.reservations.pop(tempReservation);
-              break;
+            if(tempReservation.reservationId!=reservation.reservationId){
+              tempReservations.push(tempReservation);
             }
           }
+          this.reservations = tempReservations;
         })
         .catch((error) => {
           alert(error);

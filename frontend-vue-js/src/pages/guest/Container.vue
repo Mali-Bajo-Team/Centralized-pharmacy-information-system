@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app style="background: rgba(0,0,0,0);">
     <navbar v-bind:items="links" v-bind:logout="false"></navbar>
     <v-main>
       <v-container fluid>
@@ -20,7 +20,7 @@ export default {
     links: [
       {
         title: "Home",
-        to: "/",
+        to: "/"
       },
       {
         title: "Drugs",
@@ -38,6 +38,23 @@ export default {
         title: "Register",
         to: "register",
       },
+      {
+        title: "Tabs",
+        children: [
+          {
+            title: "Example",
+            to: "/"
+          },
+          {
+            title: "With",
+            to: "/"
+          },
+          {
+            title: "Children",
+            to: "/"
+          }
+        ],
+      }
     ],
   }),
 };
