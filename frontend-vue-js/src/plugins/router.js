@@ -44,6 +44,7 @@ import VacationRequests from './../pages/pharmacyadmin/vacation/Vacation';
 import PharmacistSearch from './../pages/pharmacyadmin/consultants/Pharmacists';
 import DermatologistSearch from './../pages/pharmacyadmin/consultants/Dermatologists';
 import DrugOrders from './../pages/pharmacyadmin/orders/Container';
+import Promotion from './../pages/pharmacyadmin/promotions/AddPromotion'
 
 import Supplier from './../pages/supplier/Container';
 import SupplierLanding from './../pages/supplier/landing/Landing';
@@ -294,6 +295,11 @@ const routes = [
                 component: DrugOrders,
                 name: 'pharmacydrugorders',
                 path: 'orders'
+            },
+            {
+                component: Promotion,
+                name: 'addpromotion',
+                path: 'promotion'
             }
         ]
     },
