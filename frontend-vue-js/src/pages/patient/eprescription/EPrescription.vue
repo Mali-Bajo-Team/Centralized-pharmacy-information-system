@@ -219,7 +219,7 @@
               text-color="white"
               pill
             >
-              <v-icon small left> mdi-pill </v-icon>
+              <v-icon small left> mdi-map-marker </v-icon>
 
               {{ pharmacy.pharmacyLocation }}
             </v-chip>

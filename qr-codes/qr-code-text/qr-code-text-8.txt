@@ -1,0 +1,7 @@
+[
+  {
+    "drugCode": "brufen",
+    "amount": 2
+  }
+
+]

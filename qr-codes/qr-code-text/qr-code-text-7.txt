@@ -1,0 +1,7 @@
+[
+  {
+    "drugCode": "aspirin",
+    "amount": 11
+  }
+
+]
