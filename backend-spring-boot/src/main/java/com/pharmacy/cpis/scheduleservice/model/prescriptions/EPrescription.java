@@ -24,7 +24,7 @@ public class EPrescription {
 	private Patient patient;
 
 	@OneToMany(mappedBy = "prescription", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<PrescribedDrug> drugs;
+	private Set<PrescribedDrug> prescribedDrugs;
 
 	public EPrescription() {
 		super();
@@ -62,12 +62,12 @@ public class EPrescription {
 		this.patient = patient;
 	}
 
-	public Set<PrescribedDrug> getDrugs() {
-		return drugs;
+	public Set<PrescribedDrug> getPrescribedDrugs() {
+		return prescribedDrugs;
 	}
 
-	public void setDrugs(Set<PrescribedDrug> drugs) {
-		this.drugs = drugs;
+	public void setPrescribedDrugs(Set<PrescribedDrug> prescribedDrugs) {
+		this.prescribedDrugs = prescribedDrugs;
 	}
 
 	@Override
@@ -79,12 +79,12 @@ public class EPrescription {
 				Objects.equals(creationDate, that.creationDate) &&
 				status == that.status &&
 				Objects.equals(patient, that.patient) &&
-				Objects.equals(drugs, that.drugs);
+				Objects.equals(prescribedDrugs, that.prescribedDrugs);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, creationDate, status, patient, drugs);
+		return Objects.hash(id, creationDate, status, patient, prescribedDrugs);
 	}
 
 }

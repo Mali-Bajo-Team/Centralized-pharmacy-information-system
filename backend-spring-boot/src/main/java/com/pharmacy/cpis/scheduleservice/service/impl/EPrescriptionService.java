@@ -1,19 +1,26 @@
 package com.pharmacy.cpis.scheduleservice.service.impl;
 
+import com.pharmacy.cpis.drugservice.repository.IDrugRepository;
 import com.pharmacy.cpis.scheduleservice.dto.EPrescriptionCreateDTO;
+import com.pharmacy.cpis.scheduleservice.dto.PrescribedDrugCreateDTO;
 import com.pharmacy.cpis.scheduleservice.model.prescriptions.EPrescription;
 import com.pharmacy.cpis.scheduleservice.model.prescriptions.EPrescriptionStatus;
+import com.pharmacy.cpis.scheduleservice.model.prescriptions.PrescribedDrug;
 import com.pharmacy.cpis.scheduleservice.repository.IEPrescriptionRepository;
+import com.pharmacy.cpis.scheduleservice.repository.IPrescribedDrugRepository;
 import com.pharmacy.cpis.scheduleservice.service.IEPrescriptionService;
 import com.pharmacy.cpis.userservice.model.users.Patient;
 import com.pharmacy.cpis.userservice.repository.IPatientRepository;
 import com.pharmacy.cpis.userservice.repository.IUserRepository;
 import com.pharmacy.cpis.util.exceptions.PSNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class EPrescriptionService implements IEPrescriptionService {
@@ -27,6 +34,11 @@ public class EPrescriptionService implements IEPrescriptionService {
     @Autowired
     private IPatientRepository patientRepository;
 
+    @Autowired
+    private IDrugRepository drugRepository;
+
+    @Autowired
+    private IPrescribedDrugRepository prescribedDrugRepository;
 
     @Override
     public List<EPrescription> findAllPatientEPrescription(Long patientId) {
@@ -48,8 +60,21 @@ public class EPrescriptionService implements IEPrescriptionService {
         ePrescription.setCreationDate(new Date());
         ePrescription.setStatus(EPrescriptionStatus.CREATED);
         ePrescription.setPatient(patient);
-        // TODO: Check better way how to generate this CODE
+        EPrescription savedPrescription = prescriptionRepository.save(ePrescription); // First save, because i want to have ePrescription from DB(because of e-prescription id)
+        ePrescription.setPrescribedDrugs(savePrescribedDrugs(prescriptionDTO.getPrescribedDrugs(),savedPrescription));
 
-        return null;
+        return prescriptionRepository.save(ePrescription);
+    }
+
+    private Set<PrescribedDrug> savePrescribedDrugs(List<PrescribedDrugCreateDTO> prescribedDrugCreateDTOS, EPrescription ePrescription){
+        Set<PrescribedDrug> prescribedDrugs = new HashSet<>();
+        for(PrescribedDrugCreateDTO prescribedDrugCreateDTO : prescribedDrugCreateDTOS){
+            PrescribedDrug prescribedDrug = new PrescribedDrug();
+            prescribedDrug.setAmount(prescribedDrugCreateDTO.getAmount());
+            prescribedDrug.setDrug(drugRepository.findByCode(prescribedDrugCreateDTO.getDrugCode()));
+            prescribedDrug.setPrescription(ePrescription);
+            prescribedDrugs.add(prescribedDrugRepository.save(prescribedDrug));
+        }
+        return prescribedDrugs;
     }
 }
