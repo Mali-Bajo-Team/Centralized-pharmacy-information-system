@@ -3,12 +3,12 @@
     <v-spacer></v-spacer>
     <v-col sm="8" md="6" lg="6" xl="6" cols="12">
       <template v-if="loading">
-        <v-skeleton-loader elevation="4" class="pa-4 mb-10" type="article, actions"></v-skeleton-loader>
-        <v-skeleton-loader elevation="4" class="pa-4 mb-10" type="article, actions"></v-skeleton-loader>
+        <v-skeleton-loader elevation="4" class="pa-4 mb-10 mx-auto" type="article, actions"></v-skeleton-loader>
+        <v-skeleton-loader elevation="4" class="pa-4 mb-10 mx-auto" type="article, actions"></v-skeleton-loader>
       </template>
 
       <template v-if="orders">
-          <ordercomp v-for="ord in orders" :key="ord.id" :order="ord"></ordercomp>
+          <ordercomp v-for="ord in orders" :key="ord.id" :orderProp="ord"></ordercomp>
       </template>
 
       <v-card elevation="4" class="pa-4 mb-10" v-show="showEmptyMessage">
