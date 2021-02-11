@@ -141,9 +141,12 @@ export default {
           }
         })
         .catch((error) => {
-          if (error.response && error.response.data)
-            this.snackbarText = error.response.data;
-          else this.snackbarText = error.message;
+          if (error.response && error.response.data && error.response.data.message)
+            this.snackbarText = error.response.data.message;
+          else if (error.message) 
+            this.snackbarText = error.message;
+          else
+            this.snackbarText = "An unknown error has occured."
           this.loading = false;
           this.snackbar = true;
         });

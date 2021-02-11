@@ -16,7 +16,7 @@
         <v-tabs align-with-title hide-slider>
           <template v-for="item in items">
             <v-tab v-if="item.to" :key="item.title" :to="item.to">{{item.title}}</v-tab>
-            <v-menu  v-else :key="item.title" bottom offset-y="true" left>
+            <v-menu  v-else :key="item.title" bottom offset-y left>
             <template v-slot:activator="{ on, attrs }">
               <v-tab
                 v-bind="attrs"
