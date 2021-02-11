@@ -32,14 +32,6 @@ public class DateConversionsAndComparisons {
 		t1 = d1.getTime() - d1.getTime() % (24 * 60 * 60 * 1000L);
 		t2 = d2.getTime() - d2.getTime() % (24 * 60 * 60 * 1000L);
 		
-
-		System.out.println(d1);
-		System.out.println(d1.getTime());
-		System.out.println(t1);
-		
-		System.out.println(d2);
-		System.out.println(d2.getTime());
-		System.out.println(t2);
 		return (t1 - t2);
 	}
 
