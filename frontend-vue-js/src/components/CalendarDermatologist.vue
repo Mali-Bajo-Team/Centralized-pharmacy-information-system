@@ -139,9 +139,6 @@
             text
             @click="
               getDrugsWithoutAllergies();
-              getPredefinedDates();
-              questionDialog = false;
-              reportDialog = true;
             "
           >
             Start examination
@@ -193,7 +190,7 @@
               </v-stepper-step>
 
               <v-stepper-content step="2">
-                <v-card color="grey lighten-3" class="mb-12" height="600px">
+                <v-card color="grey lighten-3" class="mb-12" height="700px">
                   <!-- CHOOSE DRUG FOR PERSCRIBE -->
                   <h4 class="ml-n primary--text">
                     Choose {{ alternateDrugTxt }} (listed drugs was filtered
@@ -214,6 +211,16 @@
                     v-on:input="onInputWithoutAllergies"
                     @click="alertDrugsWithoutAllergies = false"
                   ></v-select>
+                  <v-alert
+                    :value="alertselectDrug"
+                    color="pink"
+                    dark
+                    border="top"
+                    icon="mdi-account"
+                    transition="scale-transition"
+                  >
+                    You must select drug!
+                  </v-alert>
                   <h4 class="ml-n primary--text">
                     Determine the duration of therapy
                   </h4>
@@ -223,6 +230,16 @@
                     label="Duration of therapy"
                     v-model="durationOfPerscirbe"
                   ></v-text-field>
+                   <v-alert
+                    :value="alertdurathiontherapy"
+                    color="pink"
+                    dark
+                    border="top"
+                    icon="mdi-account"
+                    transition="scale-transition"
+                  >
+                    You must determine duration of therapy!
+                  </v-alert>
                   <!-- DRUG SPECIFICATION -->
                   <h4 class="ml-n primary--text">Drug specification</h4>
                   <v-btn
@@ -233,6 +250,7 @@
                   >
                     Show
                   </v-btn>
+
                   <h3 class="mt-1 mb-6 ml-2 BLACK--text">
                     {{ drugSpecification }}
                   </h3>
@@ -328,7 +346,7 @@
                   <v-btn
                     depressed
                     class="ml-16"
-                    @click="scheduleConsultation"
+                    @click="scheduleConsultationPredefined"
                     color="primary"
                   >
                     Schedule
@@ -343,20 +361,20 @@
                   >
                     Successfully scheduled
                   </v-alert>
-                    <v-alert
-                      :value="scheduleAlert"
-                      color="pink"
-                      dark
-                      border="top"
-                      icon="mdi-account"
-                      transition="scale-transition"
-                    >
-                      The schedule must match the working hours of the
-                      pharmacist. The appointment should not be prepared with
-                      another examination or consultation that the patient has
-                      scheduled (in any pharmacy). And also it is not possible
-                      to schedule consultations in the past.
-                    </v-alert>
+                  <v-alert
+                    :value="scheduleAlert"
+                    color="pink"
+                    dark
+                    border="top"
+                    icon="mdi-account"
+                    transition="scale-transition"
+                  >
+                    The schedule must match the working hours of the pharmacist.
+                    The appointment should not be prepared with another
+                    examination or consultation that the patient has scheduled
+                    (in any pharmacy). And also it is not possible to schedule
+                    consultations in the past.
+                  </v-alert>
                   <h4 class="ml-n mt-10 primary--text">
                     Define new examination date and time
                   </h4>
@@ -474,16 +492,18 @@
                 </v-btn>
               </v-stepper-content>
 
-              <v-stepper-step step="4"> Submit </v-stepper-step>
+              <v-stepper-step step="4"> Finish </v-stepper-step>
               <v-stepper-content step="4">
                 <v-btn
                   color="primary"
                   @click="
-                    e6 = 1;
-                    reportDialog = false;
+                  refreshPage(),
+                    e6 = 1,
+                    reportDialog = false
+                    
                   "
                 >
-                  Submit
+                  Finish
                 </v-btn>
               </v-stepper-content>
             </v-stepper>
@@ -500,6 +520,8 @@ import { getStringDateWithTimeFromMilliseconds } from "./../util/dateHandler";
 
 export default {
   data: () => ({
+    alertdurathiontherapy: false,
+    alertselectDrug: false,
     picker: new Date().toISOString().substr(0, 10),
     selectedPharmacy: null,
     isLoading: false,
@@ -598,6 +620,9 @@ export default {
     },
   },
   methods: {
+    refreshPage(){
+       this.$router.go();
+    },
     onInputStartTime(valueStartTime) {
       this.$emit("input", valueStartTime);
       this.examinationStartTime = valueStartTime;
@@ -635,7 +660,7 @@ export default {
       this.alertDate = false;
       console.log(this.valueDate);
     },
-    scheduleConsultation() {
+    scheduleConsultationPredefined() {
       var token = parseJwt(localStorage.getItem("JWT-CPIS"));
       var email = token.sub;
       if (
@@ -668,10 +693,70 @@ export default {
             {
               consultantEmail: email,
               startDate:
-                this.valueDate + " " + this.examinationStartTime + ":00",
+              this.valueDate + " " + this.examinationStartTime + ":00",
               endDate: this.valueDate + " " + this.examinationEndTime + ":00",
               patientId: this.patientId,
               pharmacyID: this.pharmacyID,
+              id: this.consultationId,
+              predefinedConsultationID: this.selectpredefinedDate.id,
+            },
+            {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+              },
+            }
+          )
+          .then((resp) => {
+            this.pharmacist = resp.data;
+            this.scheduleAlert = false;
+            this.scheduleSucces = true;
+          })
+          .catch((error) => {
+            this.errorMessage = error.message;
+            console.error("There was an error!", error);
+            this.scheduleAlert = true;
+            this.scheduleSucces = false;
+          });
+      }
+    },
+      scheduleConsultation() {
+      var token = parseJwt(localStorage.getItem("JWT-CPIS"));
+      var email = token.sub;
+      if (
+        this.selectedPatient === null ||
+        this.valueDate === null ||
+        this.examinationStartTime === null ||
+        this.examinationEndTime === null ||
+        this.pharmacyID === null
+      ) {
+        if (this.selectedPatient === null) {
+          this.alertUser = true;
+        }
+        if (this.valueDate === null) {
+          this.alertDate = true;
+        }
+        if (this.examinationStartTime === null) {
+          this.alertStartTime = true;
+        }
+        if (this.examinationEndTime === null) {
+          this.alertEndTime = true;
+        }
+        if (this.pharmacyID === null) {
+          this.alertPharmacy = true;
+        }
+      } else {
+        this.axios
+          .post(
+            process.env.VUE_APP_BACKEND_URL +
+              process.env.VUE_APP_CONSULTATIONS_SCHEDULE,
+            {
+              consultantEmail: email,
+              startDate:
+              this.valueDate + " " + this.examinationStartTime + ":00",
+              endDate: this.valueDate + " " + this.examinationEndTime + ":00",
+              patientId: this.patientId,
+              pharmacyID: this.pharmacyID,
+              id: this.consultationId,
             },
             {
               headers: {
@@ -693,68 +778,91 @@ export default {
       }
     },
     prescribeDrug() {
-      this.axios
-        .post(
-          process.env.VUE_APP_BACKEND_URL + "api/drugrecommendation/recommend",
-          {
-            patientID: this.patientId,
-            consultationID: this.consultationId,
-            drugCode: this.selecteddrugWithoutAllergies.code,
-            duration: parseInt(this.durationOfPerscirbe),
-            consultationReport: this.report,
-          },
-          {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
-            },
-          }
-        )
-        .then(() => {
-          this.succDrugsWithoutAllergies = true;
-        });
+        this.alertselectDrug = false;
+         this.alertdurathiontherapy = false;
+       if (this.selecteddrugWithoutAllergies  == null || this.durationOfPerscirbe==null || this.alertIsDrugAvailable == true) {
+         if(this.selecteddrugWithoutAllergies  == null){
+            this.alertselectDrug = true;
+         }
+          if(this.durationOfPerscirbe == null){
+            this.alertdurathiontherapy = true;
+         }
+       }else{
+             this.alertselectDrug = false;
+            this.axios
+              .post(
+                process.env.VUE_APP_BACKEND_URL + "api/drugrecommendation/recommend",
+                {
+                  patientID: this.patientId,
+                  consultationID: this.consultationId,
+                  drugCode: this.selecteddrugWithoutAllergies.code,
+                  duration: parseInt(this.durationOfPerscirbe),
+                  consultationReport: this.report,
+                },
+                {
+                  headers: {
+                    Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+                  },
+                }
+              )
+              .then(() => {
+                this.succDrugsWithoutAllergies = true;
+              });
+       }
     },
     checkDrugAvailability() {
-      this.axios
-        .post(
-          process.env.VUE_APP_BACKEND_URL +
-            "api/drugrecommendation/checkbeforerecommend",
-          {
-            patientID: this.patientId,
-            consultationID: this.consultationId,
-            drugCode: this.selecteddrugWithoutAllergies.code,
-          },
-          {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+      this.alertdurathiontherapy = false;
+      if (this.selecteddrugWithoutAllergies != null) {
+        this.alertselectDrug = false;
+        this.axios
+          .post(
+            process.env.VUE_APP_BACKEND_URL +
+              "api/drugrecommendation/checkbeforerecommend",
+            {
+              patientID: this.patientId,
+              consultationID: this.consultationId,
+              drugCode: this.selecteddrugWithoutAllergies.code,
             },
-          }
-        )
-        .then((response) => {
-          var isDrugAvailable = response.data.available;
+            {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+              },
+            }
+          )
+          .then((response) => {
+            var isDrugAvailable = response.data.available;
 
-          if (isDrugAvailable) {
-            this.alertIsDrugAvailable = false;
-            this.succesIsDrugAvailable = true;
-          } else {
-            this.drugsWithoutAllergies = response.data.alternateDrugsDTO;
-            this.alertIsDrugAvailable = true;
-            this.succesIsDrugAvailable = false;
-            this.alternateDrugTxt = " ALTERNATE DRUG ";
-          }
-        });
+            if (isDrugAvailable) {
+              this.alertIsDrugAvailable = false;
+              this.succesIsDrugAvailable = true;
+            } else {
+              this.drugsWithoutAllergies = response.data.alternateDrugsDTO;
+              this.alertIsDrugAvailable = true;
+              this.succesIsDrugAvailable = false;
+              this.alternateDrugTxt = " ALTERNATE DRUG ";
+            }
+          });
+      } else {
+        this.alertselectDrug = true;
+      }
     },
     showDescription() {
-      this.drugSpecification =
-        "Manufacturer is " +
-        this.selecteddrugWithoutAllergies.drugSpecificationDTO.manufacturer +
-        ". Contraindications of drug are " +
-        this.selecteddrugWithoutAllergies.drugSpecificationDTO
-          .contraindications +
-        " . Recommended daily dose is " +
-        this.selecteddrugWithoutAllergies.drugSpecificationDTO
-          .recommendedDailyDose +
-        " . Ingredients are " +
-        this.selecteddrugWithoutAllergies.drugSpecificationDTO.ingredients;
+      if (this.valueDrugsWithoutAllergies != null) {
+        this.alertselectDrug = false;
+        this.drugSpecification =
+          "Manufacturer is " +
+          this.selecteddrugWithoutAllergies.drugSpecificationDTO.manufacturer +
+          ". Contraindications of drug are " +
+          this.selecteddrugWithoutAllergies.drugSpecificationDTO
+            .contraindications +
+          " . Recommended daily dose is " +
+          this.selecteddrugWithoutAllergies.drugSpecificationDTO
+            .recommendedDailyDose +
+          " . Ingredients are " +
+          this.selecteddrugWithoutAllergies.drugSpecificationDTO.ingredients;
+      } else {
+        this.alertselectDrug = true;
+      }
     },
     getDrugsWithoutAllergies() {
       this.axios
@@ -769,6 +877,8 @@ export default {
         )
         .then((resp) => {
           this.drugsWithoutAllergies = resp.data;
+          this.getPredefinedDates();
+          
         });
     },
     getPredefinedDates() {
@@ -796,6 +906,8 @@ export default {
               this.predefinedDate[i].startDate
             );
           }
+          this.questionDialog = false;
+          this.reportDialog = true;
         });
     },
     onInputWithoutAllergies(valueDrugsWithoutAllergies) {
@@ -808,7 +920,9 @@ export default {
       this.axios
         .post(
           process.env.VUE_APP_BACKEND_URL + "api/patient/addpenaltie",
-          { phatientID: this.patientId },
+          { phatientID: this.patientId,
+          consultationID: this.consultationId
+          },
           {
             headers: {
               Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),

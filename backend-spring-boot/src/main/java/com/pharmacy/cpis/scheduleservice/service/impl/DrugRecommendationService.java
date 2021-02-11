@@ -4,12 +4,14 @@ import com.pharmacy.cpis.drugservice.dto.AlternateDrugDTO;
 import com.pharmacy.cpis.drugservice.dto.DrugDTO;
 import com.pharmacy.cpis.drugservice.dto.DrugSpecificationDTO;
 import com.pharmacy.cpis.drugservice.model.drug.Drug;
+import com.pharmacy.cpis.drugservice.model.drugprocurement.DrugRequest;
 import com.pharmacy.cpis.drugservice.model.drugsales.AvailableDrug;
 import com.pharmacy.cpis.drugservice.model.drugsales.DrugPurchase;
 import com.pharmacy.cpis.drugservice.model.drugsales.DrugPurchaseType;
 import com.pharmacy.cpis.drugservice.model.drugsales.Reservation;
 import com.pharmacy.cpis.drugservice.repository.IDrugPurchaseRepository;
 import com.pharmacy.cpis.drugservice.repository.IDrugRepository;
+import com.pharmacy.cpis.drugservice.repository.IDrugRequestRepository;
 import com.pharmacy.cpis.drugservice.service.IAvailableDrugService;
 import com.pharmacy.cpis.scheduleservice.dto.DrugRecommendationDTO;
 import com.pharmacy.cpis.scheduleservice.model.consultations.Consultation;
@@ -52,6 +54,9 @@ public class DrugRecommendationService implements IDrugRecommendationService {
 
     @Autowired
     private ILoyaltyProgramService loyaltyProgramService;
+
+    @Autowired
+    private IDrugRequestRepository drugRequestRepository;
 
     @Autowired
     private IPatientRepository patientRepository;
@@ -133,6 +138,13 @@ public class DrugRecommendationService implements IDrugRecommendationService {
         }
 
         drugRecommendationDTO.setAlternateDrugsDTO(alternateDrugsDTOs);
+
+        DrugRequest drugRequest = new DrugRequest();
+        drugRequest.setConsultant(consultation.getConsultant());
+        drugRequest.setDrug(drug);
+        drugRequest.setPharmacy(consultation.getPharmacy());
+        drugRequest.setTimestamp(new Date());
+        drugRequestRepository.save(drugRequest);
 
         return drugRecommendationDTO;
     }

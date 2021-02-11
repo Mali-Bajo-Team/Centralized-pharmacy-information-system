@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app style="background: rgba(0,0,0,0);">
     <navbar v-bind:items="links" v-bind:logout="false"></navbar>
     <v-main>
       <v-container fluid>

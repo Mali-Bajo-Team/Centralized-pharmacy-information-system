@@ -1,14 +1,13 @@
 <template>
     <v-app-bar
       fixed    
-      shrink-on-scroll
-      prominent
+      scroll-threshold="80" 
       app      
     >
       <template v-slot:img="{ props }">
         <v-img
           v-bind="props"
-          gradient="to top right, rgba(255,255,230,.95), rgba(15,45,45,.7)"          
+          gradient="to top, rgba(255,255,230,.9), rgba(15,80,80,.1)"          
             src="@/assets/pills.jpg"
         ></v-img>
       </template>
@@ -19,17 +18,15 @@
             <v-tab v-if="item.to" :key="item.title" :to="item.to">{{item.title}}</v-tab>
             <v-menu  v-else :key="item.title" bottom offset-y="true" left>
             <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                text
-                class="align-self-center pl-5 pr-5 rounded-0"
+              <v-tab
                 v-bind="attrs"
-                v-on="on"
+                v-on="on"                
               >
                 {{item.title}}
                 <v-icon right>
                   mdi-menu-down
                 </v-icon>
-              </v-btn>
+              </v-tab>
             </template>
 
             <v-list>
@@ -37,12 +34,13 @@
                 v-for="subitem in item.children"
                 :key="subitem"
                 :to="subitem.to"
+                :ripple="{ center: true, class: `primary--text` }"
               >
                 {{ subitem.title }}
               </v-list-item>
             </v-list>
           </v-menu>
-          </template>          
+          </template>        
           <v-tab v-if="logout" @click="doLogout">Log out</v-tab>
         </v-tabs>
       </template>

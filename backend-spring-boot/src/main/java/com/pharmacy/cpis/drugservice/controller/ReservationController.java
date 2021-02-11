@@ -44,7 +44,7 @@ public class ReservationController {
         return new ResponseEntity<>(drugReservationDTOs,HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('DERMATOLOGIST')")
+    @PreAuthorize("hasRole('PHARMACIST')")
     @EmployeeAccountActive
     @PostMapping(value = "/isvalid")
     public ResponseEntity<ReservationDTO> getDrugPharmaciesPrices(@RequestBody ReservationDTO reservationDTO){
@@ -52,7 +52,7 @@ public class ReservationController {
         return new ResponseEntity<>(reservationDTOforReturn, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('DERMATOLOGIST')")
+    @PreAuthorize("hasRole('PHARMACIST')")
     @EmployeeAccountActive
     @PostMapping(value = "/dispense")
     public ResponseEntity<ReservationDTO> dispensingMedicine(@RequestBody ReservationDTO reservationDTO){
