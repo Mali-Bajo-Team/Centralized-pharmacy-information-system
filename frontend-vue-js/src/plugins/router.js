@@ -38,6 +38,7 @@ import SystemAdminComplaints from './../pages/systemadmin/complaints/Complaints'
 
 import PharmacyAdmin from './../pages/pharmacyadmin/Container';
 import PharmacyAdminLanding from './../pages/pharmacyadmin/landing/Landing';
+import VacationRequests from './../pages/pharmacyadmin/vacation/Vacation';
 
 import Supplier from './../pages/supplier/Container';
 import SupplierLanding from './../pages/supplier/landing/Landing';
@@ -233,6 +234,11 @@ const routes = [
                 component: SystemAdminComplaints,
                 name: 'systemadmincomplaints',
                 path: 'systemadmincomplaints'
+            },
+            {
+                component: VacationRequests,
+                name: 'vacationrequests',
+                path: 'vacationrequests'
             }
         ]
     },
@@ -253,6 +259,11 @@ const routes = [
                 component: Drugs,
                 name: 'pharmacyadmindrugs',
                 path: 'pharmacyadmindrugs'
+            },
+            {
+                component: VacationRequests,
+                name: 'pharmacyvacationrequests',
+                path: 'vacationrequests'
             }
         ]
     },

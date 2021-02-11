@@ -37,6 +37,10 @@ export default {
       {
         title: "Complaints",
         to: "/systemadmin/systemadmincomplaints"
+      },
+      {
+        title: "Vacation requests",
+        to: "/systemadmin/vacationrequests"
       }
     ],
   }),
