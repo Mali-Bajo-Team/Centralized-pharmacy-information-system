@@ -9,30 +9,31 @@
               Sort my consultations
             </v-toolbar-title>
           </v-toolbar>
+          <br />
           <!-- Sort by price -->
-            <v-row justify="center" class="pa-3">
-              <v-btn
-                small
-                width="110px"
-                color="green lighten-2"
-                class="ma-2 white--text mr-6"
-                @click="sortBy('price')"
-              >
-                Price
-                <v-icon small right dark> mdi-arrow-up-bold </v-icon>
-              </v-btn>
-              <v-btn
-                small
-                width="110px"
-                color="green lighten-2"
-                class="ma-2 white--text ml-6"
-                @click="sortDownBy('price')"
-              >
-                Price
-                <v-icon small right dark> mdi-arrow-down-bold </v-icon>
-              </v-btn>
-            </v-row>
-            <!-- End of the sort by price -->
+          <v-row justify="center" class="pa-3">
+            <v-btn
+              small
+              width="110px"
+              color="green lighten-2"
+              class="ma-2 white--text mr-6"
+              @click="sortBy('price')"
+            >
+              Price
+              <v-icon small right dark> mdi-arrow-up-bold </v-icon>
+            </v-btn>
+            <v-btn
+              small
+              width="110px"
+              color="green lighten-2"
+              class="ma-2 white--text ml-6"
+              @click="sortDownBy('price')"
+            >
+              Price
+              <v-icon small right dark> mdi-arrow-down-bold </v-icon>
+            </v-btn>
+          </v-row>
+          <!-- End of the sort by price -->
         </v-card>
       </v-col>
       <!--End of left column-->
