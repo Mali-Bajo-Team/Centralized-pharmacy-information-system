@@ -7,20 +7,21 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.pharmacy.cpis.drugservice.dto.DrugReservationDTO;
+import com.pharmacy.cpis.scheduleservice.dto.PatientCancelConsultationDTO;
+import com.pharmacy.cpis.userservice.dto.PatientEmailDTO;
+import com.pharmacy.cpis.userservice.model.users.ConsultantType;
+
 import com.pharmacy.cpis.scheduleservice.repository.IConsultationRepository;
 import com.pharmacy.cpis.userservice.dto.ConsultantPredefinedExamDTO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.pharmacy.cpis.scheduleservice.dto.AddPredefinedConsultationDTO;
 import com.pharmacy.cpis.scheduleservice.dto.ConsultationDTO;
@@ -202,6 +203,32 @@ public class ConsultationController {
 				consultation -> new ConsultationDTO(consultation));
 
 		return ResponseEntity.ok(mapped);
+	}
+
+	@PostMapping(value = "/patient/dermatologist")
+	@PreAuthorize("hasRole('PATIENT')")
+	public ResponseEntity<List<ConsultationDTO>> findAllDermatologistConsultationByPatientAndStatus(@RequestBody PatientEmailDTO patientEmailDTO){
+		List<ConsultationDTO> consultations = new ArrayList<>();
+		for(Consultation consultation : consultationService.findAllConsultationByPatientAndStatus(patientEmailDTO, ConsultationStatus.SCHEDULED, ConsultantType.DERMATOLOGIST)){
+			consultations.add(new ConsultationDTO(consultation));
+		}
+		return new ResponseEntity<>(consultations, HttpStatus.OK);
+	}
+	@PostMapping(value = "/patient/pharmacist")
+	@PreAuthorize("hasRole('PATIENT')")
+	public ResponseEntity<List<ConsultationDTO>> findAllPharmacistConsultationByPatientAndStatus(@RequestBody PatientEmailDTO patientEmailDTO){
+		List<ConsultationDTO> consultations = new ArrayList<>();
+		for(Consultation consultation : consultationService.findAllConsultationByPatientAndStatus(patientEmailDTO, ConsultationStatus.SCHEDULED, ConsultantType.PHARMACIST)){
+			consultations.add(new ConsultationDTO(consultation));
+		}
+		return new ResponseEntity<>(consultations, HttpStatus.OK);
+	}
+
+	@DeleteMapping(value = "/patient/consultant", consumes = "application/json")
+	@PreAuthorize("hasRole('PATIENT')")
+	public ResponseEntity<Void> cancelDrugReservation(@RequestBody PatientCancelConsultationDTO patientCancelConsultationDTO){
+		consultationService.cancelConsultation(patientCancelConsultationDTO);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 }

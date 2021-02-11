@@ -17,6 +17,8 @@ public interface IConsultationRepository extends JpaRepository<Consultation, Lon
 
 	Set<Consultation> findAllByPatient(Patient patient);
 
+	Set<Consultation> findAllByPatientAndStatus(Patient patient, ConsultationStatus status);
+  
 	Collection<Consultation> findAllByPharmacyIdAndStatus(Long pharmacyId, ConsultationStatus status);
 
 	Collection<Consultation> findAllByPharmacyIdAndConsultantAndStatus(Long pharmacyId, Consultant consultant,

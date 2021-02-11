@@ -152,12 +152,13 @@ export default {
         )
         .then(() => {
           this.pharmaciesSubscriptions = [];
+          let tempPharmaciesSubscription = [];
           for(let pharmacy of  this.pharmaciesSubscriptions){
-            if(pharmacy.id == this.pharmacyIdToUnsubscribe){
-              this.pharmaciesSubscriptions.pop(pharmacy);
-              break;
+            if(pharmacy.id != this.pharmacyIdToUnsubscribe){
+              tempPharmaciesSubscription.push(pharmacy);
             }
           }
+          this.pharmaciesSubscriptions = tempPharmaciesSubscription;
           console.log("success cancel subscibe");
         })
         .catch((error) => {
