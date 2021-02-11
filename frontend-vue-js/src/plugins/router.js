@@ -17,6 +17,8 @@ import PatientProfile from './../pages/patient/profile/Profile';
 import PatientReservations from './../pages/patient/reservation/DrugReservation';
 import Subscriptions from './../pages/patient/subscriptions/Subscriptions';
 import EPrescription from './../pages/patient/eprescription/EPrescription';
+import PharmacistSearchPatient from './../pages/patient/consultants/Pharmacists';
+import DermatologistSearchPatient from './../pages/patient/consultants/Dermatologists';
 
 
 
@@ -39,6 +41,8 @@ import SystemAdminComplaints from './../pages/systemadmin/complaints/Complaints'
 import PharmacyAdmin from './../pages/pharmacyadmin/Container';
 import PharmacyAdminLanding from './../pages/pharmacyadmin/landing/Landing';
 import VacationRequests from './../pages/pharmacyadmin/vacation/Vacation';
+import PharmacistSearch from './../pages/pharmacyadmin/consultants/Pharmacists';
+import DermatologistSearch from './../pages/pharmacyadmin/consultants/Dermatologists';
 
 import Supplier from './../pages/supplier/Container';
 import SupplierLanding from './../pages/supplier/landing/Landing';
@@ -118,7 +122,7 @@ const routes = [
             {
                 component: PatientReservations,
                 name: 'drugreservation',
-                path:'drugreservation'
+                path: 'drugreservation'
             },
             {
                 component: Subscriptions,
@@ -134,6 +138,16 @@ const routes = [
                 component: Consultations,
                 name: 'patientconsultations',
                 path: 'patientconsultations'
+            },
+            {
+                component: PharmacistSearchPatient,
+                name: 'pharmacistsearch',
+                path: 'pharmacists'
+            },
+            {
+                component: DermatologistSearchPatient,
+                name: 'dermatologistsearch',
+                path: 'dermatologists'
             }
         ]
     },
@@ -264,6 +278,16 @@ const routes = [
                 component: VacationRequests,
                 name: 'pharmacyvacationrequests',
                 path: 'vacationrequests'
+            },
+            {
+                component: PharmacistSearch,
+                name: 'pharmacypharmacistsearch',
+                path: 'pharmacists'
+            },
+            {
+                component: DermatologistSearch,
+                name: 'pharmacydermatologistsearch',
+                path: 'dermatologists'
             }
         ]
     },

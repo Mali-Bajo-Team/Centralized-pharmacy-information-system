@@ -32,7 +32,7 @@
             <v-list>
               <v-list-item
                 v-for="subitem in item.children"
-                :key="subitem"
+                :key="subitem.title"
                 :to="subitem.to"
                 :ripple="{ center: true, class: `primary--text` }"
               >

@@ -29,6 +29,14 @@ export default {
       {
         title: "Vacation requests",
         to: "/pharmacyadmin/vacationrequests"
+      },
+      {
+        title: "Pharmacists",
+        to: "/pharmacyadmin/pharmacists"
+      },
+      {
+        title: "Dermatologists",
+        to: "/pharmacyadmin/dermatologists"
       }
     ]
   })
