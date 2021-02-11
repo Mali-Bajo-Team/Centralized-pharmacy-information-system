@@ -92,16 +92,26 @@ public class ConsultationService implements IConsultationService {
 		} else {
 			consultantWorkingPharmacy = pharmacyRepository.getOne(consultation.getPharmacyID());
 		}
-
-		Consultation consultationForSchedule = new Consultation();
-		consultationForSchedule.setConsultant(consultant);
-		consultationForSchedule.setPatient(patientRepository.getOne(consultation.getPatientId()));
-		consultationForSchedule.setPharmacy(consultantWorkingPharmacy);
-		consultationForSchedule.setPrice(consultantWorkingPharmacy.getPharmacistConsultationPrice());
-		consultationForSchedule.setStatus(ConsultationStatus.SCHEDULED);
-		consultationForSchedule.setTime(consultationDataRange);
-
-		consultationRepository.save(consultationForSchedule);
+		Consultation consultationForSchedule;
+		if(consultation.getPredefinedConsultationID()  == null) {
+			consultationForSchedule = new Consultation();
+			consultationForSchedule.setConsultant(consultant);
+			consultationForSchedule.setPatient(patientRepository.getOne(consultation.getPatientId()));
+			consultationForSchedule.setPharmacy(consultantWorkingPharmacy);
+			consultationForSchedule.setPrice(consultantWorkingPharmacy.getPharmacistConsultationPrice());
+			consultationForSchedule.setStatus(ConsultationStatus.SCHEDULED);
+			consultationForSchedule.setTime(consultationDataRange);
+			consultationRepository.save(consultationForSchedule);
+		}else{
+			consultationForSchedule = consultationRepository.getOne(consultation.getPredefinedConsultationID());
+			consultationForSchedule.setConsultant(consultant);
+			consultationForSchedule.setPatient(patientRepository.getOne(consultation.getPatientId()));
+			consultationForSchedule.setPharmacy(consultantWorkingPharmacy);
+			consultationForSchedule.setPrice(consultantWorkingPharmacy.getPharmacistConsultationPrice());
+			consultationForSchedule.setStatus(ConsultationStatus.SCHEDULED);
+			consultationForSchedule.setTime(consultationDataRange);
+			consultationRepository.save(consultationForSchedule);
+		}
 
 		return consultationForSchedule;
 	}

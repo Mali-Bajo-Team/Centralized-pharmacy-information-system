@@ -214,6 +214,16 @@
                     v-on:input="onInputWithoutAllergies"
                     @click="alertDrugsWithoutAllergies = false"
                   ></v-select>
+                  <v-alert
+                    :value="alertselectDrug"
+                    color="pink"
+                    dark
+                    border="top"
+                    icon="mdi-account"
+                    transition="scale-transition"
+                  >
+                    You must select drug!
+                  </v-alert>
                   <h4 class="ml-n primary--text">
                     Determine the duration of therapy
                   </h4>
@@ -223,6 +233,16 @@
                     label="Duration of therapy"
                     v-model="durationOfPerscirbe"
                   ></v-text-field>
+                   <v-alert
+                    :value="alertdurathiontherapy"
+                    color="pink"
+                    dark
+                    border="top"
+                    icon="mdi-account"
+                    transition="scale-transition"
+                  >
+                    You must determine duration of therapy!
+                  </v-alert>
                   <!-- DRUG SPECIFICATION -->
                   <h4 class="ml-n primary--text">Drug specification</h4>
                   <v-btn
@@ -233,16 +253,7 @@
                   >
                     Show
                   </v-btn>
-                    <v-alert
-                    :value="alertselectDrug"
-                    color="pink"
-                    dark
-                    border="top"
-                    icon="mdi-account"
-                    transition="scale-transition"
-                  >
-                   You must select drug!
-                  </v-alert>
+
                   <h3 class="mt-1 mb-6 ml-2 BLACK--text">
                     {{ drugSpecification }}
                   </h3>
@@ -353,20 +364,20 @@
                   >
                     Successfully scheduled
                   </v-alert>
-                    <v-alert
-                      :value="scheduleAlert"
-                      color="pink"
-                      dark
-                      border="top"
-                      icon="mdi-account"
-                      transition="scale-transition"
-                    >
-                      The schedule must match the working hours of the
-                      pharmacist. The appointment should not be prepared with
-                      another examination or consultation that the patient has
-                      scheduled (in any pharmacy). And also it is not possible
-                      to schedule consultations in the past.
-                    </v-alert>
+                  <v-alert
+                    :value="scheduleAlert"
+                    color="pink"
+                    dark
+                    border="top"
+                    icon="mdi-account"
+                    transition="scale-transition"
+                  >
+                    The schedule must match the working hours of the pharmacist.
+                    The appointment should not be prepared with another
+                    examination or consultation that the patient has scheduled
+                    (in any pharmacy). And also it is not possible to schedule
+                    consultations in the past.
+                  </v-alert>
                   <h4 class="ml-n mt-10 primary--text">
                     Define new examination date and time
                   </h4>
@@ -484,16 +495,18 @@
                 </v-btn>
               </v-stepper-content>
 
-              <v-stepper-step step="4"> Submit </v-stepper-step>
+              <v-stepper-step step="4"> Finish </v-stepper-step>
               <v-stepper-content step="4">
                 <v-btn
                   color="primary"
                   @click="
-                    e6 = 1;
-                    reportDialog = false;
+                  refreshPage(),
+                    e6 = 1,
+                    reportDialog = false
+                    
                   "
                 >
-                  Submit
+                  Finish
                 </v-btn>
               </v-stepper-content>
             </v-stepper>
@@ -510,6 +523,7 @@ import { getStringDateWithTimeFromMilliseconds } from "./../util/dateHandler";
 
 export default {
   data: () => ({
+    alertdurathiontherapy: false,
     alertselectDrug: false,
     picker: new Date().toISOString().substr(0, 10),
     selectedPharmacy: null,
@@ -609,6 +623,9 @@ export default {
     },
   },
   methods: {
+    refreshPage(){
+       this.$router.go();
+    },
     onInputStartTime(valueStartTime) {
       this.$emit("input", valueStartTime);
       this.examinationStartTime = valueStartTime;
@@ -679,10 +696,12 @@ export default {
             {
               consultantEmail: email,
               startDate:
-                this.valueDate + " " + this.examinationStartTime + ":00",
+              this.valueDate + " " + this.examinationStartTime + ":00",
               endDate: this.valueDate + " " + this.examinationEndTime + ":00",
               patientId: this.patientId,
               pharmacyID: this.pharmacyID,
+              id: this.consultationId,
+              predefinedConsultationID: this.selectpredefinedDate.id,
             },
             {
               headers: {
@@ -704,72 +723,88 @@ export default {
       }
     },
     prescribeDrug() {
-      this.axios
-        .post(
-          process.env.VUE_APP_BACKEND_URL + "api/drugrecommendation/recommend",
-          {
-            patientID: this.patientId,
-            consultationID: this.consultationId,
-            drugCode: this.selecteddrugWithoutAllergies.code,
-            duration: parseInt(this.durationOfPerscirbe),
-            consultationReport: this.report,
-          },
-          {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
-            },
-          }
-        )
-        .then(() => {
-          this.succDrugsWithoutAllergies = true;
-        });
+        this.alertselectDrug = false;
+         this.alertdurathiontherapy = false;
+       if (this.selecteddrugWithoutAllergies  == null || this.durationOfPerscirbe==null) {
+         if(this.selecteddrugWithoutAllergies  == null){
+            this.alertselectDrug = true;
+         }
+          if(this.durationOfPerscirbe == null){
+            this.alertdurathiontherapy = true;
+         }
+       }else{
+             this.alertselectDrug = false;
+            this.axios
+              .post(
+                process.env.VUE_APP_BACKEND_URL + "api/drugrecommendation/recommend",
+                {
+                  patientID: this.patientId,
+                  consultationID: this.consultationId,
+                  drugCode: this.selecteddrugWithoutAllergies.code,
+                  duration: parseInt(this.durationOfPerscirbe),
+                  consultationReport: this.report,
+                },
+                {
+                  headers: {
+                    Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+                  },
+                }
+              )
+              .then(() => {
+                this.succDrugsWithoutAllergies = true;
+              });
+       }
     },
     checkDrugAvailability() {
-      this.axios
-        .post(
-          process.env.VUE_APP_BACKEND_URL +
-            "api/drugrecommendation/checkbeforerecommend",
-          {
-            patientID: this.patientId,
-            consultationID: this.consultationId,
-            drugCode: this.selecteddrugWithoutAllergies.code,
-          },
-          {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+      if (this.selecteddrugWithoutAllergies != null) {
+        this.alertselectDrug = false;
+        this.axios
+          .post(
+            process.env.VUE_APP_BACKEND_URL +
+              "api/drugrecommendation/checkbeforerecommend",
+            {
+              patientID: this.patientId,
+              consultationID: this.consultationId,
+              drugCode: this.selecteddrugWithoutAllergies.code,
             },
-          }
-        )
-        .then((response) => {
-          var isDrugAvailable = response.data.available;
+            {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+              },
+            }
+          )
+          .then((response) => {
+            var isDrugAvailable = response.data.available;
 
-          if (isDrugAvailable) {
-            this.alertIsDrugAvailable = false;
-            this.succesIsDrugAvailable = true;
-          } else {
-            this.drugsWithoutAllergies = response.data.alternateDrugsDTO;
-            this.alertIsDrugAvailable = true;
-            this.succesIsDrugAvailable = false;
-            this.alternateDrugTxt = " ALTERNATE DRUG ";
-          }
-        });
+            if (isDrugAvailable) {
+              this.alertIsDrugAvailable = false;
+              this.succesIsDrugAvailable = true;
+            } else {
+              this.drugsWithoutAllergies = response.data.alternateDrugsDTO;
+              this.alertIsDrugAvailable = true;
+              this.succesIsDrugAvailable = false;
+              this.alternateDrugTxt = " ALTERNATE DRUG ";
+            }
+          });
+      } else {
+        this.alertselectDrug = true;
+      }
     },
     showDescription() {
-     
-      if(this.valueDrugsWithoutAllergies != null){
-         this.alertselectDrug = false;
-      this.drugSpecification =
-        "Manufacturer is " +
-        this.selecteddrugWithoutAllergies.drugSpecificationDTO.manufacturer +
-        ". Contraindications of drug are " +
-        this.selecteddrugWithoutAllergies.drugSpecificationDTO
-          .contraindications +
-        " . Recommended daily dose is " +
-        this.selecteddrugWithoutAllergies.drugSpecificationDTO
-          .recommendedDailyDose +
-        " . Ingredients are " +
-        this.selecteddrugWithoutAllergies.drugSpecificationDTO.ingredients;
-      }else{
+      if (this.valueDrugsWithoutAllergies != null) {
+        this.alertselectDrug = false;
+        this.drugSpecification =
+          "Manufacturer is " +
+          this.selecteddrugWithoutAllergies.drugSpecificationDTO.manufacturer +
+          ". Contraindications of drug are " +
+          this.selecteddrugWithoutAllergies.drugSpecificationDTO
+            .contraindications +
+          " . Recommended daily dose is " +
+          this.selecteddrugWithoutAllergies.drugSpecificationDTO
+            .recommendedDailyDose +
+          " . Ingredients are " +
+          this.selecteddrugWithoutAllergies.drugSpecificationDTO.ingredients;
+      } else {
         this.alertselectDrug = true;
       }
     },
