@@ -20,6 +20,7 @@
           <v-card-actions class="pb-4">
             <v-spacer> </v-spacer>
             <v-btn
+              v-if="isAvailableCancelReservation(reservation.deadline)"
               elevation="0"
               left
               top
@@ -40,8 +41,12 @@
 </template>
 
 <script>
-import { getStringDateFromMilliseconds } from "./../../../util/dateHandler";
 import { getParsedToken } from "./../../../util/token";
+import {
+  getStringDateWithTimeFromMilliseconds,
+  isAvailableToCancelConsultation,
+} from "./../../../util/dateHandler";
+
 export default {
   data: () => ({
     reservations: [],
@@ -69,7 +74,15 @@ export default {
   },
   methods: {
     convertMsToString(ms) {
-      return getStringDateFromMilliseconds(ms);
+      return getStringDateWithTimeFromMilliseconds(ms);
+    },
+    isAvailableCancelReservation(reservationDeadlineDate) {
+      if (isAvailableToCancelConsultation(reservationDeadlineDate)) {
+        return true;
+      }
+      console.log("not valid date !!");
+
+      return false;
     },
     cancelDrugReservation(reservation) {
       this.axios
