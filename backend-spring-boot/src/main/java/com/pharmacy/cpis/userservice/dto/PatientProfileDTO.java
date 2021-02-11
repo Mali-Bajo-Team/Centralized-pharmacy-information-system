@@ -44,7 +44,7 @@ public class PatientProfileDTO {
 
     }
 
-    public PatientProfileDTO(Patient patient, PatientEmailDTO patientEmail, ILoyaltyProgramService loyaltyProgramService){
+    public PatientProfileDTO(Patient patient, String patientEmail, ILoyaltyProgramService loyaltyProgramService){
         this.setName(patient.getName());
         this.setSurname(patient.getSurname());
         this.setAddress(patient.getAddress());
@@ -52,7 +52,7 @@ public class PatientProfileDTO {
         this.setCity(patient.getCity());
         this.setPhoneNumber(patient.getPhoneNumber());
         this.setLoyaltyPoints(patient.getLoyaltyPoints());
-        this.setEmail(patientEmail.getEmail());
+        this.setEmail(patientEmail);
         this.setUserCategoryDTO(new UserCategoryDTO(loyaltyProgramService.findUserCategoryByLoyaltyPoints(patient.getLoyaltyPoints())));
         this.setAllergies(patient.getAllergies());
 
