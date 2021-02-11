@@ -1,20 +1,44 @@
 <template>
 <div>
     <button @click="blah">Blah</button>
-     <vl-map @click="mapClick" data-projection="EPSG:4326" style="height: 400px">
+
+<v-row>
+<v-col>
+
+<vl-map @click="mapClick" data-projection="EPSG:4326" style="height: 400px;">
     <vl-view ref="mapView" :zoom.sync="zoom" :center.sync="center" :rotation.sync="rotation"></vl-view>
 
     <vl-layer-tile>
       <vl-source-osm></vl-source-osm>
     </vl-layer-tile>
 
-    <vl-feature>
+    <vl-feature v-if="marker">
       <vl-geom-point ref="geom" :coordinates="marker"></vl-geom-point>      
       <vl-style-box>
-        <vl-style-icon src="https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png" :scale="0.1" :anchor="[0.5, 1]"></vl-style-icon>
+          <vl-style-icon src="@/assets/icon1.png" :scale="1.2" :anchor="[0.5, 1]"></vl-style-icon>
       </vl-style-box>
     </vl-feature>
+
+    <vl-overlay v-if="marker" id="overlay" :position="marker">
+      <template>
+        <v-chip
+          color="white"
+          text-color="primary"
+          class="pl-2 pr-2 pt-0 pb-0"
+          style="transform: translateX(-50%); border: 3px #000000 !important;"
+          label
+        >
+          Marka Miljanova 7, Novi Sad, Srbija
+        </v-chip>
+      </template>
+    </vl-overlay>
   </vl-map>
+
+</v-col>
+
+</v-row>
+
+     
 </div>
 </template>
 
@@ -98,6 +122,7 @@ export default {
         zoom: 15,
         center: [19.833549, 45.267136],
         rotation: 0,
+        publicPath: process.env.BASE_URL
       }
     },
     methods: {
