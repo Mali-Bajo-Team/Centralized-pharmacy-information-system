@@ -84,6 +84,10 @@ export default {
             to:"/patient/historydermatologist"
           }
         ]
+      },
+      {
+        title:"Rating",
+        to:"/patient/rating"
       }
     ]
   })

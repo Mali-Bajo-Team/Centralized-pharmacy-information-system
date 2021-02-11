@@ -22,6 +22,7 @@ import PharmacistSearchPatient from './../pages/patient/consultants/Pharmacists'
 import DermatologistSearchPatient from './../pages/patient/consultants/Dermatologists';
 import PharmacistHistoryPatient from  './../pages/patient/history/Pharmacist';
 import DermatologistHistoryPatient from './../pages/patient/history/Dermatologist';
+import PatientRating from './../pages/patient/rating/Rating';
 
 
 import Pharmacist from './../pages/pharmacist/Container';
@@ -166,6 +167,11 @@ const routes = [
                 component: PharmacistHistoryPatient,
                 name : 'historypharmacist',
                 path : 'historypharmacist'
+            },
+            {
+                component: PatientRating,
+                name : 'rating',
+                path : 'rating'
             }
         ]
     },
