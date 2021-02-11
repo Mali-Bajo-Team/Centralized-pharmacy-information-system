@@ -876,7 +876,6 @@ export default {
             for (let i = 0; i < this.consultants.length; i++) {
               events.push({
                 name:
-                  " Patient: " +
                   this.consultants[i].patientName +
                   "    " +
                   this.consultants[i].patientSurname +
@@ -922,7 +921,6 @@ export default {
               if (this.consultants[i].pharmacyID === this.selectedPharmacy) {
                 events.push({
                   name:
-                    " Patient: " +
                     this.consultants[i].patientName +
                     "    " +
                     this.consultants[i].patientSurname +
