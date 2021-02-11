@@ -791,7 +791,7 @@ export default {
              this.alertselectDrug = false;
             this.axios
               .post(
-                process.env.VUE_APP_BACKEND_URL + "api/drugrecommendation/recommend",
+                process.env.VUE_APP_BACKEND_URL +  process.env.VUE_APP_DRUGRECOMMENDATION_ENDPOINT,
                 {
                   patientID: this.patientId,
                   consultationID: this.consultationId,
@@ -817,7 +817,7 @@ export default {
         this.axios
           .post(
             process.env.VUE_APP_BACKEND_URL +
-              "api/drugrecommendation/checkbeforerecommend",
+              process.env.VUE_APP_CHECK_DRUG_ENDPOINT,
             {
               patientID: this.patientId,
               consultationID: this.consultationId,
@@ -867,7 +867,7 @@ export default {
     getDrugsWithoutAllergies() {
       this.axios
         .post(
-          process.env.VUE_APP_BACKEND_URL + "api/drugs/alldrugswithoutalergies",
+          process.env.VUE_APP_BACKEND_URL + process.env.VUE_APP_DRUGS_WITHOUT_ALERGIES, 
           { paatientID: this.patientId },
           {
             headers: {
@@ -888,7 +888,7 @@ export default {
       this.axios
         .post(
           process.env.VUE_APP_BACKEND_URL +
-            "api/consultations/consultantpredefinedexaminations",
+            process.env.VUE_APP_CONSULTATIONS_PREDEFINED_EXAMINATIONS_ENDPOINT,
           { email: email, consultationID: this.consultationId },
           {
             headers: {
@@ -919,7 +919,7 @@ export default {
     addPenaltie() {
       this.axios
         .post(
-          process.env.VUE_APP_BACKEND_URL + "api/patient/addpenaltie",
+          process.env.VUE_APP_BACKEND_URL + process.env.VUE_APP_PATIENT_ADD_PENALTIES_ENDPOINT,
           { phatientID: this.patientId,
           consultationID: this.consultationId
           },

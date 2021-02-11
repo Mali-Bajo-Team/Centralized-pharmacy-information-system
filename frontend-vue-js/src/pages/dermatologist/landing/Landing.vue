@@ -338,7 +338,7 @@ export default {
     //Get pharmacies for phatient
     this.axios
       .post(
-        process.env.VUE_APP_BACKEND_URL + "api/pharmacies/allfordermatologist",
+        process.env.VUE_APP_BACKEND_URL + process.env.VUE_APP_PHARMACIES_ALLFORDERMATOLOGIST_ENDPOINT,
         { dermatologistEmail: email },
         {
           headers: {
