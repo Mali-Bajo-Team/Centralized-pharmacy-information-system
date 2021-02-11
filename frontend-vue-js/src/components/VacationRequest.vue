@@ -1,55 +1,60 @@
 <template>
   <div>
-    <v-card elevation="4" class="pa-4 mb-10" v-show="!finished">
-      <v-card-title class="ml-2">{{ request.consultantName + " " + request.consultantSurname}}</v-card-title>
-      <v-card-subtitle class="ml-2">{{ request.consultantEmail}}</v-card-subtitle>
-      <v-divider class="ml-5 mr-5"></v-divider>
-      <v-card-text class="ml-2">
-        <span class="mr-2">Requested vacation from</span>
-        <v-chip color="primary">{{ request.start }}</v-chip>
-        <span class="ml-2 mr-2">to</span>
-        <v-chip color="primary">{{ request.end }}</v-chip>
-      </v-card-text>
-      <v-divider class="ml-5 mr-5" v-show="rejecting"></v-divider>
-      <v-form v-show="rejecting">
-        <v-text-field
-          class="ml-5 mr-5 mt-2 mb-2"
-          v-model="response"
-          :error-messages="responseErrors"
-          label="Reason for rejection"
-          @blur="$v.response.$touch()"
-          @input="$v.response.$touch()"
-        ></v-text-field>
-      </v-form>
-      <v-card-actions>
-        <v-btn
-          v-show="rejecting"
-          color="secondary"
-          text
-          @click="stopRejecting"
-          :disabled="performingAction"
-        >Cancel</v-btn>
-        <v-btn
-          v-show="!rejecting"
-          color="success"
-          @click="accept"
-          :disabled="performingAction"
-        >Approve</v-btn>
-        <v-btn
-          v-show="!rejecting"
-          color="error"
-          @click="startRejecting"
-          :disabled="performingAction"
-        >Reject</v-btn>
-        <v-btn
-          v-show="rejecting"
-          color="error"
-          @click="reject"
-          :disabled="performingAction || response.length == 0"
-        >Confirm rejection</v-btn>
-        <v-progress-circular class="ml-4" indeterminate color="primary" v-show="performingAction"></v-progress-circular>
-      </v-card-actions>
-    </v-card>
+    <v-lazy :options="{
+          threshold: .2
+        }" transition="fade-transition">
+      <v-card elevation="4" class="pa-4 mb-10" v-show="!finished">
+        <v-card-title class="ml-2">{{ request.consultantName + " " + request.consultantSurname}}</v-card-title>
+        <v-card-subtitle class="ml-2">{{ request.consultantEmail}}</v-card-subtitle>
+        <v-divider class="ml-5 mr-5"></v-divider>
+        <v-card-text class="ml-2">
+          <span class="mr-2">Requested vacation from</span>
+          <v-chip color="primary">{{ request.start }}</v-chip>
+          <span class="ml-2 mr-2">to</span>
+          <v-chip color="primary">{{ request.end }}</v-chip>
+        </v-card-text>
+        <v-divider class="ml-5 mr-5" v-show="rejecting"></v-divider>
+        <v-form v-show="rejecting">
+          <v-text-field
+            class="ml-5 mr-5 mt-2 mb-2"
+            v-model="response"
+            :error-messages="responseErrors"
+            label="Reason for rejection"
+            @blur="$v.response.$touch()"
+            @input="$v.response.$touch()"
+          ></v-text-field>
+        </v-form>
+        <v-card-actions>
+          <v-btn
+            v-show="rejecting"
+            color="secondary"
+            text
+            @click="stopRejecting"
+            :disabled="performingAction"
+          >Cancel</v-btn>
+          <v-btn
+            v-show="!rejecting"
+            color="success"
+            @click="accept"
+            :disabled="performingAction"
+          >Approve</v-btn>
+          <v-btn
+            v-show="!rejecting"
+            color="error"
+            @click="startRejecting"
+            :disabled="performingAction"
+          >Reject</v-btn>
+          <v-btn
+            v-show="rejecting"
+            color="error"
+            @click="reject"
+            :disabled="performingAction || response.length == 0"
+          >Confirm rejection</v-btn>
+          <v-progress-circular class="ml-4" indeterminate color="primary" v-show="performingAction"></v-progress-circular>
+        </v-card-actions>
+      </v-card>
+    </v-lazy>
+
     <v-snackbar v-model="snackbar" :timeout="2000" bottom class="mb-5" right>
       {{ snackbarText }}
       <template v-slot:action="{ attrs }">
