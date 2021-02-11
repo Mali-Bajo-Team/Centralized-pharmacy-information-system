@@ -366,7 +366,6 @@ export default {
   methods: {
     saveChanges() {
       this.dialogEditForm = !this.dialogEditForm;
-      alert("krecem potvrdu");
       this.axios
         .post(
           process.env.VUE_APP_BACKEND_URL +
@@ -390,7 +389,7 @@ export default {
           }
         )
         .then((resp) => {
-          alert("Success created a complaint");
+          alert("Successfully changed.");
           this.patient = resp.data;
           this.patientFormDTO.email = this.patient.email;
           this.patientFormDTO.name = this.patient.name;
