@@ -17,6 +17,7 @@ import PatientProfile from './../pages/patient/profile/Profile';
 import PatientReservations from './../pages/patient/reservation/DrugReservation';
 import Subscriptions from './../pages/patient/subscriptions/Subscriptions';
 import EPrescription from './../pages/patient/eprescription/EPrescription';
+import MyEPrescriptions from './../pages/patient/eprescription/MyEPrescriptions';
 import PharmacistSearchPatient from './../pages/patient/consultants/Pharmacists';
 import DermatologistSearchPatient from './../pages/patient/consultants/Dermatologists';
 import PharmacistHistoryPatient from  './../pages/patient/history/Pharmacist';
@@ -134,6 +135,11 @@ const routes = [
                 component: EPrescription,
                 name: 'eprescription',
                 path: 'eprescription'
+            },
+            {
+                component: MyEPrescriptions,
+                name: 'myeprescriptions',
+                path: 'myeprescriptions'
             },
             {
                 component: Consultations,

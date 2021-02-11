@@ -44,7 +44,16 @@ export default {
       },
       {
         title: "EPrescription",
-        to: "/patient/eprescription"
+        children:[
+          {
+            title: "QR code search",
+            to: "/patient/eprescription"
+          },
+          {
+            title: "My EPrescriptions",
+            to : "/patient/myeprescriptions"
+          }
+        ]
       },
       {
         title: "Consultations",
