@@ -1,4 +1,4 @@
-<template>  
+<template>
   <v-app style="background: rgba(0,0,0,0);">
     <navbar v-bind:items="links"></navbar>
     <v-main>
@@ -14,43 +14,56 @@ import navbar from "../../components/Navbar";
 
 export default {
   components: {
-    navbar,
+    navbar
   },
   data: () => ({
     links: [
       {
         title: "Home",
-        to: "/patient",
+        to: "/patient"
       },
       {
         title: "Profile",
-        to: "/patient/profile",
+        to: "/patient/profile"
       },
       {
         title: "Drugs",
-        to: "/patient/patientdrugs",
+        to: "/patient/patientdrugs"
       },
       {
         title: "Pharmacies",
-        to: "/patient/patientpharmacies",
+        to: "/patient/patientpharmacies"
       },
       {
         title: "Reservations",
-        to: "/patient/drugreservation",
+        to: "/patient/drugreservation"
       },
       {
         title: "Subscriptions",
-        to: "/patient/subscriptions",
+        to: "/patient/subscriptions"
       },
       {
         title: "EPrescription",
-        to: "/patient/eprescription",
+        to: "/patient/eprescription"
       },
       {
         title: "Consultations",
-        to: "/patient/patientconsultations",
+        to: "/patient/patientconsultations"
       },
-    ],
-  }),
+      {
+        title: "Consultants",
+        children: [
+          {
+            title: "Pharmacists",
+            to: "/patient/pharmacists"
+          },
+          {
+            title: "Dermatologists",
+            to: "/patient/dermatologists"
+          }
+        ]
+      }
+    ]
+  })
 };
 </script>

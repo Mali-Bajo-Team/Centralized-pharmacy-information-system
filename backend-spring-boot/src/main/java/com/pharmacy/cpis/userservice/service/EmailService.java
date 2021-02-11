@@ -217,8 +217,6 @@ public class EmailService {
 		message.append(" to ");
 		message.append(format.format(end));
 		message.append(" has been approved.\n");
-		message.append("Message from administrator: ");
-		message.append(request.getResponse());
 		mail.setText(message.toString());
 		javaMailSender.send(mail);
 
