@@ -238,51 +238,6 @@
       </v-row>
     </v-card>
     <!-- End of the card for the complaints -->
-
-    <!--Start of the card for rating-->
-    <v-card width="600px" class="mx-auto mb-14">
-      <v-row justify="end">
-        <v-card-subtitle class="ml-5 mr-5">
-          Dear {{ patient.name }}, if you want to rate pharmacist,
-          dermatologist, drug, or pharmacy, then fill out this rating form.
-        </v-card-subtitle>
-
-        <v-card-actions class="mr-2 mb-2">
-          <v-btn color="orange lighten-2" text> Rate </v-btn>
-
-          <v-spacer></v-spacer>
-
-          <v-btn class="mr-5" icon @click="showRatingPart = !showRatingPart">
-            <v-icon>{{
-              showRatingPart ? "mdi-chevron-up" : "mdi-chevron-down"
-            }}</v-icon>
-          </v-btn>
-        </v-card-actions>
-
-        <v-expand-transition>
-          <div class="pa-3" v-show="showRatingPart">
-            <v-divider></v-divider>
-
-            <v-card-text class="ml-2">
-              Dear {{ patient.name }}, be free to rate who and what you want.
-              The grade's range is from 1 to 5.
-            </v-card-text>
-
-            <v-form>
-              <v-rating
-                class="ml-5"
-                v-model="rating"
-                background-color="accent lighten-3"
-                color="accent"
-                medium
-              ></v-rating>
-            </v-form>
-          </div>
-        </v-expand-transition>
-      </v-row>
-    </v-card>
-
-    <!--End of the card for rating-->
   </v-container>
 </template>
 <script>
@@ -301,7 +256,6 @@ export default {
       pharmacyId: null,
     },
     showComplaintPart: false,
-    showRatingPart: false,
     patient: {},
     patientFormDTO: {
       name: "",

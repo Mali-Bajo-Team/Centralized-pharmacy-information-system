@@ -16,7 +16,6 @@
                 label="Select consultant you want to rate"
               ></v-select>
               <v-rating
-                v-model="rating"
                 background-color="accent lighten-3"
                 color="accent"
                 medium
