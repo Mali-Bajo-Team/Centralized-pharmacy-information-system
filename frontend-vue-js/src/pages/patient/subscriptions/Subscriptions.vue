@@ -11,9 +11,9 @@
           <!-- Row for title & unsubscribe dialog-->
           <v-row align="center">
             <v-card-subtitle>
-              <h4 class="ml-3">
+              <h3 class="ml-3">
                 {{ pharmacy.name }} , {{ pharmacy.location }}
-              </h4>
+              </h3>
             </v-card-subtitle>
             <v-spacer></v-spacer>
             <!-- Make a response dialog -->

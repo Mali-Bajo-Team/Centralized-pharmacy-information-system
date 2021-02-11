@@ -44,7 +44,16 @@ export default {
       },
       {
         title: "EPrescription",
-        to: "/patient/eprescription"
+        children:[
+          {
+            title: "QR code search",
+            to: "/patient/eprescription"
+          },
+          {
+            title: "My EPrescriptions",
+            to : "/patient/myeprescriptions"
+          }
+        ]
       },
       {
         title: "Consultations",
@@ -60,6 +69,19 @@ export default {
           {
             title: "Dermatologists",
             to: "/patient/dermatologists"
+          }
+        ]
+      },
+      {
+        title: "History",
+        children:[
+          {
+            title: "Pharmacist",
+            to:"/patient/historypharmacist"
+          },
+          {
+            title: "Dermatologist",
+            to:"/patient/historydermatologist"
           }
         ]
       }
