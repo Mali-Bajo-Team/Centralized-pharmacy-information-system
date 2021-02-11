@@ -5,6 +5,7 @@ import com.pharmacy.cpis.userservice.dto.LoyaltyProgramDTO;
 import com.pharmacy.cpis.userservice.dto.PatientEmailDTO;
 import com.pharmacy.cpis.userservice.dto.ratings.ConsultantRatingCreateDTO;
 import com.pharmacy.cpis.userservice.dto.ratings.ConsultantRatingReadDTO;
+import com.pharmacy.cpis.userservice.dto.ratings.ConsultantRatingUpdateDTO;
 import com.pharmacy.cpis.userservice.model.loyaltyprogram.LoyaltyProgram;
 import com.pharmacy.cpis.userservice.model.ratings.ConsultantRating;
 import com.pharmacy.cpis.userservice.model.users.Consultant;
@@ -42,5 +43,15 @@ public class RatingController {
         ConsultantRating consultantRating = ratingService.createConsultantRating(consultantRatingCreateDTO);
         return new ResponseEntity<>(new ConsultantRatingReadDTO(consultantRating),HttpStatus.OK);
     }
+
+    @PostMapping(value = "/consultant/update")
+    @PreAuthorize("hasRole('PATIENT')")
+    public ResponseEntity<ConsultantRatingReadDTO> updatePatientConsultantRatings(@RequestBody ConsultantRatingUpdateDTO consultantRatingUpdateDTO) {
+        ConsultantRating consultantRating = ratingService.updateConsultantRating(consultantRatingUpdateDTO);
+        return new ResponseEntity<>(new ConsultantRatingReadDTO(consultantRating),HttpStatus.OK);
+    }
+
+
+
 
 }

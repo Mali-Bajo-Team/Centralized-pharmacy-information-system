@@ -1,6 +1,7 @@
 package com.pharmacy.cpis.userservice.service.impl;
 
 import com.pharmacy.cpis.userservice.dto.ratings.ConsultantRatingCreateDTO;
+import com.pharmacy.cpis.userservice.dto.ratings.ConsultantRatingUpdateDTO;
 import com.pharmacy.cpis.userservice.model.ratings.ConsultantRating;
 import com.pharmacy.cpis.userservice.model.ratings.Rating;
 import com.pharmacy.cpis.userservice.model.users.Consultant;
@@ -51,6 +52,16 @@ public class RatingService implements IRatingService {
         rating.setRating(consultantRatingCreateDTO.getRating());
         consultantRating.setRating(rating);
 
+        return consultantRatingRepository.save(consultantRating);
+    }
+
+    @Override
+    public ConsultantRating updateConsultantRating(ConsultantRatingUpdateDTO consultantRatingUpdateDTO) {
+        ConsultantRating consultantRating = consultantRatingRepository.findById(consultantRatingUpdateDTO.getId()).orElse(null);
+        if(consultantRating == null) throw new PSNotFoundException("Not found that rating...");
+        Rating newRating = new Rating();
+        newRating.setRating(consultantRatingUpdateDTO.getNewRating());
+        consultantRating.setRating(newRating);
         return consultantRatingRepository.save(consultantRating);
     }
 }
