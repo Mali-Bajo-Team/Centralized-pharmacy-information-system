@@ -24,8 +24,10 @@ export function isAvailableToCancelConsultation(consultationDate) {
 
 export function getStringDateWithTimeFromMilliseconds(dateInMilliseconds) {
     var date = new Date(dateInMilliseconds).toISOString().split('T')[0];
-    var time = new Date(dateInMilliseconds).toISOString().split('T')[1];
+    var timeStampPlusOneHour = 3600000 + dateInMilliseconds;
+    var time = new Date(timeStampPlusOneHour).toISOString().split('T')[1];
     var DateWithTime = date + " " + time.substring(0, 5);
+    
     return DateWithTime;
 }
 
