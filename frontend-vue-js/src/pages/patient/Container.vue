@@ -32,20 +32,24 @@ export default {
       },
       {
         title: "Pharmacies",
-        to:"/patient/patientpharmacies"
+        to: "/patient/patientpharmacies",
       },
       {
-        title:"Reservations",
-        to:"/patient/drugreservation"
-       },
-       {
+        title: "Reservations",
+        to: "/patient/drugreservation",
+      },
+      {
         title: "Subscriptions",
-        to: "/patient/subscriptions"
+        to: "/patient/subscriptions",
       },
       {
         title: "EPrescription",
-        to: "/patient/eprescription"
-      }
+        to: "/patient/eprescription",
+      },
+      {
+        title: "Consultations",
+        to: "/patient/patientconsultations",
+      },
     ],
   }),
 };

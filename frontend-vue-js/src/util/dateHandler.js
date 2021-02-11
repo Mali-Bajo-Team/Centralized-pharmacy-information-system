@@ -13,6 +13,15 @@ export function getTodayDateString() {
     return today;
 }
 
+export function isAvailableToCancelConsultation(consultationDate){
+    let twentyFourHoursFromTodayDate =new Date();
+    twentyFourHoursFromTodayDate.setDate(twentyFourHoursFromTodayDate.getDate() + 1);
+    if(twentyFourHoursFromTodayDate.getTime() > consultationDate){
+        return false;
+    }
+    return true;
+}
+
 export function getStringDateWithTimeFromMilliseconds(dateInMilliseconds) {
     var date = new Date(dateInMilliseconds).toISOString().split('T')[0];
     var time = new Date(dateInMilliseconds).toISOString().split('T')[1];
