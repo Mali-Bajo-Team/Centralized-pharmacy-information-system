@@ -4,13 +4,16 @@ import com.pharmacy.cpis.userservice.model.users.Patient;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 public class EPrescription {
 	@Id
-	private String code;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private Date creationDate;
 
@@ -21,18 +24,18 @@ public class EPrescription {
 	private Patient patient;
 
 	@OneToMany(mappedBy = "prescription", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<PrescribedDrug> drugs;
+	private Set<PrescribedDrug> prescribedDrugs;
 
 	public EPrescription() {
 		super();
 	}
 
-	public String getCode() {
-		return code;
+	public Long getId() {
+		return id;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Date getCreationDate() {
@@ -59,37 +62,29 @@ public class EPrescription {
 		this.patient = patient;
 	}
 
-	public Set<PrescribedDrug> getDrugs() {
-		return drugs;
+	public Set<PrescribedDrug> getPrescribedDrugs() {
+		return prescribedDrugs;
 	}
 
-	public void setDrugs(Set<PrescribedDrug> drugs) {
-		this.drugs = drugs;
+	public void setPrescribedDrugs(Set<PrescribedDrug> prescribedDrugs) {
+		this.prescribedDrugs = prescribedDrugs;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		EPrescription that = (EPrescription) o;
+		return Objects.equals(id, that.id) &&
+				Objects.equals(creationDate, that.creationDate) &&
+				status == that.status &&
+				Objects.equals(patient, that.patient) &&
+				Objects.equals(prescribedDrugs, that.prescribedDrugs);
 	}
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((code == null) ? 0 : code.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		EPrescription other = (EPrescription) obj;
-		if (code == null) {
-			if (other.code != null)
-				return false;
-		} else if (!code.equals(other.code))
-			return false;
-		return true;
+		return Objects.hash(id, creationDate, status, patient, prescribedDrugs);
 	}
 
 }

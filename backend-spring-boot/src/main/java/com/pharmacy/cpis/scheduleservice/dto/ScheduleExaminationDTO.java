@@ -14,12 +14,13 @@ public class ScheduleExaminationDTO {
     private Long patientId;
     private Long consultantId;
     private Long pharmacyID;
+    private Long predefinedConsultationID;
+
     public ScheduleExaminationDTO() {
     }
 
-
-    public ScheduleExaminationDTO(String consultantEmail, Long id, String startDate, String endDate, String patientName, String patientSurname, Long patientId, Long consultantId, Long pharmacyID) {
-        super();
+    public ScheduleExaminationDTO(String consultantEmail, Long id, String startDate, String endDate, String patientName, String patientSurname, Long patientId, Long consultantId, Long pharmacyID, Long predefinedConsultationID) {
+        this.consultantEmail = consultantEmail;
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -27,16 +28,8 @@ public class ScheduleExaminationDTO {
         this.patientSurname = patientSurname;
         this.patientId = patientId;
         this.consultantId = consultantId;
-        this.consultantEmail = consultantEmail;
         this.pharmacyID = pharmacyID;
-    }
-
-    public Long getPharmacyID() {
-        return pharmacyID;
-    }
-
-    public void setPharmacyID(Long pharmacyID) {
-        this.pharmacyID = pharmacyID;
+        this.predefinedConsultationID = predefinedConsultationID;
     }
 
     public String getConsultantEmail() {
@@ -47,6 +40,46 @@ public class ScheduleExaminationDTO {
         this.consultantEmail = consultantEmail;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getPatientName() {
+        return patientName;
+    }
+
+    public void setPatientName(String patientName) {
+        this.patientName = patientName;
+    }
+
+    public String getPatientSurname() {
+        return patientSurname;
+    }
+
+    public void setPatientSurname(String patientSurname) {
+        this.patientSurname = patientSurname;
+    }
+
     public Long getPatientId() {
         return patientId;
     }
@@ -55,51 +88,27 @@ public class ScheduleExaminationDTO {
         this.patientId = patientId;
     }
 
-    public String getPatientSurname() {
-        return patientSurname;
-    }
-
-    public String getPatientName() {
-        return patientName;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getStartDate() {
-        return startDate;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
-    }
-
-    public void setPatientName(String patientName) {
-        this.patientName = patientName;
-    }
-
-    public void setPatientSurname(String patientSurname) {
-        this.patientSurname = patientSurname;
-    }
-
     public Long getConsultantId() {
         return consultantId;
     }
 
     public void setConsultantId(Long consultantId) {
         this.consultantId = consultantId;
+    }
+
+    public Long getPharmacyID() {
+        return pharmacyID;
+    }
+
+    public void setPharmacyID(Long pharmacyID) {
+        this.pharmacyID = pharmacyID;
+    }
+
+    public Long getPredefinedConsultationID() {
+        return predefinedConsultationID;
+    }
+
+    public void setPredefinedConsultationID(Long predefinedConsultationID) {
+        this.predefinedConsultationID = predefinedConsultationID;
     }
 }

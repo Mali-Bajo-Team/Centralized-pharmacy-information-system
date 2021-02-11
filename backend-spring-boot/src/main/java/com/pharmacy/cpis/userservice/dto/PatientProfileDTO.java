@@ -1,9 +1,15 @@
 package com.pharmacy.cpis.userservice.dto;
 
+import com.pharmacy.cpis.drugservice.dto.DrugDTO;
+import com.pharmacy.cpis.drugservice.model.drug.Drug;
 import com.pharmacy.cpis.userservice.model.users.Patient;
 import com.pharmacy.cpis.userservice.service.ILoyaltyProgramService;
 
 import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class PatientProfileDTO {
 
@@ -34,11 +40,13 @@ public class PatientProfileDTO {
     @NotEmpty(message = "User category is required.")
     private UserCategoryDTO userCategoryDTO;
 
+    private List<DrugDTO> allergies;
+
     public PatientProfileDTO() {
 
     }
 
-    public PatientProfileDTO(Patient patient, PatientEmailDTO patientEmail, ILoyaltyProgramService loyaltyProgramService){
+    public PatientProfileDTO(Patient patient, String patientEmail, ILoyaltyProgramService loyaltyProgramService){
         this.setName(patient.getName());
         this.setSurname(patient.getSurname());
         this.setAddress(patient.getAddress());
@@ -46,12 +54,14 @@ public class PatientProfileDTO {
         this.setCity(patient.getCity());
         this.setPhoneNumber(patient.getPhoneNumber());
         this.setLoyaltyPoints(patient.getLoyaltyPoints());
-        this.setEmail(patientEmail.getEmail());
+        this.setEmail(patientEmail);
         this.setUserCategoryDTO(new UserCategoryDTO(loyaltyProgramService.findUserCategoryByLoyaltyPoints(patient.getLoyaltyPoints())));
-
+        this.setAllergiesWithSet(patient.getAllergies());
 
     }
-    public PatientProfileDTO(String name, String surname, String phoneNumber, String address, String city, String country, String email, Integer loyaltyPoints, UserCategoryDTO userCategoryDTO) {
+
+    public PatientProfileDTO(String name, String surname, String phoneNumber, String address, String city, String country, String email, Integer loyaltyPoints,
+                             UserCategoryDTO userCategoryDTO, List<DrugDTO> allergies) {
         this.name = name;
         this.surname = surname;
         this.phoneNumber = phoneNumber;
@@ -61,6 +71,23 @@ public class PatientProfileDTO {
         this.email = email;
         this.loyaltyPoints = loyaltyPoints;
         this.userCategoryDTO = userCategoryDTO;
+        this.allergies = allergies;
+    }
+
+    public List<DrugDTO> getAllergies() {
+        return allergies;
+    }
+
+    public void setAllergies(List<DrugDTO> allergies) {
+        this.allergies = allergies;
+    }
+
+    public void setAllergiesWithSet(Set<Drug> allergies) {
+        List<DrugDTO> allergiesDTO = new ArrayList<>();
+        for(Drug drug : allergies){
+            allergiesDTO.add(new DrugDTO(drug));
+        }
+        this.allergies = allergiesDTO;
     }
 
     public String getName() {

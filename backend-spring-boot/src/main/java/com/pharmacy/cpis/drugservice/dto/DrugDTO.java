@@ -8,12 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class DrugDTO {
 
-    @NotEmpty(message = "Name is required.")
     private String name;
 
     private String code;
@@ -100,6 +100,7 @@ public class DrugDTO {
     }
 
     public void setAlternateDrugs(Set<Drug> alternateDrugs, IDrugService drugService) {
+        this.alternateDrugs = new ArrayList<>();
         for(Drug drug: alternateDrugs){
             DrugDTO drugDTO = new DrugDTO();
             drugDTO.setName(drug.getName());

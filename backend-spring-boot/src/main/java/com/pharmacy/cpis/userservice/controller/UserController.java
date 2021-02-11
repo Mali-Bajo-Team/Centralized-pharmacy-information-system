@@ -3,6 +3,7 @@ package com.pharmacy.cpis.userservice.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pharmacy.cpis.scheduleservice.model.consultations.ConsultationStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

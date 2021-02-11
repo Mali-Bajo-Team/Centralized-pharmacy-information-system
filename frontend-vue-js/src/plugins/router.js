@@ -11,8 +11,16 @@ import Drugs from './../pages/guest/drugs/Drugs';
 import Pharmacies from './../pages/guest/pharmacies/Pharmacies';
 
 import Patient from './../pages/patient/Container';
+import Consultations from './../pages/patient/consultations/Consultations';
 import PatientLanding from './../pages/patient/landing/Landing';
 import PatientProfile from './../pages/patient/profile/Profile';
+import PatientReservations from './../pages/patient/reservation/DrugReservation';
+import Subscriptions from './../pages/patient/subscriptions/Subscriptions';
+import EPrescription from './../pages/patient/eprescription/EPrescription';
+import PharmacistSearchPatient from './../pages/patient/consultants/Pharmacists';
+import DermatologistSearchPatient from './../pages/patient/consultants/Dermatologists';
+
+
 
 import Pharmacist from './../pages/pharmacist/Container';
 import PharmacistLanding from './../pages/pharmacist/landing/Landing';
@@ -32,6 +40,10 @@ import SystemAdminComplaints from './../pages/systemadmin/complaints/Complaints'
 
 import PharmacyAdmin from './../pages/pharmacyadmin/Container';
 import PharmacyAdminLanding from './../pages/pharmacyadmin/landing/Landing';
+import VacationRequests from './../pages/pharmacyadmin/vacation/Vacation';
+import PharmacistSearch from './../pages/pharmacyadmin/consultants/Pharmacists';
+import DermatologistSearch from './../pages/pharmacyadmin/consultants/Dermatologists';
+import DrugOrders from './../pages/pharmacyadmin/orders/Container';
 
 import Supplier from './../pages/supplier/Container';
 import SupplierLanding from './../pages/supplier/landing/Landing';
@@ -107,6 +119,36 @@ const routes = [
                 component: Pharmacies,
                 name: 'patientpharmacies',
                 path: 'patientpharmacies'
+            },
+            {
+                component: PatientReservations,
+                name: 'drugreservation',
+                path: 'drugreservation'
+            },
+            {
+                component: Subscriptions,
+                name: 'subscriptions',
+                path: 'subscriptions'
+            },
+            {
+                component: EPrescription,
+                name: 'eprescription',
+                path: 'eprescription'
+            },
+            {
+                component: Consultations,
+                name: 'patientconsultations',
+                path: 'patientconsultations'
+            },
+            {
+                component: PharmacistSearchPatient,
+                name: 'pharmacistsearch',
+                path: 'pharmacists'
+            },
+            {
+                component: DermatologistSearchPatient,
+                name: 'dermatologistsearch',
+                path: 'dermatologists'
             }
         ]
     },
@@ -207,6 +249,11 @@ const routes = [
                 component: SystemAdminComplaints,
                 name: 'systemadmincomplaints',
                 path: 'systemadmincomplaints'
+            },
+            {
+                component: VacationRequests,
+                name: 'vacationrequests',
+                path: 'vacationrequests'
             }
         ]
     },
@@ -227,6 +274,26 @@ const routes = [
                 component: Drugs,
                 name: 'pharmacyadmindrugs',
                 path: 'pharmacyadmindrugs'
+            },
+            {
+                component: VacationRequests,
+                name: 'pharmacyvacationrequests',
+                path: 'vacationrequests'
+            },
+            {
+                component: PharmacistSearch,
+                name: 'pharmacypharmacistsearch',
+                path: 'pharmacists'
+            },
+            {
+                component: DermatologistSearch,
+                name: 'pharmacydermatologistsearch',
+                path: 'dermatologists'
+            },
+            {
+                component: DrugOrders,
+                name: 'pharmacydrugorders',
+                path: 'orders'
             }
         ]
     },

@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app style="background: rgba(0,0,0,0);">
     <navbar v-bind:items="links"></navbar>
     <v-main>
       <v-container fluid>
@@ -37,6 +37,10 @@ export default {
       {
         title: "Complaints",
         to: "/systemadmin/systemadmincomplaints"
+      },
+      {
+        title: "Vacation requests",
+        to: "/systemadmin/vacationrequests"
       }
     ],
   }),

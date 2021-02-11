@@ -12,6 +12,7 @@ public class Price {
 	@Column(nullable = false)
 	private Double price;
 
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private Date date;
 

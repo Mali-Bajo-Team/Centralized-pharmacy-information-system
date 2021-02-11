@@ -8,7 +8,7 @@ import com.pharmacy.cpis.drugservice.repository.IReservationRepository;
 import com.pharmacy.cpis.drugservice.service.IAvailableDrugService;
 import com.pharmacy.cpis.drugservice.service.IReservationService;
 import com.pharmacy.cpis.pharmacyservice.service.IPharmacyService;
-import com.pharmacy.cpis.scheduleservice.model.consultations.Consultation;
+import com.pharmacy.cpis.userservice.dto.PatientEmailDTO;
 import com.pharmacy.cpis.userservice.model.users.Patient;
 import com.pharmacy.cpis.userservice.service.EmailService;
 import com.pharmacy.cpis.userservice.service.IPatientService;
@@ -75,17 +75,16 @@ public class ReservationService implements IReservationService {
         reservation.setIsPickedUp(false);
 
         availableDrugService.updateAmount(reservationDTO.getPharmacyID(),reservationDTO.getDrugCode(),reservationDTO.getAmount());
-
+        Reservation savedReservation = reservationRepository.save(reservation);
         try {
             System.out.println("Sending mail in process ..");
             emailService.sendConfirmReservationOfDrugEmailAsync(reservationDTO.getPatientEmail(),
-                    reservationDTO, reservation);
+                    reservationDTO, savedReservation);
 
         } catch (Exception e) {
             System.out.println("Error during sending email: " + e.getMessage());
         }
-
-        return reservationRepository.save(reservation);
+        return savedReservation;
     }
     @Override
     public ReservationDTO isReservationValid(ReservationDTO reservationDTO) {
@@ -129,6 +128,7 @@ public class ReservationService implements IReservationService {
         return reservationDTO;
     }
 
+
     @Override
     public ReservationDTO dispensingMedicine(ReservationDTO reservationDTO) {
         Reservation reservation = reservationRepository.getOne(reservationDTO.getReservationID());
@@ -155,6 +155,17 @@ public class ReservationService implements IReservationService {
                 allPatientPharmacies.add(reservation.getPharmacy());
         }
         return allPatientPharmacies;
+    }
+
+    @Override
+    public List<Reservation> findAllPatientReservations(PatientEmailDTO patientEmailDTO) {
+        Patient patient = patientService.findByEmail(patientEmailDTO.getEmail());
+        return reservationRepository.findAllByPatient(patient);
+    }
+
+    @Override
+    public void removeReservation(Long reservationId) {
+        reservationRepository.deleteById(reservationId);
     }
 
     private void sendDrugPurchase(Reservation reservation) {

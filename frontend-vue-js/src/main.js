@@ -9,6 +9,8 @@ Vue.use(VueAxios, axios);
 
 Vue.config.productionTip = false
 
+import "@/assets/background.css"
+
 new Vue({
   vuetify,
   router,

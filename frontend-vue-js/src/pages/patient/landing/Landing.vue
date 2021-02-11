@@ -1,13 +1,15 @@
 <template>
-    <v-container>
-        <h3>Patient</h3>
-    </v-container>
+  <v-container>
+    <h3>Patient</h3>
+  </v-container>
 </template>
 
 <script>
 export default {
-    data: () => ({
+  data() {
+    return {};
+  },
 
-    })
-}
+  methods: {},
+};
 </script>

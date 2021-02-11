@@ -18,11 +18,12 @@ public class Reservation {
 	private Integer amount;
 
 	@CreationTimestamp
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private Date dateOfCreation;
 
 	@Column(nullable = false)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date deadline;
 
 	// ko bude radio rezervacije nek odluči da li da se ovo zamjeni statusom

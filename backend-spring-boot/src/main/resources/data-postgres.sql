@@ -125,15 +125,18 @@ insert into drug_specification(additional_notes, contraindications, manufacturer
 values('Slow one', 'None', 'Zenica KP Dom', false, 5, 'kreatin');
 
 --INSERT AVAILABLE DRUG
-insert into available_drug(available_amount, default_price, drug_code, pharmacy_id)
-values(10, 10, 'brufen', 1);
-insert into available_drug(available_amount, default_price, drug_code, pharmacy_id)
-values(15, 8, 'brufen', 2);
-insert into available_drug(available_amount, default_price, drug_code, pharmacy_id)
-values(100, 15, 'aspirin', 1);
-insert into available_drug(available_amount, default_price, drug_code, pharmacy_id)
-values(2, 5, 'aspirin', 2);
-
+insert into available_drug(available_amount, default_price, drug_code, pharmacy_id, version)
+values(10, 10, 'brufen', 1, 0);
+insert into available_drug(available_amount, default_price, drug_code, pharmacy_id, version)
+values(15, 8, 'brufen', 2, 0);
+insert into available_drug(available_amount, default_price, drug_code, pharmacy_id, version)
+values(100, 15, 'aspirin', 1, 0);
+insert into available_drug(available_amount, default_price, drug_code, pharmacy_id, version)
+values(2, 5, 'aspirin', 2, 0);
+insert into available_drug(available_amount, default_price, drug_code, pharmacy_id, version)
+values(100, 15, 'kreatin', 1, 0);
+insert into available_drug(available_amount, default_price, drug_code, pharmacy_id, version)
+values(2, 5, 'kreatin', 2, 0);
 
 -- INSERT ONE DERMATOLOGIST
 insert into person (discriminator, address, city, country, name, surname, phone_number, type) values ('Consultant', 'Svetislava Pesica 20', 'Novi Sad', 'Srbija', 'Miroslav', 'Jovanovic', '0635212365', 1);
@@ -145,13 +148,16 @@ insert into consultation (price,status,start_date,end_date,consultant_id,patient
 insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (25,1,'2021-02-04 11:23','2021-02-04 13:20',9,2,1);
 insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (30,1,'2021-02-05 13:23','2021-02-05 14:00',9,4,2);
 insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (30,1,'2021-03-05 13:23','2021-03-05 14:00',9,2,2);
-
-insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 1);
-insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 2);
-insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 3);
-insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 4);
-insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 5);
-insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 6);
+insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (30,0,'2021-03-09 13:23','2021-03-05 14:00',9,2,1);
+insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (30,0,'2021-03-10 13:23','2021-03-05 14:00',9,2,2);
+insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (30,0,'2021-03-11 13:23','2021-03-05 14:00',9,2,1);
+insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (30,0,'2021-03-12 13:23','2021-03-05 14:00',9,2,2);
+-- insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 1);
+-- insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 2);
+-- insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 3);
+-- insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 4);
+-- insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 5);
+-- insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 6);
 
 -- INSERT DERMATOLOGIST WORKING TIME
 insert into working_times(consultant_id,pharmacy_id, monday_start, monday_end, tuesday_start, tuesday_end, wednesday_start,wednesday_end,thursday_start,thursday_end,friday_start,friday_end) values (9,1, '2021-02-03 10:00', '2021-02-03 18:00','2021-02-03 10:00', '2021-02-03 18:00', '2021-02-03 10:00', '2021-02-03 18:00','2021-02-03 10:00', '2021-02-03 18:00', '2021-02-03 10:00', '2021-02-03 17:00');
@@ -179,14 +185,14 @@ insert into offer(price, shipment_date, status, order_id, supplier_id) values (1
 
 --INSERT RESERVATION FOR DRUG
 insert into reservation(amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id)
- values (15,'2021-02-08','2021-02-10',false,'brufen',4,1);
+ values (15,'2021-02-08','2021-02-25',false,'brufen',4,1);
 
 
 --INSERT RESERVATION (Drug reservation)
-insert into reservation(amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (4,'2021-02-05 12:00','2021-02-09 12:00',false,'brufen',2,1);
-insert into reservation(amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (3,'2021-03-06 12:00','2021-02-09 04:00',false,'brufen',4,2);
+insert into reservation(amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (4,'2021-02-05 12:00','2021-02-25 12:00',false,'brufen',2,1);
+insert into reservation(amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (3,'2021-03-06 12:00','2021-02-03 04:00',false,'brufen',4,2);
 insert into reservation(amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (6,'2021-03-06 12:00','2021-02-08 12:00',false,'brufen',2,1);
-insert into reservation(amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (5,'2021-03-06 12:00','2021-02-10 12:00',false,'brufen',4,2);
+insert into reservation(amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (5,'2021-03-06 12:00','2021-02-11 12:00',false,'brufen',4,2);
 insert into reservation(amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (4,'2021-03-04 12:00','2021-02-09 12:00',false,'brufen',2,2);
 
 --INSERT COMPLAINT ( only patient who had a consultation can make a complaint about consultant)
@@ -228,3 +234,18 @@ insert into working_times(consultant_id,pharmacy_id, monday_start, monday_end, s
 insert into drug_request (consultant_id, pharmacy_id, drug_code, timestamp) values (9, 1, 'aspirin', '2020-10-14');
 insert into drug_request (consultant_id, pharmacy_id, drug_code, timestamp) values (9, 1, 'brufen', '2020-12-14');
 
+insert into allergies (patient_id, drug_code) values (2,'brufen');
+insert into allergies (patient_id, drug_code) values (2,'aspirin');
+
+insert into alternate_drugs(drug_code, alternate_drug_code) values('amfetamin','brufen');
+insert into alternate_drugs(drug_code, alternate_drug_code) values('amfetamin','kreatin');
+
+--INSERT E-PRESCRIPTION
+insert into eprescription(creation_date, status, patient_id) values('2021-02-1 14:00', 0, 2);
+insert into eprescription(creation_date, status, patient_id) values('2021-02-1 14:00', 0, 2);
+insert into eprescription(creation_date, status, patient_id) values('2021-02-1 14:00', 0, 8);
+
+--INSERT PRESCRIBED-DRUG
+insert into prescribed_drug(amount, drug_code, prescription_id) values (10, 'brufen', 1);
+insert into prescribed_drug(amount, drug_code, prescription_id) values (3, 'aspirin', 2);
+insert into prescribed_drug(amount, drug_code, prescription_id) values (5, 'aspirin', 3);

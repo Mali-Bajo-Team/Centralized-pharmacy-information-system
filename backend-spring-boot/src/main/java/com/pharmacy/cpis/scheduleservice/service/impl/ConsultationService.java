@@ -1,13 +1,13 @@
 package com.pharmacy.cpis.scheduleservice.service.impl;
 
 import java.util.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
 
+import com.pharmacy.cpis.scheduleservice.dto.PatientCancelConsultationDTO;
+import com.pharmacy.cpis.userservice.dto.PatientEmailDTO;
+import com.pharmacy.cpis.userservice.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
 import com.pharmacy.cpis.pharmacyservice.repository.IPharmacyRepository;
@@ -48,6 +48,9 @@ public class ConsultationService implements IConsultationService {
 	@Autowired
 	private IPharmacyRepository pharmacyRepository;
 
+	@Autowired
+	private IUserRepository userRepository;
+
 	@Override
 	public Collection<Consultation> findByPharmacyAndStatus(Long pharmacyId, ConsultationStatus status) {
 		return consultationRepository.findAllByPharmacyIdAndStatus(pharmacyId, status);
@@ -86,29 +89,39 @@ public class ConsultationService implements IConsultationService {
 		Consultant consultant = consultantRepository.getOne(consultation.getConsultantId());
 		Pharmacy consultantWorkingPharmacy;
 
-		if(Objects.isNull(consultation.getPharmacyID())) {
+		if (Objects.isNull(consultation.getPharmacyID())) {
 			consultantWorkingPharmacy = workingTimesService.consultantWorkingPharmacy(consultant.getId());
-		}else{
+		} else {
 			consultantWorkingPharmacy = pharmacyRepository.getOne(consultation.getPharmacyID());
 		}
-
-		Consultation consultationForSchedule = new Consultation();
-		consultationForSchedule.setConsultant(consultant);
-		consultationForSchedule.setPatient(patientRepository.getOne(consultation.getPatientId()));
-		consultationForSchedule.setPharmacy(consultantWorkingPharmacy);
-		consultationForSchedule.setPrice(consultantWorkingPharmacy.getPharmacistConsultationPrice());
-		consultationForSchedule.setStatus(ConsultationStatus.SCHEDULED);
-		consultationForSchedule.setTime(consultationDataRange);
-
-		consultationRepository.save(consultationForSchedule);
+		Consultation consultationForSchedule;
+		if(consultation.getPredefinedConsultationID()  == null) {
+			consultationForSchedule = new Consultation();
+			consultationForSchedule.setConsultant(consultant);
+			consultationForSchedule.setPatient(patientRepository.getOne(consultation.getPatientId()));
+			consultationForSchedule.setPharmacy(consultantWorkingPharmacy);
+			consultationForSchedule.setPrice(consultantWorkingPharmacy.getPharmacistConsultationPrice());
+			consultationForSchedule.setStatus(ConsultationStatus.SCHEDULED);
+			consultationForSchedule.setTime(consultationDataRange);
+			consultationRepository.save(consultationForSchedule);
+		}else{
+			consultationForSchedule = consultationRepository.getOne(consultation.getPredefinedConsultationID());
+			consultationForSchedule.setConsultant(consultant);
+			consultationForSchedule.setPatient(patientRepository.getOne(consultation.getPatientId()));
+			consultationForSchedule.setPharmacy(consultantWorkingPharmacy);
+			consultationForSchedule.setPrice(consultantWorkingPharmacy.getPharmacistConsultationPrice());
+			consultationForSchedule.setStatus(ConsultationStatus.SCHEDULED);
+			consultationForSchedule.setTime(consultationDataRange);
+			consultationRepository.save(consultationForSchedule);
+		}
 
 		return consultationForSchedule;
 	}
 
-
 	@Override
+	@Transactional
 	public Consultation addPredefined(Long pharmacyId, AddPredefinedConsultationDTO consultationInfo) {
-		Consultant consultant = consultantRepository.findById(consultationInfo.getConsultantId()).orElse(null);
+		Consultant consultant = consultantRepository.findLockedById(consultationInfo.getConsultantId()).orElse(null);
 		if (consultant == null)
 			throw new PSNotFoundException("The requested consultant does not exist.");
 
@@ -123,20 +136,6 @@ public class ConsultationService implements IConsultationService {
 		validateTimeIntervalForConsultation(consultation.getTime());
 
 		return consultationRepository.save(consultation);
-	}
-
-	private void checkConsultantAvailability(Long pharmacyId, Consultant consultant, DateRange interval) {
-		if (!workingTimesService.consultationFitsIntoWorkingTime(consultant.getId(), pharmacyId, interval))
-			throw new PSConflictException("Consultation doesn't fit into the consultants working time.");
-
-		if (hasOverlappingConsultations(consultant, interval, ConsultationStatus.PREDEFINED))
-			throw new PSConflictException("Consultant already has a predefined consultation in the time period.");
-
-		if (hasOverlappingConsultations(consultant, interval, ConsultationStatus.SCHEDULED))
-			throw new PSConflictException("Consultant already has a scheduled consultation in the time period.");
-
-		if (hasOverlappingVacations(consultant, interval))
-			throw new PSConflictException("Consultant already has a scheduled vacation in the time period.");
 	}
 
 	private Consultation initializeConsultation(AddPredefinedConsultationDTO consultationInfo, Pharmacy pharmacy,
@@ -156,6 +155,20 @@ public class ConsultationService implements IConsultationService {
 		}
 
 		return consultation;
+	}
+
+	private void checkConsultantAvailability(Long pharmacyId, Consultant consultant, DateRange interval) {
+		if (!workingTimesService.consultationFitsIntoWorkingTime(consultant.getId(), pharmacyId, interval))
+			throw new PSConflictException("Consultation doesn't fit into the consultants working time.");
+
+		if (hasOverlappingConsultations(consultant, interval, ConsultationStatus.PREDEFINED))
+			throw new PSConflictException("Consultant already has a predefined consultation in the time period.");
+
+		if (hasOverlappingConsultations(consultant, interval, ConsultationStatus.SCHEDULED))
+			throw new PSConflictException("Consultant already has a scheduled consultation in the time period.");
+
+		if (hasOverlappingVacations(consultant, interval))
+			throw new PSConflictException("Consultant already has a scheduled vacation in the time period.");
 	}
 
 	private boolean hasOverlappingConsultations(Consultant consultant, DateRange interval, ConsultationStatus status) {
@@ -217,6 +230,28 @@ public class ConsultationService implements IConsultationService {
 				allPatientPharmacies.add(consultation.getPharmacy());
 		}
 		return allPatientPharmacies;
+	}
+
+	@Override
+	public Set<Consultation> findAllConsultationByPatientAndStatus(PatientEmailDTO patientEmailDTO, ConsultationStatus status, ConsultantType consultantType) {
+		Long patientId = userRepository.findByEmail(patientEmailDTO.getEmail()).getPerson().getId();
+		Patient patient = patientRepository.findById(patientId).orElse(null);
+		if(patient == null) throw new PSNotFoundException("Not found that patient");
+		Set<Consultation> consultations = new HashSet<>();
+		for(Consultation consultation : consultationRepository.findAllByPatientAndStatus(patient,status)){
+			if(consultation.getConsultant().getType().equals(consultantType)){
+				consultations.add(consultation);
+			}
+		}
+		return consultations;
+	}
+
+	@Override
+	public void cancelConsultation(PatientCancelConsultationDTO patientCancelConsultationDTO) {
+		Consultation consultation = consultationRepository.findById(patientCancelConsultationDTO.getConsultationId()).orElse(null);
+		if(consultation == null) throw new PSNotFoundException("Not found that consultation");
+		consultation.setStatus(ConsultationStatus.CANCELLED);
+		consultationRepository.save(consultation);
 	}
 
 }

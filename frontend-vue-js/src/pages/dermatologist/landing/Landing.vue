@@ -92,7 +92,7 @@
               Choose pharmacy for examination
             </h4>
             <v-select
-              v-model="pharmaciesForDermatologist"
+              v-model="selectedPharmacy"
               :items="pharmaciesForDermatologist"
               item-text="name"
               item-value="location"
@@ -291,6 +291,7 @@ export default {
     examinitedPatients: [],
     vacationRequestDateRange: [],
     pharmaciesForDermatologist: [],
+    selectedPharmacy: null,
     alertPharmacy: false,
     headers: [
       {
@@ -337,7 +338,7 @@ export default {
     //Get pharmacies for phatient
     this.axios
       .post(
-        process.env.VUE_APP_BACKEND_URL + "api/pharmacies/allfordermatologist",
+        process.env.VUE_APP_BACKEND_URL + process.env.VUE_APP_PHARMACIES_ALLFORDERMATOLOGIST_ENDPOINT,
         { dermatologistEmail: email },
         {
           headers: {
