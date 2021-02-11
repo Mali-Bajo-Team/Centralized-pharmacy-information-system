@@ -99,6 +99,7 @@ public class ReservationService implements IReservationService {
 
     @Override
     public void makeReservationForEPrescription(EPrescription ePrescription, Long pharmacyIdWhereIsMadeReservation) {
+        List<Reservation> reservationsForEPrescriptions = new ArrayList<>();
         for (PrescribedDrug prescribedDrug : ePrescription.getPrescribedDrugs()) {
             Reservation reservation = new Reservation();
             reservation.setAmount(prescribedDrug.getAmount());
@@ -113,9 +114,16 @@ public class ReservationService implements IReservationService {
             reservation.setIsPickedUp(false);
             availableDrugService.updateAmount(pharmacyIdWhereIsMadeReservation, prescribedDrug.getDrug().getCode(), prescribedDrug.getAmount());
             Reservation savedReservation = reservationRepository.save(reservation);
+            reservationsForEPrescriptions.add(savedReservation);
         }
 
-        //TODO: Send email with ID reservation for every drug
+        try {
+            System.out.println("Sending mail in process ..");
+            emailService.sendConfirmEPrescriptionDrugsReservationEmailAsync(reservationsForEPrescriptions);
+
+        } catch (Exception e) {
+            System.out.println("Error during sending email: " + e.getMessage());
+        }
     }
 
     @Override
