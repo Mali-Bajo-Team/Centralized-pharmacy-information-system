@@ -28,9 +28,10 @@ public class DateConversionsAndComparisons {
 	public static long compareDatesWithoutTime(Date d1, Date d2) {
 		long t1;
 		long t2;
-
+		
 		t1 = d1.getTime() - d1.getTime() % (24 * 60 * 60 * 1000L);
 		t2 = d2.getTime() - d2.getTime() % (24 * 60 * 60 * 1000L);
+		
 		return (t1 - t2);
 	}
 
@@ -106,6 +107,10 @@ public class DateConversionsAndComparisons {
 
 	public static Date getTime(Date dateTime) {
 		return new Date(dateTime.getTime() % (24 * 60 * 60 * 1000L));
+	}
+
+	public static Date getDate(Date dateTime) {
+		return new Date(dateTime.getTime() - dateTime.getTime() % (24 * 60 * 60 * 1000L));
 	}
 
 }

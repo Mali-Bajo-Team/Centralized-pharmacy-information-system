@@ -11,7 +11,11 @@ export default new Vuetify({
         light: {
           primary: colors.teal.base,
           secondary: colors.teal.lighten3,
-          accent: colors.yellow.base,
+          accent: colors.orange.lighten1,
+          info: colors.lightGreen.lighten2,
+          warning: colors.yellow.lighten1,
+          error: colors.deepOrange.lighten2,
+          success: colors.lightGreen.base
         },
       },
     }

@@ -22,6 +22,7 @@ import com.pharmacy.cpis.drugservice.service.IDrugOrderService;
 import com.pharmacy.cpis.userservice.model.users.PharmacyAdministrator;
 import com.pharmacy.cpis.userservice.model.users.UserAccount;
 import com.pharmacy.cpis.userservice.repository.IPharmacyAdministratorRepository;
+import com.pharmacy.cpis.util.DateConversionsAndComparisons;
 import com.pharmacy.cpis.util.exceptions.PSBadRequestException;
 import com.pharmacy.cpis.util.exceptions.PSConflictException;
 import com.pharmacy.cpis.util.exceptions.PSForbiddenException;
@@ -74,7 +75,7 @@ public class DrugOrderService implements IDrugOrderService {
 			throw new PSForbiddenException("No pharmacy administrator associated with this account.");
 
 		DrugOrder newDrugOrder = new DrugOrder();
-		newDrugOrder.setDeadline(drugOrder.getDeadline());
+		newDrugOrder.setDeadline(DateConversionsAndComparisons.getDate(drugOrder.getDeadline()));
 		newDrugOrder.setStatus(DrugOrderStatus.WAITING_FOR_OFFERS);
 		newDrugOrder.setTimestamp(new Date());
 		newDrugOrder.setAdministrator(admin);
@@ -124,7 +125,7 @@ public class DrugOrderService implements IDrugOrderService {
 		if (!order.getStatus().equals(DrugOrderStatus.WAITING_FOR_OFFERS))
 			throw new PSConflictException("Drug order cannot be updated because it already has offers.");
 
-		order.setDeadline(orderUpdate.getDeadline());
+		order.setDeadline(DateConversionsAndComparisons.getDate(orderUpdate.getDeadline()));
 		order = drugOrderRepository.save(order);
 
 		for (OrderedDrug orderedDrug : order.getOrderedDrugs()) {

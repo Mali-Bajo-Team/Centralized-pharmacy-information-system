@@ -89,8 +89,8 @@ export default {
     finished: false
   }),
   mounted() {
-    this.request.start = new Date(this.request.start).toDateString();
-    this.request.end = new Date(this.request.end).toDateString();
+    this.request.start = new Date(this.request.start).toLocaleDateString();
+    this.request.end = new Date(this.request.end).toLocaleDateString();
   },
   methods: {
     accept() {

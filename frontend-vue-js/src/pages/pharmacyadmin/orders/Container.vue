@@ -7,12 +7,12 @@
         <v-skeleton-loader elevation="4" class="pa-4 mb-10 mx-auto" type="article, actions"></v-skeleton-loader>
       </template>
 
-      <template v-if="requests">
-        <vacrequest v-for="vr in requests" :key="vr.id" :request="vr" :endpoint="endpoint"></vacrequest>
+      <template v-if="orders">
+          <ordercomp v-for="ord in orders" :key="ord.id" :orderProp="ord"></ordercomp>
       </template>
 
       <v-card elevation="4" class="pa-4 mb-10" v-show="showEmptyMessage">
-        <v-card-title>There are no unreviewed vacation requests.</v-card-title>
+        <v-card-title>There are no drug orders.</v-card-title>
       </v-card>
 
       <v-snackbar v-model="snackbar" :timeout="2000" bottom class="mb-5" right>
@@ -28,14 +28,14 @@
 </template>
 
 <script>
-import vacrequest from "../../../components/VacationRequest";
+import ordercomp from "./Order";
 
 export default {
   components: {
-    vacrequest
+    ordercomp
   },
   data: () => ({
-    requests: [],
+    orders: [],
     loading: true,
     endpoint: "",
     snackbarText: "",
@@ -44,7 +44,7 @@ export default {
   mounted() {
     this.endpoint =
       process.env.VUE_APP_BACKEND_URL +
-      process.env.VUE_APP_VACATION_REQUEST_ENDPOINT;
+      process.env.VUE_APP_PROCUREMENT_ORDERS_ENDPOINT;
     this.axios
       .get(this.endpoint, {
         headers: {
@@ -52,7 +52,7 @@ export default {
         }
       })
       .then(response => {
-        this.requests = response.data;
+        this.orders = response.data;
         this.loading = false;
       })
       .catch(error => {
@@ -69,7 +69,7 @@ export default {
   },
   computed: {
     showEmptyMessage: function() {
-      return !this.loading && this.requests.length == 0;
+      return !this.loading && this.orders.length == 0;
     }
   }
 };
