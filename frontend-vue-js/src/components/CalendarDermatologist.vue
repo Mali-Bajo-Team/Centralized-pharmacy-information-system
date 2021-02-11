@@ -783,7 +783,7 @@ export default {
     prescribeDrug() {
         this.alertselectDrug = false;
          this.alertdurathiontherapy = false;
-       if (this.selecteddrugWithoutAllergies  == null || this.durationOfPerscirbe==null) {
+       if (this.selecteddrugWithoutAllergies  == null || this.durationOfPerscirbe==null || this.alertIsDrugAvailable == true) {
          if(this.selecteddrugWithoutAllergies  == null){
             this.alertselectDrug = true;
          }
