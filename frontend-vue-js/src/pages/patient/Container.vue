@@ -62,6 +62,19 @@ export default {
             to: "/patient/dermatologists"
           }
         ]
+      },
+      {
+        title: "History",
+        children:[
+          {
+            title: "Pharmacist",
+            to:"/patient/historypharmacist"
+          },
+          {
+            title: "Dermatologist",
+            to:"/patient/historydermatologist"
+          }
+        ]
       }
     ]
   })

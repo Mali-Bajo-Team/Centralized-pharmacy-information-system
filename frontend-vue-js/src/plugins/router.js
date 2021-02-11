@@ -19,7 +19,8 @@ import Subscriptions from './../pages/patient/subscriptions/Subscriptions';
 import EPrescription from './../pages/patient/eprescription/EPrescription';
 import PharmacistSearchPatient from './../pages/patient/consultants/Pharmacists';
 import DermatologistSearchPatient from './../pages/patient/consultants/Dermatologists';
-
+import PharmacistHistoryPatient from  './../pages/patient/history/Pharmacist';
+import DermatologistHistoryPatient from './../pages/patient/history/Dermatologist';
 
 
 import Pharmacist from './../pages/pharmacist/Container';
@@ -148,6 +149,16 @@ const routes = [
                 component: DermatologistSearchPatient,
                 name: 'dermatologistsearch',
                 path: 'dermatologists'
+            },
+            {
+                component: DermatologistHistoryPatient,
+                name : 'historydermatologist',
+                path : 'historydermatologist'
+            },
+            {
+                component: PharmacistHistoryPatient,
+                name : 'historypharmacist',
+                path : 'historypharmacist'
             }
         ]
     },
