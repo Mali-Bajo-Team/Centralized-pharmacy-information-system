@@ -277,19 +277,7 @@ export default {
           }
         )
         .then(() => {
-          alert("success");
-          // this.pharmaciesWithRequiredDrugsAmount = [];
-          // for (let pharmacy of resp.data) {
-          //   let tempObj = {
-          //     showConfirmDialog: false,
-          //     pharmacyId: pharmacy.pharmacyId,
-          //     totalPrice: pharmacy.totalPrice,
-          //     pharmacyRating: pharmacy.pharmacyRating,
-          //     pharmacyName: pharmacy.pharmacyName,
-          //     pharmacyLocation: pharmacy.pharmacyLocation,
-          //   };
-          //   this.pharmaciesWithRequiredDrugsAmount.push(tempObj);
-          // }
+          alert("Successfully booked. Check email for more information.");
         })
         .catch((error) => {
           alert("Error: " + error);
