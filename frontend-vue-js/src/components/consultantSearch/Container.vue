@@ -55,8 +55,8 @@
 
     <v-col sm="12" md="8" lg="6" xl="6" cols="12">
       <template v-if="loading">
-        <v-skeleton-loader elevation="4" class="pa-4 mb-10" type="article, actions"></v-skeleton-loader>
-        <v-skeleton-loader elevation="4" class="pa-4 mb-10" type="article, actions"></v-skeleton-loader>
+        <v-skeleton-loader elevation="4" class="pa-4 mb-10 mx-auto" type="article, actions"></v-skeleton-loader>
+        <v-skeleton-loader elevation="4" class="pa-4 mb-10 mx-auto" type="article, actions"></v-skeleton-loader>
       </template>
 
       <v-card elevation="4" class="pa-4 mb-10" v-show="showEmptyMessage">

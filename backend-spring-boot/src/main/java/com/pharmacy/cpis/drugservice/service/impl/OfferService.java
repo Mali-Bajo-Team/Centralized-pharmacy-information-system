@@ -24,6 +24,8 @@ import com.pharmacy.cpis.userservice.repository.IPharmacyAdministratorRepository
 import com.pharmacy.cpis.userservice.service.EmailService;
 import com.pharmacy.cpis.userservice.service.ISupplierService;
 import com.pharmacy.cpis.util.CollectionUtil;
+import com.pharmacy.cpis.util.DateConversionsAndComparisons;
+import com.pharmacy.cpis.util.TimeProvider;
 import com.pharmacy.cpis.util.exceptions.PSBadRequestException;
 import com.pharmacy.cpis.util.exceptions.PSConflictException;
 import com.pharmacy.cpis.util.exceptions.PSForbiddenException;
@@ -50,6 +52,9 @@ public class OfferService implements IOfferService {
 	@Autowired
 	private EmailService emailService;
 
+	@Autowired
+	private TimeProvider timeProvider;
+
 	@Override
 	public List<Offer> findOffersBySupplier(Supplier supplier) {
 		return offerRepository.findOffersBySupplier(supplier);
@@ -62,6 +67,9 @@ public class OfferService implements IOfferService {
 			throw new PSNotFoundException("Not found that offer");
 		if (!offer.getStatus().equals(OfferStatus.PENDING))
 			throw new PSConflictException("The offer has already been reviewed.");
+		if (DateConversionsAndComparisons.compareDatesWithoutTime(timeProvider.currentDate(),
+				offer.getOrder().getDeadline()) > 0)
+			throw new PSBadRequestException("The deadline for offers has passed.");
 		offer.setPrice(offerDTO.getPrice());
 		offer.setShipmentDate(offerDTO.getShipmentDate());
 		return offerRepository.save(offer);
@@ -80,6 +88,9 @@ public class OfferService implements IOfferService {
 			throw new PSConflictException("The requested drug order is already finished.");
 		if (CollectionUtil.contains(order.getOffers(), offer -> offer.getSupplier().equals(supplier)))
 			throw new PSConflictException("You have already made an offer for the requested order.");
+
+		if (DateConversionsAndComparisons.compareDatesWithoutTime(timeProvider.currentDate(), order.getDeadline()) > 0)
+			throw new PSBadRequestException("The deadline for offers has passed.");
 
 		Offer offer = new Offer();
 		offer.setShipmentDate(offerDTO.getShipmentDate());
@@ -112,6 +123,9 @@ public class OfferService implements IOfferService {
 
 		if (order.getStatus().equals(DrugOrderStatus.FINISHED))
 			throw new PSConflictException("The requested drug order is already finished.");
+
+		if (DateConversionsAndComparisons.compareDatesWithoutTime(timeProvider.currentDate(), order.getDeadline()) <= 0)
+			throw new PSBadRequestException("The deadline for offers hasn't passed yet.");
 
 		order.setStatus(DrugOrderStatus.FINISHED);
 		drugOrderRepository.save(order);
