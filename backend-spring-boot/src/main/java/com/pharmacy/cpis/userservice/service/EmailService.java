@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import com.pharmacy.cpis.userservice.model.complaints.Complaint;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -153,6 +154,36 @@ public class EmailService {
 		System.out.println("Email was sent!");
 	}
 
+
+	@Async
+	public void sendConfirmEPrescriptionDrugsReservationEmailAsync(List<Reservation> reservationsForEPrescriptions) throws MailException, InterruptedException {
+		System.out.println("Email sending...\n\n");
+		SimpleMailMessage mail = new SimpleMailMessage();
+		String patientEmail = reservationsForEPrescriptions.get(0).getPatient().getAccount().getEmail(); // all those reservations is for only one patient, so, it's ok to get his email on this way
+		String pharmacyName = reservationsForEPrescriptions.get(0).getPharmacy().getName(); // same for pharmacy
+
+
+		StringBuilder reservedDrugs = new StringBuilder();
+		StringBuilder reservedDrugsId = new StringBuilder();
+		for(Reservation reservation : reservationsForEPrescriptions){
+			reservedDrugs.append(reservation.getDrug().getName());
+			reservedDrugsId.append(reservation.getId());
+			reservedDrugs.append(", ");
+			reservedDrugsId.append(", ");
+		}
+		String reservedDrugsString = reservedDrugs.substring(0, reservedDrugs.length() - 2); // remove last ", " and add only " "
+		String reservedDrugsIdString = reservedDrugsId.substring(0, reservedDrugsId.length() - 2); // remove last ", " and add only " "
+
+
+		mail.setTo(patientEmail);
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Confirmation ePrescription reservation of drugs");
+		mail.setText("Hello " + patientEmail + "," + " your reservation with ePrescription of drugs "+ reservedDrugsString+" is succesfully scheduled in "+pharmacyName+"."+
+				" IDs of your reservations are "+reservedDrugsIdString + ".");
+		javaMailSender.send(mail);
+
+		System.out.println("Email was sent!");
+	}
 
 	@Async
 	public void sendOfferUpdateEmailAsync(String email, Offer offer) {

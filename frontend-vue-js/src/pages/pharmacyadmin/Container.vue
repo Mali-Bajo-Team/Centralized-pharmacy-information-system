@@ -46,6 +46,10 @@ export default {
       {
         title: "Dermatologists",
         to: "/pharmacyadmin/dermatologists"
+      },
+      {
+        title: "Add promotion",
+        to: "/pharmacyadmin/promotion"
       }
     ]
   })

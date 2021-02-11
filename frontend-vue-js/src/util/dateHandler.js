@@ -13,10 +13,10 @@ export function getTodayDateString() {
     return today;
 }
 
-export function isAvailableToCancelConsultation(consultationDate){
-    let twentyFourHoursFromTodayDate =new Date();
+export function isAvailableToCancelConsultation(consultationDate) {
+    let twentyFourHoursFromTodayDate = new Date();
     twentyFourHoursFromTodayDate.setDate(twentyFourHoursFromTodayDate.getDate() + 1);
-    if(twentyFourHoursFromTodayDate.getTime() > consultationDate){
+    if (twentyFourHoursFromTodayDate.getTime() > consultationDate) {
         return false;
     }
     return true;
@@ -25,6 +25,20 @@ export function isAvailableToCancelConsultation(consultationDate){
 export function getStringDateWithTimeFromMilliseconds(dateInMilliseconds) {
     var date = new Date(dateInMilliseconds).toISOString().split('T')[0];
     var time = new Date(dateInMilliseconds).toISOString().split('T')[1];
-    var DateWithTime = date + " "+ time.substring(0,5);
+    var DateWithTime = date + " " + time.substring(0, 5);
     return DateWithTime;
+}
+
+export function getMillisecondsFromStringDate(date) {
+    if (!date)
+        return null;
+
+    const [year, month, day] = date.split('-');
+
+    return new Date(parseInt(year), parseInt(month) - 1, parseInt(day)).getTime()
+}
+
+export function getCurrentDate() {
+    let date = new Date();
+    return new Date(date.getFullYear, date.getMonth, date.getDate);
 }
