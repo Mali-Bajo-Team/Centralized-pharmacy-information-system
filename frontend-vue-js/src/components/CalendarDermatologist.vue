@@ -919,7 +919,9 @@ export default {
       this.axios
         .post(
           process.env.VUE_APP_BACKEND_URL + "api/patient/addpenaltie",
-          { phatientID: this.patientId },
+          { phatientID: this.patientId,
+          consultationID: this.consultationId
+          },
           {
             headers: {
               Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
