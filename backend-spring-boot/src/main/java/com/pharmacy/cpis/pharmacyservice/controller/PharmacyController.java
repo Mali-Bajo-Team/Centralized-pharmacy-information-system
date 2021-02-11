@@ -99,9 +99,8 @@ public class PharmacyController {
 		return new ResponseEntity<>(pharmaciesDTO, HttpStatus.OK);
 	}
 
-	// findPharmaciesWithRequiredDrugsAmount
 	@PostMapping(value = "/requireddrugs")
-	// TODO: add auth
+	@PreAuthorize("hasRole('PATIENT')")
 	public ResponseEntity<List<PharmacyTotalPriceDTO>> findPharmaciesWithRequiredDrugsAmount(
 			@RequestBody List<DrugCodeAndAmountDTO> drugCodeAndAmountDTOS) {
 		List<PharmacyTotalPriceDTO> pharmacyTotalPriceDTOS = availableDrugService
