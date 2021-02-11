@@ -11,12 +11,12 @@
           <!-- Row for title & cancel consulation dialog-->
           <v-row align="center">
             <v-card-subtitle>
-              <h4 class="ml-3">
+              <h3 class="ml-3">
                 {{ consultation.pharmacyName }} ,
                 {{ consultation.consultantName }}
                 {{ consultation.consultantSurname }} ,
                 {{ convertMsToString(consultation.startDate) }}
-              </h4>
+              </h3>
             </v-card-subtitle>
             <v-spacer></v-spacer>
             <!-- Make a response dialog -->

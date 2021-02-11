@@ -207,18 +207,39 @@ public class ConsultationController {
 
 	@PostMapping(value = "/patient/dermatologist")
 	@PreAuthorize("hasRole('PATIENT')")
-	public ResponseEntity<List<ConsultationDTO>> findAllDermatologistConsultationByPatientAndStatus(@RequestBody PatientEmailDTO patientEmailDTO){
+	public ResponseEntity<List<ConsultationDTO>> findAllScheduledDermatologistConsultationByPatientAndStatus(@RequestBody PatientEmailDTO patientEmailDTO){
 		List<ConsultationDTO> consultations = new ArrayList<>();
 		for(Consultation consultation : consultationService.findAllConsultationByPatientAndStatus(patientEmailDTO, ConsultationStatus.SCHEDULED, ConsultantType.DERMATOLOGIST)){
 			consultations.add(new ConsultationDTO(consultation));
 		}
 		return new ResponseEntity<>(consultations, HttpStatus.OK);
 	}
+
+	@PostMapping(value = "/patient/dermatologist/history")
+	//@PreAuthorize("hasRole('PATIENT')")
+	public ResponseEntity<List<ConsultationDTO>> findAllFinishedDermatologistConsultationByPatientAndStatus(@RequestBody PatientEmailDTO patientEmailDTO){
+		List<ConsultationDTO> consultations = new ArrayList<>();
+		for(Consultation consultation : consultationService.findAllConsultationByPatientAndStatus(patientEmailDTO, ConsultationStatus.FINISHED, ConsultantType.DERMATOLOGIST)){
+			consultations.add(new ConsultationDTO(consultation));
+		}
+		return new ResponseEntity<>(consultations, HttpStatus.OK);
+	}
+
 	@PostMapping(value = "/patient/pharmacist")
 	@PreAuthorize("hasRole('PATIENT')")
-	public ResponseEntity<List<ConsultationDTO>> findAllPharmacistConsultationByPatientAndStatus(@RequestBody PatientEmailDTO patientEmailDTO){
+	public ResponseEntity<List<ConsultationDTO>> findAllScheduledPharmacistConsultationByPatientAndStatus(@RequestBody PatientEmailDTO patientEmailDTO){
 		List<ConsultationDTO> consultations = new ArrayList<>();
 		for(Consultation consultation : consultationService.findAllConsultationByPatientAndStatus(patientEmailDTO, ConsultationStatus.SCHEDULED, ConsultantType.PHARMACIST)){
+			consultations.add(new ConsultationDTO(consultation));
+		}
+		return new ResponseEntity<>(consultations, HttpStatus.OK);
+	}
+
+	@PostMapping(value = "/patient/pharmacist/history")
+	//@PreAuthorize("hasRole('PATIENT')")
+	public ResponseEntity<List<ConsultationDTO>> findAllFinishedPharmacistConsultationByPatientAndStatus(@RequestBody PatientEmailDTO patientEmailDTO){
+		List<ConsultationDTO> consultations = new ArrayList<>();
+		for(Consultation consultation : consultationService.findAllConsultationByPatientAndStatus(patientEmailDTO, ConsultationStatus.FINISHED, ConsultantType.PHARMACIST)){
 			consultations.add(new ConsultationDTO(consultation));
 		}
 		return new ResponseEntity<>(consultations, HttpStatus.OK);
