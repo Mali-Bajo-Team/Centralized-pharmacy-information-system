@@ -72,7 +72,6 @@ export default {
       return getStringDateFromMilliseconds(ms);
     },
     cancelDrugReservation(reservation) {
-      alert("Pozvana funkcija" + reservation.reservationId);
       this.axios
         .delete(
           process.env.VUE_APP_BACKEND_URL +
@@ -91,12 +90,13 @@ export default {
         )
         .then(() => {
           alert("Successfully cancelled reservation.");
+          let tempReservations = [];
           for(let tempReservation of this.reservations){
-            if(tempReservation.reservationId==reservation.reservationId){
-              this.reservations.pop(tempReservation);
-              break;
+            if(tempReservation.reservationId!=reservation.reservationId){
+              tempReservations.push(tempReservation);
             }
           }
+          this.reservations = tempReservations;
         })
         .catch((error) => {
           alert(error);

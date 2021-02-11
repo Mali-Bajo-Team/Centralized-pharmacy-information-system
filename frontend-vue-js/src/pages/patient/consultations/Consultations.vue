@@ -130,7 +130,7 @@ export default {
     },
     setConsultationForCancel(consultation) {
       this.consultationDTO.email = consultation.consultantEmail;
-      this.consultationDTO.id = consultation.id;
+      this.consultationDTO.consultationId = consultation.id;
     },
     confirmCancelConsultation() {
        this.axios
@@ -143,18 +143,19 @@ export default {
             },
             data: {
                 email: this.consultationDTO.email,
-                consultationId: this.consultationDTO.id
+                consultationId: this.consultationDTO.consultationId
             },
           }
         )
         .then(() => {
           alert("Successfully cancelled consultation.");
+          let tempConsultations = [];
             for(let tempConsultation of this.patientConsultations){
-                if(tempConsultation.id == this.consultationDTO.id){
-                    this.patientConsultations.pop(tempConsultation);
-                    break;
+                if(tempConsultation.id != this.consultationDTO.consultationId){
+                    tempConsultations.push(tempConsultation);
                 }
             }
+            this.patientConsultations = tempConsultations;
         })
         .catch((error) => {
           alert(error);
