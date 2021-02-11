@@ -1,8 +1,8 @@
 package com.pharmacy.cpis.scheduleservice.service.impl;
 
 import com.pharmacy.cpis.drugservice.repository.IDrugRepository;
-import com.pharmacy.cpis.scheduleservice.dto.EPrescriptionCreateDTO;
-import com.pharmacy.cpis.scheduleservice.dto.PrescribedDrugCreateDTO;
+import com.pharmacy.cpis.scheduleservice.dto.prescription.EPrescriptionCreateDTO;
+import com.pharmacy.cpis.scheduleservice.dto.prescription.PrescribedDrugCreateDTO;
 import com.pharmacy.cpis.scheduleservice.model.prescriptions.EPrescription;
 import com.pharmacy.cpis.scheduleservice.model.prescriptions.EPrescriptionStatus;
 import com.pharmacy.cpis.scheduleservice.model.prescriptions.PrescribedDrug;
@@ -14,7 +14,6 @@ import com.pharmacy.cpis.userservice.repository.IPatientRepository;
 import com.pharmacy.cpis.userservice.repository.IUserRepository;
 import com.pharmacy.cpis.util.exceptions.PSNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;

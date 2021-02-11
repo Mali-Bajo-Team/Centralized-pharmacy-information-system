@@ -1,15 +1,20 @@
-package com.pharmacy.cpis.scheduleservice.dto;
+package com.pharmacy.cpis.scheduleservice.dto.prescription;
 
 import com.pharmacy.cpis.scheduleservice.model.prescriptions.EPrescription;
 import com.pharmacy.cpis.scheduleservice.model.prescriptions.EPrescriptionStatus;
+import com.pharmacy.cpis.scheduleservice.model.prescriptions.PrescribedDrug;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 public class EPrescriptionReadDTO {
     private Long prescriptionId;
     private Date creationDate;
     private EPrescriptionStatus status;
     private Long patientId;
+    private List<PrescribedDrugReadDTO> prescribedDrugs;
 
     public EPrescriptionReadDTO(){
 
@@ -20,6 +25,23 @@ public class EPrescriptionReadDTO {
         this.setCreationDate(ePrescription.getCreationDate());
         this.setStatus(ePrescription.getStatus());
         this.setPatientId(ePrescription.getPatient().getId());
+        this.setPrescribedDrugs(mapPrescribedDrugsToDTO(ePrescription.getPrescribedDrugs()));
+    }
+
+    private List<PrescribedDrugReadDTO> mapPrescribedDrugsToDTO(Set<PrescribedDrug> prescribedDrugs){
+        List<PrescribedDrugReadDTO> prescribedDrugReadDTOS = new ArrayList<>();
+        for(PrescribedDrug prescribedDrug : prescribedDrugs){
+            prescribedDrugReadDTOS.add(new PrescribedDrugReadDTO(prescribedDrug));
+        }
+        return prescribedDrugReadDTOS;
+    }
+
+    public List<PrescribedDrugReadDTO> getPrescribedDrugs() {
+        return prescribedDrugs;
+    }
+
+    public void setPrescribedDrugs(List<PrescribedDrugReadDTO> prescribedDrugs) {
+        this.prescribedDrugs = prescribedDrugs;
     }
 
     public Long getPrescriptionId() {

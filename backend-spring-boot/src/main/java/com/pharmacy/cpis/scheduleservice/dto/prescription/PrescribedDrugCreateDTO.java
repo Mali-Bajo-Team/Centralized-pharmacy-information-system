@@ -1,4 +1,4 @@
-package com.pharmacy.cpis.scheduleservice.dto;
+package com.pharmacy.cpis.scheduleservice.dto.prescription;
 
 public class PrescribedDrugCreateDTO {
     private Integer amount;

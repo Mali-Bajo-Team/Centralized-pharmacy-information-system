@@ -1,6 +1,5 @@
-package com.pharmacy.cpis.scheduleservice.dto;
+package com.pharmacy.cpis.scheduleservice.dto.prescription;
 
-import java.util.Date;
 import java.util.List;
 
 public class EPrescriptionCreateDTO {
