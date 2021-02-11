@@ -20,46 +20,111 @@
         <v-card class="mt-5">
           <!--Toolbar of the card-->
           <v-toolbar color="primary" dark dense flat>
-            <v-toolbar-title class="body-2"> Sort pharmacies categories </v-toolbar-title>
+            <v-toolbar-title class="body-2">
+              Sort pharmacies categories
+            </v-toolbar-title>
           </v-toolbar>
           <!--End of toolbar of the card-->
           <v-form class="ma-4 ml-2">
-            <v-row class="ml-6 mb-6">
-              <v-switch
-                v-model="sortByPrice"
-                label="price"
-                color="indigo"
-                value="indigo"
-                hide-details
-              ></v-switch>
-              <v-switch
-              class="ml-11"
-                v-model="sortByRating"
-                label="rating"
-                color="indigo"
-                value="indigo"
-                hide-details
-              ></v-switch>
+            <!-- Sort by price -->
+            <v-row justify="center" class="pa-3">
+              <v-btn
+                width="110px"
+                small
+                color="green lighten-2"
+                class="ma-2 white--text mr-6"
+                @click="sortBy('totalPrice')"
+              >
+                Price
+                <v-icon small right dark> mdi-arrow-up-bold </v-icon>
+              </v-btn>
+              <v-btn
+                small
+                width="110px"
+                color="green lighten-2"
+                class="ma-2 white--text ml-6"
+                @click="sortDownBy('totalPrice')"
+              >
+                Price
+                <v-icon small right dark> mdi-arrow-down-bold </v-icon>
+              </v-btn>
             </v-row>
-            <v-divider></v-divider>
-             <v-row class="ml-6 mt-2 pb-6">
-              <v-switch
-                v-model="sortByLocation"
-                label="location"
-                color="indigo"
-                value="indigo"
-                hide-details
-              ></v-switch>
-              <v-switch
-               class="ml-6"
-                v-model="sortByName"
-                label="name"
-                color="indigo"
-                value="indigo"
-                hide-details
-              ></v-switch>
-            </v-row>
+            <!-- End of the sort by price -->
 
+            <!-- Sort by rating -->
+            <v-row justify="center" class="pa-3">
+              <v-btn
+                small
+                width="110px"
+                color="green lighten-2"
+                class="ma-2 white--text mr-6"
+                @click="sortBy('pharmacyRating')"
+              >
+                Rating
+                <v-icon small right dark> mdi-arrow-up-bold </v-icon>
+              </v-btn>
+              <v-btn
+                small
+                width="110px"
+                color="green lighten-2"
+                class="ma-2 white--text ml-6"
+                @click="sortDownBy('pharmacyRating')"
+              >
+                Rating
+                <v-icon small right dark> mdi-arrow-down-bold </v-icon>
+              </v-btn>
+            </v-row>
+            <!-- End of the sort by ratings -->
+
+            <!-- Sort by location -->
+            <v-row justify="center" class="pa-3">
+              <v-btn
+                small
+                width="110px"
+                color="green lighten-2"
+                class="ma-2 white--text mr-6"
+                @click="sortBy('pharmacyLocation')"
+              >
+                Location
+                <v-icon small right dark> mdi-arrow-up-bold </v-icon>
+              </v-btn>
+              <v-btn
+                small
+                width="110px"
+                color="green lighten-2"
+                class="ma-2 white--text ml-6"
+                @click="sortDownBy('pharmacyLocation')"
+              >
+                Location
+                <v-icon small right dark> mdi-arrow-down-bold </v-icon>
+              </v-btn>
+            </v-row>
+            <!-- End of the sort by location -->
+
+            <!-- Sort by pharmacy name -->
+            <v-row justify="center" class="pa-3">
+              <v-btn
+                small
+                width="110px"
+                color="green lighten-2"
+                class="ma-2 white--text mr-6"
+                @click="sortBy('pharmacyName')"
+              >
+                Name
+                <v-icon small right dark> mdi-arrow-up-bold </v-icon>
+              </v-btn>
+              <v-btn
+                small
+                width="110px"
+                color="green lighten-2"
+                class="ma-2 white--text ml-6"
+                @click="sortDownBy('pharmacyName')"
+              >
+                Name
+                <v-icon small right dark> mdi-arrow-down-bold </v-icon>
+              </v-btn>
+            </v-row>
+            <!-- End of the sort by pharmacy name -->
           </v-form>
         </v-card>
       </v-col>
@@ -181,8 +246,17 @@ export default {
       pharmaciesWithRequiredDrugsAmount: [],
     };
   },
-
   methods: {
+    sortBy(prop) {
+      this.pharmaciesWithRequiredDrugsAmount.sort((a, b) =>
+        a[prop] < b[prop] ? -1 : 1
+      );
+    },
+    sortDownBy(prop) {
+      this.pharmaciesWithRequiredDrugsAmount.sort((a, b) =>
+        a[prop] > b[prop] ? -1 : 1
+      );
+    },
     onDecode(readedQr) {
       this.readedQr = JSON.parse(readedQr);
       console.log(this.readedQr);
