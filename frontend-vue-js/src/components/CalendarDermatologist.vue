@@ -193,7 +193,7 @@
               </v-stepper-step>
 
               <v-stepper-content step="2">
-                <v-card color="grey lighten-3" class="mb-12" height="600px">
+                <v-card color="grey lighten-3" class="mb-12" height="700px">
                   <!-- CHOOSE DRUG FOR PERSCRIBE -->
                   <h4 class="ml-n primary--text">
                     Choose {{ alternateDrugTxt }} (listed drugs was filtered
@@ -349,7 +349,7 @@
                   <v-btn
                     depressed
                     class="ml-16"
-                    @click="scheduleConsultation"
+                    @click="scheduleConsultationPredefined"
                     color="primary"
                   >
                     Schedule
@@ -663,7 +663,7 @@ export default {
       this.alertDate = false;
       console.log(this.valueDate);
     },
-    scheduleConsultation() {
+    scheduleConsultationPredefined() {
       var token = parseJwt(localStorage.getItem("JWT-CPIS"));
       var email = token.sub;
       if (
@@ -722,6 +722,64 @@ export default {
           });
       }
     },
+      scheduleConsultation() {
+      var token = parseJwt(localStorage.getItem("JWT-CPIS"));
+      var email = token.sub;
+      if (
+        this.selectedPatient === null ||
+        this.valueDate === null ||
+        this.examinationStartTime === null ||
+        this.examinationEndTime === null ||
+        this.pharmacyID === null
+      ) {
+        if (this.selectedPatient === null) {
+          this.alertUser = true;
+        }
+        if (this.valueDate === null) {
+          this.alertDate = true;
+        }
+        if (this.examinationStartTime === null) {
+          this.alertStartTime = true;
+        }
+        if (this.examinationEndTime === null) {
+          this.alertEndTime = true;
+        }
+        if (this.pharmacyID === null) {
+          this.alertPharmacy = true;
+        }
+      } else {
+        this.axios
+          .post(
+            process.env.VUE_APP_BACKEND_URL +
+              process.env.VUE_APP_CONSULTATIONS_SCHEDULE,
+            {
+              consultantEmail: email,
+              startDate:
+              this.valueDate + " " + this.examinationStartTime + ":00",
+              endDate: this.valueDate + " " + this.examinationEndTime + ":00",
+              patientId: this.patientId,
+              pharmacyID: this.pharmacyID,
+              id: this.consultationId,
+            },
+            {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+              },
+            }
+          )
+          .then((resp) => {
+            this.pharmacist = resp.data;
+            this.scheduleAlert = false;
+            this.scheduleSucces = true;
+          })
+          .catch((error) => {
+            this.errorMessage = error.message;
+            console.error("There was an error!", error);
+            this.scheduleAlert = true;
+            this.scheduleSucces = false;
+          });
+      }
+    },
     prescribeDrug() {
         this.alertselectDrug = false;
          this.alertdurathiontherapy = false;
@@ -756,6 +814,7 @@ export default {
        }
     },
     checkDrugAvailability() {
+      this.alertdurathiontherapy = false;
       if (this.selecteddrugWithoutAllergies != null) {
         this.alertselectDrug = false;
         this.axios
