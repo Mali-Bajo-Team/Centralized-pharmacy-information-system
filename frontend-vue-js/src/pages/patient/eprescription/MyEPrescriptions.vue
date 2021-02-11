@@ -62,6 +62,7 @@
         >
           <v-card-subtitle>
             <h3 class="ml-3">
+              {{ convertMsToString(prescription.creationDate) }}, 
               {{ prescription.status }}
             </h3>
           </v-card-subtitle>
@@ -75,6 +76,8 @@
 
 <script>
 import { getParsedToken } from "./../../../util/token";
+import { getStringDateWithTimeFromMilliseconds } from "./../../../util/dateHandler";
+
 export default {
   data: () => ({
     prescriptions: [],
@@ -100,5 +103,10 @@ export default {
         alert(error);
       });
   },
+   methods: {
+    convertMsToString(ms) {
+      return getStringDateWithTimeFromMilliseconds(ms);
+    }
+   }
 };
 </script>
