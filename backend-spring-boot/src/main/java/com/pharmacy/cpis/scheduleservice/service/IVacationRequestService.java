@@ -14,6 +14,6 @@ public interface IVacationRequestService {
 
 	public VacationRequest reject(UserAccount user, Long id, String response);
 	
-	VacationRequest accept(UserAccount user, Long id, String response);
+	VacationRequest accept(UserAccount user, Long id);
 
 }

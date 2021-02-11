@@ -20,6 +20,7 @@ import com.pharmacy.cpis.scheduleservice.dto.AddVacationRequestDTO;
 import com.pharmacy.cpis.scheduleservice.dto.VacationRequestDTO;
 import com.pharmacy.cpis.scheduleservice.dto.VacationReviewDTO;
 import com.pharmacy.cpis.scheduleservice.model.workschedule.VacationRequest;
+import com.pharmacy.cpis.scheduleservice.model.workschedule.VacationRequestStatus;
 import com.pharmacy.cpis.scheduleservice.service.IVacationRequestService;
 import com.pharmacy.cpis.userservice.model.users.UserAccount;
 import com.pharmacy.cpis.userservice.service.EmailService;
@@ -52,6 +53,8 @@ public class VacationRequestController {
 		UserAccount user = (UserAccount) authentication.getPrincipal();
 
 		Collection<VacationRequest> requests = vacationRequestService.getVacationRequests(user);
+		requests = CollectionUtil.findAll(requests,
+				request -> request.getStatus().equals(VacationRequestStatus.PENDING));
 
 		Collection<VacationRequestDTO> mapped = CollectionUtil.map(requests,
 				request -> new VacationRequestDTO(request));
@@ -77,14 +80,14 @@ public class VacationRequestController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@PostMapping(value = "/{id}/accept", consumes = "application/json")
+	@PostMapping(value = "/{id}/accept")
 	@PreAuthorize("hasAnyRole('PHARMACY_ADMIN', 'ADMIN')")
 	@EmployeeAccountActive
 	public ResponseEntity<Void> acceptVacationRequest(@PathVariable(required = true) Long id,
-			@RequestBody @Valid VacationReviewDTO response, Authentication authentication) {
+			Authentication authentication) {
 		UserAccount user = (UserAccount) authentication.getPrincipal();
 
-		VacationRequest request = vacationRequestService.accept(user, id, response.getResponse());
+		VacationRequest request = vacationRequestService.accept(user, id);
 
 		try {
 			emailService.sendVacationApprovedEmailAsync(request.getConsultant().getAccount().getEmail(), request);

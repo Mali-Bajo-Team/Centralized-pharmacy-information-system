@@ -80,7 +80,7 @@ public class VacationRequestService implements IVacationRequestService {
 
 	@Override
 	@Transactional
-	public VacationRequest accept(UserAccount user, Long id, String response) {
+	public VacationRequest accept(UserAccount user, Long id) {
 		VacationRequest request = vacationRequestRepository.findById(id).orElse(null);
 		if (request == null)
 			throw new PSNotFoundException("The requested vacation request does not exist.");
@@ -91,7 +91,6 @@ public class VacationRequestService implements IVacationRequestService {
 			throw new PSConflictException("The vacation request has already been reviewed.");
 
 		request.setStatus(VacationRequestStatus.ACCEPTED);
-		request.setResponse(response);
 		createVacation(request);
 		request = vacationRequestRepository.save(request);
 
