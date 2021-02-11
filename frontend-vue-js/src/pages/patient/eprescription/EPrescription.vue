@@ -179,18 +179,30 @@
                   </v-toolbar-title>
                 </v-toolbar>
                 <!-- End of toolbar of the card -->
-                <br />
-                <v-form class="ma-5">
-                  <p>Make some confirmation question ...</p>
-                </v-form>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
+                <v-card-text class="pa-5">
+                  <br />
+                  Are you sure you want a buy all drugs from this pharmacy ?
+                </v-card-text>
+
+                <v-card-actions class="pb-4">
+                  <v-spacer> </v-spacer>
                   <v-btn
-                    color="primary"
+                    color="success"
+                    dark
+                    depressed
+                    @click="confirmEPrescriptionReservation(pharmacy)"
+                  >
+                    <v-icon dark left> mdi-checkbox-marked-circle </v-icon>
+                    Confirm
+                  </v-btn>
+                  <v-btn
+                    color="red lighten-3"
+                    dark
+                    depressed
                     @click="
                       pharmacy.showConfirmDialog = !pharmacy.showConfirmDialog
                     "
-                  >
+                    ><v-icon dark left> mdi-minus-circle </v-icon>
                     Close
                   </v-btn>
                 </v-card-actions>
@@ -233,7 +245,7 @@
 
 <script>
 import { QrcodeCapture } from "vue-qrcode-reader";
-
+import { getParsedToken } from "./../../../util/token";
 export default {
   components: { QrcodeCapture },
   data() {
@@ -242,11 +254,47 @@ export default {
       sortByPrice: false,
       sortByLocation: false,
       sortByName: false,
+      patientEmail: getParsedToken().sub,
       readedQr: {},
       pharmaciesWithRequiredDrugsAmount: [],
     };
   },
   methods: {
+    confirmEPrescriptionReservation(pharmacy) {
+      this.axios
+        .post(
+          process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_EPRESCRIPTION_SAVE_ENDPOINT,
+          {
+            patientEmail:this.patientEmail,
+            pharmacyId: pharmacy.pharmacyId,
+            prescribedDrugs: this.readedQr,
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then(() => {
+          alert("success");
+          // this.pharmaciesWithRequiredDrugsAmount = [];
+          // for (let pharmacy of resp.data) {
+          //   let tempObj = {
+          //     showConfirmDialog: false,
+          //     pharmacyId: pharmacy.pharmacyId,
+          //     totalPrice: pharmacy.totalPrice,
+          //     pharmacyRating: pharmacy.pharmacyRating,
+          //     pharmacyName: pharmacy.pharmacyName,
+          //     pharmacyLocation: pharmacy.pharmacyLocation,
+          //   };
+          //   this.pharmaciesWithRequiredDrugsAmount.push(tempObj);
+          // }
+        })
+        .catch((error) => {
+          alert("Error: " + error);
+        });
+    },
     sortBy(prop) {
       this.pharmaciesWithRequiredDrugsAmount.sort((a, b) =>
         a[prop] < b[prop] ? -1 : 1
