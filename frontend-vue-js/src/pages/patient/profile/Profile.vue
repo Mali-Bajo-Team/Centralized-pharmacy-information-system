@@ -257,6 +257,7 @@ export default {
       phoneNumber: "",
       allergies: "",
     },
+    allDrugs: [],
     rules: {
       required: (value) => !!value || "Required.",
       min: (v) => v.length >= 8 || "Min 8 characters",
@@ -264,6 +265,24 @@ export default {
     patientEmail: getParsedToken().sub,
   }),
   mounted() {
+    alert("test");
+    this.axios
+      .get(
+        process.env.VUE_APP_BACKEND_URL +
+          process.env.VUE_APP_ALL_DRUGS_ENDPOINT,
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+          },
+        }
+      )
+      .then((resp) => {
+        this.allDrugs = resp.data;
+      })
+      .catch((error) => {
+        alert("Error: " + error);
+      });
+
     this.axios
       .post(
         process.env.VUE_APP_BACKEND_URL +
@@ -285,6 +304,7 @@ export default {
         this.patientFormDTO.city = this.patient.city;
         this.patientFormDTO.country = this.patient.country;
         this.patientFormDTO.phoneNumber = this.patient.phoneNumber;
+        this.patientFormDTO.allergies = this.patient.allergies;
       })
       .catch((error) => {
         alert("Error: " + error);

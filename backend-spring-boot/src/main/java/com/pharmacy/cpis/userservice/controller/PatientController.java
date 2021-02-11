@@ -38,7 +38,6 @@ public class PatientController {
         return new ResponseEntity<>(new PatientProfileDTO(patient,patientEmail,loyaltyProgramService), HttpStatus.OK);
     }
 
-
     @PostMapping("/addpenaltie")
     @PreAuthorize("hasRole('PHARMACIST') || hasRole('DERMATOLOGIST')")
     public  ResponseEntity<PenaltieDTO> addPenaltie(@RequestBody PenaltieDTO penaltieDTO) {

@@ -1,9 +1,13 @@
 package com.pharmacy.cpis.userservice.dto;
 
+import com.pharmacy.cpis.drugservice.dto.DrugDTO;
+import com.pharmacy.cpis.drugservice.model.drug.Drug;
 import com.pharmacy.cpis.userservice.model.users.Patient;
 import com.pharmacy.cpis.userservice.service.ILoyaltyProgramService;
 
 import javax.validation.constraints.NotEmpty;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PatientProfileDTO {
 
@@ -34,6 +38,8 @@ public class PatientProfileDTO {
     @NotEmpty(message = "User category is required.")
     private UserCategoryDTO userCategoryDTO;
 
+    private Set<DrugDTO> allergies;
+
     public PatientProfileDTO() {
 
     }
@@ -48,7 +54,7 @@ public class PatientProfileDTO {
         this.setLoyaltyPoints(patient.getLoyaltyPoints());
         this.setEmail(patientEmail.getEmail());
         this.setUserCategoryDTO(new UserCategoryDTO(loyaltyProgramService.findUserCategoryByLoyaltyPoints(patient.getLoyaltyPoints())));
-
+        this.setAllergies(patient.getAllergies());
 
     }
     public PatientProfileDTO(String name, String surname, String phoneNumber, String address, String city, String country, String email, Integer loyaltyPoints, UserCategoryDTO userCategoryDTO) {
@@ -61,6 +67,18 @@ public class PatientProfileDTO {
         this.email = email;
         this.loyaltyPoints = loyaltyPoints;
         this.userCategoryDTO = userCategoryDTO;
+    }
+
+    public Set<DrugDTO> getAllergies() {
+        return allergies;
+    }
+
+    public void setAllergies(Set<Drug> allergies) {
+        Set<DrugDTO> allergiesDTO = new HashSet<>();
+        for(Drug drug : allergies){
+            allergiesDTO.add(new DrugDTO(drug));
+        }
+        this.allergies = allergiesDTO;
     }
 
     public String getName() {
