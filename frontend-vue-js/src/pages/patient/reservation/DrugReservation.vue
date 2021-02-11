@@ -9,11 +9,14 @@
       <v-card-title>Reservation {{ reservation.reservationId }}</v-card-title>
       <v-row>
         <v-col xl="8" md="8" sm="12">
-          <v-card-text
-            >{{ reservation.drugName }}, {{ reservation.pharmacyName }},
-            {{ reservation.amount }},
-            {{ convertMsToString(reservation.deadline) }}</v-card-text
-          >
+          <v-card-subtitle>
+            <h3 class="ml-3">
+              {{ reservation.drugName }}, {{ reservation.pharmacyName }},
+              {{ reservation.amount }}
+              <br /><br />
+              {{ convertMsToString(reservation.deadline) }}
+            </h3>
+          </v-card-subtitle>
           <v-spacer></v-spacer>
         </v-col>
         <v-col>
@@ -104,8 +107,8 @@ export default {
         .then(() => {
           alert("Successfully cancelled reservation.");
           let tempReservations = [];
-          for(let tempReservation of this.reservations){
-            if(tempReservation.reservationId!=reservation.reservationId){
+          for (let tempReservation of this.reservations) {
+            if (tempReservation.reservationId != reservation.reservationId) {
               tempReservations.push(tempReservation);
             }
           }
