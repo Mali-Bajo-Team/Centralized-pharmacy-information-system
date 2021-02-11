@@ -64,7 +64,7 @@
 
         <!--Dialog form-->
         <v-col xl="4" md="4" sm="12">
-          <v-dialog width="500">
+          <v-dialog v-model="dialogEditForm" width="500">
             <template v-slot:activator="{ on, attrs }">
               <v-btn fab dark large color="primary" v-bind="attrs" v-on="on">
                 <v-icon dark> mdi-pencil </v-icon>
@@ -100,13 +100,20 @@
                     v-model="patientFormDTO.country"
                   ></v-text-field>
                   <v-text-field
+                    type="number"
                     label="Change your phone number"
                     v-model="patientFormDTO.phoneNumber"
                   ></v-text-field>
-                  <v-text-field
-                    label="Add drugs which cause you allergic reactions"
+                  <v-select
                     v-model="patientFormDTO.allergies"
-                  ></v-text-field>
+                    :items="allDrugs"
+                    item-text="name"
+                    item-value="code"
+                    label="Add drugs which cause you allergic reactions"
+                    multiple
+                    chips
+                  >
+                  </v-select>
                 </v-form>
               </v-card-text>
 
@@ -114,7 +121,7 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" text @click="dialog = false">
+                <v-btn color="primary" text @click="saveChanges()">
                   Save changes
                 </v-btn>
               </v-card-actions>
@@ -237,6 +244,8 @@
 import { getParsedToken } from "./../../../util/token";
 export default {
   data: () => ({
+    selectedAlergiesObjects: [],
+    dialogEditForm: false,
     selectedAccussed: {},
     possibleConsultantsForComplaint: [],
     possiblePharmaciesForComplaint: [],
@@ -251,12 +260,16 @@ export default {
     patientFormDTO: {
       name: "",
       surname: "",
+      phoneNumber: "",
       address: "",
       city: "",
       country: "",
-      phoneNumber: "",
-      allergies: "",
+      email: "",
+      loyaltyPoints: 0,
+      userCategoryDTO: {},
+      allergies: [],
     },
+    allDrugs: [],
     rules: {
       required: (value) => !!value || "Required.",
       min: (v) => v.length >= 8 || "Min 8 characters",
@@ -264,6 +277,23 @@ export default {
     patientEmail: getParsedToken().sub,
   }),
   mounted() {
+    this.axios
+      .get(
+        process.env.VUE_APP_BACKEND_URL +
+          process.env.VUE_APP_ALL_DRUGS_ENDPOINT,
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+          },
+        }
+      )
+      .then((resp) => {
+        this.allDrugs = resp.data;
+      })
+      .catch((error) => {
+        alert("Error: " + error);
+      });
+
     this.axios
       .post(
         process.env.VUE_APP_BACKEND_URL +
@@ -279,12 +309,15 @@ export default {
       )
       .then((resp) => {
         this.patient = resp.data;
+        this.patientFormDTO.email = this.patient.email;
         this.patientFormDTO.name = this.patient.name;
         this.patientFormDTO.surname = this.patient.surname;
         this.patientFormDTO.address = this.patient.address;
         this.patientFormDTO.city = this.patient.city;
         this.patientFormDTO.country = this.patient.country;
         this.patientFormDTO.phoneNumber = this.patient.phoneNumber;
+        this.patientFormDTO.allergies = this.patient.allergies;
+        this.patientFormDTO.loyaltyPoints = this.patient.loyaltyPoints;
       })
       .catch((error) => {
         alert("Error: " + error);
@@ -331,6 +364,48 @@ export default {
       });
   },
   methods: {
+    saveChanges() {
+      this.dialogEditForm = !this.dialogEditForm;
+      alert("krecem potvrdu");
+      this.axios
+        .post(
+          process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_PATIENT_PROFILE_UPDATE_ENDPOINT,
+          {
+            name: this.patientFormDTO.name,
+            surname: this.patientFormDTO.surname,
+            phoneNumber: this.patientFormDTO.phoneNumber,
+            address: this.patientFormDTO.address,
+            city: this.patientFormDTO.city,
+            country: this.patientFormDTO.country,
+            email: this.patientFormDTO.email,
+            loyaltyPoints: this.patientFormDTO.loyaltyPoints,
+            userCategoryDTO: {},
+            allergies: this.findSelectedAlergies(this.patientFormDTO.allergies),
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then((resp) => {
+          alert("Success created a complaint");
+          this.patient = resp.data;
+          this.patientFormDTO.email = this.patient.email;
+          this.patientFormDTO.name = this.patient.name;
+          this.patientFormDTO.surname = this.patient.surname;
+          this.patientFormDTO.address = this.patient.address;
+          this.patientFormDTO.city = this.patient.city;
+          this.patientFormDTO.country = this.patient.country;
+          this.patientFormDTO.phoneNumber = this.patient.phoneNumber;
+          this.patientFormDTO.allergies = this.patient.allergies;
+          this.patientFormDTO.userCategoryDTO = this.patient.userCategoryDTO;
+        })
+        .catch((error) => {
+          alert("Error: " + error);
+        });
+    },
     resetComplaintDTO() {
       this.complaintDTO.pharmacyId = null;
       this.complaintDTO.consultantEmail = null;
@@ -364,6 +439,19 @@ export default {
         .catch((error) => {
           alert("Error: " + error);
         });
+    },
+    findSelectedAlergies(selectedAllergiesOnlyCodes) {
+      this.selectedAlergiesObjects = [];
+      for (let drug of this.allDrugs) {
+        for (let selectedDrugCode of selectedAllergiesOnlyCodes) {
+          if (drug.code == selectedDrugCode) {
+            this.selectedAlergiesObjects.push(drug);
+            break;
+          }
+        }
+      }
+      this.patientFormDTO.allergies = this.selectedAlergiesObjects;
+      return this.selectedAlergiesObjects;
     },
   },
 };

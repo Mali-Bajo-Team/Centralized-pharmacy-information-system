@@ -1,6 +1,7 @@
 package com.pharmacy.cpis.userservice.service;
 
 import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
+import com.pharmacy.cpis.userservice.dto.PatientProfileDTO;
 import com.pharmacy.cpis.userservice.model.users.Patient;
 
 import java.util.List;
@@ -14,5 +15,7 @@ public interface IPatientService {
     Patient addPenaltie(String email, Long consultationID);
 
     Set<Pharmacy> findPatientSubscriptions(String patientEmail);
+
+    Patient update(PatientProfileDTO patientProfileDTO);
 
 }
