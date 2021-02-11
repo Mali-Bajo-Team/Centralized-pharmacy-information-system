@@ -22,15 +22,16 @@ export default {
         title: "Home",
         to: "/pharmacyadmin"
       },
+
       {
         title: "Drugs",
-        to: "/pharmacyadmin/pharmacyadmindrugs"
-      },
-      {
-        title: "Drug procurement",
         children: [
           {
-            title: "All orders",
+            title: "All drugs",
+            to: "/pharmacyadmin/pharmacyadmindrugs"
+          },
+          {
+            title: "Orders",
             to: "/pharmacyadmin/orders"
           }
         ]
