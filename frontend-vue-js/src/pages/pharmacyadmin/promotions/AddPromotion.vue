@@ -1,9 +1,9 @@
 <template>
   <v-row class="pa-5">
     <v-spacer></v-spacer>
-    <v-col sm="8" md="6" lg="4" xl="4" cols="12">
+    <v-col sm="8" md="6" lg="6" xl="6" cols="12">
       <v-card elevation="4" class="pa-5">
-        <v-card-title>Log in</v-card-title>
+        <v-card-title>Add promotion</v-card-title>
 
         <v-form>
           <v-text-field
@@ -16,7 +16,7 @@
           ></v-text-field>
 
           <v-textarea
-            rows="3"
+            rows="1"
             auto-grow
             v-model="form.content"
             :error-messages="contentErrors"
@@ -26,13 +26,13 @@
             @input="$v.form.content.$touch()"
           ></v-textarea>
 
-          <span class="mt-4">Choose validity range:</span>
-          <v-date-picker class="mt-3" full-width v-model="form.validityRange" range :min="today"></v-date-picker>
+          <span class="mt-8 grey-lighten2">Choose validity range:</span>
+          <v-date-picker class="mt-3 mb-0" full-width v-model="form.validityRange" range :min="today"></v-date-picker>
 
-          <v-card-actions class="pt-5">
+          <v-card-actions class="pt-0">
             <v-btn color="secondary" text @click="reset">Reset form</v-btn>
             <v-spacer></v-spacer>
-            <v-btn color="primary" @click="submit">Log in</v-btn>
+            <v-btn color="primary" @click="submit">Save</v-btn>
           </v-card-actions>
         </v-form>
 
@@ -134,6 +134,11 @@ export default {
             content: this.form.content,
             validityStart: date1,
             validityEnd: date2
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS")
+            }
           }
         )
         .then(() => {
