@@ -14,7 +14,6 @@ import java.util.Set;
 
 public class DrugDTO {
 
-    @NotEmpty(message = "Name is required.")
     private String name;
 
     private String code;

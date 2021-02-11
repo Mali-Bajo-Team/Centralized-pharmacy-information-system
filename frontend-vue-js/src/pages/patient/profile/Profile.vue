@@ -100,7 +100,7 @@
                     v-model="patientFormDTO.country"
                   ></v-text-field>
                   <v-text-field
-                  type="number"
+                    type="number"
                     label="Change your phone number"
                     v-model="patientFormDTO.phoneNumber"
                   ></v-text-field>
@@ -244,6 +244,7 @@
 import { getParsedToken } from "./../../../util/token";
 export default {
   data: () => ({
+    selectedAlergiesObjects: [],
     dialogEditForm: false,
     selectedAccussed: {},
     possibleConsultantsForComplaint: [],
@@ -380,7 +381,7 @@ export default {
             email: this.patientFormDTO.email,
             loyaltyPoints: this.patientFormDTO.loyaltyPoints,
             userCategoryDTO: {},
-            allergies: [],
+            allergies: this.findSelectedAlergies(this.patientFormDTO.allergies),
           },
           {
             headers: {
@@ -438,6 +439,19 @@ export default {
         .catch((error) => {
           alert("Error: " + error);
         });
+    },
+    findSelectedAlergies(selectedAllergiesOnlyCodes) {
+      this.selectedAlergiesObjects = [];
+      for (let drug of this.allDrugs) {
+        for (let selectedDrugCode of selectedAllergiesOnlyCodes) {
+          if (drug.code == selectedDrugCode) {
+            this.selectedAlergiesObjects.push(drug);
+            break;
+          }
+        }
+      }
+      this.patientFormDTO.allergies = this.selectedAlergiesObjects;
+      return this.selectedAlergiesObjects;
     },
   },
 };
