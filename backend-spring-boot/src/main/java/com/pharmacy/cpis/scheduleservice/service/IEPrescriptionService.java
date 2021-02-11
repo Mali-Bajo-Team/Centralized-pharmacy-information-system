@@ -7,7 +7,7 @@ import com.pharmacy.cpis.scheduleservice.model.prescriptions.EPrescriptionStatus
 import java.util.List;
 
 public interface IEPrescriptionService {
-    List<EPrescription> findAllPatientEPrescription(Long patientId);
+    List<EPrescription> findAllPatientEPrescription(String patientEmail);
     List<EPrescription> findAllPatientEPrescriptionByStatus(Long patientId, EPrescriptionStatus status);
     EPrescription savePrescription(EPrescriptionCreateDTO prescriptionDTO);
 }

@@ -40,7 +40,8 @@ public class EPrescriptionService implements IEPrescriptionService {
     private IPrescribedDrugRepository prescribedDrugRepository;
 
     @Override
-    public List<EPrescription> findAllPatientEPrescription(Long patientId) {
+    public List<EPrescription> findAllPatientEPrescription(String patientEmail) {
+        Long patientId = userRepository.findByEmail(patientEmail).getPerson().getId();
         return prescriptionRepository.findAllByPatientId(patientId);
     }
 
