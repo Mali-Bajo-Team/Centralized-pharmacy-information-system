@@ -103,10 +103,17 @@
                     label="Change your phone number"
                     v-model="patientFormDTO.phoneNumber"
                   ></v-text-field>
-                  <v-text-field
-                    label="Add drugs which cause you allergic reactions"
+                  <v-select
+                    
                     v-model="patientFormDTO.allergies"
-                  ></v-text-field>
+                    :items="allDrugs"
+                    item-text="name"
+                    item-value="code"
+                    label="Add drugs which cause you allergic reactions"
+                    multiple
+                    chips
+                  >
+                  </v-select>
                 </v-form>
               </v-card-text>
 
