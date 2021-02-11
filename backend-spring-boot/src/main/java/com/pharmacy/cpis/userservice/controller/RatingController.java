@@ -3,6 +3,7 @@ package com.pharmacy.cpis.userservice.controller;
 
 import com.pharmacy.cpis.userservice.dto.LoyaltyProgramDTO;
 import com.pharmacy.cpis.userservice.dto.PatientEmailDTO;
+import com.pharmacy.cpis.userservice.dto.ratings.ConsultantRatingCreateDTO;
 import com.pharmacy.cpis.userservice.dto.ratings.ConsultantRatingReadDTO;
 import com.pharmacy.cpis.userservice.model.loyaltyprogram.LoyaltyProgram;
 import com.pharmacy.cpis.userservice.model.ratings.ConsultantRating;
@@ -27,12 +28,19 @@ public class RatingController {
 
     @PostMapping(value = "/consultant")
     @PreAuthorize("hasRole('PATIENT')")
-    public ResponseEntity<List<ConsultantRatingReadDTO>> getLoyaltyPrograms(@RequestBody PatientEmailDTO patientEmailDTO) {
+    public ResponseEntity<List<ConsultantRatingReadDTO>> getPatientConsultantRatings(@RequestBody PatientEmailDTO patientEmailDTO) {
         List<ConsultantRatingReadDTO> consultantRatingReadDTOS = new ArrayList<>();
         for (ConsultantRating consultantRating : ratingService.getAllConsultantRatingsByPatient(patientEmailDTO.getEmail())) {
             consultantRatingReadDTOS.add(new ConsultantRatingReadDTO(consultantRating));
         }
         return new ResponseEntity<>(consultantRatingReadDTOS, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/consultant/create")
+    @PreAuthorize("hasRole('PATIENT')")
+    public ResponseEntity<ConsultantRatingReadDTO> savePatientConsultantRatings(@RequestBody ConsultantRatingCreateDTO consultantRatingCreateDTO) {
+        ConsultantRating consultantRating = ratingService.createConsultantRating(consultantRatingCreateDTO);
+        return new ResponseEntity<>(new ConsultantRatingReadDTO(consultantRating),HttpStatus.OK);
     }
 
 }

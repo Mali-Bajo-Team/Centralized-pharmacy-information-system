@@ -251,7 +251,7 @@ insert into prescribed_drug(amount, drug_code, prescription_id) values (3, 'aspi
 insert into prescribed_drug(amount, drug_code, prescription_id) values (5, 'aspirin', 3);
 
 --INSERT CONSULTANT RATING
-insert into consultant_rating(rating, consultant_id, patient_id) values(4,3,2);
+--insert into consultant_rating(rating, consultant_id, patient_id) values(4,3,2);
 insert into consultant_rating(rating, consultant_id, patient_id) values(4,5,2);
 insert into consultant_rating(rating, consultant_id, patient_id) values(4,9,2);
 insert into consultant_rating(rating, consultant_id, patient_id) values(4,11,2);
