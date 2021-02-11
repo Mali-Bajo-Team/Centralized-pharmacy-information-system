@@ -1,6 +1,7 @@
 package com.pharmacy.cpis.pharmacyservice.dto;
 
 import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
+import com.pharmacy.cpis.util.CollectionUtil;
 
 public class PharmacyDetailsDTO {
 
@@ -14,6 +15,7 @@ public class PharmacyDetailsDTO {
 	private Double rating;
 	private Double dermatologistConsultationPrice;
 	private Double pharmacistConsultationPrice;
+	private Boolean subscribed;
 
 	public PharmacyDetailsDTO(Pharmacy pharmacy) {
 		super();
@@ -27,6 +29,12 @@ public class PharmacyDetailsDTO {
 		this.rating = pharmacy.getAverageRating();
 		this.dermatologistConsultationPrice = pharmacy.getDermatologistConsultationPrice();
 		this.pharmacistConsultationPrice = pharmacy.getPharmacistConsultationPrice();
+	}
+
+	public PharmacyDetailsDTO(Pharmacy pharmacy, String patientEmail) {
+		this(pharmacy);
+		this.subscribed = CollectionUtil.contains(pharmacy.getSubscribers(),
+				sub -> sub.getAccount().getEmail().equals(patientEmail));
 	}
 
 	public String getName() {
@@ -67,6 +75,10 @@ public class PharmacyDetailsDTO {
 
 	public Double getPharmacistConsultationPrice() {
 		return pharmacistConsultationPrice;
+	}
+
+	public Boolean getSubscribed() {
+		return subscribed;
 	}
 
 }

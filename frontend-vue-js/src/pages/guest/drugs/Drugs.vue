@@ -70,7 +70,7 @@
               <h2>{{ drug.name }}</h2>
             </v-card-title>
             <v-spacer></v-spacer>
-            <v-chip class="mr-2" color="teal" text-color="white" pill>
+            <v-chip class="mr-2" color="primary" text-color="white" pill>
               <v-icon small left> mdi-pill </v-icon>
 
               {{ drug.typeOfDrug }}
