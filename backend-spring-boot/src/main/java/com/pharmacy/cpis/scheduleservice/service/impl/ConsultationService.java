@@ -254,4 +254,22 @@ public class ConsultationService implements IConsultationService {
 		consultationRepository.save(consultation);
 	}
 
+	@Override
+	public Boolean isConsultantFreeForConsultation(Long consultantId, Long pharmacyID, Date examinationStartDate, Date examinationEndDate) {
+		Consultant consultant = consultantRepository.getOne(consultantId);
+
+		for (Consultation c : consultant.getConsultations()) {
+			// ESD izmedju CSD i CED
+			// EED izmedju CSD i CED
+			if (DateConversionsAndComparisons.compareDates(c.getTime().getStart(), examinationStartDate) <= 0
+					&& DateConversionsAndComparisons.compareDates(c.getTime().getEnd(), examinationStartDate) >= 0
+					&& DateConversionsAndComparisons.compareDates(c.getTime().getEnd(), examinationEndDate) >= 0
+					&& DateConversionsAndComparisons.compareDates(c.getTime().getStart(), examinationEndDate) <= 0) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 }

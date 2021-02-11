@@ -145,10 +145,14 @@ public class ConsultationController {
 				.isConsultationTimeFitsIntoConsultantWorkingTime(loggedPharmacist.getId(), examinationStartDate,
 						examinationEndDate);
 
+		//Moram proveriti i da li je konsultant slobodan u tom terminu u toj apoteci
+		Boolean isConsultantFreeForConsultation = consultationService.isConsultantFreeForConsultation(
+				scheduleExaminationDTO.getConsultantId(), scheduleExaminationDTO.getPharmacyID(), examinationStartDate, examinationEndDate);
+
 		Boolean isPhatientFreeForConsultation = consultationService.isPhatientFreeForConsultation(
 				scheduleExaminationDTO.getPatientId(), examinationStartDate, examinationEndDate);
 
-		if (isConsultationTimeFitsIntoConsultantWorkingTime && isPhatientFreeForConsultation
+		if (isConsultantFreeForConsultation && isConsultationTimeFitsIntoConsultantWorkingTime && isPhatientFreeForConsultation
 				&& !examinationStartDate.before(new Date())) {
 			consultationService.scheduleConsultation(scheduleExaminationDTO);
 
