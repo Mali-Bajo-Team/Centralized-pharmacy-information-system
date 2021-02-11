@@ -152,18 +152,18 @@
     </v-row>
 
     <!-- Start QUESTION DIALOG -->
-    <v-dialog v-model="questionDialog" persistent max-width="600px">
+    <v-dialog v-model="questionDialog" persistent max-width="800px">
       <v-card>
         <v-card-title>
-          <span class="headline">Examination report for {{ name }}</span>
+          <span class="headline">Choose from calendar examination for {{ name }}</span>
         </v-card-title>
         <v-card-text>
           <v-container>
-            <v-row> </v-row>
+           <calendar></calendar>
           </v-container>
         </v-card-text>
         <v-card-actions>
-          <v-spacer></v-spacer>
+         
           <v-btn color="primary" text @click="questionDialog = false">
             The patient did not show up
           </v-btn>
@@ -302,7 +302,11 @@
 </template>
 
 <script>
+import calendar from "./Calendar";
 export default {
+  components:{
+    calendar,
+  },
   data() {
     return {
       show3: false,

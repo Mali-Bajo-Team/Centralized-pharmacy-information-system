@@ -92,7 +92,7 @@
               Choose pharmacy for examination
             </h4>
             <v-select
-              v-model="pharmaciesForDermatologist"
+              v-model="selectedPharmacy"
               :items="pharmaciesForDermatologist"
               item-text="name"
               item-value="location"
@@ -291,6 +291,7 @@ export default {
     examinitedPatients: [],
     vacationRequestDateRange: [],
     pharmaciesForDermatologist: [],
+    selectedPharmacy: null,
     alertPharmacy: false,
     headers: [
       {
