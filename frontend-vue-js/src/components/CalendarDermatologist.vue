@@ -139,9 +139,6 @@
             text
             @click="
               getDrugsWithoutAllergies();
-              getPredefinedDates();
-              questionDialog = false;
-              reportDialog = true;
             "
           >
             Start examination
@@ -880,6 +877,8 @@ export default {
         )
         .then((resp) => {
           this.drugsWithoutAllergies = resp.data;
+          this.getPredefinedDates();
+          
         });
     },
     getPredefinedDates() {
@@ -907,6 +906,8 @@ export default {
               this.predefinedDate[i].startDate
             );
           }
+          this.questionDialog = false;
+          this.reportDialog = true;
         });
     },
     onInputWithoutAllergies(valueDrugsWithoutAllergies) {
