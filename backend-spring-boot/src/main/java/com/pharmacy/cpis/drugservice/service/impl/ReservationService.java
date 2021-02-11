@@ -7,7 +7,10 @@ import com.pharmacy.cpis.drugservice.repository.IDrugRepository;
 import com.pharmacy.cpis.drugservice.repository.IReservationRepository;
 import com.pharmacy.cpis.drugservice.service.IAvailableDrugService;
 import com.pharmacy.cpis.drugservice.service.IReservationService;
+import com.pharmacy.cpis.pharmacyservice.repository.IPharmacyRepository;
 import com.pharmacy.cpis.pharmacyservice.service.IPharmacyService;
+import com.pharmacy.cpis.scheduleservice.model.prescriptions.EPrescription;
+import com.pharmacy.cpis.scheduleservice.model.prescriptions.PrescribedDrug;
 import com.pharmacy.cpis.userservice.dto.PatientEmailDTO;
 import com.pharmacy.cpis.userservice.model.users.Patient;
 import com.pharmacy.cpis.userservice.service.EmailService;
@@ -22,12 +25,16 @@ import com.pharmacy.cpis.userservice.model.users.Consultant;
 import com.pharmacy.cpis.userservice.repository.IUserRepository;
 import com.pharmacy.cpis.userservice.service.IConsultantService;
 import com.pharmacy.cpis.userservice.service.ILoyaltyProgramService;
+import com.pharmacy.cpis.util.DateConversionsAndComparisons;
+import com.pharmacy.cpis.util.exceptions.PSBadRequestException;
+import com.pharmacy.cpis.util.exceptions.PSNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -39,6 +46,9 @@ public class ReservationService implements IReservationService {
 
     @Autowired
     private IDrugRepository drugRepository;
+
+    @Autowired
+    private IPharmacyRepository pharmacyRepository;
 
     @Autowired
     private IPatientService patientService;
@@ -64,8 +74,8 @@ public class ReservationService implements IReservationService {
     private IUserRepository userRepository;
 
     @Override
-    public Reservation saveReservation(DrugReservationDTO reservationDTO) {
-        Reservation reservation=new Reservation();
+    public Reservation makeReservation(DrugReservationDTO reservationDTO) {
+        Reservation reservation = new Reservation();
         reservation.setAmount(reservationDTO.getAmount());
         reservation.setDeadline(reservationDTO.getDeadline());
         reservation.setPatient(patientService.findByEmail(reservationDTO.getPatientEmail()));
@@ -74,7 +84,7 @@ public class ReservationService implements IReservationService {
         reservation.setDrug(drugRepository.findByCode(reservationDTO.getDrugCode()));
         reservation.setIsPickedUp(false);
 
-        availableDrugService.updateAmount(reservationDTO.getPharmacyID(),reservationDTO.getDrugCode(),reservationDTO.getAmount());
+        availableDrugService.updateAmount(reservationDTO.getPharmacyID(), reservationDTO.getDrugCode(), reservationDTO.getAmount());
         Reservation savedReservation = reservationRepository.save(reservation);
         try {
             System.out.println("Sending mail in process ..");
@@ -86,6 +96,28 @@ public class ReservationService implements IReservationService {
         }
         return savedReservation;
     }
+
+    @Override
+    public void makeReservationForEPrescription(EPrescription ePrescription, Long pharmacyIdWhereIsMadeReservation) {
+        for (PrescribedDrug prescribedDrug : ePrescription.getPrescribedDrugs()) {
+            Reservation reservation = new Reservation();
+            reservation.setAmount(prescribedDrug.getAmount());
+            // Make this deadline for ePrescription drugs reservation because that is not defined by project specification
+            reservation.setDeadline(DateConversionsAndComparisons.getUtilDate("2022-01-01 12:00:00"));
+            reservation.setPatient(ePrescription.getPatient());
+            reservation.setDateOfCreation(new Date());
+            Pharmacy pharmacyWhereIsMadeReservation = pharmacyRepository.findById(pharmacyIdWhereIsMadeReservation).orElse(null);
+            if(pharmacyWhereIsMadeReservation == null) throw new PSBadRequestException("That pharmacy does not exist in our system");
+            reservation.setPharmacy(pharmacyWhereIsMadeReservation);
+            reservation.setDrug(prescribedDrug.getDrug());
+            reservation.setIsPickedUp(false);
+            availableDrugService.updateAmount(pharmacyIdWhereIsMadeReservation, prescribedDrug.getDrug().getCode(), prescribedDrug.getAmount());
+            Reservation savedReservation = reservationRepository.save(reservation);
+        }
+
+        //TODO: Send email with ID reservation for every drug
+    }
+
     @Override
     public ReservationDTO isReservationValid(ReservationDTO reservationDTO) {
         Reservation reservation = reservationRepository.getOne(reservationDTO.getReservationID());
@@ -99,10 +131,10 @@ public class ReservationService implements IReservationService {
         Consultant consultant = consultantService.findByEmail(reservationDTO.getConsultantEmail());
 
         Pharmacy pharmacy = findPharmacyWhereConsultantWork(consultant.getId());
-        if(pharmacy.getId().equals(reservation.getPharmacy().getId())){
-            if(reservationRepository.existsById(reservationDTO.getReservationID()) && reservation.getDeadline().compareTo(dateBefore24h) > 0){
+        if (pharmacy.getId().equals(reservation.getPharmacy().getId())) {
+            if (reservationRepository.existsById(reservationDTO.getReservationID()) && reservation.getDeadline().compareTo(dateBefore24h) > 0) {
 
-                if(Boolean.FALSE.equals(reservation.getIsPickedUp())) {
+                if (Boolean.FALSE.equals(reservation.getIsPickedUp())) {
                     isValid = true;
                     reservationDTO.setValid(isValid);
                     reservationDTO.setAmount(reservation.getAmount());
@@ -143,15 +175,15 @@ public class ReservationService implements IReservationService {
     @Override
     public List<Pharmacy> findAllPatientPharmacies(Patient patient) {
         List<Pharmacy> allPatientPharmacies = new ArrayList<>();
-        for(Reservation reservation : reservationRepository.findAllByPatient(patient)){
+        for (Reservation reservation : reservationRepository.findAllByPatient(patient)) {
             boolean alreadyExistPharmacy = false;
-            for(Pharmacy pharmacy : allPatientPharmacies){
-                if(pharmacy.getId().equals(reservation.getPharmacy().getId())){
+            for (Pharmacy pharmacy : allPatientPharmacies) {
+                if (pharmacy.getId().equals(reservation.getPharmacy().getId())) {
                     alreadyExistPharmacy = true;
                     break;
                 }
             }
-            if(!alreadyExistPharmacy)
+            if (!alreadyExistPharmacy)
                 allPatientPharmacies.add(reservation.getPharmacy());
         }
         return allPatientPharmacies;
@@ -191,21 +223,21 @@ public class ReservationService implements IReservationService {
         UserCategory userCategory = loyaltyProgramService.findUserCategoryByLoyaltyPoints(reservation.getPatient().getLoyaltyPoints());
         Double discount = userCategory.getReservationDiscount();
 
-        if(discount != 0){
-            priceWithDiscount = (priceWithoutDiscount -(priceWithoutDiscount*(discount/100))) * reservation.getAmount();
-        }else{
-            priceWithDiscount =priceWithoutDiscount;
+        if (discount != 0) {
+            priceWithDiscount = (priceWithoutDiscount - (priceWithoutDiscount * (discount / 100))) * reservation.getAmount();
+        } else {
+            priceWithDiscount = priceWithoutDiscount;
         }
         return priceWithDiscount;
     }
 
 
-    Pharmacy findPharmacyWhereConsultantWork(Long consultantID){
+    Pharmacy findPharmacyWhereConsultantWork(Long consultantID) {
         List<Pharmacy> allPharmacies = pharmacyService.findAll();
 
         for (Pharmacy p : allPharmacies) {
-            for(WorkingTimes wt : p.getConsultants()){
-                if(wt.getConsultant().getId().equals(consultantID)){
+            for (WorkingTimes wt : p.getConsultants()) {
+                if (wt.getConsultant().getId().equals(consultantID)) {
                     return p;
                 }
             }

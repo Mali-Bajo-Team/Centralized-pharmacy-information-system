@@ -4,10 +4,19 @@ import java.util.List;
 
 public class EPrescriptionCreateDTO {
     private String patientEmail;
+    private Long pharmacyId;
     private List<PrescribedDrugCreateDTO> prescribedDrugs;
 
     public EPrescriptionCreateDTO(){
 
+    }
+
+    public Long getPharmacyId() {
+        return pharmacyId;
+    }
+
+    public void setPharmacyId(Long pharmacyId) {
+        this.pharmacyId = pharmacyId;
     }
 
     public List<PrescribedDrugCreateDTO> getPrescribedDrugs() {
