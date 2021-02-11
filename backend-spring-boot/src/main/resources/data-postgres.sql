@@ -239,3 +239,8 @@ insert into allergies (patient_id, drug_code) values (2,'aspirin');
 
 insert into alternate_drugs(drug_code, alternate_drug_code) values('amfetamin','brufen');
 insert into alternate_drugs(drug_code, alternate_drug_code) values('amfetamin','kreatin');
+
+--INSERT E-PRESCRIPTION
+insert into eprescription(code, creation_date, status, patient_id) values('1', '2021-02-1 14:00', 0, 2);
+insert into eprescription(code, creation_date, status, patient_id) values('2', '2021-02-1 14:00', 0, 2);
+insert into eprescription(code, creation_date, status, patient_id) values('3', '2021-02-1 14:00', 0, 8);
