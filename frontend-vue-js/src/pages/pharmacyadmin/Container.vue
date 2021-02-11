@@ -27,6 +27,15 @@ export default {
         to: "/pharmacyadmin/pharmacyadmindrugs"
       },
       {
+        title: "Drug procurement",
+        children: [
+          {
+            title: "All orders",
+            to: "/pharmacyadmin/orders"
+          }
+        ]
+      },
+      {
         title: "Vacation requests",
         to: "/pharmacyadmin/vacationrequests"
       },
