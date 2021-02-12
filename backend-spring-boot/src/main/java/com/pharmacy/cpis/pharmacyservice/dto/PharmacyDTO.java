@@ -19,9 +19,7 @@ public class PharmacyDTO {
 
     private String city;
 
-    public PharmacyDTO(){
-
-    }
+    public PharmacyDTO(){}
 
     public PharmacyDTO(Pharmacy pharmacy){
         getPharmacyLocation(pharmacy);
