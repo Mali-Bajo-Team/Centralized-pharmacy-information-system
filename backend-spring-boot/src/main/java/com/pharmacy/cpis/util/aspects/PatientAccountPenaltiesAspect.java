@@ -14,18 +14,17 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Component
 public class PatientAccountPenaltiesAspect {
-        private final int PENALTY_LIMIT= 3;
-        @Autowired
-        private PatientService patientService;
+	private final int PENALTY_LIMIT = 3;
+	@Autowired
+	private PatientService patientService;
 
-        @Before("@annotation(com.pharmacy.cpis.util.aspects.PatientAccountPenalties)")
-        public void check(JoinPoint joinPoint)
-        {
-            UserAccount user= (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            Patient patient= patientService.findByEmail(user.getEmail());
-            if(patient.getPenalties() != null && patient.getPenalties() >= PENALTY_LIMIT) {
-                throw new PSForbiddenException("Penalty limit reached.");
-            }
-        }
+	@Before("@annotation(com.pharmacy.cpis.util.aspects.PatientAccountPenalties)")
+	public void check(JoinPoint joinPoint) {
+		UserAccount user = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Patient patient = patientService.findByEmail(user.getEmail());
+		if (patient != null && patient.getPenalties() != null && patient.getPenalties() >= PENALTY_LIMIT) {
+			throw new PSForbiddenException("Penalty limit reached.");
+		}
+	}
 
 }
