@@ -10,6 +10,10 @@ import java.util.Date;
 
 @Entity
 public class Reservation {
+	@Version
+	@Column(nullable = false)
+	private Long version;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -38,10 +42,6 @@ public class Reservation {
 
 	@ManyToOne(optional = false)
 	private Pharmacy pharmacy;
-
-	@Version
-	@Column(nullable = false)
-	private Long version;
 
 
 	public Reservation() {
