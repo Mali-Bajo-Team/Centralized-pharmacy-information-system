@@ -56,6 +56,7 @@ import AddPharmacist from './../pages/pharmacyadmin/consultants/AddPharmacist';
 import AddDermatologist from './../pages/pharmacyadmin/consultants/AddDermatologist';
 import DrugOrders from './../pages/pharmacyadmin/orders/Container';
 import AddDrugOrder from './../pages/pharmacyadmin/orders/AddOrder';
+import EditDrugOrder from './../pages/pharmacyadmin/orders/EditOrder';
 import Promotion from './../pages/pharmacyadmin/promotions/AddPromotion';
 import DrugsInPharmacy from './../pages/pharmacyadmin/drugs/Container';
 import ViewPredefined from './../pages/pharmacyadmin/consultations/ViewPredefined'
@@ -402,6 +403,11 @@ const routes = [
                 component: PAPassword,
                 name: 'pharmacyadminpassword',
                 path: 'password'
+            },{
+                component: EditDrugOrder,
+                name: 'editdrugorder',
+                path: 'orders/edit/:id',
+                props: true
             }
         ]
     },

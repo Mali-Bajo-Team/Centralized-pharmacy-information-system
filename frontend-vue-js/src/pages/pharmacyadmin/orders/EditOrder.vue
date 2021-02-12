@@ -173,31 +173,13 @@ export default {
       orderedDrugs: []
     }
   }),
+  watch: {
+    id: function() {
+      this.loadOrder();
+    }
+  },
   mounted() {
-    this.axios
-      .get(
-        process.env.VUE_APP_BACKEND_URL +
-          process.env.VUE_APP_ALL_DRUGS_ENDPOINT,
-        {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("JWT-CPIS")
-          }
-        }
-      )
-      .then(response => {
-        this.drugs = response.data;
-      })
-      .catch(error => {
-        if (
-          error.response &&
-          error.response.data &&
-          error.response.data.message
-        )
-          this.snackbarText = error.response.data.message;
-        else if (error.message) this.snackbarText = error.message;
-        else this.snackbarText = "An unknown error has occured.";
-        this.snackbar = true;
-      });
+    this.loadOrder();
 
     this.axios
       .get(
@@ -253,6 +235,32 @@ export default {
               name: drug.drug.name
             });
           }
+          this.axios
+            .get(
+              process.env.VUE_APP_BACKEND_URL +
+                process.env.VUE_APP_ALL_DRUGS_ENDPOINT,
+              {
+                headers: {
+                  Authorization: "Bearer " + localStorage.getItem("JWT-CPIS")
+                }
+              }
+            )
+            .then(response => {
+              this.drugs = [];
+              for (let drug of response.data)
+                if (!this.isInOrder(drug)) this.drugs.push(drug);
+            })
+            .catch(error => {
+              if (
+                error.response &&
+                error.response.data &&
+                error.response.data.message
+              )
+                this.snackbarText = error.response.data.message;
+              else if (error.message) this.snackbarText = error.message;
+              else this.snackbarText = "An unknown error has occured.";
+              this.snackbar = true;
+            });
         })
         .catch(error => {
           if (
@@ -288,7 +296,9 @@ export default {
       this.axios
         .put(
           process.env.VUE_APP_BACKEND_URL +
-            process.env.VUE_APP_PROCUREMENT_ORDERS_ENDPOINT,
+            process.env.VUE_APP_PROCUREMENT_ORDERS_ENDPOINT +
+            "/" +
+            this.id,
           this.order,
           {
             headers: {
@@ -297,7 +307,7 @@ export default {
           }
         )
         .then(() => {
-          this.snackbarText = "Successfully ordered.";
+          this.snackbarText = "Successfully updated.";
           this.snackbar = true;
           this.performingAction = false;
         })
@@ -325,6 +335,11 @@ export default {
       let index = this.order.orderedDrugs.indexOf(drug);
       this.order.orderedDrugs.splice(index, 1);
       this.drugs.push(drug.drug);
+    },
+    isInOrder(drug) {
+      for (let dio of this.order.orderedDrugs)
+        if (drug.code == dio.code) return true;
+      return false;
     }
   },
   computed: {
