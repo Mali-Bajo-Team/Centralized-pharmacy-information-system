@@ -4,6 +4,7 @@ import com.pharmacy.cpis.userservice.model.users.Consultant;
 
 public class ConsultantDTO {
     private Long consultationId;
+    private Long consultantId;
     private String email;
     private String name;
     private String lastName;
@@ -60,6 +61,7 @@ public class ConsultantDTO {
     }
 
     public ConsultantDTO(Consultant consultant){
+        this.setConsultantId(consultant.getId());
         this.setEmail(consultant.getAccount().getEmail());
         this.setName(consultant.getName());
         this.setLastName(consultant.getSurname());
@@ -80,6 +82,14 @@ public class ConsultantDTO {
         this.location = location;
         this.city = city;
         this.country = country;
+    }
+
+    public Long getConsultantId() {
+        return consultantId;
+    }
+
+    public void setConsultantId(Long consultantId) {
+        this.consultantId = consultantId;
     }
 
     public void setEmail(String email) {this.email = email; }

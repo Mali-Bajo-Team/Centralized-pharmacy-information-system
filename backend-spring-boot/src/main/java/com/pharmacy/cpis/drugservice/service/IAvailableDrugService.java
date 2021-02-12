@@ -4,12 +4,17 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import com.pharmacy.cpis.drugservice.dto.*;
+import com.pharmacy.cpis.drugservice.dto.AddAvailableDrugDTO;
+import com.pharmacy.cpis.drugservice.dto.AddDrugPriceDTO;
+import com.pharmacy.cpis.drugservice.dto.DrugCodeAndAmountDTO;
+import com.pharmacy.cpis.drugservice.dto.DrugPriceDTO;
+import com.pharmacy.cpis.drugservice.dto.DrugSearchDTO;
 import com.pharmacy.cpis.drugservice.model.drugsales.AvailableDrug;
 import com.pharmacy.cpis.pharmacyservice.dto.PharmacyTotalPriceDTO;
-import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
 
 public interface IAvailableDrugService {
+
+	Collection<AvailableDrug> getByPharmacyForPatient(Long pharmacyId, String patientEmail);
 
 	Collection<AvailableDrug> getByPharmacy(Long pharmacyId);
 
@@ -21,13 +26,13 @@ public interface IAvailableDrugService {
 
 	AvailableDrug getByPharmacyAndDrug(Long pharmacyId, String drugCode);
 
-    AvailableDrug checkIsAvailableinPharmacy(Long pharmacyId, String drugCode);
+	AvailableDrug checkIsAvailableinPharmacy(Long pharmacyId, String drugCode);
 
-    Collection<DrugPriceDTO> getPrice(Long pharmacyId, String drugCode, Date start, Date end);
+	Collection<DrugPriceDTO> getPrice(Long pharmacyId, String drugCode, Date start, Date end);
 
 	void addPrice(Long pharmacyId, String drugCode, AddDrugPriceDTO priceInfo);
 
-	AvailableDrug updateAmount(Long pharmacyId,String drugCode,Integer amount);
+	AvailableDrug updateAmount(Long pharmacyId, String drugCode, Integer amount);
 
 	List<PharmacyTotalPriceDTO> findPharmaciesWithRequiredDrugsAmount(List<DrugCodeAndAmountDTO> drugCodeAndAmountDTOS);
 

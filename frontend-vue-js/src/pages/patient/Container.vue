@@ -1,5 +1,5 @@
 <template>
-  <v-app style="background: rgba(0,0,0,0);">
+  <v-app style="background: rgba(0, 0, 0, 0)">
     <navbar v-bind:items="links"></navbar>
     <v-main>
       <v-container fluid>
@@ -14,78 +14,108 @@ import navbar from "../../components/Navbar";
 
 export default {
   components: {
-    navbar
+    navbar,
   },
   data: () => ({
     links: [
       {
         title: "Home",
-        to: "/patient"
+        to: "/patient",
       },
       {
         title: "Profile",
-        to: "/patient/profile"
+        to: "/patient/profile",
       },
       {
         title: "Drugs",
-        to: "/patient/patientdrugs"
+        children: [
+          {
+            title: "Drugs search",
+            to: "/patient/patientdrugs",
+          },
+          {
+            title: "Reservations",
+            to: "/patient/drugreservation",
+          },
+        ],
       },
       {
         title: "Pharmacies",
-        to: "/patient/patientpharmacies"
+        children: [
+          {
+            title: "Pharmacies search",
+            to: "/patient/patientpharmacies",
+          },
+          {
+            title: "Subscriptions",
+            to: "/patient/subscriptions",
+          },
+          {
+            title: "Consultations",
+            to: "/patient/patientconsultations",
+          },
+        ],
       },
-      {
-        title: "Reservations",
-        to: "/patient/drugreservation"
-      },
-      {
-        title: "Subscriptions",
-        to: "/patient/subscriptions"
-      },
+
       {
         title: "EPrescription",
-        children:[
+        children: [
           {
             title: "QR code search",
-            to: "/patient/eprescription"
+            to: "/patient/eprescription",
           },
           {
             title: "My EPrescriptions",
-            to : "/patient/myeprescriptions"
-          }
-        ]
+            to: "/patient/myeprescriptions",
+          },
+        ],
       },
-      {
-        title: "Consultations",
-        to: "/patient/patientconsultations"
-      },
+
       {
         title: "Consultants",
         children: [
           {
             title: "Pharmacists",
-            to: "/patient/pharmacists"
+            to: "/patient/pharmacists",
           },
           {
             title: "Dermatologists",
-            to: "/patient/dermatologists"
-          }
-        ]
+            to: "/patient/dermatologists",
+          },
+        ],
       },
       {
         title: "History",
-        children:[
+        children: [
           {
             title: "Pharmacist",
-            to:"/patient/historypharmacist"
+            to: "/patient/historypharmacist",
           },
           {
             title: "Dermatologist",
-            to:"/patient/historydermatologist"
+            to: "/patient/historydermatologist",
+          },
+        ],
+      },
+      {
+        title: "Rating",
+        children: [
+          {
+            title: "Consultants",
+            to: "/patient/rating"
+          },
+          {
+            title: "Pharmacies",
+            to:"/patient/ratingpharmacies"
+          },
+          {
+            title: "Drugs",
+            to:"/patient/ratingdrugs"
           }
         ]
-      }
-    ]
-  })
+       
+      },
+    ],
+  }),
 };
 </script>
