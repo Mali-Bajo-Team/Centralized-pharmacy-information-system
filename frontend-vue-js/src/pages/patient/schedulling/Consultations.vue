@@ -131,9 +131,7 @@
           >
 
           <v-card-actions>
-            <v-btn color="orange lighten-2" text>
-              Show free pharmacists
-            </v-btn>
+            <v-btn color="orange lighten-2" text> Show free pharmacists </v-btn>
 
             <v-spacer></v-spacer>
 
@@ -199,21 +197,27 @@
                   <v-col>
                     <v-card-text>
                       <h3>
-                      {{ pharmacist.consultantName }}
-                      {{ pharmacist.consultantSurname }}
+                        {{ pharmacist.consultantName }}
+                        {{ pharmacist.consultantSurname }}
                       </h3>
                     </v-card-text>
-
-                  
                   </v-col>
                   <v-col>
-                    <v-rating color="accent" v-model="pharmacist.consultantRating">
+                    <v-rating
+                      color="accent"
+                      v-model="pharmacist.consultantRating"
+                    >
                     </v-rating>
                   </v-col>
                   <v-divider></v-divider>
                   <v-col>
                     <v-card-actions>
-                      <v-btn color="primary" > Schedule </v-btn>
+                      <v-btn
+                        color="primary"
+                        @click="scheduleExamination(pharmacist, consultation)"
+                      >
+                        Schedule
+                      </v-btn>
                     </v-card-actions>
                   </v-col>
                 </v-row>
@@ -231,6 +235,9 @@ import {
   getStringDateFromMilliseconds,
   getTodayDateString,
 } from "./../../../util/dateHandler";
+
+// import { getParsedToken } from "./../../../util/token";
+
 export default {
   data() {
     return {
@@ -245,6 +252,39 @@ export default {
   },
 
   methods: {
+    scheduleExamination(pharmacist, consultation) {
+      console.log(pharmacist + " " + consultation);
+      alert("hasas");
+      this.axios
+        .post(
+          process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_CONSULTATIONS_SCHEDULE,
+          {
+            // startDate:  this.dateBind + " " + this.time + ":00",
+            // patientEmail: "cpisuser+dragana@gmail.com",
+            // consultantId: pharmacist.consultantId,
+            // pharmacyID: consultation.pharmacyId,
+            // consultantEmail: pharmacist.consultantEmail,
+            // patientId: 2,
+            startDate: "2022-01-01 12:00:00",
+            patientEmail: "cpisuser+dragana@gmail.com",
+            consultantId: 13,
+            pharmacyID: 1,
+            consultantEmail: "cpisuser+pharmacist13@gmail.com",
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then(() => {
+          alert("Successfuly, check email for more information");
+        })
+        .catch((error) => {
+          alert("Error: " + error);
+        });
+    },
     sortBy(prop) {
       this.consultations.sort((a, b) => (a[prop] < b[prop] ? -1 : 1));
     },

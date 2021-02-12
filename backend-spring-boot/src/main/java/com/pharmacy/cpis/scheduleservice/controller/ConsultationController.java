@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.validation.Valid;
 
@@ -139,8 +140,20 @@ public class ConsultationController {
 	public ResponseEntity<ScheduleExaminationDTO> scheduleConsultation(
 			@RequestBody ScheduleExaminationDTO scheduleExaminationDTO) throws InterruptedException {
 
+		if(scheduleExaminationDTO.getPatientId() == null && scheduleExaminationDTO.getPatientEmail() != null){
+			scheduleExaminationDTO.setPatientId(userService.findByEmail(scheduleExaminationDTO.getPatientEmail()).getPerson().getId());
+		}
+
+
 		Date examinationStartDate = DateConversionsAndComparisons.getUtilDate(scheduleExaminationDTO.getStartDate());
-		Date examinationEndDate = DateConversionsAndComparisons.getUtilDate(scheduleExaminationDTO.getEndDate());
+		// For patient scheduling, he only enter a start date, so because of that we have this check
+		Date examinationEndDate;
+		if(scheduleExaminationDTO.getEndDate() == null){
+			examinationEndDate = new Date(examinationStartDate.getTime() + TimeUnit.HOURS.toMillis(1)); // Add 1 hours
+		}else{
+			examinationEndDate = DateConversionsAndComparisons.getUtilDate(scheduleExaminationDTO.getEndDate());
+		}
+
 
 		UserAccount loggedPharmacist = userService.findByEmail(scheduleExaminationDTO.getConsultantEmail());
 		scheduleExaminationDTO.setConsultantId(loggedPharmacist.getId());

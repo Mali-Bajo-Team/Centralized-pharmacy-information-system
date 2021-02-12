@@ -85,7 +85,11 @@ public class ConsultationService implements IConsultationService {
 
         DateRange consultationDataRange = new DateRange();
         consultationDataRange.setStart(DateConversionsAndComparisons.getUtilDate(consultation.getStartDate()));
-        consultationDataRange.setEnd(DateConversionsAndComparisons.getUtilDate(consultation.getEndDate()));
+        if(consultation.getEndDate() == null){
+            consultationDataRange.setEnd(new Date(DateConversionsAndComparisons.getUtilDate(consultation.getStartDate()).getTime() + TimeUnit.HOURS.toMillis(1)));
+        }else{
+            consultationDataRange.setEnd(DateConversionsAndComparisons.getUtilDate(consultation.getEndDate()));
+        }
 
         Consultant consultant = consultantRepository.getOne(consultation.getConsultantId());
         Pharmacy consultantWorkingPharmacy;

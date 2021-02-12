@@ -7,6 +7,7 @@ public class FreePharmacistReadDTO {
     private Double consultantRating;
     private String consultantName;
     private String consultantSurname;
+    private String consultantEmail;
 
     public FreePharmacistReadDTO(){}
 
@@ -15,6 +16,15 @@ public class FreePharmacistReadDTO {
         this.setConsultantName(consultant.getName());
         this.setConsultantSurname(consultant.getSurname());
         this.setConsultantRating(consultant.getAverageRating());
+        this.setConsultantEmail(consultant.getAccount().getEmail());
+    }
+
+    public String getConsultantEmail() {
+        return consultantEmail;
+    }
+
+    public void setConsultantEmail(String consultantEmail) {
+        this.consultantEmail = consultantEmail;
     }
 
     public Long getConsultantId() {
