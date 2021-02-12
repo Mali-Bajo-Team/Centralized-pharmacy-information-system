@@ -5,7 +5,7 @@
         }" transition="fade-transition">
       <v-card elevation="4" class="pa-4 mb-10" v-show="!finished">
         <v-card-title class="ml-2">
-          {{ consultant.name + " " + consultant.surname}}
+          <h2>{{ consultant.name + " " + consultant.surname}}</h2>
           <v-spacer></v-spacer>
           <v-rating
             class="mr-10"

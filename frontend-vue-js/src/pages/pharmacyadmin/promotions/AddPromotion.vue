@@ -113,13 +113,13 @@ export default {
       let date2 = 0;
       if (this.form.validityRange.length == 0) {
         date1 = getMillisecondsFromStringDate(this.form.validityRange[0]);
-        date2 = date1;
+        date2 = getMillisecondsFromStringDate(this.form.validityRange[0]);
       } else {
         date1 = getMillisecondsFromStringDate(this.form.validityRange[0]);
         date2 = getMillisecondsFromStringDate(this.form.validityRange[1]);
 
         if (date1 > date2) {
-          let temp = date2;
+          var temp = date2;
           date2 = date1;
           date1 = temp;
         }

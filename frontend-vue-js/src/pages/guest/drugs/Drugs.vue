@@ -61,6 +61,7 @@
             label="Select type of the drug"
             multiple
             chips
+            clearable
           ></v-select>
         </v-form>
       </v-card>
@@ -154,9 +155,8 @@
               color="success"
               @click="startAddingToPharmacy(drug)"
             >Add to pharmacy</v-btn>
-            <v-btn @click="getDrugPharmacies(drug)" color="accent" text>Pharmacies</v-btn>
-            <v-spacer></v-spacer>
-            <v-btn icon @click="getDrugPharmacies(drug)">
+            <v-btn @click="getDrugPharmacies(drug)" color="accent" text>
+              Pharmacies
               <v-icon>
                 {{
                 drug.showPharmacies ? "mdi-chevron-up" : "mdi-chevron-down"
@@ -434,6 +434,10 @@ export default {
     },
     addToPharmacy() {
       this.loading = true;
+
+      this.$v.$touch();
+
+      if (this.$v.$invalid) return;
 
       this.axios
         .post(
