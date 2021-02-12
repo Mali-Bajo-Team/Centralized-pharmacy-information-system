@@ -99,7 +99,21 @@ export default {
       },
       {
         title: "Rating",
-        to: "/patient/rating",
+        children: [
+          {
+            title: "Consultants",
+            to: "/patient/rating"
+          },
+          {
+            title: "Pharmacies",
+            to:"/patient/ratingpharmacies"
+          },
+          {
+            title: "Drugs",
+            to:"/patient/ratingdrugs"
+          }
+        ]
+       
       },
     ],
   }),
