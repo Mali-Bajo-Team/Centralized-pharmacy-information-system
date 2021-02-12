@@ -49,6 +49,8 @@ export function getMillisecondsFromStringTimeAndDate(time, date) {
     const [hours, minutes] = time.split(':');
     realdate.setHours(hours);
     realdate.setMinutes(minutes);
+    realdate.setMilliseconds(0);
+    realdate.setSeconds(0);
     return realdate.getTime();
 }
 

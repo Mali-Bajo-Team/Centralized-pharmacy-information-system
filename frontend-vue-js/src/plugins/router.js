@@ -52,6 +52,8 @@ import PharmacyAdminLanding from './../pages/pharmacyadmin/landing/Landing';
 import VacationRequests from './../pages/pharmacyadmin/vacation/Vacation';
 import PharmacistSearch from './../pages/pharmacyadmin/consultants/Pharmacists';
 import DermatologistSearch from './../pages/pharmacyadmin/consultants/Dermatologists';
+import AddPharmacist from './../pages/pharmacyadmin/consultants/AddPharmacist';
+import AddDermatologist from './../pages/pharmacyadmin/consultants/AddDermatologist';
 import DrugOrders from './../pages/pharmacyadmin/orders/Container';
 import Promotion from './../pages/pharmacyadmin/promotions/AddPromotion';
 import DrugsInPharmacy from './../pages/pharmacyadmin/drugs/Container';
@@ -186,13 +188,13 @@ const routes = [
             },
             {
                 component: PatientRating,
-                name : 'rating',
-                path : 'rating'
+                name: 'rating',
+                path: 'rating'
             },
             {
                 component: PatientPharmaciesRating,
-                name : 'ratingpharmacies',
-                path : 'ratingpharmacies'
+                name: 'ratingpharmacies',
+                path: 'ratingpharmacies'
             },
             {
                 component: PatientDrugsRating,
@@ -373,6 +375,16 @@ const routes = [
                 component: ViewPredefined,
                 name: 'pharmacyadminviewpredefined',
                 path: 'predefined'
+            },
+            {
+                component: AddDermatologist,
+                name: 'pharmacyadmindermatologistadd',
+                path: 'dermatologists/add'
+            },
+            {
+                component: AddPharmacist,
+                name: 'pharmacyadminpharmacistadd',
+                path: 'pharmacists/add'
             }
         ]
     },
