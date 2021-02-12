@@ -1,6 +1,7 @@
 package com.pharmacy.cpis.scheduleservice.service.impl;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import com.pharmacy.cpis.scheduleservice.dto.*;
 import com.pharmacy.cpis.scheduleservice.model.workschedule.WorkingTimes;
@@ -275,10 +276,11 @@ public class ConsultationService implements IConsultationService {
     @Override
     public List<FreePharmacyReadDTO> allPharmaciesWhichHaveMinOnePharmacistFree(String examinationStartDateString) {
         Date examinationStartDate = DateConversionsAndComparisons.getUtilDate(examinationStartDateString);
+        Date examinationEndDate = new Date(examinationStartDate.getTime() + TimeUnit.HOURS.toMillis(1)); // Add 1 hours
         // I will do here DTO mapping because i do not want to make two method for same process
         List<FreePharmacyReadDTO> pharmaciesWithMinOnePharmacistFree = new ArrayList<>();
         for (Pharmacy pharmacy : pharmacyRepository.findAll()) {
-            List<Consultant> consultants = getPharmacyFreePharmacist(examinationStartDate, pharmacy);
+            List<Consultant> consultants = getPharmacyFreePharmacist(examinationStartDate, examinationEndDate, pharmacy);
             if(consultants.isEmpty()) continue;
 
             List<FreePharmacistReadDTO> pharmacyFreePharmacist = new ArrayList<>();
@@ -291,12 +293,12 @@ public class ConsultationService implements IConsultationService {
         return pharmaciesWithMinOnePharmacistFree;
     }
 
-    private List<Consultant> getPharmacyFreePharmacist(Date examinationStartDate, Pharmacy pharmacy) {
+    private List<Consultant> getPharmacyFreePharmacist(Date examinationStartDate, Date examinationEndDate, Pharmacy pharmacy) {
         List<Consultant> freeConsultants = new ArrayList<>();
         for (WorkingTimes consultantWorkingTimes : pharmacy.getConsultants()) {
             if (consultantWorkingTimes.getConsultant().getType() != ConsultantType.PHARMACIST) // we only need pharmacist
                 continue;
-            if (isConsultantFreeForConsultation(consultantWorkingTimes.getConsultant().getId(), pharmacy.getId(), examinationStartDate, examinationStartDate)) {
+            if (isConsultantFreeForConsultation(consultantWorkingTimes.getConsultant().getId(), pharmacy.getId(), examinationStartDate, examinationEndDate)) {
                 freeConsultants.add(consultantWorkingTimes.getConsultant());
             }
         }
