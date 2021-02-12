@@ -22,6 +22,7 @@ import PharmacistSearchPatient from './../pages/patient/consultants/Pharmacists'
 import DermatologistSearchPatient from './../pages/patient/consultants/Dermatologists';
 import PharmacistHistoryPatient from './../pages/patient/history/Pharmacist';
 import DermatologistHistoryPatient from './../pages/patient/history/Dermatologist';
+import PharmacyProfile from './../pages/patient/pharmacy/Pharmacy'
 import PatientRating from './../pages/patient/rating/ConsultantsRating';
 import PatientPharmaciesRating from './../pages/patient/rating/PharmaciesRating';
 import PatientDrugsRating from './../pages/patient/rating/DrugsRating';
@@ -170,8 +171,14 @@ const routes = [
             },
             {
                 component: PharmacistHistoryPatient,
-                name : 'historypharmacist',
-                path : 'historypharmacist'
+                name: 'historypharmacist',
+                path: 'historypharmacist'
+            },
+            {
+                component: PharmacyProfile,
+                name: 'patientpharmacyprofile',
+                path: 'pharmacy/:id',
+                props: true
             },
             {
                 component: PatientRating,

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,11 +53,11 @@ public class DrugController {
 
 	@GetMapping(value = "/pharmacy/{id}")
 	@PreAuthorize("hasRole('PATIENT')")
-	public ResponseEntity<Collection<DrugDTO>> getAvailableByPharmacy(@PathVariable(required = true) Long id) {
-		Collection<AvailableDrug> drugs = availableDrugService.getByPharmacy(id);
-		drugs = CollectionUtil.findAll(drugs, drug -> drug.getAvailableAmount() > 0);
+	public ResponseEntity<Collection<DrugDTO>> getAvailableByPharmacy(@PathVariable(required = true) Long id,
+			Authentication authentication) {
+		Collection<AvailableDrug> drugs = availableDrugService.getByPharmacyForPatient(id, authentication.getName());
 
-		Collection<DrugDTO> mapped = CollectionUtil.map(drugs, drug -> new DrugDTO(drug.getDrug()));
+		Collection<DrugDTO> mapped = CollectionUtil.map(drugs, drug -> new DrugDTO(drug.getDrug(), drugService));
 
 		return new ResponseEntity<>(mapped, HttpStatus.OK);
 	}
