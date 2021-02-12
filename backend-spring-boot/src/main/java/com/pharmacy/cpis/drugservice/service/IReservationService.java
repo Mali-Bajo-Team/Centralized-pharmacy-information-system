@@ -5,13 +5,16 @@ import com.pharmacy.cpis.drugservice.dto.DrugReservationDTO;
 import com.pharmacy.cpis.drugservice.dto.ReservationDTO;
 import com.pharmacy.cpis.drugservice.model.drugsales.Reservation;
 import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
+import com.pharmacy.cpis.scheduleservice.model.prescriptions.EPrescription;
 import com.pharmacy.cpis.userservice.dto.PatientEmailDTO;
 import com.pharmacy.cpis.userservice.model.users.Patient;
 
 import java.util.List;
 
 public interface IReservationService {
-    Reservation saveReservation(DrugReservationDTO reservationDTO);
+    Reservation makeReservation(DrugReservationDTO reservationDTO);
+
+    void makeReservationForEPrescription(EPrescription ePrescription,  Long pharmacyIdWhereIsMadeReservation);
 
     ReservationDTO isReservationValid(ReservationDTO reservationDTO);
 

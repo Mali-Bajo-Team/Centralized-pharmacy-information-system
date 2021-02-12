@@ -29,7 +29,7 @@ public class ReservationController {
     @PreAuthorize("hasRole('PATIENT')")
     @PostMapping(value = "/drug")
     public ResponseEntity<DrugReservationDTO> makeReservationOfDrug(@RequestBody DrugReservationDTO drugReservationDTO){
-        Reservation reservation = reservationService.saveReservation(drugReservationDTO);
+        Reservation reservation = reservationService.makeReservation(drugReservationDTO);
         return new ResponseEntity<>(new DrugReservationDTO(reservation) , HttpStatus.OK);
     }
 
