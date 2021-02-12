@@ -39,8 +39,17 @@ public class Reservation {
 	@ManyToOne(optional = false)
 	private Pharmacy pharmacy;
 
+	@Version
+	@Column(nullable = false)
+	private Long version;
+
+
 	public Reservation() {
 		super();
+	}
+
+	public Long getVersion() {
+		return version;
 	}
 
 	public Long getId() {

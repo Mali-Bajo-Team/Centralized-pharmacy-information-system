@@ -32,6 +32,7 @@ import com.pharmacy.cpis.util.exceptions.PSNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -169,8 +170,8 @@ public class ReservationService implements IReservationService {
         return reservationDTO;
     }
 
-
     @Override
+    @Transactional
     public ReservationDTO dispensingMedicine(ReservationDTO reservationDTO) {
         Reservation reservation = reservationRepository.getOne(reservationDTO.getReservationID());
 
