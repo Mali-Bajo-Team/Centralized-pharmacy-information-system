@@ -12,10 +12,14 @@
           <v-card-text>
             <v-form>
               <v-select
-                :items="drugs"
+                v-model="createRatingDTO.drugCode"
+                :items="availableDrugsForRating"
+                item-text="drugName"
+                item-value="drugCode"
                 label="Select drug you want to rate"
               ></v-select>
               <v-rating
+                v-model="createRatingDTO.rating"
                 background-color="accent lighten-3"
                 color="accent"
                 medium
@@ -24,6 +28,7 @@
                 width="110px"
                 color="primary"
                 class="ma-2 white--text mr-6"
+                @click="makeNewRating()"
               >
                 Rate
                 <v-icon small right dark> mdi-star </v-icon>
@@ -132,14 +137,20 @@
 import { getParsedToken } from "./../../../util/token";
 export default {
   data: () => ({
+    availableDrugsForRating: [],
     drugsRated: [],
-    drugs: ["Ana Perisic", "Vladislav Maksimovic"],
     updateRatingDTO: {
       id: 0,
       newRating: 1,
     },
+    createRatingDTO: {
+      patientEmail: getParsedToken().sub,
+      drugCode: "",
+      rating: 3,
+    },
   }),
   mounted() {
+    //get patient rated drugs
     this.axios
       .post(
         process.env.VUE_APP_BACKEND_URL +
@@ -159,13 +170,59 @@ export default {
       .catch((error) => {
         alert(error);
       });
+
+    // get available drugs for reating
+    this.axios
+      .post(
+        process.env.VUE_APP_BACKEND_URL +
+          process.env.VUE_APP_PATIENT_AVAILABLE_DRUGS_REATING_ENDPOINT,
+        {
+          email: getParsedToken().sub,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+          },
+        }
+      )
+      .then((resp) => {
+        this.availableDrugsForRating = resp.data;
+      })
+      .catch((error) => {
+        alert(error);
+      });
   },
   methods: {
+    makeNewRating() {
+      for (let drug of this.drugsRated) {
+        if (drug.drugCode == this.createRatingDTO.drugCode) {
+          alert("You have already made a rating for thath drug");
+          return;
+        }
+      }
+      this.axios
+        .post(
+          process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_PATIENT_CREATE_DRUG_RATING_ENDPOINT,
+          this.createRatingDTO,
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then((resp) => {
+          alert("Successfully created rating for drugs.");
+          this.drugsRated.push(resp.data);
+        })
+        .catch((error) => {
+          alert(error);
+        });
+    },
     setUpdateDTO(drugRated) {
       this.updateRatingDTO.id = drugRated.id;
       this.updateRatingDTO.newRating = drugRated.rating;
     },
-
     confirmNewRate() {
       this.axios
         .post(
@@ -173,7 +230,7 @@ export default {
             process.env.VUE_APP_PATIENT_CHANGE_RATING_DRUGS_ENDPOINT,
           {
             newRating: this.updateRatingDTO.newRating,
-            id: this.updateRatingDTO.id
+            id: this.updateRatingDTO.id,
           },
           {
             headers: {
@@ -184,14 +241,12 @@ export default {
         .then((resp) => {
           console.log(resp.data);
           alert("Successfully confirmed!");
-          for(let drugRate of this.drugsRated){
-            if(drugRate.id == this.updateRatingDTO.id){
-               drugRate.rating = resp.data.rating;
+          for (let drugRate of this.drugsRated) {
+            if (drugRate.id == this.updateRatingDTO.id) {
+              drugRate.rating = resp.data.rating;
               break;
             }
           }
-          
-
         })
         .catch((error) => {
           alert(error);

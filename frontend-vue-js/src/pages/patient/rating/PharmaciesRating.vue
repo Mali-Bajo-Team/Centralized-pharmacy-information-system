@@ -137,8 +137,7 @@
 import { getParsedToken } from "./../../../util/token";
 export default {
   data: () => ({
-    pharmaciesRated: [], // TODO: from available remove this already rated ones
-    pharmacies: ["Ana Perisic", "Vladislav Maksimovic"],
+    pharmaciesRated: [],
     updateRatingDTO: {
       id: 0,
       newRating: 1,
