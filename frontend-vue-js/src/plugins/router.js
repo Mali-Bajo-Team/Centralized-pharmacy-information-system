@@ -49,6 +49,7 @@ import SystemAdminComplaints from './../pages/systemadmin/complaints/Complaints'
 
 import PharmacyAdmin from './../pages/pharmacyadmin/Container';
 import PharmacyAdminLanding from './../pages/pharmacyadmin/landing/Landing';
+import EditPharmacy from './../pages/pharmacyadmin/landing/EditPharmacy';
 import VacationRequests from './../pages/pharmacyadmin/vacation/Vacation';
 import PharmacistSearch from './../pages/pharmacyadmin/consultants/Pharmacists';
 import DermatologistSearch from './../pages/pharmacyadmin/consultants/Dermatologists';
@@ -329,6 +330,11 @@ const routes = [
                 component: PharmacyAdminLanding,
                 name: 'pharmacyadmin',
                 path: ''
+            },
+            {
+                component: EditPharmacy,
+                name: 'pharmacyadminedit',
+                path: 'edit'
             },
             {
                 component: Drugs,
