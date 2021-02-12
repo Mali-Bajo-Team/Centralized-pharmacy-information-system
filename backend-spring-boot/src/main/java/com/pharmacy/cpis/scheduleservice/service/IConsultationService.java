@@ -1,8 +1,7 @@
 package com.pharmacy.cpis.scheduleservice.service;
 
 import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
-import com.pharmacy.cpis.scheduleservice.dto.PatientCancelConsultationDTO;
-import com.pharmacy.cpis.scheduleservice.dto.ScheduleExaminationDTO;
+import com.pharmacy.cpis.scheduleservice.dto.*;
 import com.pharmacy.cpis.scheduleservice.model.consultations.Consultation;
 import com.pharmacy.cpis.userservice.dto.PatientEmailDTO;
 import com.pharmacy.cpis.userservice.model.users.Consultant;
@@ -15,7 +14,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import com.pharmacy.cpis.scheduleservice.dto.AddPredefinedConsultationDTO;
 import com.pharmacy.cpis.scheduleservice.dto.ScheduleExaminationDTO;
 import com.pharmacy.cpis.scheduleservice.model.consultations.Consultation;
 import com.pharmacy.cpis.scheduleservice.model.consultations.ConsultationStatus;
@@ -42,4 +40,6 @@ public interface IConsultationService {
     void cancelConsultation(PatientCancelConsultationDTO patientCancelConsultationDTO);
 
     Boolean isConsultantFreeForConsultation(Long consultantId, Long pharmacyID, Date examinationStartDate, Date examinationEndDate);
+
+    List<FreePharmacyReadDTO> allPharmaciesWhichHaveMinOnePharmacistFree(String examinationStartDateString);
 }
