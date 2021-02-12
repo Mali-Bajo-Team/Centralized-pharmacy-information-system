@@ -148,10 +148,10 @@ insert into consultation (price,status,start_date,end_date,consultant_id,patient
 insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id,version) values (25,3,'2021-02-04 11:23','2021-02-04 13:20',9,2,1,0);
 insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id,version) values (30,3,'2021-02-05 13:23','2021-02-05 14:00',9,4,2,0);
 insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id,version) values (30,1,'2021-03-05 13:23','2021-03-05 14:00',9,2,2,0);
-insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id,version) values (30,0,'2021-03-09 13:23','2021-03-05 14:00',9,2,1,0);
-insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id,version) values (30,0,'2021-03-10 13:23','2021-03-05 14:00',9,2,2,0);
-insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id,version) values (30,0,'2021-03-11 13:23','2021-03-05 14:00',9,2,1,0);
-insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id,version) values (30,0,'2021-03-12 13:23','2021-03-05 14:00',9,2,2,0);
+insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id,version) values (30,0,'2021-03-09 13:23','2021-03-09 14:00',9,2,1,0);
+insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id,version) values (30,0,'2021-03-10 13:23','2021-03-10 14:00',9,2,2,0);
+insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id,version) values (30,0,'2021-03-11 13:23','2021-03-11 14:00',9,2,1,0);
+insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id,version) values (30,0,'2021-03-12 13:23','2021-03-12 14:00',9,2,2,0);
 -- insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 1);
 -- insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 2);
 -- insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 3);

@@ -164,6 +164,10 @@
               </v-card-title>
             </v-col>
           </v-row>
+
+          <v-card-actions v-if="isPatient">            
+          <v-btn color="info" :to="detailsLink(pharmacy)">Details</v-btn>
+          </v-card-actions>
         </v-card>
       </v-col>
       <!--End of right column-->
@@ -172,6 +176,8 @@
 </template>
 
 <script>
+import { getToken, getParsedToken } from '@/util/token'
+
 export default {
   data: () => ({
     pharmacies: [],
@@ -219,6 +225,9 @@ export default {
       if (pharmacy.rating < minMark || pharmacy.rating > maxMark) return false;
 
       return true;
+    },
+    detailsLink(pharmacy) {
+      return "/patient/pharmacy/" + pharmacy.id;
     }
   },
   computed: {
@@ -226,6 +235,9 @@ export default {
       return this.pharmacies.filter(pharmacy => {
         return this.isMatchedPharmacy(pharmacy);
       });
+    },
+    isPatient: function() {
+      return getToken() && getParsedToken().role === "PATIENT";
     }
   }
 };

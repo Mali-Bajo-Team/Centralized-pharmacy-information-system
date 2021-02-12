@@ -57,6 +57,19 @@ export default {
         ]
       },
       {
+        title: "Consultations",
+        children: [
+          {
+            title: "Add predefined",
+            to: "/pharmacyadmin/predefined/add"
+          },
+          {
+            title: "View predefined",
+            to: "/pharmacyadmin/predefined"
+          }
+        ]
+      },
+      {
         title: "Add promotion",
         to: "/pharmacyadmin/promotion"
       }
