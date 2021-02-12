@@ -86,6 +86,10 @@ export default {
         to: "/pharmacyadmin/promotion"
       },
       {
+        title: "Statistics",
+        to: "/pharmacyadmin/statistics"
+      },
+      {
         title: "My profile",
         children: [
           {
