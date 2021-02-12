@@ -8,7 +8,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import com.pharmacy.cpis.drugservice.dto.DrugReservationDTO;
-import com.pharmacy.cpis.scheduleservice.dto.PatientCancelConsultationDTO;
+import com.pharmacy.cpis.scheduleservice.dto.*;
 import com.pharmacy.cpis.userservice.dto.PatientEmailDTO;
 import com.pharmacy.cpis.userservice.model.users.ConsultantType;
 
@@ -24,9 +24,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import com.pharmacy.cpis.scheduleservice.dto.AddPredefinedConsultationDTO;
-import com.pharmacy.cpis.scheduleservice.dto.ConsultationDTO;
-import com.pharmacy.cpis.scheduleservice.dto.ScheduleExaminationDTO;
 import com.pharmacy.cpis.scheduleservice.model.consultations.Consultation;
 import com.pharmacy.cpis.scheduleservice.model.consultations.ConsultationStatus;
 import com.pharmacy.cpis.scheduleservice.service.IConsultationService;
@@ -57,6 +54,12 @@ public class ConsultationController {
 	private EmailService emailService;
 	@Autowired
 	private IConsultationRepository consultationRepository;
+
+	@PostMapping(value = "/date/free")
+	@PreAuthorize("hasRole('PATIENT')")
+	public ResponseEntity<List<FreePharmacyReadDTO>> getAllPharmaciesWithMinOneFreePharmacist(@RequestBody ExaminationStartDTO examinationStartDTO){
+		return new ResponseEntity<>(consultationService.allPharmaciesWhichHaveMinOnePharmacistFree(examinationStartDTO.getExaminationStart()) ,HttpStatus.OK);
+	}
 
 	@GetMapping
 	@PreAuthorize("hasRole('PHARMACIST')")
