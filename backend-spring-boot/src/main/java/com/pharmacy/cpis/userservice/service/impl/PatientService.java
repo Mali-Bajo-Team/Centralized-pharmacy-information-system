@@ -15,6 +15,7 @@ import com.pharmacy.cpis.userservice.service.IPatientService;
 import com.pharmacy.cpis.util.exceptions.PSNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -90,5 +91,10 @@ public class PatientService implements IPatientService {
         consultationRepository.save(consultation);
 
         return patient;
+    }
+    @Override
+    @Transactional
+    public void resetPenalties() {
+        patientRepository.resetPenalties();
     }
 }
