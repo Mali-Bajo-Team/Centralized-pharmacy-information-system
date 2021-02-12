@@ -12,8 +12,7 @@ public class AddOrderedDrugDTO {
 	@NotNull(message = "Amount of ordered drug is required.")
 	@Min(value = 1, message = "Amount of ordered drug must be positive.")
 	private Integer amount;
-
-	@NotNull(message = "Default price of ordered drug is required.")
+	
 	@Min(value = 0, message = "Default price of ordered drug must be positive.")
 	private Double defaultPrice;
 

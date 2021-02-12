@@ -33,6 +33,7 @@ import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
@@ -167,8 +168,8 @@ public class ReservationService implements IReservationService {
         return reservationDTO;
     }
 
-
     @Override
+    @Transactional
     public ReservationDTO dispensingMedicine(ReservationDTO reservationDTO) {
         Reservation reservation = reservationRepository.getOne(reservationDTO.getReservationID());
 
