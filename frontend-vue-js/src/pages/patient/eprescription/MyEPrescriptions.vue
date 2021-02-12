@@ -17,6 +17,7 @@
               width="110px"
               color="green lighten-2"
               class="ma-2 white--text mr-6"
+              @click="sortBy('creationDate')"
             >
               Date
               <v-icon small right dark> mdi-arrow-up-bold </v-icon>
@@ -26,6 +27,7 @@
               width="110px"
               color="green lighten-2"
               class="ma-2 white--text ml-6"
+              @click="sortDownBy('creationDate')"
             >
               Date
               <v-icon small right dark> mdi-arrow-down-bold </v-icon>
@@ -95,20 +97,13 @@
                 :key="prescribedDrug.id"
               >
                 <v-card-title>
-                 Code: {{ prescribedDrug.drugCode }}
+                  Code: {{ prescribedDrug.drugCode }}
                 </v-card-title>
 
-                <v-card-subtitle> Amount: {{ prescribedDrug.amount }}</v-card-subtitle>
+                <v-card-subtitle>
+                  Amount: {{ prescribedDrug.amount }}</v-card-subtitle
+                >
               </v-card>
-
-              <!-- <v-card-text>
-                I'm a thing. But, like most politicians, he promised more than
-                he could deliver. You won't have time for sleeping, soldier, not
-                with all the bed making you'll be doing. Then we'll go with that
-                data file! Hey, you add a one and two zeros to that or we walk!
-                You're going to do his laundry? I've got to find a way to
-                escape.
-              </v-card-text> -->
             </div>
           </v-expand-transition>
         </v-card>
@@ -159,6 +154,12 @@ export default {
       });
   },
   methods: {
+    sortBy(prop) {
+      this.prescriptions.sort((a, b) => (a[prop] < b[prop] ? -1 : 1));
+    },
+    sortDownBy(prop) {
+      this.prescriptions.sort((a, b) => (a[prop] > b[prop] ? -1 : 1));
+    },
     convertMsToString(ms) {
       return getStringDateWithTimeFromMilliseconds(ms);
     },
