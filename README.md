@@ -12,6 +12,14 @@
 - Frontend: (https://isa-2020-tim29.herokuapp.com/)[https://isa-2020-tim29.herokuapp.com/]
 - Backend: (https://isa-2020-tim29-backend.herokuapp.com/)[https://isa-2020-tim29-backend.herokuapp.com/]
 
+### Emails and passwords for login
+- Patient: cpisuser+dragana@gmail.com, dragana
+- Pharmacy Administrator: cpisuser+jankovic@gmail.com, jankovic; cpisuser+benu@gmail.com, benumerkator
+- System Administrator: cpisuser+admin@gmail.com, administrator
+- Pharmacist: cpisuser+pharmacist@gmail.com, pharmacist
+- Dermatologist: cpisuser+dermatologist@gmail.com, dermatologist
+- Supplier: cpisuser+jovica@gmail.com, jovica
+
 ### Help
 
 <details>
