@@ -20,6 +20,14 @@
 - Dermatologist: cpisuser+dermatologist@gmail.com, dermatologist
 - Supplier: cpisuser+jovica@gmail.com, jovica
 
+### Running locally
+#### Backend
+The backend is a Maven SpringBoot application, and can be found in the <i>backend-spring-boot<i> folder. It can be started normally as a Java project in Eclipse or IntelliJ (further details in Help section). Java 11 was used.
+PostgreSQL is needed for the backend. Local satabase connection settings can be found in the <i>application.properties<i> file.
+  
+#### Frontend
+The frontend is a Vue.js application, and can be found in the <i>frontend-vue-js<i> folder. It can be started by running <code>npm install</code> and then <code>npm run serve</code> in the mentioned folder. Further installation details can be found in the Help section and in README.md in <i>frontend-vue-js<i>.
+
 ### Help
 
 <details>
