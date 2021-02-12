@@ -80,6 +80,19 @@ export default {
       {
         title: "Add promotion",
         to: "/pharmacyadmin/promotion"
+      },
+      {
+        title: "My profile",
+        children: [
+          {
+            title: "Personal info",
+            to: "/pharmacyadmin/profile"
+          },
+          {
+            title: "Change password",
+            to: "/pharmacyadmin/password"
+          }
+        ]
       }
     ]
   })

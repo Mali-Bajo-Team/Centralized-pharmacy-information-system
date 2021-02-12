@@ -59,6 +59,7 @@ import Promotion from './../pages/pharmacyadmin/promotions/AddPromotion';
 import DrugsInPharmacy from './../pages/pharmacyadmin/drugs/Container';
 import ViewPredefined from './../pages/pharmacyadmin/consultations/ViewPredefined'
 import AddPredefined from './../pages/pharmacyadmin/consultations/AddPredefined'
+import PAPassword from './../pages/pharmacyadmin/password/ChangePassword'
 
 import Supplier from './../pages/supplier/Container';
 import SupplierLanding from './../pages/supplier/landing/Landing';
@@ -385,6 +386,16 @@ const routes = [
                 component: AddPharmacist,
                 name: 'pharmacyadminpharmacistadd',
                 path: 'pharmacists/add'
+            },
+            {
+                component: SupplierProfile,
+                name: 'pharmacyadminprofile',
+                path: 'profile'
+            },
+            {
+                component: PAPassword,
+                name: 'pharmacyadminpassword',
+                path: 'password'
             }
         ]
     },
