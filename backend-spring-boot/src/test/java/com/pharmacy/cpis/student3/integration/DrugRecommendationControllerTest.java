@@ -58,7 +58,7 @@ public class DrugRecommendationControllerTest {
 	private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
 			MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
 
-	private String pharmacyAdminToken;
+	private String dermatologistAccesToken;
 
 	private MockMvc mockMvc;
 	private Consultant mockDermatologist;
@@ -121,7 +121,7 @@ public class DrugRecommendationControllerTest {
 		ResponseEntity<UserTokenState> jankovicToken = restTemplate.postForEntity("/auth/login",
 				new JwtAuthenticationRequest(LoginConstants.DERMATOLOGIST_EMAIL, LoginConstants.DERMATOLOGIST_PASSWORD),
 				UserTokenState.class);
-		this.pharmacyAdminToken = jankovicToken.getBody().getAccessToken();
+		this.dermatologistAccesToken = jankovicToken.getBody().getAccessToken();
 
 
 	}
@@ -132,13 +132,13 @@ public class DrugRecommendationControllerTest {
 	public void checkDrugAvailableInPharmacyWhereIsConsultation() throws Exception {
 
 		DrugRecommendationDTO drugRecommendationDTO = new DrugRecommendationDTO();
-		drugRecommendationDTO.setDrugCode("amfetamin");
+		drugRecommendationDTO.setDrugCode("aspirin");
 		drugRecommendationDTO.setConsultationID(1L);
 		drugRecommendationDTO.setPatientID(2L);
 		drugRecommendationDTO.setDuration(2);
 
 		this.mockMvc
-				.perform(post(URL_PREFIX).header("Authorization", "Bearer " + pharmacyAdminToken)
+				.perform(post(URL_PREFIX).header("Authorization", "Bearer " + dermatologistAccesToken)
 						.contentType(contentType).content(TestUtil.json(drugRecommendationDTO)))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType(contentType));
