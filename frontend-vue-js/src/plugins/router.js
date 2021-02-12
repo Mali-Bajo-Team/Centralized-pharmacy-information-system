@@ -20,7 +20,7 @@ import EPrescription from './../pages/patient/eprescription/EPrescription';
 import MyEPrescriptions from './../pages/patient/eprescription/MyEPrescriptions';
 import PharmacistSearchPatient from './../pages/patient/consultants/Pharmacists';
 import DermatologistSearchPatient from './../pages/patient/consultants/Dermatologists';
-import PharmacistHistoryPatient from  './../pages/patient/history/Pharmacist';
+import PharmacistHistoryPatient from './../pages/patient/history/Pharmacist';
 import DermatologistHistoryPatient from './../pages/patient/history/Dermatologist';
 import PatientRating from './../pages/patient/rating/ConsultantsRating';
 import PatientPharmaciesRating from './../pages/patient/rating/PharmaciesRating';
@@ -50,7 +50,8 @@ import VacationRequests from './../pages/pharmacyadmin/vacation/Vacation';
 import PharmacistSearch from './../pages/pharmacyadmin/consultants/Pharmacists';
 import DermatologistSearch from './../pages/pharmacyadmin/consultants/Dermatologists';
 import DrugOrders from './../pages/pharmacyadmin/orders/Container';
-import Promotion from './../pages/pharmacyadmin/promotions/AddPromotion'
+import Promotion from './../pages/pharmacyadmin/promotions/AddPromotion';
+import DrugsInPharmacy from './../pages/pharmacyadmin/drugs/Container';
 
 import Supplier from './../pages/supplier/Container';
 import SupplierLanding from './../pages/supplier/landing/Landing';
@@ -164,8 +165,8 @@ const routes = [
             },
             {
                 component: DermatologistHistoryPatient,
-                name : 'historydermatologist',
-                path : 'historydermatologist'
+                name: 'historydermatologist',
+                path: 'historydermatologist'
             },
             {
                 component: PharmacistHistoryPatient,
@@ -310,7 +311,7 @@ const routes = [
             {
                 component: Drugs,
                 name: 'pharmacyadmindrugs',
-                path: 'pharmacyadmindrugs'
+                path: 'alldrugs'
             },
             {
                 component: VacationRequests,
@@ -336,6 +337,11 @@ const routes = [
                 component: Promotion,
                 name: 'addpromotion',
                 path: 'promotion'
+            },
+            {
+                component: DrugsInPharmacy,
+                name: 'drugsinpharmacy',
+                path: 'drugs'
             }
         ]
     },

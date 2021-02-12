@@ -41,4 +41,5 @@ public interface IConsultationService {
 
     void cancelConsultation(PatientCancelConsultationDTO patientCancelConsultationDTO);
 
+    Boolean isConsultantFreeForConsultation(Long consultantId, Long pharmacyID, Date examinationStartDate, Date examinationEndDate);
 }

@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import com.pharmacy.cpis.scheduleservice.dto.AddPredefinedConsultationDTO;
@@ -145,10 +146,13 @@ public class ConsultationController {
 				.isConsultationTimeFitsIntoConsultantWorkingTime(loggedPharmacist.getId(), examinationStartDate,
 						examinationEndDate);
 
+		Boolean isConsultantFreeForConsultation = consultationService.isConsultantFreeForConsultation(
+				scheduleExaminationDTO.getConsultantId(), scheduleExaminationDTO.getPharmacyID(), examinationStartDate, examinationEndDate);
+
 		Boolean isPhatientFreeForConsultation = consultationService.isPhatientFreeForConsultation(
 				scheduleExaminationDTO.getPatientId(), examinationStartDate, examinationEndDate);
 
-		if (isConsultationTimeFitsIntoConsultantWorkingTime && isPhatientFreeForConsultation
+		if (isConsultantFreeForConsultation && isConsultationTimeFitsIntoConsultantWorkingTime && isPhatientFreeForConsultation
 				&& !examinationStartDate.before(new Date())) {
 			consultationService.scheduleConsultation(scheduleExaminationDTO);
 

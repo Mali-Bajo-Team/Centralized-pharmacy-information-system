@@ -12,8 +12,7 @@ public class TimeProvider {
 	}
 
 	public Date currentDate() {
-		Date withTime = currentDateAndTime();
-		return new Date(withTime.getTime() - withTime.getTime() % (24 * 60 * 60 * 1000L));
+		return DateConversionsAndComparisons.getDate(new Date());
 	}
 
 }
