@@ -1,5 +1,7 @@
 package com.pharmacy.cpis.userservice.controller;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -28,6 +30,7 @@ import com.pharmacy.cpis.userservice.service.IPatientRegistrationService;
 import com.pharmacy.cpis.userservice.service.ISupplierService;
 import com.pharmacy.cpis.userservice.service.ISystemAdministratorService;
 import com.pharmacy.cpis.userservice.service.IUserService;
+import com.pharmacy.cpis.util.DateConversionsAndComparisons;
 import com.pharmacy.cpis.util.exceptions.PSConflictException;
 
 // Controller in charge of user authentication
@@ -52,6 +55,16 @@ public class AuthenticationController {
 
     @Autowired
     private ISystemAdministratorService systemAdministratorService;
+    
+    @PostMapping(value ="date", consumes = "application/json")
+    public ResponseEntity<Date> test(@RequestBody Date date){
+    	return ResponseEntity.ok(DateConversionsAndComparisons.getDate(date));
+    }
+    
+    @PostMapping(value ="time", consumes = "application/json")
+    public ResponseEntity<Date> test2(@RequestBody Date date){
+    	return ResponseEntity.ok(DateConversionsAndComparisons.getTime(date));
+    }
 
 	// The first endpoint that affects the user when logging in.
 	// Then he only knows his username and password and forwards it to the backend.

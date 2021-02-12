@@ -6,9 +6,7 @@
         <v-card>
           <!--Toolbar of the card-->
           <v-toolbar color="primary" dark dense flat>
-            <v-toolbar-title class="body-2">
-              Search pharmacies
-            </v-toolbar-title>
+            <v-toolbar-title class="body-2">Search pharmacies</v-toolbar-title>
           </v-toolbar>
 
           <!--End of toolbar of the card-->
@@ -17,53 +15,40 @@
           <v-card-text>
             <v-row no-gutters>
               <v-col>
-                <v-text-field
-                  label="Name of pharmacy"
-                  v-model="searchFieldForName"
-                ></v-text-field>
+                <v-text-field label="Name of pharmacy" v-model="searchFieldForName"></v-text-field>
               </v-col>
             </v-row>
 
-            <v-text-field
-              label="Place of pharmacy"
-              v-model="searchFieldForPlace"
-            ></v-text-field>
+            <v-text-field label="Place of pharmacy" v-model="searchFieldForPlace"></v-text-field>
           </v-card-text>
         </v-card>
         <!--End of search form-->
-        <br /><br />
+        <br />
+        <br />
         <v-card>
           <!--Toolbar of the card-->
           <v-toolbar color="primary" dark dense flat>
-            <v-toolbar-title class="body-2">
-              Filter pharmacies
-            </v-toolbar-title>
+            <v-toolbar-title class="body-2">Filter pharmacies</v-toolbar-title>
           </v-toolbar>
 
           <!--End of toolbar of the card-->
 
           <!--Filter form-->
-          <v-card-title> Filter pharmacies by grade [1-5] </v-card-title>
+          <v-card-title>Filter pharmacies by grade [1-5]</v-card-title>
           <v-card-text>
             <v-row no-gutters>
-              <v-range-slider
-                :tick-labels="marks"
-                class="ml-4 mr-4"
-                v-model="markRange"
-                step="25"
-              ></v-range-slider>
+              <v-range-slider :tick-labels="marks" class="ml-4 mr-4" v-model="markRange" step="25"></v-range-slider>
             </v-row>
           </v-card-text>
         </v-card>
         <!--End of filter form-->
-        <br /><br />
+        <br />
+        <br />
         <!-- Sorting pharmacies -->
         <v-card class="mt-5">
           <!--Toolbar of the card-->
           <v-toolbar color="primary" dark dense flat>
-            <v-toolbar-title class="body-2">
-              Sort pharmacies 
-            </v-toolbar-title>
+            <v-toolbar-title class="body-2">Sort pharmacies</v-toolbar-title>
           </v-toolbar>
           <!--End of toolbar of the card-->
           <v-form class="ma-4 ml-2">
@@ -77,7 +62,7 @@
                 @click="sortBy('name')"
               >
                 Name
-                <v-icon small right dark> mdi-arrow-up-bold </v-icon>
+                <v-icon small right dark>mdi-arrow-up-bold</v-icon>
               </v-btn>
               <v-btn
                 small
@@ -87,7 +72,7 @@
                 @click="sortDownBy('name')"
               >
                 Name
-                <v-icon small right dark> mdi-arrow-down-bold </v-icon>
+                <v-icon small right dark>mdi-arrow-down-bold</v-icon>
               </v-btn>
             </v-row>
             <!-- End of the sort by pharmacy name -->
@@ -101,7 +86,7 @@
                 @click="sortBy('location')"
               >
                 Location
-                <v-icon small right dark> mdi-arrow-up-bold </v-icon>
+                <v-icon small right dark>mdi-arrow-up-bold</v-icon>
               </v-btn>
               <v-btn
                 small
@@ -111,11 +96,11 @@
                 @click="sortDownBy('location')"
               >
                 Location
-                <v-icon small right dark> mdi-arrow-down-bold </v-icon>
+                <v-icon small right dark>mdi-arrow-down-bold</v-icon>
               </v-btn>
             </v-row>
             <!-- End of the sort by location -->
-             <!-- Sort by rating -->
+            <!-- Sort by rating -->
             <v-row justify="center" class="pa-3">
               <v-btn
                 small
@@ -125,7 +110,7 @@
                 @click="sortBy('rating')"
               >
                 Rating
-                <v-icon small right dark> mdi-arrow-up-bold </v-icon>
+                <v-icon small right dark>mdi-arrow-up-bold</v-icon>
               </v-btn>
               <v-btn
                 small
@@ -135,7 +120,7 @@
                 @click="sortDownBy('rating')"
               >
                 Rating
-                <v-icon small right dark> mdi-arrow-down-bold </v-icon>
+                <v-icon small right dark>mdi-arrow-down-bold</v-icon>
               </v-btn>
             </v-row>
             <!-- End of the sort by ratings -->
@@ -156,13 +141,12 @@
           <v-row>
             <v-col>
               <v-card-title>
-                {{ pharmacy.name }}
+                <h2>{{ pharmacy.name }}</h2>
               </v-card-title>
 
               <v-card-text>
                 <v-chip color="primary">
-                  <v-icon color="secondary"> mdi-map-marker </v-icon>
-
+                  <v-icon color="secondary">mdi-map-marker</v-icon>
                   {{ pharmacy.location }}
                 </v-chip>
               </v-card-text>
@@ -176,8 +160,7 @@
                   background-color="accent "
                   half-increments
                   readonly
-                >
-                </v-rating>
+                ></v-rating>
               </v-card-title>
             </v-col>
           </v-row>
@@ -195,7 +178,7 @@ export default {
     searchFieldForPlace: "",
     searchFieldForName: "",
     markRange: [0, 100],
-    marks: ["1", "2", "3", "4", "5"],
+    marks: ["1", "2", "3", "4", "5"]
   }),
   mounted() {
     this.axios
@@ -203,7 +186,7 @@ export default {
         process.env.VUE_APP_BACKEND_URL +
           process.env.VUE_APP_PHARMACIES_ENDPOINT
       )
-      .then((resp) => {
+      .then(resp => {
         this.pharmacies = resp.data;
       });
   },
@@ -236,14 +219,14 @@ export default {
       if (pharmacy.rating < minMark || pharmacy.rating > maxMark) return false;
 
       return true;
-    },
+    }
   },
   computed: {
-    filteredPharmacies: function () {
-      return this.pharmacies.filter((pharmacy) => {
+    filteredPharmacies: function() {
+      return this.pharmacies.filter(pharmacy => {
         return this.isMatchedPharmacy(pharmacy);
       });
-    },
-  },
+    }
+  }
 };
 </script>

@@ -44,7 +44,7 @@
             :disabled="performingAction"
             @click="viewOffers()"
           >View offers</v-btn>
-          <v-progress-circular class="ml-4" indeterminate color="primary" v-show="performingAction"></v-progress-circular>
+          <v-progress-circular class="ml-4" indeterminate color="primary" v-show="performingAction && !offerDialog"></v-progress-circular>
         </v-card-actions>
       </v-card>
     </v-lazy>
