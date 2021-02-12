@@ -40,6 +40,8 @@ public class PatientProfileDTO {
     @NotEmpty(message = "User category is required.")
     private UserCategoryDTO userCategoryDTO;
 
+    private Integer penalties;
+
     private List<DrugDTO> allergies;
 
     public PatientProfileDTO() {
@@ -57,11 +59,12 @@ public class PatientProfileDTO {
         this.setEmail(patientEmail);
         this.setUserCategoryDTO(new UserCategoryDTO(loyaltyProgramService.findUserCategoryByLoyaltyPoints(patient.getLoyaltyPoints())));
         this.setAllergiesWithSet(patient.getAllergies());
+        this.setPenalties(patient.getPenalties());
 
     }
 
     public PatientProfileDTO(String name, String surname, String phoneNumber, String address, String city, String country, String email, Integer loyaltyPoints,
-                             UserCategoryDTO userCategoryDTO, List<DrugDTO> allergies) {
+                             UserCategoryDTO userCategoryDTO, List<DrugDTO> allergies, Integer penalties) {
         this.name = name;
         this.surname = surname;
         this.phoneNumber = phoneNumber;
@@ -72,6 +75,7 @@ public class PatientProfileDTO {
         this.loyaltyPoints = loyaltyPoints;
         this.userCategoryDTO = userCategoryDTO;
         this.allergies = allergies;
+        this.penalties = penalties;
     }
 
     public List<DrugDTO> getAllergies() {
@@ -160,5 +164,13 @@ public class PatientProfileDTO {
 
     public void setUserCategoryDTO(UserCategoryDTO userCategoryDTO) {
         this.userCategoryDTO = userCategoryDTO;
+    }
+
+    public Integer getPenalties() {
+        return penalties;
+    }
+
+    public void setPenalties(Integer penalties) {
+        this.penalties = penalties;
     }
 }
