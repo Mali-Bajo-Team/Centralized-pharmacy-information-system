@@ -29,16 +29,14 @@ import com.pharmacy.cpis.userservice.service.ILoyaltyProgramService;
 import com.pharmacy.cpis.util.DateConversionsAndComparisons;
 import com.pharmacy.cpis.util.exceptions.PSBadRequestException;
 import com.pharmacy.cpis.util.exceptions.PSNotFoundException;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ReservationService implements IReservationService {
@@ -277,4 +275,8 @@ public class ReservationService implements IReservationService {
         return new Pharmacy();
     }
 
+    @Override
+    public Set<Reservation> getUnclaimedReservationsForDate(LocalDate date) {
+        return reservationRepository.getUnclaimedReservationsForDate(date.getYear(), date.getMonthOfYear(), date.getDayOfMonth());
+    }
 }

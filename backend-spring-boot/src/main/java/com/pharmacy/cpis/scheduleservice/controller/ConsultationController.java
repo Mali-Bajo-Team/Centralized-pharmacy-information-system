@@ -9,6 +9,8 @@ import java.util.concurrent.TimeUnit;
 import javax.validation.Valid;
 
 import com.pharmacy.cpis.drugservice.dto.DrugReservationDTO;
+import com.pharmacy.cpis.pharmacyservice.dto.PharmacyDetailsDTO;
+import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
 import com.pharmacy.cpis.scheduleservice.dto.*;
 import com.pharmacy.cpis.userservice.dto.PatientEmailDTO;
 import com.pharmacy.cpis.userservice.model.users.ConsultantType;
@@ -251,7 +253,7 @@ public class ConsultationController {
 	}
 
 	@PostMapping(value = "/patient/dermatologist/history")
-	//@PreAuthorize("hasRole('PATIENT')")
+	@PreAuthorize("hasRole('PATIENT')")
 	public ResponseEntity<List<ConsultationDTO>> findAllFinishedDermatologistConsultationByPatientAndStatus(@RequestBody PatientEmailDTO patientEmailDTO){
 		List<ConsultationDTO> consultations = new ArrayList<>();
 		for(Consultation consultation : consultationService.findAllConsultationByPatientAndStatus(patientEmailDTO, ConsultationStatus.FINISHED, ConsultantType.DERMATOLOGIST)){
@@ -271,7 +273,7 @@ public class ConsultationController {
 	}
 
 	@PostMapping(value = "/patient/pharmacist/history")
-	//@PreAuthorize("hasRole('PATIENT')")
+	@PreAuthorize("hasRole('PATIENT')")
 	public ResponseEntity<List<ConsultationDTO>> findAllFinishedPharmacistConsultationByPatientAndStatus(@RequestBody PatientEmailDTO patientEmailDTO){
 		List<ConsultationDTO> consultations = new ArrayList<>();
 		for(Consultation consultation : consultationService.findAllConsultationByPatientAndStatus(patientEmailDTO, ConsultationStatus.FINISHED, ConsultantType.PHARMACIST)){
@@ -286,5 +288,14 @@ public class ConsultationController {
 		consultationService.cancelConsultation(patientCancelConsultationDTO);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+
+	@GetMapping("/reserve/{id}")
+	@PreAuthorize("hasRole('PATIENT')")
+	public ResponseEntity<Void> reserveConsultationById(@PathVariable(required = true) Long id,
+															  Authentication authentication) {
+		consultationService.updateConsultation(id,authentication.getName());
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
 
 }

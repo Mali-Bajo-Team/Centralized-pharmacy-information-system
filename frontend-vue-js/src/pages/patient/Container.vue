@@ -72,16 +72,8 @@ export default {
       },
       {
         title: "Schedulling",
-        children: [
-          {
-            title: "Consultations",
-            to : "/patient/schedullingconsultations",
-          },
-          { 
-            title:"Examinations",
-            to: "/patient/schedullingexaminations",
-          }
-        ]
+        to : "/patient/schedullingconsultations",
+        
       },
 
       {

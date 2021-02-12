@@ -119,7 +119,7 @@
         <v-card-actions>
           <v-btn
             color="success"
-            @click="schedule(consultation.id)"
+            @click="schedule(consultation)"
             :disabled="performingAction"
           >Schedule</v-btn>
         </v-card-actions>
@@ -200,8 +200,35 @@ export default {
     sortDownBy(prop) {
       this.consultations.sort((a, b) => (a[prop] > b[prop] ? -1 : 1));
     },
-    schedule: function(id) {
-      console.log(id);
+    schedule: function(consultation) {
+      this.performingAction=true;
+      this.axios
+        .get(process.env.VUE_APP_BACKEND_URL+ process.env.VUE_APP_PATIENT_RESERVE_CONSULATION_ENDPOINT +
+            "/" +
+            consultation.id, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("JWT-CPIS")
+          }
+        })
+        .then(() => {
+          this.load();
+          this.performingAction=false;
+          this.snackbarText="Successfully scheduled.";
+          this.snackbar=true;
+          
+        })
+        .catch(error => {
+          if (
+            error.response &&
+            error.response.data &&
+            error.response.data.message
+          )
+            this.snackbarText = error.response.data.message;
+          else if (error.message) this.snackbarText = error.message;
+          else this.snackbarText = "An unknown error has occured.";
+          this.snackbar = true;
+        });
+
     }
   }
 };
