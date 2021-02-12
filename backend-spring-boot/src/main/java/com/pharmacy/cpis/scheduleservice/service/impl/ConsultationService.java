@@ -303,7 +303,9 @@ public class ConsultationService implements IConsultationService {
             if (consultantWorkingTimes.getConsultant().getType() != ConsultantType.PHARMACIST) // we only need pharmacist
                 continue;
             if (isConsultantFreeForConsultation(consultantWorkingTimes.getConsultant().getId(), pharmacy.getId(), examinationStartDate, examinationEndDate)) {
-                freeConsultants.add(consultantWorkingTimes.getConsultant());
+                if(workingTimesService.isConsultationTimeFitsIntoConsultantWorkingTime(consultantWorkingTimes.getConsultant().getId(),examinationStartDate,examinationEndDate)){
+                    freeConsultants.add(consultantWorkingTimes.getConsultant());
+                }
             }
         }
         return freeConsultants;
