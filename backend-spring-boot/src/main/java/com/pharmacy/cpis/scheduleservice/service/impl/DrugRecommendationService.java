@@ -29,6 +29,7 @@ import com.pharmacy.cpis.userservice.service.ILoyaltyProgramService;
 import com.pharmacy.cpis.userservice.service.IPatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -61,6 +62,7 @@ public class DrugRecommendationService implements IDrugRecommendationService {
     @Autowired
     private IPatientRepository patientRepository;
     @Override
+    @Transactional
     public DrugRecommendationDTO recommendDrug(DrugRecommendationDTO drugRecommendationDTO) {
         Consultation consultation = consultationRepository.getOne(drugRecommendationDTO.getConsultationID());
 
@@ -78,8 +80,12 @@ public class DrugRecommendationService implements IDrugRecommendationService {
 
         drugRecommendationRepository.save(drugRecommendation);
 
-        consultation.setStatus(ConsultationStatus.FINISHED);
-        consultationRepository.save(consultation);
+
+        if(consultation.getStatus().equals(ConsultationStatus.SCHEDULED)){
+            consultation.setStatus(ConsultationStatus.FINISHED);
+            consultationRepository.save(consultation);
+        }
+
 
         availableDrugService.updateAmount(consultation.getPharmacy().getId(),drugRecommendationDTO.getDrugCode(),1);
 

@@ -235,6 +235,7 @@ public class AvailableDrugService implements IAvailableDrugService {
 	}
 
 	@Override
+    @Transactional
 	public AvailableDrug updateAmount(Long pharmacyId, String drugCode, Integer amount) {
 		AvailableDrug availableDrug = availableDrugRepository.findByPharmacyIdAndDrugCode(pharmacyId, drugCode)
 				.orElse(null);
