@@ -16,4 +16,7 @@ public class WorkingTimesConstants {
 
 	public static final Date WT_NOT_OVERLAPPING_END = new Date(1612983600000L); // 19:00
 
+	public static final Date WT_OVERLAPPING_BEFORE_WORKING_TIME_START = new Date(1612933200000L); // 05:00
+
+	public static final Date WT_OVERLAPPING_BEFORE_WORKING_TIME_END = new Date(1612936800000L); // 06:00
 }

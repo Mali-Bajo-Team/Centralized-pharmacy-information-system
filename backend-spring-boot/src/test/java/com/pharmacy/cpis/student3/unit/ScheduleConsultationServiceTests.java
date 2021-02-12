@@ -136,7 +136,7 @@ public class ScheduleConsultationServiceTests {
 	@Test()
 	@Transactional
 	@Rollback(true)
-	public void scheduleConsultationFailsWhenOverlappingDermatologistWorkingTime() {
+	public void checkOverlappingDermatologistWorkingTimeAfterWorkingTime() {
 		Mockito.when(pharmacyRepositoryMock.findById(2L)).thenReturn(Optional.of(mockPharmacy));
 		Mockito.when(consultantRepositoryMock.findLockedById(1L)).thenReturn(Optional.of(mockDermatologist));
 
@@ -150,7 +150,21 @@ public class ScheduleConsultationServiceTests {
 	@Test()
 	@Transactional
 	@Rollback(true)
-	public void scheduleConsultationFailsWhenOverlappingPatientScheduledExamination() {
+	public void checkOverlappingDermatologistWorkingTimeBeforeWorkingTime() {
+		Mockito.when(pharmacyRepositoryMock.findById(2L)).thenReturn(Optional.of(mockPharmacy));
+		Mockito.when(consultantRepositoryMock.findLockedById(1L)).thenReturn(Optional.of(mockDermatologist));
+
+		Boolean result = consultationServiceMock.isConsultantFreeForConsultation(1L,1L,WT_OVERLAPPING_BEFORE_WORKING_TIME_START ,WT_OVERLAPPING_BEFORE_WORKING_TIME_END);
+
+		Mockito.verify(workingTimesRepositoryMock, Mockito.never()).save(Mockito.any());
+
+		assertEquals(false, result);
+	}
+
+	@Test()
+	@Transactional
+	@Rollback(true)
+	public void checkOverlappingPatientScheduledExamination() {
 		Mockito.when(pharmacyRepositoryMock.findById(2L)).thenReturn(Optional.of(mockPharmacy));
 		Mockito.when(consultantRepositoryMock.findLockedById(1L)).thenReturn(Optional.of(mockDermatologist));
 
