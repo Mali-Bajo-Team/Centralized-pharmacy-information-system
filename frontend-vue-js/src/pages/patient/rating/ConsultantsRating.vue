@@ -12,19 +12,23 @@
           <v-card-text>
             <v-form>
               <v-select
-                :items="consultants"
+                v-model="createRatingDTO.consultantId"
+                :items="availableConsultantsForRating"
+                item-text="email"
+                item-value="consultantId"
                 label="Select consultant you want to rate"
               ></v-select>
               <v-rating
+                v-model="createRatingDTO.rating"
                 background-color="accent lighten-3"
                 color="accent"
                 medium
               ></v-rating>
               <v-btn
-                
                 width="110px"
                 color="primary"
                 class="ma-2 white--text mr-6"
+                @click="makeNewRating()"
               >
                 Rate
                 <v-icon small right dark> mdi-star </v-icon>
@@ -134,14 +138,41 @@
 import { getParsedToken } from "./../../../util/token";
 export default {
   data: () => ({
+    availableConsultantsForRating: [],
     consultantsRated: [],
-    consultants: ["Ana Perisic", "Vladislav Maksimovic"],
     updateRatingDTO: {
       id: 0,
       newRating: 1,
     },
+    createRatingDTO: {
+      patientEmail: getParsedToken().sub,
+      consultantId: 0,
+      rating: 3,
+    },
   }),
   mounted() {
+    // get available pharmacies for rating
+    this.axios
+      .post(
+        process.env.VUE_APP_BACKEND_URL +
+          process.env.VUE_APP_PATIENT_CONSULTANTS_ENDPOINT,
+        {
+          email: getParsedToken().sub,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+          },
+        }
+      )
+      .then((resp) => {
+        this.availableConsultantsForRating = resp.data;
+      })
+      .catch((error) => {
+        alert(error);
+      });
+
+    // get rated consultants
     this.axios
       .post(
         process.env.VUE_APP_BACKEND_URL +
@@ -163,9 +194,36 @@ export default {
       });
   },
   methods: {
+    makeNewRating() {
+      for (let consultant of this.consultantsRated) {
+        if (consultant.consultantId == this.createRatingDTO.consultantId) {
+          alert("You have already made a rating for that consultant");
+          return;
+        }
+      }
+
+      this.axios
+        .post(
+          process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_PATIENT_CREATE_CONSULTANT_RATING_ENDPOINT,
+          this.createRatingDTO,
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then((resp) => {
+          alert("Successfully created rating for consultant.");
+          this.consultantsRated.push(resp.data);
+        })
+        .catch((error) => {
+          alert(error);
+        });
+    },
     setUpdateDTO(consultantRated) {
-      this.updateRatingDTO.id=consultantRated.id;
-      this.updateRatingDTO.newRating=consultantRated.rating;
+      this.updateRatingDTO.id = consultantRated.id;
+      this.updateRatingDTO.newRating = consultantRated.rating;
     },
     confirmNewRate() {
       this.axios
@@ -174,8 +232,7 @@ export default {
             process.env.VUE_APP_PATIENT_CHANGE_RATING_CONSULTANTS_ENDPOINT,
           {
             newRating: this.updateRatingDTO.newRating,
-            id: this.updateRatingDTO.id
-
+            id: this.updateRatingDTO.id,
           },
           {
             headers: {
@@ -186,8 +243,8 @@ export default {
         .then((resp) => {
           console.log(resp.data);
           alert("Successfully confirmed!");
-          for(let consultantRate of this.consultantsRated){
-            if(consultantRate.id == this.updateRatingDTO.id){
+          for (let consultantRate of this.consultantsRated) {
+            if (consultantRate.id == this.updateRatingDTO.id) {
               consultantRate.rating = resp.data.rating;
               break;
             }
