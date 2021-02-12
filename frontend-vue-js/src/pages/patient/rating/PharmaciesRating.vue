@@ -12,10 +12,14 @@
           <v-card-text>
             <v-form>
               <v-select
-                :items="pharmacies"
+                v-model="createRatingDTO.pharmacyId"
+                :items="availablePharmacyForRating"
+                item-text="name"
+                item-value="id"
                 label="Select pharmacy you want to rate"
               ></v-select>
               <v-rating
+                v-model="createRatingDTO.rating"
                 background-color="accent lighten-3"
                 color="accent"
                 medium
@@ -133,7 +137,7 @@
 import { getParsedToken } from "./../../../util/token";
 export default {
   data: () => ({
-    pharmaciesRated: [],
+    pharmaciesRated: [], // TODO: from available remove this already rated ones
     pharmacies: ["Ana Perisic", "Vladislav Maksimovic"],
     updateRatingDTO: {
       id: 0,
@@ -141,11 +145,32 @@ export default {
     },
     createRatingDTO: {
       pharmacyId: 0,
-      rating: 1,
-      patientEmail: "",
+      rating: 3,
+      patientEmail: getParsedToken().sub,
     },
+    availablePharmacyForRating: [],
   }),
   mounted() {
+    this.axios
+      .post(
+        process.env.VUE_APP_BACKEND_URL +
+          process.env.VUE_APP_PATIENT_PHARMACIES_ENDPOINT,
+        {
+          email: getParsedToken().sub,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+          },
+        }
+      )
+      .then((resp) => {
+        this.availablePharmacyForRating = resp.data;
+      })
+      .catch((error) => {
+        alert(error);
+      });
+
     this.axios
       .post(
         process.env.VUE_APP_BACKEND_URL +
@@ -172,22 +197,27 @@ export default {
       this.updateRatingDTO.newRating = pharmacyRated.rating;
     },
     makeNewRating() {
+      for(let pharmacy of this.pharmaciesRated){
+        if(pharmacy.pharmacyId == this.createRatingDTO.pharmacyId){
+          alert("You have already made a rating for thath pharmacy");
+          return;
+        }
+      }
       this.axios
         .post(
           process.env.VUE_APP_BACKEND_URL +
-            process.env.VUE_APP_PATIENT_CHANGE_RATING_PHARMACIES_ENDPOINT,
-          {
-            patientEmail: "cpisuser+dragana@gmail.com",
-            rating: 4,
-            pharmacyId: 2,
-          },
+            process.env.VUE_APP_PATIENT_CREATE_PHARMACY_RATING_ENDPOINT,
+          this.createRatingDTO,
           {
             headers: {
               Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
             },
           }
         )
-        .then(() => {})
+        .then((resp) => {
+          alert("Successfully created rating for pharmacy.");
+          this.pharmaciesRated.push(resp.data);
+        })
         .catch((error) => {
           alert(error);
         });

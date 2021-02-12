@@ -96,6 +96,7 @@ public class RatingService implements IRatingService {
         Rating rating = new Rating();
         rating.setRating(pharmacyRatingCreateDTO.getRating());
         Long patientId = userRepository.findByEmail(pharmacyRatingCreateDTO.getPatientEmail()).getPerson().getId();
+        if(patientId == null) throw new PSNotFoundException("No patient with that id");
         Patient patient = patientRepository.findById(patientId).orElse(null);
         if(patient == null) throw new PSNotFoundException("Not found that patient");
         Pharmacy pharmacy = pharmacyRepository.findById(pharmacyRatingCreateDTO.getPharmacyId()).orElse(null);
