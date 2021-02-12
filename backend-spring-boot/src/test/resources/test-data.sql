@@ -146,6 +146,7 @@ insert into consultation (price,status,start_date,end_date,consultant_id,patient
 insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id,version) values (30,1,'2021-02-05 13:23','2021-02-05 14:00',9,4,2,0);
 insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id,version) values (30,1,'2021-03-05 13:23','2021-03-05 14:00',9,2,2,0);
 insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id,version) values (30,3,'2021-02-26 13:23','2021-02-26 14:00',9,2,1,0);
+insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id,version) values (30,1,'2021-02-17 13:00','2021-02-17 14:00',9,2,2,0);
 
 insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 1);
 insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 2);
