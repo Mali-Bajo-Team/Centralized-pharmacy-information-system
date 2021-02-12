@@ -135,8 +135,7 @@ public class DrugRecommendationControllerTest {
 		scheduleExaminationDTO.setEndDate("2021-02-26 14:00:00");
 		scheduleExaminationDTO.setPharmacyID(1L);
 		scheduleExaminationDTO.setPredefinedConsultationID(8L);
-
-
+		
 		this.mockMvc
 				.perform(post(URL_PREFIX_SCHEDULE_EXAMIANTION).header("Authorization", "Bearer " + dermatologistAccesToken)
 						.contentType(contentType).content(TestUtil.json(scheduleExaminationDTO)))
