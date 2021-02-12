@@ -80,6 +80,7 @@ public class ConsultationService implements IConsultationService {
 	}
 
 	@Override
+	@Transactional
 	public Consultation scheduleConsultation(ScheduleExaminationDTO consultation) {
 
 		DateRange consultationDataRange = new DateRange();
