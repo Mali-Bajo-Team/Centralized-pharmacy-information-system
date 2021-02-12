@@ -1,8 +1,13 @@
 <template >
   <v-card width="600px" class="mx-auto ma-5">
-    <v-card-title class="ml-8"
-      >{{ supplier.name }} {{ supplier.surname }}
-    </v-card-title>
+    <v-snackbar v-model="snackbar" :timeout="2000" bottom class="mb-5" right>
+      {{ snackbarText }}
+      <template v-slot:action="{ attrs }">
+        <v-btn color="primary" text v-bind="attrs" @click="snackbar = false">Close</v-btn>
+      </template>
+    </v-snackbar>
+
+    <v-card-title class="ml-8">{{ supplier.name }} {{ supplier.surname }}</v-card-title>
     <v-row class="ma-5" align="end">
       <!-- Base information -->
       <v-col xl="8" md="8" sm="12">
@@ -10,25 +15,29 @@
           <!--Username-->
           <v-icon class="mr-3" color="primary">mdi-account</v-icon>
           {{ supplierEmail }}
-          <br /><br />
+          <br />
+          <br />
 
           <!--Adress-->
-          <v-icon class="mr-3" color="primary"> mdi-map-marker </v-icon>
+          <v-icon class="mr-3" color="primary">mdi-map-marker</v-icon>
           {{ supplier.address }}
-          <br /><br />
+          <br />
+          <br />
 
           <!--City-->
           <v-icon class="mr-3" color="primary">mdi-city</v-icon>
           {{ supplier.city }}
-          <br /><br />
+          <br />
+          <br />
 
           <!--Country-->
           <v-icon class="mr-3" color="primary">mdi-map</v-icon>
           {{ supplier.country }}
-          <br /><br />
+          <br />
+          <br />
 
           <!--Phone nubmer-->
-          <v-icon class="mr-3" color="primary"> mdi-phone-classic </v-icon>
+          <v-icon class="mr-3" color="primary">mdi-phone-classic</v-icon>
           {{ supplier.phone }}
         </v-card-text>
       </v-col>
@@ -48,40 +57,24 @@
               v-on="on"
               @click="setSupplierFormDTO(supplier)"
             >
-              <v-icon dark> mdi-pencil </v-icon>
+              <v-icon dark>mdi-pencil</v-icon>
             </v-btn>
           </template>
           <!-- Dialog form -->
           <v-card>
             <v-toolbar color="primary" dark dense flat>
-              <v-toolbar-title class="body-2">
-                Change your personal information
-              </v-toolbar-title>
+              <v-toolbar-title class="body-2">Change your personal information</v-toolbar-title>
             </v-toolbar>
             <!-- Content -->
             <v-card-text>
-              <br /><br />
+              <br />
+              <br />
               <v-form>
-                <v-text-field
-                  label="Change your name "
-                  v-model="supplierFormDTO.name"
-                ></v-text-field>
-                <v-text-field
-                  label="Change your surname "
-                  v-model="supplierFormDTO.surname"
-                ></v-text-field>
-                <v-text-field
-                  label="Change your address"
-                  v-model="supplierFormDTO.address"
-                ></v-text-field>
-                <v-text-field
-                  label="Change your city"
-                  v-model="supplierFormDTO.city"
-                ></v-text-field>
-                <v-text-field
-                  label="Change your country"
-                  v-model="supplierFormDTO.country"
-                ></v-text-field>
+                <v-text-field label="Change your name " v-model="supplierFormDTO.name"></v-text-field>
+                <v-text-field label="Change your surname " v-model="supplierFormDTO.surname"></v-text-field>
+                <v-text-field label="Change your address" v-model="supplierFormDTO.address"></v-text-field>
+                <v-text-field label="Change your city" v-model="supplierFormDTO.city"></v-text-field>
+                <v-text-field label="Change your country" v-model="supplierFormDTO.country"></v-text-field>
                 <v-text-field
                   type="number"
                   label="Change your phone number"
@@ -94,16 +87,10 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="success" dark depressed @click="confirmChanges()">
-                <v-icon dark left> mdi-checkbox-marked-circle </v-icon>
-                Confirm
+                <v-icon dark left>mdi-checkbox-marked-circle</v-icon>Confirm
               </v-btn>
-              <v-btn
-                color="red lighten-3"
-                dark
-                depressed
-                @click="showEditDialog = !showEditDialog"
-                ><v-icon dark left> mdi-minus-circle </v-icon>
-                Close
+              <v-btn color="red lighten-3" dark depressed @click="showEditDialog = !showEditDialog">
+                <v-icon dark left>mdi-minus-circle</v-icon>Close
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -117,6 +104,8 @@
 import { getParsedToken } from "./../../../util/token";
 export default {
   data: () => ({
+    snackbar: false,
+    snackbarText: "",
     showEditDialog: false,
     supplier: {},
     patient: {},
@@ -126,13 +115,13 @@ export default {
       address: "",
       city: "",
       country: "",
-      phone: "",
+      phone: ""
     },
     rules: {
-      required: (value) => !!value || "Required.",
-      min: (v) => v.length >= 8 || "Min 8 characters",
+      required: value => !!value || "Required.",
+      min: v => v.length >= 8 || "Min 8 characters"
     },
-    supplierEmail: getParsedToken().sub,
+    supplierEmail: getParsedToken().sub
   }),
   methods: {
     setSupplierFormDTO(supplier) {
@@ -151,15 +140,28 @@ export default {
           this.supplierFormDTO,
           {
             headers: {
-              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
-            },
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS")
+            }
           }
         )
-        .then((resp) => {
-          alert("Success changed supplier information");
+        .then(resp => {
           this.supplier = resp.data;
+          this.snackbarText = "Profile successfully updated."
+          this.snackbar = true;
+          this.showEditDialog = false;
+        }).catch(error => {
+          if (
+            error.response &&
+            error.response.data &&
+            error.response.data.message
+          )
+            this.snackbarText = error.response.data.message;
+          else if (error.message) this.snackbarText = error.message;
+          else this.snackbarText = "An unknown error has occured.";
+          this.loading = false;
+          this.snackbar = true;
         });
-    },
+    }
   },
   mounted() {
     this.axios
@@ -167,14 +169,25 @@ export default {
         process.env.VUE_APP_BACKEND_URL + process.env.VUE_APP_PROFILE_ENDPOINT,
         {
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
-          },
+            Authorization: "Bearer " + localStorage.getItem("JWT-CPIS")
+          }
         }
       )
-      .then((resp) => {
-        // alert("success");
+      .then(resp => {
         this.supplier = resp.data;
+      })
+      .catch(error => {
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.message
+        )
+          this.snackbarText = error.response.data.message;
+        else if (error.message) this.snackbarText = error.message;
+        else this.snackbarText = "An unknown error has occured.";
+        this.loading = false;
+        this.snackbar = true;
       });
-  },
+  }
 };
 </script>

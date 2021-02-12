@@ -124,8 +124,8 @@ public class PharmacyEmployeeServiceTests {
 		EmployDermatologistDTO details = new EmployDermatologistDTO();
 		details.setDermatologistId(1L);
 		details.setWorkingTimes(new AddWorkingTimeDTO());
-		details.getWorkingTimes().setMonday(new AddWorkingDayDTO(WorkingTimesConstants.WT_OVERLAPPING_START,
-				WorkingTimesConstants.WT_OVERLAPPING_END));
+		details.getWorkingTimes().setMonday(new AddWorkingDayDTO(WorkingTimesConstants.WT_START,
+				WorkingTimesConstants.WT_END));
 
 		pharmacyEmployeService.employDermatologist(2L, details);
 
