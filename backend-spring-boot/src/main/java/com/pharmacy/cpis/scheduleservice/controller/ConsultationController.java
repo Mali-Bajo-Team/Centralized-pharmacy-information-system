@@ -18,6 +18,7 @@ import com.pharmacy.cpis.userservice.model.users.ConsultantType;
 import com.pharmacy.cpis.scheduleservice.repository.IConsultationRepository;
 import com.pharmacy.cpis.userservice.dto.ConsultantPredefinedExamDTO;
 
+import com.pharmacy.cpis.util.aspects.PatientAccountPenalties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -154,6 +155,7 @@ public class ConsultationController {
 
 	@PostMapping("/scheduleconsultation")
 	@PreAuthorize("hasRole('PHARMACIST') || hasRole('DERMATOLOGIST') || hasRole('PATIENT')")
+	@PatientAccountPenalties
 	public ResponseEntity<ScheduleExaminationDTO> scheduleConsultation(
 			@RequestBody ScheduleExaminationDTO scheduleExaminationDTO) throws InterruptedException {
 
@@ -233,6 +235,7 @@ public class ConsultationController {
 
 	@GetMapping(value = "/predefined/pharmacy/{id}")
 	@PreAuthorize("hasRole('PATIENT')")
+
 	public ResponseEntity<Collection<ConsultationDTO>> getPredefinedByPharmacy(@PathVariable(required = true) Long id) {
 		Collection<Consultation> consultations = consultationService.findByPharmacyAndStatus(id,
 				ConsultationStatus.PREDEFINED);
@@ -291,6 +294,7 @@ public class ConsultationController {
 
 	@GetMapping("/reserve/{id}")
 	@PreAuthorize("hasRole('PATIENT')")
+	@PatientAccountPenalties
 	public ResponseEntity<Void> reserveConsultationById(@PathVariable(required = true) Long id,
 															  Authentication authentication) {
 		consultationService.updateConsultation(id,authentication.getName());
