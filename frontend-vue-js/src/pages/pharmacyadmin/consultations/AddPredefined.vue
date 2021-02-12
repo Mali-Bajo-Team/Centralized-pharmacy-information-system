@@ -124,7 +124,7 @@
             </v-stepper-content>
 
             <v-stepper-step :complete="e6 > 5" step="5">
-              Choose end time
+              Choose price
               <br />
               <small>optional</small>
             </v-stepper-step>
