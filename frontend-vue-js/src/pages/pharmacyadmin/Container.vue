@@ -87,7 +87,16 @@ export default {
       },
       {
         title: "My profile",
-        to: "/pharmacyadmin/profile"
+        children: [
+          {
+            title: "Personal info",
+            to: "/pharmacyadmin/profile"
+          },
+          {
+            title: "Change password",
+            to: "/pharmacyadmin/password"
+          }
+        ]
       }
     ]
   })

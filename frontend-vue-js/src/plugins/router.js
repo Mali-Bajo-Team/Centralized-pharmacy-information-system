@@ -60,6 +60,7 @@ import Promotion from './../pages/pharmacyadmin/promotions/AddPromotion';
 import DrugsInPharmacy from './../pages/pharmacyadmin/drugs/Container';
 import ViewPredefined from './../pages/pharmacyadmin/consultations/ViewPredefined'
 import AddPredefined from './../pages/pharmacyadmin/consultations/AddPredefined'
+import PAPassword from './../pages/pharmacyadmin/password/ChangePassword'
 
 import Supplier from './../pages/supplier/Container';
 import SupplierLanding from './../pages/supplier/landing/Landing';
@@ -199,18 +200,18 @@ const routes = [
             },
             {
                 component: PatientDrugsRating,
-                name : 'ratingdrugs',
-                path : 'ratingdrugs'
+                name: 'ratingdrugs',
+                path: 'ratingdrugs'
             },
             {
                 component: PatientSchedullingConsultations,
-                name : 'schedullingconsultations',
-                path : 'schedullingconsultations'
+                name: 'schedullingconsultations',
+                path: 'schedullingconsultations'
             },
             {
                 component: PatientSchedullingExaminations,
-                name : 'schedullingexaminations',
-                path : 'schedullingexaminations'
+                name: 'schedullingexaminations',
+                path: 'schedullingexaminations'
             }
         ]
     },
@@ -396,6 +397,11 @@ const routes = [
                 component: AddDrugOrder,
                 name: 'adddrugorder',
                 path: 'orders/add'
+            },
+            {
+                component: PAPassword,
+                name: 'pharmacyadminpassword',
+                path: 'password'
             }
         ]
     },

@@ -63,7 +63,7 @@
 
             <v-stepper-step :complete="e6 > 3" step="3">Confirm</v-stepper-step>
             <v-stepper-content step="3">
-              <v-btn :disabled="performingAction" color="success" @click="schedule">Order</v-btn>
+              <v-btn :disabled="performingAction" color="success" @click="schedule">Save</v-btn>
               <v-btn color="secondary" text @click="e6 = e6 - 1">Back</v-btn>
               <v-progress-circular
                 class="ml-4"
@@ -129,6 +129,11 @@ import { getStringDateFromMilliseconds } from "@/util/dateHandler";
 import { getMillisecondsFromStringDate } from "../../../util/dateHandler";
 
 export default {
+  props: {
+    id: {
+      required: true
+    }
+  },
   data: () => ({
     showDialog: false,
     headers: [
@@ -221,7 +226,46 @@ export default {
       });
   },
   methods: {
-    
+    loadOrder() {
+      this.axios
+        .get(
+          process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_PROCUREMENT_ORDERS_ENDPOINT +
+            "/" +
+            this.id,
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS")
+            }
+          }
+        )
+        .then(response => {
+          this.order.deadline = getStringDateFromMilliseconds(
+            response.data.deadline
+          );
+          this.order.orderedDrugs = [];
+          for (let drug of response.data.orderedDrugs) {
+            this.order.orderedDrugs.push({
+              drug: drug.drug,
+              code: drug.drug.code,
+              amount: drug.amount,
+              price: null,
+              name: drug.drug.name
+            });
+          }
+        })
+        .catch(error => {
+          if (
+            error.response &&
+            error.response.data &&
+            error.response.data.message
+          )
+            this.snackbarText = error.response.data.message;
+          else if (error.message) this.snackbarText = error.message;
+          else this.snackbarText = "An unknown error has occured.";
+          this.snackbar = true;
+        });
+    },
     addDrug: function() {
       this.order.orderedDrugs.push({
         code: this.selected[0].code,
@@ -242,7 +286,7 @@ export default {
       this.performingAction = true;
       this.order.deadline = getMillisecondsFromStringDate(this.order.deadline);
       this.axios
-        .post(
+        .put(
           process.env.VUE_APP_BACKEND_URL +
             process.env.VUE_APP_PROCUREMENT_ORDERS_ENDPOINT,
           this.order,
