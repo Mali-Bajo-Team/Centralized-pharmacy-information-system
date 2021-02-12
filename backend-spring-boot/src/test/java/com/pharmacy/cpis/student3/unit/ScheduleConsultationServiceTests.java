@@ -19,10 +19,7 @@ import com.pharmacy.cpis.student2.constants.WorkingTimesConstants;
 import com.pharmacy.cpis.userservice.dto.AddWorkingDayDTO;
 import com.pharmacy.cpis.userservice.dto.AddWorkingTimeDTO;
 import com.pharmacy.cpis.userservice.dto.EmployDermatologistDTO;
-import com.pharmacy.cpis.userservice.model.users.Authority;
-import com.pharmacy.cpis.userservice.model.users.Consultant;
-import com.pharmacy.cpis.userservice.model.users.ConsultantType;
-import com.pharmacy.cpis.userservice.model.users.UserAccount;
+import com.pharmacy.cpis.userservice.model.users.*;
 import com.pharmacy.cpis.userservice.repository.IConsultantRepository;
 import com.pharmacy.cpis.userservice.repository.IUserRepository;
 import com.pharmacy.cpis.userservice.service.IConsultantService;
@@ -85,6 +82,7 @@ public class ScheduleConsultationServiceTests {
 	private WorkingTimes mockPharmacistWorkingTimes;
 	private Collection<Consultation> mockConsultations;
 	private Pharmacy mockPharmacy;
+	private Patient mockPatient;
 
 	@Before
 	public void setup() {
@@ -126,6 +124,13 @@ public class ScheduleConsultationServiceTests {
 		mockPharmacist.setWorkingTimes(new HashSet<>());
 		mockPharmacist.getWorkingTimes().add(mockPharmacistWorkingTimes);
 
+		mockPatient = new Patient();
+		Set<Consultation> mockSetConsultations = new HashSet<>();
+		mockSetConsultations.add(mockConsultation);
+
+		mockPatient.setId(5l);
+		mockPatient.setConsultations(mockSetConsultations);
+
 	}
 
 	@Test()
@@ -136,6 +141,20 @@ public class ScheduleConsultationServiceTests {
 		Mockito.when(consultantRepositoryMock.findLockedById(1L)).thenReturn(Optional.of(mockDermatologist));
 
 		Boolean result = consultationServiceMock.isConsultantFreeForConsultation(1L,1L,WT_OVERLAPPING_START ,WT_OVERLAPPING_END);
+
+		Mockito.verify(workingTimesRepositoryMock, Mockito.never()).save(Mockito.any());
+
+		assertEquals(false, result);
+	}
+
+	@Test()
+	@Transactional
+	@Rollback(true)
+	public void scheduleConsultationFailsWhenOverlappingPatientScheduledExamination() {
+		Mockito.when(pharmacyRepositoryMock.findById(2L)).thenReturn(Optional.of(mockPharmacy));
+		Mockito.when(consultantRepositoryMock.findLockedById(1L)).thenReturn(Optional.of(mockDermatologist));
+
+		Boolean result = consultationServiceMock.isPhatientFreeForConsultation(5L,WT_OVERLAPPING_START ,WT_OVERLAPPING_END);
 
 		Mockito.verify(workingTimesRepositoryMock, Mockito.never()).save(Mockito.any());
 
