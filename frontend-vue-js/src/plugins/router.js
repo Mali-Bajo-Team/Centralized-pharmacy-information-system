@@ -385,6 +385,11 @@ const routes = [
                 component: AddPharmacist,
                 name: 'pharmacyadminpharmacistadd',
                 path: 'pharmacists/add'
+            },
+            {
+                component: SupplierProfile,
+                name: 'pharmacyadminprofile',
+                path: 'profile'
             }
         ]
     },
