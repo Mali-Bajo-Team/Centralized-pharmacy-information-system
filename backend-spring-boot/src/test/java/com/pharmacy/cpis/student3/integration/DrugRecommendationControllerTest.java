@@ -1,21 +1,10 @@
 package com.pharmacy.cpis.student3.integration;
 
-import com.pharmacy.cpis.drugservice.dto.AddAvailableDrugDTO;
-import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
 import com.pharmacy.cpis.scheduleservice.dto.DrugRecommendationDTO;
 import com.pharmacy.cpis.scheduleservice.dto.ScheduleExaminationDTO;
-import com.pharmacy.cpis.scheduleservice.model.consultations.Consultation;
-import com.pharmacy.cpis.scheduleservice.model.consultations.ConsultationStatus;
-import com.pharmacy.cpis.scheduleservice.model.workschedule.WorkingTimes;
-import com.pharmacy.cpis.student2.constants.WorkingTimesConstants;
 import com.pharmacy.cpis.student3.constants.LoginConstants;
 import com.pharmacy.cpis.userservice.dto.JwtAuthenticationRequest;
 import com.pharmacy.cpis.userservice.dto.UserTokenState;
-import com.pharmacy.cpis.userservice.model.users.Consultant;
-import com.pharmacy.cpis.userservice.model.users.ConsultantType;
-import com.pharmacy.cpis.userservice.model.users.Patient;
-import com.pharmacy.cpis.userservice.model.users.UserAccount;
-import com.pharmacy.cpis.util.DateRange;
 import com.pharmacy.cpis.util.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,11 +23,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
-
 import java.nio.charset.Charset;
-import java.util.*;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @RunWith(SpringRunner.class)
@@ -74,7 +59,6 @@ public class DrugRecommendationControllerTest {
 				new JwtAuthenticationRequest(LoginConstants.DERMATOLOGIST_EMAIL, LoginConstants.DERMATOLOGIST_PASSWORD),
 				UserTokenState.class);
 		this.dermatologistAccesToken = jankovicToken.getBody().getAccessToken();
-
 
 	}
 
