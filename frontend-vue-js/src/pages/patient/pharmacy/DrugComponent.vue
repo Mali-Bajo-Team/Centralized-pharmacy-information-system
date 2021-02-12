@@ -62,7 +62,7 @@
 
     <!-- Right column for drugs preview-->
     <v-col sm="12" md="8" lg="8" xl="8" cols="12">
-      <v-card elevation="4" class="pa-4 ml-10 mb-10" v-for="drug in filteredDrugs" :key="drug.code">
+      <v-card elevation="4" class="pa-4 mb-10" v-for="drug in filteredDrugs" :key="drug.code">
         <!-- Row for title & drug type, specification preview -->
         <v-row align="center">
           <v-card-title>
