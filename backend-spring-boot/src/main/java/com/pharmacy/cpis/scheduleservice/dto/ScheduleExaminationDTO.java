@@ -12,6 +12,7 @@ public class ScheduleExaminationDTO {
     private String patientName;
     private String patientSurname;
     private Long patientId;
+    private String patientEmail;
     private Long consultantId;
     private Long pharmacyID;
     private Long predefinedConsultationID;
@@ -30,6 +31,14 @@ public class ScheduleExaminationDTO {
         this.consultantId = consultantId;
         this.pharmacyID = pharmacyID;
         this.predefinedConsultationID = predefinedConsultationID;
+    }
+
+    public String getPatientEmail() {
+        return patientEmail;
+    }
+
+    public void setPatientEmail(String patientEmail) {
+        this.patientEmail = patientEmail;
     }
 
     public String getConsultantEmail() {
