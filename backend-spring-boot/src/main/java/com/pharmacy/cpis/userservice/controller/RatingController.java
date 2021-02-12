@@ -1,14 +1,10 @@
 package com.pharmacy.cpis.userservice.controller;
 
 
-import com.pharmacy.cpis.userservice.dto.LoyaltyProgramDTO;
 import com.pharmacy.cpis.userservice.dto.PatientEmailDTO;
-import com.pharmacy.cpis.userservice.dto.ratings.ConsultantRatingCreateDTO;
-import com.pharmacy.cpis.userservice.dto.ratings.ConsultantRatingReadDTO;
-import com.pharmacy.cpis.userservice.dto.ratings.ConsultantRatingUpdateDTO;
-import com.pharmacy.cpis.userservice.model.loyaltyprogram.LoyaltyProgram;
+import com.pharmacy.cpis.userservice.dto.ratings.*;
 import com.pharmacy.cpis.userservice.model.ratings.ConsultantRating;
-import com.pharmacy.cpis.userservice.model.users.Consultant;
+import com.pharmacy.cpis.userservice.model.ratings.PharmacyRating;
 import com.pharmacy.cpis.userservice.service.IRatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,7 +47,29 @@ public class RatingController {
         return new ResponseEntity<>(new ConsultantRatingReadDTO(consultantRating),HttpStatus.OK);
     }
 
+    @PostMapping(value = "/pharmacy")
+    @PreAuthorize("hasRole('PATIENT')")
+    public ResponseEntity<List<PharmacyRatingReadDTO>> getPatientPharmacyRatings(@RequestBody PatientEmailDTO patientEmailDTO) {
+        List<PharmacyRatingReadDTO> pharmacyRatingReadDTOS = new ArrayList<>();
+        for(PharmacyRating pharmacyRating : ratingService.getAllPharmacyRatingsByPatient(patientEmailDTO.getEmail())){
+            pharmacyRatingReadDTOS.add(new PharmacyRatingReadDTO(pharmacyRating));
+        }
+        return new ResponseEntity<>(pharmacyRatingReadDTOS, HttpStatus.OK);
+    }
 
+    @PostMapping(value = "/pharmacy/create")
+    @PreAuthorize("hasRole('PATIENT')")
+    public ResponseEntity<PharmacyRatingReadDTO> savePatientPharmacyRatings(@RequestBody PharmacyRatingCreateDTO pharmacyRatingCreateDTO) {
+        PharmacyRating pharmacyRating = ratingService.createPharmacyRating(pharmacyRatingCreateDTO);
+        return new ResponseEntity<>(new PharmacyRatingReadDTO(pharmacyRating),HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/pharmacy/update")
+    @PreAuthorize("hasRole('PATIENT')")
+    public ResponseEntity<PharmacyRatingReadDTO> updatePatientPharmacyRatings(@RequestBody PharmacyRatingUpdateDTO consultantRatingUpdateDTO) {
+        PharmacyRating consultantRating = ratingService.updatePharmacyRating(consultantRatingUpdateDTO);
+        return new ResponseEntity<>(new PharmacyRatingReadDTO(consultantRating),HttpStatus.OK);
+    }
 
 
 }
