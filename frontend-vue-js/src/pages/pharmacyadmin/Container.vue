@@ -19,7 +19,7 @@ export default {
   data: () => ({
     links: [
       {
-        title: "Home",
+        title: "Pharmacy profile",
         to: "/pharmacyadmin"
       },
       {
