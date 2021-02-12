@@ -3,8 +3,9 @@ package com.pharmacy.cpis;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
-
+@EnableScheduling
 @SpringBootApplication
 @EnableAsync // Support for asynchronous tasks needs to be included. // TODO: Try to move this to some specific class (some config class maybe)
 public class StartupApplication {

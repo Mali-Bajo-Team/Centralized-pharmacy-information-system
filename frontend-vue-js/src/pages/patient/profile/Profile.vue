@@ -38,6 +38,11 @@
             <v-icon color="primary">mdi-star</v-icon>
             {{ patient.loyaltyPoints }} <i> points</i> <br /><br />
 
+            <!--Penalties-->
+            <v-chip color="primary">Penalties: {{patient.penalties}}</v-chip>
+
+            <br /><br />
+
             <!--Category-->
             <v-chip color="primary">{{ patient.userCategoryDTO.name }} </v-chip>
             <br /><br />

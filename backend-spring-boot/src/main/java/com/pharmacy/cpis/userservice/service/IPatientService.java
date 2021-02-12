@@ -18,4 +18,8 @@ public interface IPatientService {
 
     Patient update(PatientProfileDTO patientProfileDTO);
 
+    void resetPenalties();
+
+    void addPenalty(String email);
+
 }
