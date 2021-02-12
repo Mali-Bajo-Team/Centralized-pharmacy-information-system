@@ -46,13 +46,17 @@
           <v-row align="center">
             <v-card-subtitle>
               <h2 class="ml-3">
-                {{ pharmacyRated.pharmacyName }}
+                {{ pharmacyRated.pharmacyName }},
                 {{ pharmacyRated.rating }}
               </h2>
             </v-card-subtitle>
             <v-spacer></v-spacer>
 
-            <v-dialog width="500" :retain-focus="false"  v-model="pharmacyRated.showDialogForChangingRate">
+            <v-dialog
+              width="500"
+              :retain-focus="false"
+              v-model="pharmacyRated.showDialogForChangingRate"
+            >
               <template #activator="{ on: dialog }">
                 <v-tooltip bottom>
                   <template #activator="{ on: tooltip }">
@@ -63,6 +67,7 @@
                       class="mr-5"
                       dark
                       color="accent"
+                      @click="setUpdateDTO(pharmacyRated)"
                     >
                       <v-icon dark left> mdi-pen </v-icon>
                       Change
@@ -81,8 +86,14 @@
                 <!-- End of the toolbar of the card -->
                 <v-card-text class="pa-5">
                   <br />
-                  Are you sure you want to change the rate for
-                  {{ pharmacyRated.pharmacyName}} ?
+                  <v-form>
+                    <v-rating
+                      background-color="accent lighten-3"
+                      color="accent"
+                      medium
+                      v-model="updateRatingDTO.newRating"
+                    ></v-rating>
+                  </v-form>
                 </v-card-text>
 
                 <v-card-actions class="pb-4">
@@ -124,13 +135,16 @@ export default {
   data: () => ({
     pharmaciesRated: [],
     pharmacies: ["Ana Perisic", "Vladislav Maksimovic"],
- 
+    updateRatingDTO: {
+      id: 0,
+      newRating: 1,
+    },
   }),
   mounted() {
     this.axios
       .post(
         process.env.VUE_APP_BACKEND_URL +
-          process.env.VUE_APP_PATIENT_RATING_CONSULTANTS_ENDPOINT,
+          process.env.VUE_APP_PATIENT_RATING_PHARMACIES_ENDPOINT,
         {
           email: getParsedToken().sub,
         },
@@ -147,15 +161,20 @@ export default {
         alert(error);
       });
   },
-  methods:{
- confirmNewRate() {
-      console.log("simulation of unsub");
+  methods: {
+    setUpdateDTO(pharmacyRated) {
+      this.updateRatingDTO.id = pharmacyRated.id;
+      this.updateRatingDTO.newRating = pharmacyRated.rating;
+    },
+
+    confirmNewRate() {
       this.axios
         .post(
           process.env.VUE_APP_BACKEND_URL +
-            process.env.VUE_APP_PATIENT_RATING_CONSULTANTS_ENDPOINT,
+            process.env.VUE_APP_PATIENT_CHANGE_RATING_PHARMACIES_ENDPOINT,
           {
-            email: getParsedToken().sub,
+            newRating: this.updateRatingDTO.newRating,
+            id: this.updateRatingDTO.id
           },
           {
             headers: {
@@ -163,14 +182,22 @@ export default {
             },
           }
         )
-        .then(() => {
-          alert("Successfully confirmed!")
+        .then((resp) => {
+          console.log(resp.data);
+          alert("Successfully confirmed!");
+          for(let pharmacyRate of this.pharmaciesRated){
+            if(pharmacyRate.id == this.updateRatingDTO.id){
+               pharmacyRate.rating = resp.data.rating;
+              break;
+            }
+          }
+          
+
         })
         .catch((error) => {
           alert(error);
         });
     },
-  }
- 
+  },
 };
 </script>
