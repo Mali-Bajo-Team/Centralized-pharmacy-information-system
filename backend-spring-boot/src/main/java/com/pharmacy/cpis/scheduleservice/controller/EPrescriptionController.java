@@ -5,6 +5,7 @@ import com.pharmacy.cpis.scheduleservice.dto.prescription.EPrescriptionReadDTO;
 import com.pharmacy.cpis.scheduleservice.model.prescriptions.EPrescription;
 import com.pharmacy.cpis.scheduleservice.service.IEPrescriptionService;
 import com.pharmacy.cpis.userservice.dto.PatientEmailDTO;
+import com.pharmacy.cpis.util.aspects.PatientAccountPenalties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,14 +24,16 @@ public class EPrescriptionController {
 
     @PostMapping(value = "/save")
     @PreAuthorize("hasRole('PATIENT')")
-    public ResponseEntity<EPrescriptionReadDTO> getPredefinedByPharmacy(@RequestBody EPrescriptionCreateDTO ePrescriptionCreateDTO) {
+  @PatientAccountPenalties
+    public ResponseEntity<EPrescriptionReadDTO> saveEPrescription(@RequestBody EPrescriptionCreateDTO ePrescriptionCreateDTO) {
         EPrescription ePrescription = prescriptionService.savePrescription(ePrescriptionCreateDTO);
         return new ResponseEntity<>(new EPrescriptionReadDTO(ePrescription),HttpStatus.OK);
     }
 
     @PostMapping(value = "/patient")
     @PreAuthorize("hasRole('PATIENT')")
-    public ResponseEntity<List<EPrescriptionReadDTO>> getPredefinedByPharmacy(@RequestBody PatientEmailDTO patientEmailDTO) {
+  @PatientAccountPenalties
+    public ResponseEntity<List<EPrescriptionReadDTO>> findAllPatientEPrescriptions(@RequestBody PatientEmailDTO patientEmailDTO) {
         List<EPrescriptionReadDTO> prescriptionReadDTOS = new ArrayList<>();
         for(EPrescription ePrescription : prescriptionService.findAllPatientEPrescription(patientEmailDTO.getEmail())){
             prescriptionReadDTOS.add(new EPrescriptionReadDTO(ePrescription));

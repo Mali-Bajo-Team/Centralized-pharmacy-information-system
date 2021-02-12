@@ -9,6 +9,10 @@ import java.util.Set;
 @Entity
 @Check(constraints = "(active_until is not null and is_active) or (active_until is null and not is_active)")
 public class LoyaltyProgram {
+	@Version
+	@Column(nullable = false)
+	private Long version;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -26,6 +30,9 @@ public class LoyaltyProgram {
 	@OneToMany(mappedBy = "loyaltyProgram", fetch = FetchType.EAGER)
 	private Set<UserCategory> categories;
 
+	public Long getVersion() {
+		return version;
+	}
 	public LoyaltyProgram() {
 		super();
 	}

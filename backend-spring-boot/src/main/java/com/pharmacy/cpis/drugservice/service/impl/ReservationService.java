@@ -98,6 +98,7 @@ public class ReservationService implements IReservationService {
     }
 
     @Override
+    @Transactional
     public void makeReservationForEPrescription(EPrescription ePrescription, Long pharmacyIdWhereIsMadeReservation) {
         List<Reservation> reservationsForEPrescriptions = new ArrayList<>();
         for (PrescribedDrug prescribedDrug : ePrescription.getPrescribedDrugs()) {

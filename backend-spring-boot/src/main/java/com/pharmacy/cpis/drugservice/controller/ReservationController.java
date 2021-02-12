@@ -10,6 +10,7 @@ import com.pharmacy.cpis.drugservice.service.IAvailableDrugService;
 import com.pharmacy.cpis.drugservice.service.IReservationService;
 import com.pharmacy.cpis.userservice.dto.PatientEmailDTO;
 import com.pharmacy.cpis.util.aspects.EmployeeAccountActive;
+import com.pharmacy.cpis.util.aspects.PatientAccountPenalties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,7 @@ public class ReservationController {
     private IAvailableDrugService availableDrugService;
 
     @PreAuthorize("hasRole('PATIENT')")
+    @PatientAccountPenalties
     @PostMapping(value = "/drug")
     public ResponseEntity<DrugReservationDTO> makeReservationOfDrug(@RequestBody DrugReservationDTO drugReservationDTO){
         Reservation reservation = reservationService.makeReservation(drugReservationDTO);

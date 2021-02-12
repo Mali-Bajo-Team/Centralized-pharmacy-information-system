@@ -63,6 +63,7 @@ import DrugsInPharmacy from './../pages/pharmacyadmin/drugs/Container';
 import ViewPredefined from './../pages/pharmacyadmin/consultations/ViewPredefined'
 import AddPredefined from './../pages/pharmacyadmin/consultations/AddPredefined'
 import PAPassword from './../pages/pharmacyadmin/password/ChangePassword'
+import Statistics from './../pages/pharmacyadmin/statistics/Statistics'
 
 import Supplier from './../pages/supplier/Container';
 import SupplierLanding from './../pages/supplier/landing/Landing';
@@ -404,11 +405,17 @@ const routes = [
                 component: PAPassword,
                 name: 'pharmacyadminpassword',
                 path: 'password'
-            }, {
+            },
+            {
                 component: EditDrugOrder,
                 name: 'editdrugorder',
                 path: 'orders/edit/:id',
                 props: true
+            },
+            {
+                component: Statistics,
+                name: 'statistics',
+                path: 'statistics'
             }
         ]
     },

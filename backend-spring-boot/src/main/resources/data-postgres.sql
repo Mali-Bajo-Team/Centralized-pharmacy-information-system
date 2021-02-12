@@ -54,7 +54,7 @@ insert into drug_class (name) values ('Antiviral');
 insert into drug_class (name) values ('Cardiovascular');
 
 -- INSERT LOYALTY PROGRAM
-insert into loyalty_program(active_until, is_active, points_per_consultation) values('2021-02-03', true, 15);
+insert into loyalty_program(active_until, is_active, points_per_consultation, version) values('2021-02-03', true, 15,0);
 
 -- INSERT USER CATEGORY
 insert into user_category (loyalty_program_id, name, minimum_points, reservation_discount, consultation_discount) values (1, 'Bronze', 15, 5, 5);
@@ -196,14 +196,14 @@ insert into reservation(amount,date_of_creation,deadline,is_picked_up,drug_code,
 insert into reservation(amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id,version) values (4,'2021-03-04 12:00','2021-02-09 12:00',false,'brufen',2,2,0);
 
 --INSERT COMPLAINT ( only patient who had a consultation can make a complaint about consultant)
-insert into complaint(content, creation_timestamp, response, consultant_id, creator_id)
-values('Very sad after consultation','2021-02-02 12:00', 'Waiting on reply', 9,2);
-insert into complaint(content, creation_timestamp, response, consultant_id, creator_id)
-values('He is psyho, i need only pediatar','2021-04-04 12:00', 'Waiting on reply', 9,2);
-insert into complaint(content, creation_timestamp, response,  creator_id, pharmacy_id)
-values('Very expensive one','2021-05-05 12:00', 'Waiting on reply', 2,1);
-insert into complaint(content, creation_timestamp, response, consultant_id, creator_id)
-values('Omg, there is no need for this type of conversation...','2021-03-03 12:00', 'Waiting on reply', 9,4);
+insert into complaint(content, creation_timestamp, response, consultant_id, creator_id, version)
+values('Very sad after consultation','2021-02-02 12:00', 'Waiting on reply', 9,2, 0);
+insert into complaint(content, creation_timestamp, response, consultant_id, creator_id, version)
+values('He is psyho, i need only pediatar','2021-04-04 12:00', 'Waiting on reply', 9,2, 0);
+insert into complaint(content, creation_timestamp, response,  creator_id, pharmacy_id, version)
+values('Very expensive one','2021-05-05 12:00', 'Waiting on reply', 2,1, 0);
+insert into complaint(content, creation_timestamp, response, consultant_id, creator_id, version)
+values('Omg, there is no need for this type of conversation...','2021-03-03 12:00', 'Waiting on reply', 9,4, 0);
 
 -- INSERT VACATION REQUESTS
 insert into vacation_request (consultant_id, status, start_date, end_date) values (5, 0, '2021-03-25', '2021-03-29');
@@ -241,9 +241,9 @@ insert into alternate_drugs(drug_code, alternate_drug_code) values('amfetamin','
 insert into alternate_drugs(drug_code, alternate_drug_code) values('amfetamin','kreatin');
 
 --INSERT E-PRESCRIPTION
-insert into eprescription(creation_date, status, patient_id) values('2021-02-1 14:00', 0, 2);
-insert into eprescription(creation_date, status, patient_id) values('2021-02-1 14:00', 0, 2);
-insert into eprescription(creation_date, status, patient_id) values('2021-02-1 14:00', 0, 8);
+insert into eprescription(creation_date, status, patient_id,version) values('2021-02-1 14:00', 0, 2,0);
+insert into eprescription(creation_date, status, patient_id,version) values('2021-02-1 14:00', 0, 2,0);
+insert into eprescription(creation_date, status, patient_id,version) values('2021-02-1 14:00', 0, 8,0);
 
 --INSERT PRESCRIBED-DRUG
 insert into prescribed_drug(amount, drug_code, prescription_id) values (10, 'brufen', 1);

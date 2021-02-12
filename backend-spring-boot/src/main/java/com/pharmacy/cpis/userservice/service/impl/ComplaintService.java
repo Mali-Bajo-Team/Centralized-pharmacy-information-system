@@ -19,6 +19,7 @@ import com.pharmacy.cpis.util.exceptions.PSBadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -56,6 +57,7 @@ public class ComplaintService implements IComplaintService {
     }
 
     @Override
+    @Transactional
     public Complaint updateComplaintResponse(ComplaintDTO complaintDTO) {
         Complaint complaint = getComplaint(complaintDTO);
         complaint.setResponse(complaintDTO.getResponse());
