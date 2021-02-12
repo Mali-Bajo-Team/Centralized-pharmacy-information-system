@@ -199,7 +199,7 @@ public class ConsultationService implements IConsultationService {
 	@Override
 	public List<Consultant> findAllPatientConsultants(Patient patient) {
 		List<Consultant> allPatientConsultants = new ArrayList<>();
-		for (Consultation consultation : consultationRepository.findAllByPatient(patient)) {
+		for (Consultation consultation : consultationRepository.findAllByPatientAndStatus(patient,ConsultationStatus.FINISHED)) {
 			boolean alreadyExistConsultant = false;
 			for (Consultant consultant : allPatientConsultants) {
 				if (consultant.getId().equals(consultation.getConsultant().getId())) {
@@ -219,7 +219,7 @@ public class ConsultationService implements IConsultationService {
 	 */
 	public List<Pharmacy> findAllPatientPharmacies(Patient patient) {
 		List<Pharmacy> allPatientPharmacies = new ArrayList<>();
-		for (Consultation consultation : consultationRepository.findAllByPatient(patient)) {
+		for (Consultation consultation : consultationRepository.findAllByPatientAndStatus(patient, ConsultationStatus.FINISHED)) {
 			boolean alreadyExistPharmacy = false;
 			for (Pharmacy pharmacy : allPatientPharmacies) {
 				if (pharmacy.getId().equals(consultation.getPharmacy().getId())) {

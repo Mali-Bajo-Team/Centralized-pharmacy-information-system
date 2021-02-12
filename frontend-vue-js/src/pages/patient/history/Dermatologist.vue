@@ -34,6 +34,54 @@
             </v-btn>
           </v-row>
           <!-- End of the sort by price -->
+          <!-- Sort by date -->
+          <v-row justify="center" class="pa-3">
+            <v-btn
+              small
+              width="110px"
+              color="green lighten-2"
+              class="ma-2 white--text mr-6"
+              @click="sortBy('startDate')"
+            >
+              Date
+              <v-icon small right dark> mdi-arrow-up-bold </v-icon>
+            </v-btn>
+            <v-btn
+              small
+              width="110px"
+              color="green lighten-2"
+              class="ma-2 white--text ml-6"
+              @click="sortDownBy('startDate')"
+            >
+              Date
+              <v-icon small right dark> mdi-arrow-down-bold </v-icon>
+            </v-btn>
+          </v-row>
+          <!-- End of the sort by date -->
+          <!-- Sort by duration -->
+          <v-row justify="center" class="pa-3">
+            <v-btn
+              small
+              width="110px"
+              color="green lighten-2"
+              class="ma-2 white--text mr-6"
+              @click="sortBy('consultationDuration')"
+            >
+              Duration
+              <v-icon small right dark> mdi-arrow-up-bold </v-icon>
+            </v-btn>
+            <v-btn
+              small
+              width="110px"
+              color="green lighten-2"
+              class="ma-2 white--text ml-6"
+              @click="sortDownBy('consultationDuration')"
+            >
+              Duration
+              <v-icon small right dark> mdi-arrow-down-bold </v-icon>
+            </v-btn>
+          </v-row>
+          <!-- End of the sort by duration -->
         </v-card>
       </v-col>
       <!--End of left column-->
@@ -92,7 +140,25 @@ export default {
         }
       )
       .then((resp) => {
-        this.consultations = resp.data;
+        this.consultations = [];
+        for (let consultation of resp.data) {
+          let tempObj = {
+            consultantEmail: consultation.consultantEmail,
+            consultantId: consultation.consultantId,
+            consultantName: consultation.consultantName,
+            consultantSurname: consultation.consultantSurname,
+            endDate: consultation.endDate,
+            startDate: consultation.startDate,
+            consultationDuration: consultation.endDate - consultation.startDate,
+            patientId: consultation.patientId,
+            patientName: consultation.patientName,
+            patientSurname: consultation.patientSurname,
+            pharmacyID: consultation.pharmacyID,
+            pharmacyName: consultation.pharmacyName,
+            price: consultation.price,
+          };
+          this.consultations.push(tempObj);
+        }
       })
       .catch((error) => {
         alert(error);

@@ -2,6 +2,7 @@ package com.pharmacy.cpis.drugservice.service.impl;
 
 
 import com.pharmacy.cpis.drugservice.dto.DrugReservationDTO;
+import com.pharmacy.cpis.drugservice.model.drug.Drug;
 import com.pharmacy.cpis.drugservice.model.drugsales.Reservation;
 import com.pharmacy.cpis.drugservice.repository.IDrugRepository;
 import com.pharmacy.cpis.drugservice.repository.IReservationRepository;
@@ -206,6 +207,28 @@ public class ReservationService implements IReservationService {
     @Override
     public void removeReservation(Long reservationId) {
         reservationRepository.deleteById(reservationId);
+    }
+
+    @Override
+    public List<Drug> findAllPatientDrugsAvailableForRating(String patientEmail) { // drugs which patient had contact (made reservation for them)
+        Patient patient = patientService.findByEmail(patientEmail);
+        List<Reservation> reservations = reservationRepository.findAllByPatient(patient);
+        List<Drug> patientDrugs = new ArrayList<>();
+
+        for(Reservation reservation : reservations){
+            boolean alreadyAdded = false;
+            for(Drug drug : patientDrugs){
+                if(drug.getCode().equals(reservation.getDrug().getCode())){
+                    alreadyAdded = true;
+                    break;
+                }
+            }
+            if(!alreadyAdded){
+                patientDrugs.add(reservation.getDrug());
+            }
+        }
+
+        return patientDrugs;
     }
 
     private void sendDrugPurchase(Reservation reservation) {

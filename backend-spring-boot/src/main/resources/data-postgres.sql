@@ -249,3 +249,9 @@ insert into eprescription(creation_date, status, patient_id) values('2021-02-1 1
 insert into prescribed_drug(amount, drug_code, prescription_id) values (10, 'brufen', 1);
 insert into prescribed_drug(amount, drug_code, prescription_id) values (3, 'aspirin', 2);
 insert into prescribed_drug(amount, drug_code, prescription_id) values (5, 'aspirin', 3);
+
+--INSERT CONSULTANT RATING
+--insert into consultant_rating(rating, consultant_id, patient_id) values(4,3,2);
+insert into consultant_rating(rating, consultant_id, patient_id) values(4,5,2);
+insert into consultant_rating(rating, consultant_id, patient_id) values(4,9,2);
+insert into consultant_rating(rating, consultant_id, patient_id) values(4,11,2);
