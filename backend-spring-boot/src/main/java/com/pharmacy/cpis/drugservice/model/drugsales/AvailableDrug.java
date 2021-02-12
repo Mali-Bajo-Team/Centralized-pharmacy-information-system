@@ -44,6 +44,7 @@ public class AvailableDrug {
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "drug", cascade = CascadeType.ALL)
 	private Set<Price> prices;
 
+
 	public AvailableDrug() {
 		super();
 	}
