@@ -9,6 +9,10 @@ import java.util.Set;
 
 @Entity
 public class EPrescription {
+	@Version
+	@Column(nullable = false)
+	private Long version;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -68,6 +72,10 @@ public class EPrescription {
 
 	public void setPrescribedDrugs(Set<PrescribedDrug> prescribedDrugs) {
 		this.prescribedDrugs = prescribedDrugs;
+	}
+
+	public Long getVersion() {
+		return version;
 	}
 
 	@Override

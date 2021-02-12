@@ -241,9 +241,9 @@ insert into alternate_drugs(drug_code, alternate_drug_code) values('amfetamin','
 insert into alternate_drugs(drug_code, alternate_drug_code) values('amfetamin','kreatin');
 
 --INSERT E-PRESCRIPTION
-insert into eprescription(creation_date, status, patient_id) values('2021-02-1 14:00', 0, 2);
-insert into eprescription(creation_date, status, patient_id) values('2021-02-1 14:00', 0, 2);
-insert into eprescription(creation_date, status, patient_id) values('2021-02-1 14:00', 0, 8);
+insert into eprescription(creation_date, status, patient_id,version) values('2021-02-1 14:00', 0, 2,0);
+insert into eprescription(creation_date, status, patient_id,version) values('2021-02-1 14:00', 0, 2,0);
+insert into eprescription(creation_date, status, patient_id,version) values('2021-02-1 14:00', 0, 8,0);
 
 --INSERT PRESCRIBED-DRUG
 insert into prescribed_drug(amount, drug_code, prescription_id) values (10, 'brufen', 1);
