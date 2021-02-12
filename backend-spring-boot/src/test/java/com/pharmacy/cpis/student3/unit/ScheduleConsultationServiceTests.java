@@ -160,4 +160,7 @@ public class ScheduleConsultationServiceTests {
 
 		assertEquals(false, result);
 	}
+
+
+
 }
