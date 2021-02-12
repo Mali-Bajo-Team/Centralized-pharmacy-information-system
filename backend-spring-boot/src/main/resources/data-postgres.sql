@@ -24,6 +24,7 @@ insert into user_authority (user_id, authority_id) values (2, 1);
 insert into person (discriminator, address, city, country, name, surname, phone_number, type) values ('Consultant', 'Jovana Jovanovica 30', 'Novi Sad', 'Srbija', 'Pero', 'Ivanović', '0661352720', 0);
 insert into user_account (email, password, is_active, person_id, needs_password_change) values ('cpisuser+pharmacist@gmail.com', '$2a$10$UYKr0EAl1Hhzmg.3LutLeuczdzcdgEwXhuY0raFaNyRRspKTg0MCW', true, 3, false);
 -- Password for pharmacist account is: pharmacist
+-- Password for pharmacist account is: pharmacist
 insert into user_authority (user_id, authority_id) values (3, 4);
 
 -- INSERT ONE PATIENT
@@ -97,10 +98,9 @@ insert into pharmacy_rating(rating, patient_id,pharmacy_id) values (5,2,1);
 insert into pharmacy_rating(rating, patient_id,pharmacy_id) values (3,2,2);
 insert into pharmacy_rating(rating, patient_id,pharmacy_id) values (4,4,2);
 
-
-insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (20,1,'2021-02-03 10:23','2021-02-03 11:00',3,2,1);
-insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (20,1,'2021-02-04 11:23','2021-02-04 13:20',3,2,1);
-insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (20,1,'2021-02-05 13:23','2021-02-05 14:00',5,4,1);
+insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id,version) values (25,3,'2021-02-03 10:23','2021-02-03 11:00',3,2,1,0);
+insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id,version) values (20,3,'2021-02-04 11:23','2021-02-04 13:20',3,2,1,0);
+insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id,version) values (20,1,'2021-02-05 13:23','2021-02-05 14:00',5,4,1,0);
 
 -- INSERT DRUGS
 insert into drug(code, loyalty_points, name, drug_class_id, drug_form_id) values ('brufen', 5, 'Brufen',1,1);
@@ -144,14 +144,14 @@ insert into user_account (email, password, is_active, person_id, needs_password_
 -- Password for dermatologist account is: dermatologist
 insert into user_authority (user_id, authority_id) values (9, 5);
 
-insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (20,1,'2021-02-03 10:23','2021-02-03 11:00',9,2,1);
-insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (25,1,'2021-02-04 11:23','2021-02-04 13:20',9,2,1);
-insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (30,1,'2021-02-05 13:23','2021-02-05 14:00',9,4,2);
-insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (30,1,'2021-03-05 13:23','2021-03-05 14:00',9,2,2);
-insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (30,0,'2021-03-09 13:23','2021-03-05 14:00',9,2,1);
-insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (30,0,'2021-03-10 13:23','2021-03-05 14:00',9,2,2);
-insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (30,0,'2021-03-11 13:23','2021-03-05 14:00',9,2,1);
-insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id) values (30,0,'2021-03-12 13:23','2021-03-05 14:00',9,2,2);
+insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id,version) values (20,1,'2021-02-03 10:23','2021-02-03 11:00',9,2,1,0);
+insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id,version) values (25,3,'2021-02-04 11:23','2021-02-04 13:20',9,2,1,0);
+insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id,version) values (30,3,'2021-02-05 13:23','2021-02-05 14:00',9,4,2,0);
+insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id,version) values (30,1,'2021-03-05 13:23','2021-03-05 14:00',9,2,2,0);
+insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id,version) values (30,0,'2021-03-09 13:23','2021-03-09 14:00',9,2,1,0);
+insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id,version) values (30,0,'2021-03-10 13:23','2021-03-10 14:00',9,2,2,0);
+insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id,version) values (30,0,'2021-03-11 13:23','2021-03-11 14:00',9,2,1,0);
+insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id,version) values (30,0,'2021-03-12 13:23','2021-03-12 14:00',9,2,2,0);
 -- insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 1);
 -- insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 2);
 -- insert into consultation_report(anamnesis,diagnosis, consultation_id) values ('Omgyyyy very sick man', 'Its fine', 3);
@@ -184,16 +184,16 @@ insert into offer(price, shipment_date, status, order_id, supplier_id) values (1
 
 
 --INSERT RESERVATION FOR DRUG
-insert into reservation(amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id)
- values (15,'2021-02-08','2021-02-25',false,'brufen',4,1);
+insert into reservation(amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id,version)
+ values (15,'2021-02-08','2021-02-25',false,'brufen',4,1,0);
 
 
 --INSERT RESERVATION (Drug reservation)
-insert into reservation(amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (4,'2021-02-05 12:00','2021-02-25 12:00',false,'brufen',2,1);
-insert into reservation(amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (3,'2021-03-06 12:00','2021-02-03 04:00',false,'brufen',4,2);
-insert into reservation(amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (6,'2021-03-06 12:00','2021-02-08 12:00',false,'brufen',2,1);
-insert into reservation(amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (5,'2021-03-06 12:00','2021-02-11 12:00',false,'brufen',4,2);
-insert into reservation(amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id) values (4,'2021-03-04 12:00','2021-02-09 12:00',false,'brufen',2,2);
+insert into reservation(amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id,version) values (4,'2021-02-05 12:00','2021-02-25 12:00',false,'brufen',2,1,0);
+insert into reservation(amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id,version) values (3,'2021-03-06 12:00','2021-02-03 04:00',false,'brufen',4,2,0);
+insert into reservation(amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id,version) values (6,'2021-03-06 12:00','2021-02-08 12:00',false,'brufen',2,1,0);
+insert into reservation(amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id,version) values (5,'2021-03-06 12:00','2021-02-11 12:00',false,'brufen',4,2,0);
+insert into reservation(amount,date_of_creation,deadline,is_picked_up,drug_code,patient_id,pharmacy_id,version) values (4,'2021-03-04 12:00','2021-02-09 12:00',false,'brufen',2,2,0);
 
 --INSERT COMPLAINT ( only patient who had a consultation can make a complaint about consultant)
 insert into complaint(content, creation_timestamp, response, consultant_id, creator_id)
@@ -249,3 +249,16 @@ insert into eprescription(creation_date, status, patient_id) values('2021-02-1 1
 insert into prescribed_drug(amount, drug_code, prescription_id) values (10, 'brufen', 1);
 insert into prescribed_drug(amount, drug_code, prescription_id) values (3, 'aspirin', 2);
 insert into prescribed_drug(amount, drug_code, prescription_id) values (5, 'aspirin', 3);
+
+--INSERT CONSULTANT RATING
+--insert into consultant_rating(rating, consultant_id, patient_id) values(4,3,2);
+insert into consultant_rating(rating, consultant_id, patient_id) values(4,5,2);
+insert into consultant_rating(rating, consultant_id, patient_id) values(4,9,2);
+insert into consultant_rating(rating, consultant_id, patient_id) values(4,11,2);
+
+-- INSERT ONE PHARMACIST
+insert into person (discriminator, address, city, country, name, surname, phone_number, type,pharmacy_id) values ('Consultant', 'Milana Rakica 12', 'Beograd', 'Srbija', 'Milan', 'Milovic', '06123655523', 0,1);
+insert into user_account (email, password, is_active, person_id, needs_password_change) values ('cpisuser+pharmacist13@gmail.com', '$2a$10$Vr/M4gsgzXeRQqxq4kGzb.piaiRV80k.lu2B4a8McpqtKBGW0EZGC', true, 13, false);
+-- Password for pharmacist account is: pharmacist13
+insert into user_authority (user_id, authority_id) values (13, 4);
+insert into working_times(consultant_id,pharmacy_id, monday_start, monday_end, saturday_start, saturday_end) values (13,1, '2021-02-13 19:00', '2021-02-13 21:00','2021-02-13 10:00', '2021-02-13 18:00');

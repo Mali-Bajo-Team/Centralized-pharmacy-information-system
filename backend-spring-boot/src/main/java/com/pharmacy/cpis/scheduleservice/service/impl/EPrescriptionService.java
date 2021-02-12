@@ -1,6 +1,7 @@
 package com.pharmacy.cpis.scheduleservice.service.impl;
 
 import com.pharmacy.cpis.drugservice.repository.IDrugRepository;
+import com.pharmacy.cpis.drugservice.service.IReservationService;
 import com.pharmacy.cpis.scheduleservice.dto.prescription.EPrescriptionCreateDTO;
 import com.pharmacy.cpis.scheduleservice.dto.prescription.PrescribedDrugCreateDTO;
 import com.pharmacy.cpis.scheduleservice.model.prescriptions.EPrescription;
@@ -39,6 +40,9 @@ public class EPrescriptionService implements IEPrescriptionService {
     @Autowired
     private IPrescribedDrugRepository prescribedDrugRepository;
 
+    @Autowired
+    private IReservationService reservationService;
+
     @Override
     public List<EPrescription> findAllPatientEPrescription(String patientEmail) {
         Long patientId = userRepository.findByEmail(patientEmail).getPerson().getId();
@@ -63,7 +67,11 @@ public class EPrescriptionService implements IEPrescriptionService {
         EPrescription savedPrescription = prescriptionRepository.save(ePrescription); // First save, because i want to have ePrescription from DB(because of e-prescription id)
         ePrescription.setPrescribedDrugs(savePrescribedDrugs(prescriptionDTO.getPrescribedDrugs(),savedPrescription));
 
-        return prescriptionRepository.save(ePrescription);
+        // This is new with updated prescribed drugs
+        EPrescription ePrescriptionSaved = prescriptionRepository.save(ePrescription);
+        reservationService.makeReservationForEPrescription(ePrescription, prescriptionDTO.getPharmacyId());
+
+        return ePrescriptionSaved;
     }
 
     private Set<PrescribedDrug> savePrescribedDrugs(List<PrescribedDrugCreateDTO> prescribedDrugCreateDTOS, EPrescription ePrescription){

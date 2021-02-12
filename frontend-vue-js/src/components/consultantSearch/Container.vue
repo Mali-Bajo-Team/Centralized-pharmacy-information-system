@@ -8,7 +8,7 @@
     </v-snackbar>
 
     <v-spacer></v-spacer>
-    <v-col sm="12" md="4" lg="3" xl="3" cols="12">
+    <v-col sm="12" md="4" lg="4" xl="4" cols="12">
       <!-- Search card -->
       <v-card>
         <v-toolbar color="primary" dark dense flat>
@@ -48,12 +48,13 @@
             label="Select pharmacies"
             multiple
             chips
+            clearable
           ></v-select>
         </v-form>
       </v-card>
     </v-col>
 
-    <v-col sm="12" md="8" lg="6" xl="6" cols="12">
+    <v-col sm="12" md="8" lg="8" xl="8" cols="12">
       <template v-if="loading">
         <v-skeleton-loader elevation="4" class="pa-4 mb-10 mx-auto" type="article, actions"></v-skeleton-loader>
         <v-skeleton-loader elevation="4" class="pa-4 mb-10 mx-auto" type="article, actions"></v-skeleton-loader>
@@ -108,29 +109,13 @@ export default {
     snackbarText: "",
     snackbar: false
   }),
+  watch: {
+    endpoint: function() {
+      this.loadConsultants();
+    }
+  },
   mounted: function() {
-    this.axios
-      .get(this.endpoint, {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("JWT-CPIS")
-        }
-      })
-      .then(response => {
-        this.consultants = response.data;
-        this.loading = false;
-      })
-      .catch(error => {
-        if (
-          error.response &&
-          error.response.data &&
-          error.response.data.message
-        )
-          this.snackbarText = error.response.data.message;
-        else if (error.message) this.snackbarText = error.message;
-        else this.snackbarText = "An unknown error has occured.";
-        this.performingAction = false;
-        this.snackbar = true;
-      });
+    this.loadConsultants();
 
     this.axios
       .get(
@@ -155,6 +140,32 @@ export default {
       });
   },
   methods: {
+    loadConsultants: function() {
+      this.loading = true;
+      this.axios
+        .get(this.endpoint, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("JWT-CPIS")
+          }
+        })
+        .then(response => {
+          this.consultants = response.data;
+          this.loading = false;
+        })
+        .catch(error => {
+          if (
+            error.response &&
+            error.response.data &&
+            error.response.data.message
+          )
+            this.snackbarText = error.response.data.message;
+          else if (error.message) this.snackbarText = error.message;
+          else this.snackbarText = "An unknown error has occured.";
+          this.performingAction = false;
+          this.snackbar = true;
+          this.loading = false;
+        });
+    },
     matchesFilters: function(consultant) {
       if (!consultant.name.toLowerCase().match(this.filters.name.toLowerCase()))
         return false;

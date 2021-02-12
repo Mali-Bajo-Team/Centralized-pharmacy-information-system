@@ -2,6 +2,8 @@ package com.pharmacy.cpis.drugservice.controller;
 
 
 import com.pharmacy.cpis.drugservice.dto.DrugReservationDTO;
+import com.pharmacy.cpis.drugservice.dto.PatientDrugForRatingReadDTO;
+import com.pharmacy.cpis.drugservice.model.drug.Drug;
 import com.pharmacy.cpis.drugservice.model.drugsales.Reservation;
 import com.pharmacy.cpis.drugservice.dto.ReservationDTO;
 import com.pharmacy.cpis.drugservice.service.IAvailableDrugService;
@@ -29,7 +31,7 @@ public class ReservationController {
     @PreAuthorize("hasRole('PATIENT')")
     @PostMapping(value = "/drug")
     public ResponseEntity<DrugReservationDTO> makeReservationOfDrug(@RequestBody DrugReservationDTO drugReservationDTO){
-        Reservation reservation = reservationService.saveReservation(drugReservationDTO);
+        Reservation reservation = reservationService.makeReservation(drugReservationDTO);
         return new ResponseEntity<>(new DrugReservationDTO(reservation) , HttpStatus.OK);
     }
 
@@ -42,6 +44,16 @@ public class ReservationController {
             drugReservationDTOs.add(new DrugReservationDTO(reservation));
         }
         return new ResponseEntity<>(drugReservationDTOs,HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('PATIENT')")
+    @PostMapping(value = "/drug/ratings")
+    public ResponseEntity<List<PatientDrugForRatingReadDTO>> getPatientDrugsAvailableForRatings(@RequestBody PatientEmailDTO patientEmailDTO){
+        List<PatientDrugForRatingReadDTO> patientDrugForRatingReadDTOS = new ArrayList<>();
+        for(Drug drug : reservationService.findAllPatientDrugsAvailableForRating(patientEmailDTO.getEmail())){
+            patientDrugForRatingReadDTOS.add(new PatientDrugForRatingReadDTO(drug));
+        }
+        return new ResponseEntity<>(patientDrugForRatingReadDTOS,HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('PHARMACIST')")

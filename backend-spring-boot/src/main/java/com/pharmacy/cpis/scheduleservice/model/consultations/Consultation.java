@@ -13,6 +13,10 @@ public class Consultation {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Version
+	@Column(nullable = false)
+	private Long version;
+
 	@Column(nullable = false)
 	private ConsultationStatus status;
 
@@ -89,6 +93,10 @@ public class Consultation {
 
 	public void setPatient(Patient patient) {
 		this.patient = patient;
+	}
+
+	public Long getVersion() {
+		return version;
 	}
 
 	@Override

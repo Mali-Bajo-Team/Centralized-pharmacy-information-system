@@ -17,8 +17,17 @@ import PatientProfile from './../pages/patient/profile/Profile';
 import PatientReservations from './../pages/patient/reservation/DrugReservation';
 import Subscriptions from './../pages/patient/subscriptions/Subscriptions';
 import EPrescription from './../pages/patient/eprescription/EPrescription';
+import MyEPrescriptions from './../pages/patient/eprescription/MyEPrescriptions';
 import PharmacistSearchPatient from './../pages/patient/consultants/Pharmacists';
 import DermatologistSearchPatient from './../pages/patient/consultants/Dermatologists';
+import PharmacistHistoryPatient from './../pages/patient/history/Pharmacist';
+import DermatologistHistoryPatient from './../pages/patient/history/Dermatologist';
+import PharmacyProfile from './../pages/patient/pharmacy/Pharmacy'
+import PatientRating from './../pages/patient/rating/ConsultantsRating';
+import PatientPharmaciesRating from './../pages/patient/rating/PharmaciesRating';
+import PatientDrugsRating from './../pages/patient/rating/DrugsRating';
+import PatientSchedullingConsultations from './../pages/patient/schedulling/Consultations';
+
 
 
 
@@ -43,7 +52,16 @@ import PharmacyAdminLanding from './../pages/pharmacyadmin/landing/Landing';
 import VacationRequests from './../pages/pharmacyadmin/vacation/Vacation';
 import PharmacistSearch from './../pages/pharmacyadmin/consultants/Pharmacists';
 import DermatologistSearch from './../pages/pharmacyadmin/consultants/Dermatologists';
+import AddPharmacist from './../pages/pharmacyadmin/consultants/AddPharmacist';
+import AddDermatologist from './../pages/pharmacyadmin/consultants/AddDermatologist';
 import DrugOrders from './../pages/pharmacyadmin/orders/Container';
+import AddDrugOrder from './../pages/pharmacyadmin/orders/AddOrder';
+import EditDrugOrder from './../pages/pharmacyadmin/orders/EditOrder';
+import Promotion from './../pages/pharmacyadmin/promotions/AddPromotion';
+import DrugsInPharmacy from './../pages/pharmacyadmin/drugs/Container';
+import ViewPredefined from './../pages/pharmacyadmin/consultations/ViewPredefined'
+import AddPredefined from './../pages/pharmacyadmin/consultations/AddPredefined'
+import PAPassword from './../pages/pharmacyadmin/password/ChangePassword'
 
 import Supplier from './../pages/supplier/Container';
 import SupplierLanding from './../pages/supplier/landing/Landing';
@@ -136,6 +154,11 @@ const routes = [
                 path: 'eprescription'
             },
             {
+                component: MyEPrescriptions,
+                name: 'myeprescriptions',
+                path: 'myeprescriptions'
+            },
+            {
                 component: Consultations,
                 name: 'patientconsultations',
                 path: 'patientconsultations'
@@ -149,7 +172,43 @@ const routes = [
                 component: DermatologistSearchPatient,
                 name: 'dermatologistsearch',
                 path: 'dermatologists'
-            }
+            },
+            {
+                component: DermatologistHistoryPatient,
+                name: 'historydermatologist',
+                path: 'historydermatologist'
+            },
+            {
+                component: PharmacistHistoryPatient,
+                name: 'historypharmacist',
+                path: 'historypharmacist'
+            },
+            {
+                component: PharmacyProfile,
+                name: 'patientpharmacyprofile',
+                path: 'pharmacy/:id',
+                props: true
+            },
+            {
+                component: PatientRating,
+                name: 'rating',
+                path: 'rating'
+            },
+            {
+                component: PatientPharmaciesRating,
+                name: 'ratingpharmacies',
+                path: 'ratingpharmacies'
+            },
+            {
+                component: PatientDrugsRating,
+                name: 'ratingdrugs',
+                path: 'ratingdrugs'
+            },
+            {
+                component: PatientSchedullingConsultations,
+                name: 'schedullingconsultations',
+                path: 'schedullingconsultations'
+            }          
         ]
     },
     {
@@ -273,7 +332,7 @@ const routes = [
             {
                 component: Drugs,
                 name: 'pharmacyadmindrugs',
-                path: 'pharmacyadmindrugs'
+                path: 'alldrugs'
             },
             {
                 component: VacationRequests,
@@ -294,6 +353,56 @@ const routes = [
                 component: DrugOrders,
                 name: 'pharmacydrugorders',
                 path: 'orders'
+            },
+            {
+                component: Promotion,
+                name: 'addpromotion',
+                path: 'promotion'
+            },
+            {
+                component: DrugsInPharmacy,
+                name: 'drugsinpharmacy',
+                path: 'drugs'
+            },
+            {
+                component: AddPredefined,
+                name: 'pharmacyadminaddpredefined',
+                path: 'predefined/add'
+            },
+            {
+                component: ViewPredefined,
+                name: 'pharmacyadminviewpredefined',
+                path: 'predefined'
+            },
+            {
+                component: AddDermatologist,
+                name: 'pharmacyadmindermatologistadd',
+                path: 'dermatologists/add'
+            },
+            {
+                component: AddPharmacist,
+                name: 'pharmacyadminpharmacistadd',
+                path: 'pharmacists/add'
+            },
+            {
+                component: SupplierProfile,
+                name: 'pharmacyadminprofile',
+                path: 'profile'
+            },
+            {
+                component: AddDrugOrder,
+                name: 'adddrugorder',
+                path: 'orders/add'
+            },
+            {
+                component: PAPassword,
+                name: 'pharmacyadminpassword',
+                path: 'password'
+            },{
+                component: EditDrugOrder,
+                name: 'editdrugorder',
+                path: 'orders/edit/:id',
+                props: true
             }
         ]
     },

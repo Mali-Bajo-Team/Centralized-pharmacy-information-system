@@ -38,6 +38,11 @@
             <v-icon color="primary">mdi-star</v-icon>
             {{ patient.loyaltyPoints }} <i> points</i> <br /><br />
 
+            <!--Penalties-->
+            <v-chip color="primary">Penalties: {{patient.penalties}}</v-chip>
+
+            <br /><br />
+
             <!--Category-->
             <v-chip color="primary">{{ patient.userCategoryDTO.name }} </v-chip>
             <br /><br />
@@ -132,7 +137,7 @@
     </v-card>
     <!-- End of the card for the base info about patient -->
     <!-- Card for the complaints -->
-    <v-card width="600px" class="mx-auto mb-14">
+    <v-card width="600px" class="mx-auto mb-1">
       <v-row justify="end">
         <v-card-subtitle class="ml-5 mr-5">
           Dear {{ patient.name }}, if you have some complain on some of the
@@ -366,7 +371,6 @@ export default {
   methods: {
     saveChanges() {
       this.dialogEditForm = !this.dialogEditForm;
-      alert("krecem potvrdu");
       this.axios
         .post(
           process.env.VUE_APP_BACKEND_URL +
@@ -390,7 +394,7 @@ export default {
           }
         )
         .then((resp) => {
-          alert("Success created a complaint");
+          alert("Successfully changed.");
           this.patient = resp.data;
           this.patientFormDTO.email = this.patient.email;
           this.patientFormDTO.name = this.patient.name;

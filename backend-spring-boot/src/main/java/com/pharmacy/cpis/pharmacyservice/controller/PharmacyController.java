@@ -56,16 +56,16 @@ public class PharmacyController {
 	@PostMapping("/{id}/subscribe")
 	@PreAuthorize("hasRole('PATIENT')")
 	public ResponseEntity<Void> subscribeOnPharmacyPromotions(@PathVariable(required = true) Long id,
-			@RequestBody PatientEmailDTO patientEmailDTO) {
-		pharmacyService.subscribePatientOnPharmacyPromotions(patientEmailDTO.getEmail(), id);
+			@RequestBody PatientEmailDTO patientEmailDTO, Authentication authentication) {
+		pharmacyService.subscribePatientOnPharmacyPromotions(authentication.getName(), id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@PostMapping("/{id}/unsubscribe")
 	@PreAuthorize("hasRole('PATIENT')")
 	public ResponseEntity<Void> unsubscribeOnPharmacyPromotions(@PathVariable(required = true) Long id,
-			@RequestBody PatientEmailDTO patientEmailDTO) {
-		pharmacyService.unsubscribePatientOnPharmacyPromotions(patientEmailDTO.getEmail(), id);
+			@RequestBody PatientEmailDTO patientEmailDTO, Authentication authentication) {
+		pharmacyService.unsubscribePatientOnPharmacyPromotions(authentication.getName(), id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
@@ -99,9 +99,8 @@ public class PharmacyController {
 		return new ResponseEntity<>(pharmaciesDTO, HttpStatus.OK);
 	}
 
-	// findPharmaciesWithRequiredDrugsAmount
 	@PostMapping(value = "/requireddrugs")
-	// TODO: add auth
+	@PreAuthorize("hasRole('PATIENT')")
 	public ResponseEntity<List<PharmacyTotalPriceDTO>> findPharmaciesWithRequiredDrugsAmount(
 			@RequestBody List<DrugCodeAndAmountDTO> drugCodeAndAmountDTOS) {
 		List<PharmacyTotalPriceDTO> pharmacyTotalPriceDTOS = availableDrugService

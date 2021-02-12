@@ -24,28 +24,79 @@ export default {
       },
       {
         title: "Drugs",
-        to: "/pharmacyadmin/pharmacyadmindrugs"
-      },
-      {
-        title: "Drug procurement",
         children: [
           {
-            title: "All orders",
+            title: "All drugs",
+            to: "/pharmacyadmin/alldrugs"
+          },
+          {
+            title: "Drugs in pharmacy",
+            to: "/pharmacyadmin/drugs"
+          },
+          {
+            title: "Orders",
             to: "/pharmacyadmin/orders"
+          },
+          {
+            title: "Add order",
+            to: "/pharmacyadmin/orders/add"
           }
         ]
       },
       {
-        title: "Vacation requests",
-        to: "/pharmacyadmin/vacationrequests"
+        title: "Employees",
+        children: [
+          {
+            title: "Pharmacists",
+            to: "/pharmacyadmin/pharmacists"
+          },
+          {
+            title: "Add pharmacist",
+            to: "/pharmacyadmin/pharmacists/add"
+          },
+          {
+            title: "Dermatologists",
+            to: "/pharmacyadmin/dermatologists"
+          },
+          {
+            title: "Add dermatologist",
+            to: "/pharmacyadmin/dermatologists/add"
+          },
+          {
+            title: "Vacation requests",
+            to: "/pharmacyadmin/vacationrequests"
+          }
+        ]
       },
       {
-        title: "Pharmacists",
-        to: "/pharmacyadmin/pharmacists"
+        title: "Consultations",
+        children: [
+          {
+            title: "Add predefined",
+            to: "/pharmacyadmin/predefined/add"
+          },
+          {
+            title: "View predefined",
+            to: "/pharmacyadmin/predefined"
+          }
+        ]
       },
       {
-        title: "Dermatologists",
-        to: "/pharmacyadmin/dermatologists"
+        title: "Add promotion",
+        to: "/pharmacyadmin/promotion"
+      },
+      {
+        title: "My profile",
+        children: [
+          {
+            title: "Personal info",
+            to: "/pharmacyadmin/profile"
+          },
+          {
+            title: "Change password",
+            to: "/pharmacyadmin/password"
+          }
+        ]
       }
     ]
   })
