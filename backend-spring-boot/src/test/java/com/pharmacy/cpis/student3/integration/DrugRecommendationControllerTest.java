@@ -63,59 +63,9 @@ public class DrugRecommendationControllerTest {
 	private String dermatologistAccesToken;
 
 	private MockMvc mockMvc;
-	private Consultant mockDermatologist;
-	private WorkingTimes mockDermatologistWorkingTimes;
-	private Consultant mockPharmacist;
-	private WorkingTimes mockPharmacistWorkingTimes;
-	private Collection<Consultation> mockConsultations;
-	private Pharmacy mockPharmacy;
-	private Patient mockPatient;
+
 	@Before
 	public void setup() {
-		mockConsultations = new ArrayList<>();
-		mockDermatologist = new Consultant();
-		mockDermatologist.setType(ConsultantType.DERMATOLOGIST);
-		mockDermatologist.setId(1L);
-		mockDermatologistWorkingTimes = new WorkingTimes();
-		mockDermatologistWorkingTimes.setId(1L);
-		mockDermatologistWorkingTimes.setConsultant(mockDermatologist);
-		mockDermatologistWorkingTimes.setPharmacy(new Pharmacy());
-		mockDermatologistWorkingTimes.getPharmacy().setId(1L);
-		mockDermatologistWorkingTimes
-				.setMonday(new DateRange(WorkingTimesConstants.WT_START, WorkingTimesConstants.WT_END));
-		mockDermatologist.setWorkingTimes(new HashSet<>());
-		mockDermatologist.getWorkingTimes().add(mockDermatologistWorkingTimes);
-
-		Consultation mockConsultation = new Consultation();
-		mockConsultation.setId(1L);
-		mockConsultation.setConsultant(mockDermatologist);
-		mockConsultation.setStatus(ConsultationStatus.SCHEDULED);
-		mockConsultation.setTime(new DateRange(WorkingTimesConstants.WT_START,
-				new Date(WorkingTimesConstants.WT_START.getTime() + (60 * 60 * 1000L))));
-		mockConsultations.add(mockConsultation);
-
-		mockPharmacy = new Pharmacy();
-		mockPharmacy.setId(2L);
-
-		mockPharmacist = new Consultant();
-		mockPharmacist.setType(ConsultantType.PHARMACIST);
-		mockPharmacist.setId(2L);
-		mockPharmacist.setAccount(new UserAccount());
-		mockPharmacistWorkingTimes = new WorkingTimes();
-		mockPharmacistWorkingTimes.setId(2L);
-		mockPharmacistWorkingTimes.setConsultant(mockDermatologist);
-		mockPharmacistWorkingTimes.setPharmacy(mockPharmacy);
-		mockPharmacistWorkingTimes
-				.setMonday(new DateRange(WorkingTimesConstants.WT_START, WorkingTimesConstants.WT_END));
-		mockPharmacist.setWorkingTimes(new HashSet<>());
-		mockPharmacist.getWorkingTimes().add(mockPharmacistWorkingTimes);
-
-		mockPatient = new Patient();
-		Set<Consultation> mockSetConsultations = new HashSet<>();
-		mockSetConsultations.add(mockConsultation);
-
-		mockPatient.setId(2L);
-		mockPatient.setConsultations(mockSetConsultations);
 
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).addFilters(springSecurityFilterChain)
 				.build();
@@ -164,6 +114,27 @@ public class DrugRecommendationControllerTest {
 				.perform(post(URL_PREFIX_SCHEDULE_EXAMIANTION).header("Authorization", "Bearer " + dermatologistAccesToken)
 						.contentType(contentType).content(TestUtil.json(scheduleExaminationDTO)))
 				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content().contentType(contentType));
+	}
+
+	@Test
+	@Transactional
+	@Rollback(true)
+	public void scheduleExamiantionWithOverllapingStartEndDate() throws Exception {
+
+		ScheduleExaminationDTO scheduleExaminationDTO = new ScheduleExaminationDTO();
+		scheduleExaminationDTO.setConsultantEmail(LoginConstants.DERMATOLOGIST_EMAIL);
+		scheduleExaminationDTO.setConsultantId(9L);
+		scheduleExaminationDTO.setStartDate("2021-02-16 19:00:00");
+		scheduleExaminationDTO.setEndDate("2021-02-16 20:00:00");
+		scheduleExaminationDTO.setPatientId(2L);
+		scheduleExaminationDTO.setPharmacyID(2L);
+
+
+		this.mockMvc
+				.perform(post(URL_PREFIX_SCHEDULE_EXAMIANTION).header("Authorization", "Bearer " + dermatologistAccesToken)
+						.contentType(contentType).content(TestUtil.json(scheduleExaminationDTO)))
+				.andExpect(MockMvcResultMatchers.status().isBadRequest())
 				.andExpect(MockMvcResultMatchers.content().contentType(contentType));
 	}
 
