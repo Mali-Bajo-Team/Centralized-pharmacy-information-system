@@ -120,37 +120,106 @@
           v-for="consultation in consultations"
           :key="consultation.pharmacyId"
         >
-          <v-row>
-            <v-col>
-              <v-card-title>
-                <h2>{{ consultation.pharmacyName }}</h2>
-              </v-card-title>
+          <v-card-title>
+            {{ consultation.pharmacyName }}
+          </v-card-title>
 
-              <v-card-text>
-                <v-chip color="primary">
-                  <v-icon color="secondary">mdi-map-marker</v-icon>
-                  {{ consultation.pharmacyLocation }}
-                </v-chip>
-                <v-chip color="primary" class="ml-2">
-                  <v-icon color="secondary">mdi-cash</v-icon>
-                  {{ consultation.consultationPrice }}
-                </v-chip>
-                <br /><br />
-              </v-card-text>
-            </v-col>
+          <v-card-subtitle>
+            {{ consultation.pharmacyLocation }} ,
+            {{ consultation.consultationPrice }} $,
+            {{ consultation.pharmacyRating }}</v-card-subtitle
+          >
 
-            <v-col>
-              <v-card-title>
-                <v-rating
-                  color="accent"
-                  background-color="accent "
-                  half-increments
-                  readonly
-                  v-model="consultation.pharmacyRating"
-                ></v-rating>
-              </v-card-title>
-            </v-col>
-          </v-row>
+          <v-card-actions>
+            <v-btn color="orange lighten-2" text>
+              Show free pharmacists
+            </v-btn>
+
+            <v-spacer></v-spacer>
+
+            <v-btn
+              icon
+              color="orange lighten-2"
+              @click="
+                consultation.showPharmacyFreePharmacist = !consultation.showPharmacyFreePharmacist
+              "
+            >
+              <v-icon>{{
+                consultation.showPharmacyFreePharmacist
+                  ? "mdi-chevron-up"
+                  : "mdi-chevron-down"
+              }}</v-icon>
+            </v-btn>
+          </v-card-actions>
+
+          <v-expand-transition>
+            <div v-show="consultation.showPharmacyFreePharmacist">
+              <v-divider></v-divider>
+              <v-card height="40px">
+                <v-row align="center" justify="center">
+                  <v-btn
+                    small
+                    width="110px"
+                    color="green lighten-2"
+                    class="ma-2 white--text mr-6"
+                    @click="
+                      sortArrayBy(
+                        'consultationPrice',
+                        consultation.freePharmacist
+                      )
+                    "
+                    >Rating
+                    <v-icon small right dark> mdi-arrow-up-bold </v-icon>
+                  </v-btn>
+                  <v-btn
+                    small
+                    width="110px"
+                    color="green lighten-2"
+                    class="ma-2 white--text mr-6"
+                    @click="
+                      sortArrayDownBy(
+                        'consultationPrice',
+                        consultation.freePharmacist
+                      )
+                    "
+                  >
+                    Rating
+                    <v-icon small right dark> mdi-arrow-down-bold </v-icon>
+                  </v-btn>
+                </v-row>
+              </v-card>
+              <v-divider></v-divider>
+
+              <v-card
+                class="mt-5"
+                v-for="pharmacist in consultation.freePharmacist"
+                :key="pharmacist.consultantId"
+              >
+                <v-row>
+                  <v-col>
+                    <v-card-text>
+                      <h3>
+                      {{ pharmacist.consultantName }}
+                      {{ pharmacist.consultantSurname }}
+                      </h3>
+                    </v-card-text>
+
+                  
+                  </v-col>
+                  <v-col>
+                    <v-rating color="accent" v-model="pharmacist.consultantRating">
+                    </v-rating>
+                  </v-col>
+                  <v-divider></v-divider>
+                  <v-col>
+                    <v-card-actions>
+                      <v-btn color="primary" > Schedule </v-btn>
+                    </v-card-actions>
+                  </v-col>
+                </v-row>
+              </v-card>
+            </div>
+          </v-expand-transition>
         </v-card>
       </v-col>
       <!--End of the right column-->
@@ -179,15 +248,19 @@ export default {
     sortBy(prop) {
       this.consultations.sort((a, b) => (a[prop] < b[prop] ? -1 : 1));
     },
+    sortArrayBy(prop, array) {
+      array.sort((a, b) => (a[prop] < b[prop] ? -1 : 1));
+    },
     sortDownBy(prop) {
       this.consultations.sort((a, b) => (a[prop] > b[prop] ? -1 : 1));
+    },
+    sortArrayDownBy(prop, array) {
+      array.sort((a, b) => (a[prop] > b[prop] ? -1 : 1));
     },
     isDateValid() {
       var todayDate = Date.parse(getTodayDateString());
       var examinationStartDate = Date.parse(
-        getStringDateFromMilliseconds(
-          this.dateBind
-        )
+        getStringDateFromMilliseconds(this.dateBind)
       );
       if (todayDate > examinationStartDate) return false;
       return true;
@@ -212,7 +285,20 @@ export default {
         )
         .then((resp) => {
           alert("Successfuly");
-          this.consultations = resp.data;
+          this.consultations = [];
+          for (let consultation of resp.data) {
+            let tempObj = {
+              showPharmacyFreePharmacist: false,
+              consultationPrice: consultation.consultationPrice,
+              freePharmacist: consultation.freePharmacist,
+              pharmacyId: consultation.pharmacyId,
+              pharmacyLocation: consultation.pharmacyLocation,
+              pharmacyName: consultation.pharmacyName,
+              pharmacyRating: consultation.pharmacyRating,
+            };
+
+            this.consultations.push(tempObj);
+          }
         })
         .catch((error) => {
           alert("Error: " + error);
