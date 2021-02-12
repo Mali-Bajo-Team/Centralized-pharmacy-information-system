@@ -12,6 +12,10 @@ import java.util.Date;
 @Entity
 @Check(constraints = "(consultant_id is not null) or (pharmacy_id is not null)")
 public class Complaint {
+	@Version
+	@Column(nullable = false)
+	private Long version;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -38,6 +42,10 @@ public class Complaint {
 
 	public Complaint() {
 		super();
+	}
+
+	public Long getVersion() {
+		return version;
 	}
 
 	public Long getId() {
