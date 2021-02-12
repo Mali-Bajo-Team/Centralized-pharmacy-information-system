@@ -53,6 +53,8 @@ import DermatologistSearch from './../pages/pharmacyadmin/consultants/Dermatolog
 import DrugOrders from './../pages/pharmacyadmin/orders/Container';
 import Promotion from './../pages/pharmacyadmin/promotions/AddPromotion';
 import DrugsInPharmacy from './../pages/pharmacyadmin/drugs/Container';
+import ViewPredefined from './../pages/pharmacyadmin/consultations/ViewPredefined'
+import AddPredefined from './../pages/pharmacyadmin/consultations/AddPredefined'
 
 import Supplier from './../pages/supplier/Container';
 import SupplierLanding from './../pages/supplier/landing/Landing';
@@ -349,6 +351,16 @@ const routes = [
                 component: DrugsInPharmacy,
                 name: 'drugsinpharmacy',
                 path: 'drugs'
+            },
+            {
+                component: AddPredefined,
+                name: 'pharmacyadminaddpredefined',
+                path: 'predefined/add'
+            },
+            {
+                component: ViewPredefined,
+                name: 'pharmacyadminviewpredefined',
+                path: 'predefined'
             }
         ]
     },

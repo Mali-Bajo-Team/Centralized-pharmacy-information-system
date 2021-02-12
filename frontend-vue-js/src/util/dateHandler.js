@@ -44,7 +44,20 @@ export function getMillisecondsFromStringDate(date) {
     return new Date(parseInt(year), parseInt(month) - 1, parseInt(day)).getTime()
 }
 
+export function getMillisecondsFromStringTimeAndDate(time, date) {
+    let realdate = new Date(getMillisecondsFromStringDate(date));
+    const [hours, minutes] = time.split(':');
+    realdate.setHours(hours);
+    realdate.setMinutes(minutes);
+    return realdate.getTime();
+}
+
 export function getCurrentDate() {
     let date = new Date();
     return new Date(date.getFullYear, date.getMonth, date.getDate);
+}
+
+export function getTimeStringFromMilliseconds(milliseconds) {
+    let date = new Date(milliseconds)
+    return String(date.getHours()).padStart(2, "0") + ":" + String(date.getMinutes()).padStart(2, "0");
 }
