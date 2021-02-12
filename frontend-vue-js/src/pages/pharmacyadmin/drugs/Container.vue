@@ -15,8 +15,7 @@
           <v-toolbar-title class="body-2">Search</v-toolbar-title>
         </v-toolbar>
         <v-form class="pa-4">
-          <v-text-field v-model="filters.name" label="Name"></v-text-field>
-          <v-text-field v-model="filters.surname" label="Surname"></v-text-field>
+          <v-text-field v-model="filters.name" label="Drug name"></v-text-field>
         </v-form>
       </v-card>
 
@@ -29,23 +28,20 @@
         <!--End of toolbar of the card-->
 
         <v-form class="pa-4">
-          <v-card-text>
-            <h3>Rating</h3>
-          </v-card-text>
-          <v-range-slider
-            :tick-labels="ratings"
-            class="ml-4 mr-4"
-            v-model="filters.ratingRange"
-            step="25"
-          ></v-range-slider>
-          <br />
-          <v-divider></v-divider>
-          <br />
           <v-select
             class="ml-4 mr-4"
-            v-model="filters.pharmacies"
-            :items="pharmacies"
-            label="Select pharmacies"
+            v-model="filters.drugClasses"
+            :items="drugClasses"
+            label="Select drug type"
+            multiple
+            chips
+            clearable
+          ></v-select>
+          <v-select
+            class="ml-4 mr-4"
+            v-model="filters.drugForms"
+            :items="drugForms"
+            label="Select drug form"
             multiple
             chips
             clearable
@@ -64,14 +60,8 @@
         <v-card-title>No consultants found.</v-card-title>
       </v-card>
 
-      <template v-for="cons in consultants">
-        <onecons
-          v-show="matchesFilters(cons)"
-          :key="cons.id"
-          :consultant="cons"
-          :admin="admin"
-          :endpoint="endpoint"
-        ></onecons>
+      <template v-for="drug in drugs">
+        <oneitem v-show="matchesFilters(drug)" :key="drug.code" :drug="drug"></oneitem>
       </template>
     </v-col>
     <v-spacer></v-spacer>
@@ -79,45 +69,38 @@
 </template>
 
 <script>
-import onecons from "./Consultant";
+import oneitem from "./DrugInPharmacy";
 
 export default {
   components: {
-    onecons
-  },
-  props: {
-    admin: {
-      type: Boolean,
-      default: false
-    },
-    endpoint: {
-      type: String,
-      default: ""
-    }
+    oneitem
   },
   data: () => ({
     loading: true,
-    ratings: ["1", "2", "3", "4", "5"],
-    consultants: [],
-    pharmacies: [],
+    drugs: [],
+    drugClasses: [],
+    drugForms: [],
     filters: {
       name: "",
-      surname: "",
-      ratingRange: [0, 100],
-      pharmacies: []
+      drugForms: [],
+      drugClasses: []
     },
     snackbarText: "",
     snackbar: false
   }),
   mounted: function() {
     this.axios
-      .get(this.endpoint, {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("JWT-CPIS")
+      .get(
+        process.env.VUE_APP_BACKEND_URL +
+          process.env.VUE_APP_DRUGS_IN_PHARMACY_ENDPOINT,
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("JWT-CPIS")
+          }
         }
-      })
+      )
       .then(response => {
-        this.consultants = response.data;
+        this.drugs = response.data;
         this.loading = false;
       })
       .catch(error => {
@@ -129,7 +112,6 @@ export default {
           this.snackbarText = error.response.data.message;
         else if (error.message) this.snackbarText = error.message;
         else this.snackbarText = "An unknown error has occured.";
-        this.performingAction = false;
         this.snackbar = true;
         this.loading = false;
       });
@@ -137,11 +119,11 @@ export default {
     this.axios
       .get(
         process.env.VUE_APP_BACKEND_URL +
-          process.env.VUE_APP_PHARMACIES_ENDPOINT
+          process.env.VUE_APP_ALL_DRUGS_TYPES_ENDPOINT
       )
       .then(response => {
-        this.pharmacies = [];
-        for (let pharmacy of response.data) this.pharmacies.push(pharmacy.name);
+        this.drugClasses = [];
+        for (let drc of response.data) this.drugClasses.push(drc.name);
       })
       .catch(error => {
         if (
@@ -152,35 +134,55 @@ export default {
           this.snackbarText = error.response.data.message;
         else if (error.message) this.snackbarText = error.message;
         else this.snackbarText = "An unknown error has occured.";
-        this.performingAction = false;
+        this.snackbar = true;
+      });
+
+    this.axios
+      .get(
+        process.env.VUE_APP_BACKEND_URL +
+          process.env.VUE_APP_ALL_DRUGS_FORMS_ENDPOINT
+      )
+      .then(response => {
+        this.drugForms = [];
+        for (let drf of response.data) this.drugForms.push(drf.name);
+      })
+      .catch(error => {
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.message
+        )
+          this.snackbarText = error.response.data.message;
+        else if (error.message) this.snackbarText = error.message;
+        else this.snackbarText = "An unknown error has occured.";
         this.snackbar = true;
       });
   },
   methods: {
-    matchesFilters: function(consultant) {
-      if (!consultant.name.toLowerCase().match(this.filters.name.toLowerCase()))
+    matchesFilters: function(drug) {
+      if (!drug.name.toLowerCase().match(this.filters.name.toLowerCase()))
         return false;
+
       if (
-        !consultant.surname
-          .toLowerCase()
-          .match(this.filters.surname.toLowerCase())
+        this.filters.drugClasses.length == 0 &&
+        this.filters.drugForms.length == 0
       )
-        return false;
+        return true;
 
-      if (consultant.rating < this.filters.ratingRange[0]) return false;
-      if (consultant.rating > this.filters.ratingRange[1]) return false;
+      if (this.filters.drugClasses.length > 0)
+        for (let drc of this.filters.drugClasses)
+          if (drug.drugClass == drc) return true;
 
-      if (this.filters.pharmacies.length == 0) return true;
+      if (this.filters.drugForms.length > 0)
+        for (let drf of this.filters.drugForms)
+          if (drug.drugForm == drf) return true;
 
-      for (let worksin of consultant.pharmacies)
-        for (let pharm of this.filters.pharmacies)
-          if (pharm == worksin.name) return true;
       return false;
     }
   },
   computed: {
     showEmptyMessage: function() {
-      return !this.loading && this.consultants.length == 0;
+      return !this.loading && this.drugs.length == 0;
     }
   }
 };
