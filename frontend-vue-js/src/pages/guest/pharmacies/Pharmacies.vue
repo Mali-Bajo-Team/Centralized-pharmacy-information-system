@@ -83,9 +83,9 @@
                 width="110px"
                 color="green lighten-2"
                 class="ma-2 white--text mr-6"
-                @click="sortBy('location')"
+                @click="sortBy('city')"
               >
-                Location
+                City
                 <v-icon small right dark>mdi-arrow-up-bold</v-icon>
               </v-btn>
               <v-btn
@@ -93,9 +93,9 @@
                 width="110px"
                 color="green lighten-2"
                 class="ma-2 white--text ml-6"
-                @click="sortDownBy('location')"
+                @click="sortDownBy('city')"
               >
-                Location
+                City
                 <v-icon small right dark>mdi-arrow-down-bold</v-icon>
               </v-btn>
             </v-row>
