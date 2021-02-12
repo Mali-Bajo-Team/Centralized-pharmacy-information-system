@@ -24,16 +24,16 @@ public class EPrescriptionController {
 
     @PostMapping(value = "/save")
     @PreAuthorize("hasRole('PATIENT')")
-    @PatientAccountPenalties
-    public ResponseEntity<EPrescriptionReadDTO> getPredefinedByPharmacy(@RequestBody EPrescriptionCreateDTO ePrescriptionCreateDTO) {
+  @PatientAccountPenalties
+    public ResponseEntity<EPrescriptionReadDTO> saveEPrescription(@RequestBody EPrescriptionCreateDTO ePrescriptionCreateDTO) {
         EPrescription ePrescription = prescriptionService.savePrescription(ePrescriptionCreateDTO);
         return new ResponseEntity<>(new EPrescriptionReadDTO(ePrescription),HttpStatus.OK);
     }
 
     @PostMapping(value = "/patient")
     @PreAuthorize("hasRole('PATIENT')")
-    @PatientAccountPenalties
-    public ResponseEntity<List<EPrescriptionReadDTO>> getPredefinedByPharmacy(@RequestBody PatientEmailDTO patientEmailDTO) {
+  @PatientAccountPenalties
+    public ResponseEntity<List<EPrescriptionReadDTO>> findAllPatientEPrescriptions(@RequestBody PatientEmailDTO patientEmailDTO) {
         List<EPrescriptionReadDTO> prescriptionReadDTOS = new ArrayList<>();
         for(EPrescription ePrescription : prescriptionService.findAllPatientEPrescription(patientEmailDTO.getEmail())){
             prescriptionReadDTOS.add(new EPrescriptionReadDTO(ePrescription));

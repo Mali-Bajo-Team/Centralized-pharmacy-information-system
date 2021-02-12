@@ -21,13 +21,13 @@ import com.pharmacy.cpis.util.DateConversionsAndComparisons;
 
 @Entity
 public class AvailableDrug {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-
 	@Version
 	@Column(nullable = false)
 	private Long version;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	@Column(nullable = false)
 	private Integer availableAmount;
@@ -43,6 +43,7 @@ public class AvailableDrug {
 
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "drug", cascade = CascadeType.ALL)
 	private Set<Price> prices;
+
 
 	public AvailableDrug() {
 		super();
