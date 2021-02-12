@@ -98,7 +98,6 @@ insert into pharmacy_rating(rating, patient_id,pharmacy_id) values (5,2,1);
 insert into pharmacy_rating(rating, patient_id,pharmacy_id) values (3,2,2);
 insert into pharmacy_rating(rating, patient_id,pharmacy_id) values (4,4,2);
 
-
 insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id,version) values (25,3,'2021-02-03 10:23','2021-02-03 11:00',3,2,1,0);
 insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id,version) values (20,3,'2021-02-04 11:23','2021-02-04 13:20',3,2,1,0);
 insert into consultation (price,status,start_date,end_date,consultant_id,patient_id,pharmacy_id,version) values (20,1,'2021-02-05 13:23','2021-02-05 14:00',5,4,1,0);
