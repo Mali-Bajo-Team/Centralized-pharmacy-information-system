@@ -3,6 +3,7 @@ package com.pharmacy.cpis.drugservice.service;
 
 import com.pharmacy.cpis.drugservice.dto.DrugReservationDTO;
 import com.pharmacy.cpis.drugservice.dto.ReservationDTO;
+import com.pharmacy.cpis.drugservice.model.drug.Drug;
 import com.pharmacy.cpis.drugservice.model.drugsales.Reservation;
 import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
 import com.pharmacy.cpis.scheduleservice.model.prescriptions.EPrescription;
@@ -26,4 +27,7 @@ public interface IReservationService {
     List<Reservation> findAllPatientReservations(PatientEmailDTO patientEmailDTO);
 
     void removeReservation(Long reservationId);
+
+    // All reserved drugs (there is also ones which are made with ePrescription)
+    List<Drug> findAllPatientDrugsAvailableForRating(String patientEmail);
 }
