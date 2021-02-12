@@ -36,7 +36,8 @@
         </v-card>
         <!-- End of the sort by date -->
         <br /><br />
-        <!--Toolbar of the card-->
+
+        <!-- Filter -->
         <v-card>
           <v-toolbar color="primary" dark dense flat>
             <v-toolbar-title class="body-2">
@@ -46,11 +47,17 @@
 
           <!--End of toolbar of the card-->
 
-          <!--Filter form-->
-          <v-card-text> </v-card-text>
+          <v-select
+            class="ml-4 mr-4"
+            v-model="selectedStatus"
+            :items="possibleStatus"
+            label="Select prescription status"
+            chips
+            clearable
+          ></v-select>
         </v-card>
-
         <!--End of filter form-->
+
         <br /><br />
       </v-col>
       <!--End of left column-->
@@ -59,7 +66,7 @@
       <v-col xl="8" sm="12" md="8">
         <v-card
           class="pa-2 ml-16 mr-16 mb-10"
-          v-for="prescription in prescriptions"
+          v-for="prescription in filteredPrescriptions"
           :key="prescription.prescriptionId"
         >
           <v-card-title>
@@ -120,6 +127,8 @@ import { getStringDateWithTimeFromMilliseconds } from "./../../../util/dateHandl
 export default {
   data: () => ({
     prescriptions: [],
+    possibleStatus: ["CREATED", "USED", "REJECTED"],
+    selectedStatus: "",
   }),
   mounted() {
     this.axios
@@ -154,6 +163,16 @@ export default {
       });
   },
   methods: {
+    isMatachedPrescription(prescription) {
+      if (
+        this.selectedStatus != "" &&
+        prescription.status != this.selectedStatus
+      ) {
+        return false;
+      }
+      console.log(prescription);
+      return true;
+    },
     sortBy(prop) {
       this.prescriptions.sort((a, b) => (a[prop] < b[prop] ? -1 : 1));
     },
@@ -162,6 +181,13 @@ export default {
     },
     convertMsToString(ms) {
       return getStringDateWithTimeFromMilliseconds(ms);
+    },
+  },
+  computed: {
+    filteredPrescriptions() {
+      return this.prescriptions.filter((prescription) => {
+        return this.isMatachedPrescription(prescription);
+      });
     },
   },
 };
