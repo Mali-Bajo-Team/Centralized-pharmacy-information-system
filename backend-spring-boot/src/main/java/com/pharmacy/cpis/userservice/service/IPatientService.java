@@ -20,4 +20,6 @@ public interface IPatientService {
 
     void resetPenalties();
 
+    void addPenalty(String email);
+
 }

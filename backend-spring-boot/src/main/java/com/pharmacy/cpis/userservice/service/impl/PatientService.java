@@ -97,4 +97,14 @@ public class PatientService implements IPatientService {
     public void resetPenalties() {
         patientRepository.resetPenalties();
     }
+
+    @Override
+    public void addPenalty(String email) {
+        Patient patient= findByEmail(email);
+        if(patient.getPenalties() == null) {
+            patient.setPenalties(1);
+        } else{
+            patient.setPenalties(patient.getPenalties() + 1);
+        }patientRepository.save(patient);
+    }
 }
