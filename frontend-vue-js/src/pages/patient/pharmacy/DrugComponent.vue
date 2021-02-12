@@ -252,36 +252,7 @@ export default {
     showMakeReservation: false
   }),
   mounted() {
-    this.axios
-      .get(this.endpoint, {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("JWT-CPIS")
-        }
-      })
-      .then(resp => {
-        this.drugs = resp.data;
-        this.drugs = [];
-        for (let drug of resp.data) {
-          let tempDrug = {
-            name: drug.name,
-            alternateDrugs: drug.alternateDrugs,
-            code: drug.code,
-            loyaltyPoints: drug.loyaltyPoints,
-            mark: drug.mark,
-            typeOfDrug: drug.typeOfDrug,
-            showPharmacies: false,
-            showSpecification: false,
-            drugSpecificationDTO: {
-              manufacturer: drug.drugSpecificationDTO.manufacturer,
-              contraindications: drug.drugSpecificationDTO.contraindications,
-              ingredients: drug.drugSpecificationDTO.ingredients,
-              recommendedDailyDose:
-                drug.drugSpecificationDTO.recommendedDailyDose
-            }
-          };
-          this.drugs.push(tempDrug);
-        }
-      });
+    this.load();
 
     this.axios
       .get(
@@ -295,8 +266,44 @@ export default {
         }
       });
   },
-
+  watch: {
+    endpoint: function() {
+      this.load();
+    }
+  },
   methods: {
+    load: function() {
+      this.axios
+        .get(this.endpoint, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("JWT-CPIS")
+          }
+        })
+        .then(resp => {
+          this.drugs = resp.data;
+          this.drugs = [];
+          for (let drug of resp.data) {
+            let tempDrug = {
+              name: drug.name,
+              alternateDrugs: drug.alternateDrugs,
+              code: drug.code,
+              loyaltyPoints: drug.loyaltyPoints,
+              mark: drug.mark,
+              typeOfDrug: drug.typeOfDrug,
+              showPharmacies: false,
+              showSpecification: false,
+              drugSpecificationDTO: {
+                manufacturer: drug.drugSpecificationDTO.manufacturer,
+                contraindications: drug.drugSpecificationDTO.contraindications,
+                ingredients: drug.drugSpecificationDTO.ingredients,
+                recommendedDailyDose:
+                  drug.drugSpecificationDTO.recommendedDailyDose
+              }
+            };
+            this.drugs.push(tempDrug);
+          }
+        });
+    },
     isDateValid() {
       var todayDate = Date.parse(getTodayDateString());
       var deadlineDate = Date.parse(

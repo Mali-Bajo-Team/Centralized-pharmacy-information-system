@@ -5,9 +5,7 @@
       <v-col xl="4" sm="12" md="4">
         <v-card mt="5">
           <v-toolbar color="primary" dark dense flat>
-            <v-toolbar-title class="body-2">
-              Sort my consultations
-            </v-toolbar-title>
+            <v-toolbar-title class="body-2">Sort my consultations</v-toolbar-title>
           </v-toolbar>
           <br />
           <!-- Sort by price -->
@@ -20,7 +18,7 @@
               @click="sortBy('price')"
             >
               Price
-              <v-icon small right dark> mdi-arrow-up-bold </v-icon>
+              <v-icon small right dark>mdi-arrow-up-bold</v-icon>
             </v-btn>
             <v-btn
               small
@@ -30,7 +28,7 @@
               @click="sortDownBy('price')"
             >
               Price
-              <v-icon small right dark> mdi-arrow-down-bold </v-icon>
+              <v-icon small right dark>mdi-arrow-down-bold</v-icon>
             </v-btn>
           </v-row>
           <!-- End of the sort by price -->
@@ -44,7 +42,7 @@
               @click="sortBy('startDate')"
             >
               Date
-              <v-icon small right dark> mdi-arrow-up-bold </v-icon>
+              <v-icon small right dark>mdi-arrow-up-bold</v-icon>
             </v-btn>
             <v-btn
               small
@@ -54,7 +52,7 @@
               @click="sortDownBy('startDate')"
             >
               Date
-              <v-icon small right dark> mdi-arrow-down-bold </v-icon>
+              <v-icon small right dark>mdi-arrow-down-bold</v-icon>
             </v-btn>
           </v-row>
           <!-- End of the sort by date -->
@@ -68,7 +66,7 @@
               @click="sortBy('consultationDuration')"
             >
               Duration
-              <v-icon small right dark> mdi-arrow-up-bold </v-icon>
+              <v-icon small right dark>mdi-arrow-up-bold</v-icon>
             </v-btn>
             <v-btn
               small
@@ -78,7 +76,7 @@
               @click="sortDownBy('consultationDuration')"
             >
               Duration
-              <v-icon small right dark> mdi-arrow-down-bold </v-icon>
+              <v-icon small right dark>mdi-arrow-down-bold</v-icon>
             </v-btn>
           </v-row>
           <!-- End of the sort by duration -->
@@ -89,25 +87,26 @@
       <!--Right column-->
       <v-col xl="8" sm="12" md="8">
         <v-card
+          elevation="4"
+          class="pa-4 mb-10"
           v-for="consultation in consultations"
           :key="consultation.id"
-          class="pa-2 ml-16 mr-16 mb-10"
         >
-          <v-card-subtitle>
-            <h3 class="ml-3">
-              {{ consultation.pharmacyName }},
-              {{ consultation.consultantName }}
-              {{ consultation.consultantSurname }}
-              <br />
-              <br />
-              {{ convertMsToString(consultation.startDate) }},
-              {{ convertMsToString(consultation.endDate) }}
-              <br />
-              <br />
-              {{ consultation.price }} $
-            </h3>
-          </v-card-subtitle>
-          <v-spacer></v-spacer>
+          <v-card-title>
+            <h2>{{consultation.consultantName + " " +consultation.consultantSurname}}</h2>
+            <v-spacer></v-spacer>
+            <v-chip color="success" class="ml-0">{{ consultation.price }}€</v-chip>
+          </v-card-title>
+          <v-card-title class="pt-0">
+            <v-chip>{{ consultation.pharmacyName }}</v-chip>
+          </v-card-title>
+          <v-divider class="ml-5 mr-5"></v-divider>
+          <v-card-text class="ml-2">
+            <span class="mr-2">From</span>
+            <v-chip color="primary">{{ consultation.startDate }}</v-chip>
+            <span class="ml-2 mr-2">to</span>
+            <v-chip color="primary">{{ consultation.endDate }}</v-chip>
+          </v-card-text>
         </v-card>
       </v-col>
       <!--End of right column-->
@@ -122,7 +121,7 @@ import { getStringDateWithTimeFromMilliseconds } from "./../../../util/dateHandl
 
 export default {
   data: () => ({
-    consultations: [],
+    consultations: []
   }),
   mounted() {
     this.axios
@@ -130,36 +129,34 @@ export default {
         process.env.VUE_APP_BACKEND_URL +
           process.env.VUE_APP_PATIENT_CONSULTATIONS_PHARMACIST_HISTORY_ENDPOINT,
         {
-          email: getParsedToken().sub,
+          email: getParsedToken().sub
         },
         {
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
-          },
+            Authorization: "Bearer " + localStorage.getItem("JWT-CPIS")
+          }
         }
       )
-      .then((resp) => {
+      .then(resp => {
         this.consultations = [];
         for (let consultation of resp.data) {
           let tempObj = {
+            id: consultation.id,
             consultantEmail: consultation.consultantEmail,
             consultantId: consultation.consultantId,
             consultantName: consultation.consultantName,
             consultantSurname: consultation.consultantSurname,
-            endDate: consultation.endDate,
-            startDate: consultation.startDate,
+            endDate: new Date(consultation.endDate).toLocaleString(),
+            startDate: new Date(consultation.startDate).toLocaleString(),
             consultationDuration: consultation.endDate - consultation.startDate,
-            patientId: consultation.patientId,
-            patientName: consultation.patientName,
-            patientSurname: consultation.patientSurname,
             pharmacyID: consultation.pharmacyID,
             pharmacyName: consultation.pharmacyName,
-            price: consultation.price,
+            price: consultation.price
           };
           this.consultations.push(tempObj);
         }
       })
-      .catch((error) => {
+      .catch(error => {
         alert(error);
       });
   },
@@ -172,7 +169,7 @@ export default {
     },
     sortDownBy(prop) {
       this.consultations.sort((a, b) => (a[prop] > b[prop] ? -1 : 1));
-    },
-  },
+    }
+  }
 };
 </script>

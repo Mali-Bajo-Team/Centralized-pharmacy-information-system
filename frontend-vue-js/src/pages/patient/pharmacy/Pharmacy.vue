@@ -28,6 +28,7 @@
             <v-tab>Dermatologists</v-tab>
             <v-tab>Pharmacists</v-tab>
             <v-tab>Available drugs</v-tab>
+            <v-tab>Consultations</v-tab>
           </v-tabs>
           <v-tabs-items v-model="tab">
             <v-tab-item>
@@ -73,6 +74,9 @@
             <v-tab-item>
               <drugs :endpoint="drugEndpoint" :pharmacyId="id"></drugs>
             </v-tab-item>
+            <v-tab-item>
+              <exams :endpoint="predefinedEndpoint"></exams>
+            </v-tab-item>
           </v-tabs-items>
         </v-card>
       </v-col>
@@ -91,11 +95,13 @@
 <script>
 import consultants from "@/components/consultantSearch/Container";
 import drugs from "./DrugComponent";
+import exams from "./ConsultationComponent";
 
 export default {
   components: {
     consultants,
-    drugs
+    drugs,
+    exams
   },
   props: {
     id: {
