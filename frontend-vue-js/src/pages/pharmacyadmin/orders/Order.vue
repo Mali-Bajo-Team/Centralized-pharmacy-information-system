@@ -31,7 +31,7 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-btn v-show="editable" color="info" :disabled="performingAction">Edit</v-btn>
+          <v-btn v-show="editable && false" color="info" :disabled="performingAction">Edit</v-btn>
           <v-btn
             v-show="editable"
             color="error"

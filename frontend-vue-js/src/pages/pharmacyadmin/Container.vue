@@ -36,6 +36,10 @@ export default {
           {
             title: "Orders",
             to: "/pharmacyadmin/orders"
+          },
+          {
+            title: "Add order",
+            to: "/pharmacyadmin/orders/add"
           }
         ]
       },

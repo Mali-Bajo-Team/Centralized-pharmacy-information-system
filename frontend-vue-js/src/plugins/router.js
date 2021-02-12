@@ -55,6 +55,7 @@ import DermatologistSearch from './../pages/pharmacyadmin/consultants/Dermatolog
 import AddPharmacist from './../pages/pharmacyadmin/consultants/AddPharmacist';
 import AddDermatologist from './../pages/pharmacyadmin/consultants/AddDermatologist';
 import DrugOrders from './../pages/pharmacyadmin/orders/Container';
+import AddDrugOrder from './../pages/pharmacyadmin/orders/AddOrder';
 import Promotion from './../pages/pharmacyadmin/promotions/AddPromotion';
 import DrugsInPharmacy from './../pages/pharmacyadmin/drugs/Container';
 import ViewPredefined from './../pages/pharmacyadmin/consultations/ViewPredefined'
@@ -390,6 +391,11 @@ const routes = [
                 component: SupplierProfile,
                 name: 'pharmacyadminprofile',
                 path: 'profile'
+            },
+            {
+                component: AddDrugOrder,
+                name: 'adddrugorder',
+                path: 'orders/add'
             }
         ]
     },
