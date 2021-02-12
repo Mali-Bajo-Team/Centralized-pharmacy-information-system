@@ -3,6 +3,7 @@ package com.pharmacy.cpis.student3.integration;
 import com.pharmacy.cpis.drugservice.dto.AddAvailableDrugDTO;
 import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
 import com.pharmacy.cpis.scheduleservice.dto.DrugRecommendationDTO;
+import com.pharmacy.cpis.scheduleservice.dto.ScheduleExaminationDTO;
 import com.pharmacy.cpis.scheduleservice.model.consultations.Consultation;
 import com.pharmacy.cpis.scheduleservice.model.consultations.ConsultationStatus;
 import com.pharmacy.cpis.scheduleservice.model.workschedule.WorkingTimes;
@@ -45,6 +46,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 public class DrugRecommendationControllerTest {
 
 	private static final String URL_PREFIX = "/api/drugrecommendation/checkbeforerecommend";
+	private static final String URL_PREFIX_SCHEDULE_EXAMIANTION = "/api/consultations/scheduleconsultation";
 
 	@Autowired
 	private WebApplicationContext webApplicationContext;
@@ -140,6 +142,27 @@ public class DrugRecommendationControllerTest {
 		this.mockMvc
 				.perform(post(URL_PREFIX).header("Authorization", "Bearer " + dermatologistAccesToken)
 						.contentType(contentType).content(TestUtil.json(drugRecommendationDTO)))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content().contentType(contentType));
+	}
+
+	@Test
+	@Transactional
+	@Rollback(true)
+	public void scheduleExamiantionWithCorrectStartEndDate() throws Exception {
+
+		ScheduleExaminationDTO scheduleExaminationDTO = new ScheduleExaminationDTO();
+		scheduleExaminationDTO.setConsultantEmail(LoginConstants.DERMATOLOGIST_EMAIL);
+		scheduleExaminationDTO.setConsultantId(9L);
+		scheduleExaminationDTO.setStartDate("2021-02-16 12:00:00");
+		scheduleExaminationDTO.setEndDate("2021-02-16 13:00:00");
+		scheduleExaminationDTO.setPatientId(2L);
+		scheduleExaminationDTO.setPharmacyID(2L);
+
+
+		this.mockMvc
+				.perform(post(URL_PREFIX_SCHEDULE_EXAMIANTION).header("Authorization", "Bearer " + dermatologistAccesToken)
+						.contentType(contentType).content(TestUtil.json(scheduleExaminationDTO)))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType(contentType));
 	}
