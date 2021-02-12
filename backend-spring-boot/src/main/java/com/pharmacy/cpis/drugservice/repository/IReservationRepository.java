@@ -19,5 +19,6 @@ public interface IReservationRepository extends JpaRepository<Reservation, Long>
             + "date_part('year',r.deadline) = :year and "+
             "date_part('month',r.deadline) = :month and "+
             "date_part('day',r.deadline) = :day")
-    Set<Reservation> getUnclaimedReservationsForDate(int day, int month, int year);
+    Set<Reservation> getUnclaimedReservationsForDate(int day, int month, int year);   
+    
 }

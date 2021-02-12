@@ -49,6 +49,7 @@ import SystemAdminComplaints from './../pages/systemadmin/complaints/Complaints'
 
 import PharmacyAdmin from './../pages/pharmacyadmin/Container';
 import PharmacyAdminLanding from './../pages/pharmacyadmin/landing/Landing';
+import EditPharmacy from './../pages/pharmacyadmin/landing/EditPharmacy';
 import VacationRequests from './../pages/pharmacyadmin/vacation/Vacation';
 import PharmacistSearch from './../pages/pharmacyadmin/consultants/Pharmacists';
 import DermatologistSearch from './../pages/pharmacyadmin/consultants/Dermatologists';
@@ -62,6 +63,7 @@ import DrugsInPharmacy from './../pages/pharmacyadmin/drugs/Container';
 import ViewPredefined from './../pages/pharmacyadmin/consultations/ViewPredefined'
 import AddPredefined from './../pages/pharmacyadmin/consultations/AddPredefined'
 import PAPassword from './../pages/pharmacyadmin/password/ChangePassword'
+import Statistics from './../pages/pharmacyadmin/statistics/Statistics'
 
 import Supplier from './../pages/supplier/Container';
 import SupplierLanding from './../pages/supplier/landing/Landing';
@@ -208,7 +210,7 @@ const routes = [
                 component: PatientSchedullingConsultations,
                 name: 'schedullingconsultations',
                 path: 'schedullingconsultations'
-            }          
+            }
         ]
     },
     {
@@ -330,6 +332,11 @@ const routes = [
                 path: ''
             },
             {
+                component: EditPharmacy,
+                name: 'pharmacyadminedit',
+                path: 'edit'
+            },
+            {
                 component: Drugs,
                 name: 'pharmacyadmindrugs',
                 path: 'alldrugs'
@@ -398,11 +405,17 @@ const routes = [
                 component: PAPassword,
                 name: 'pharmacyadminpassword',
                 path: 'password'
-            },{
+            },
+            {
                 component: EditDrugOrder,
                 name: 'editdrugorder',
                 path: 'orders/edit/:id',
                 props: true
+            },
+            {
+                component: Statistics,
+                name: 'statistics',
+                path: 'statistics'
             }
         ]
     },
