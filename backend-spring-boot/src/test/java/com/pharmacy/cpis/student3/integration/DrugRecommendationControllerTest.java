@@ -138,4 +138,26 @@ public class DrugRecommendationControllerTest {
 				.andExpect(MockMvcResultMatchers.content().contentType(contentType));
 	}
 
+	@Test
+	@Transactional
+	@Rollback(true)
+	public void scheduleExamiantionWithPredefinedDate() throws Exception {
+
+		ScheduleExaminationDTO scheduleExaminationDTO = new ScheduleExaminationDTO();
+		scheduleExaminationDTO.setConsultantEmail(LoginConstants.DERMATOLOGIST_EMAIL);
+		scheduleExaminationDTO.setConsultantId(9L);
+		scheduleExaminationDTO.setPatientId(2L);
+		scheduleExaminationDTO.setStartDate("2021-02-26 13:23:00");
+		scheduleExaminationDTO.setEndDate("2021-02-26 14:00:00");
+		scheduleExaminationDTO.setPharmacyID(1L);
+		scheduleExaminationDTO.setPredefinedConsultationID(8L);
+
+
+		this.mockMvc
+				.perform(post(URL_PREFIX_SCHEDULE_EXAMIANTION).header("Authorization", "Bearer " + dermatologistAccesToken)
+						.contentType(contentType).content(TestUtil.json(scheduleExaminationDTO)))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content().contentType(contentType));
+	}
+
 }
