@@ -152,6 +152,10 @@ public class DrugOrderService implements IDrugOrderService {
 				.findByPharmacyIdAndDrugCode(order.getPharmacy().getId(), drug.getCode()).orElse(null);
 
 		if (availableDrug == null) {
+			if (orderedDrugDTO.getDefaultPrice() == null)
+				throw new PSBadRequestException(
+						"Drug price is necessary for drugs that have't been added to the pharmacy before.");
+
 			availableDrug = new AvailableDrug();
 			availableDrug.setDrug(drug);
 			availableDrug.setDefaultPrice(orderedDrugDTO.getDefaultPrice());
