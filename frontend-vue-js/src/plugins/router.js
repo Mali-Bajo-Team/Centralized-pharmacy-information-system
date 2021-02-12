@@ -52,11 +52,14 @@ import PharmacyAdminLanding from './../pages/pharmacyadmin/landing/Landing';
 import VacationRequests from './../pages/pharmacyadmin/vacation/Vacation';
 import PharmacistSearch from './../pages/pharmacyadmin/consultants/Pharmacists';
 import DermatologistSearch from './../pages/pharmacyadmin/consultants/Dermatologists';
+import AddPharmacist from './../pages/pharmacyadmin/consultants/AddPharmacist';
+import AddDermatologist from './../pages/pharmacyadmin/consultants/AddDermatologist';
 import DrugOrders from './../pages/pharmacyadmin/orders/Container';
 import Promotion from './../pages/pharmacyadmin/promotions/AddPromotion';
 import DrugsInPharmacy from './../pages/pharmacyadmin/drugs/Container';
 import ViewPredefined from './../pages/pharmacyadmin/consultations/ViewPredefined'
 import AddPredefined from './../pages/pharmacyadmin/consultations/AddPredefined'
+import PAPassword from './../pages/pharmacyadmin/password/ChangePassword'
 
 import Supplier from './../pages/supplier/Container';
 import SupplierLanding from './../pages/supplier/landing/Landing';
@@ -186,13 +189,13 @@ const routes = [
             },
             {
                 component: PatientRating,
-                name : 'rating',
-                path : 'rating'
+                name: 'rating',
+                path: 'rating'
             },
             {
                 component: PatientPharmaciesRating,
-                name : 'ratingpharmacies',
-                path : 'ratingpharmacies'
+                name: 'ratingpharmacies',
+                path: 'ratingpharmacies'
             },
             {
                 component: PatientDrugsRating,
@@ -369,6 +372,26 @@ const routes = [
                 component: ViewPredefined,
                 name: 'pharmacyadminviewpredefined',
                 path: 'predefined'
+            },
+            {
+                component: AddDermatologist,
+                name: 'pharmacyadmindermatologistadd',
+                path: 'dermatologists/add'
+            },
+            {
+                component: AddPharmacist,
+                name: 'pharmacyadminpharmacistadd',
+                path: 'pharmacists/add'
+            },
+            {
+                component: SupplierProfile,
+                name: 'pharmacyadminprofile',
+                path: 'profile'
+            },
+            {
+                component: PAPassword,
+                name: 'pharmacyadminpassword',
+                path: 'password'
             }
         ]
     },
