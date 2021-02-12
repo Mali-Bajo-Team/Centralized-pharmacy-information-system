@@ -164,7 +164,7 @@
                     class="ma-2 white--text mr-6"
                     @click="
                       sortArrayBy(
-                        'consultationPrice',
+                        'consultantRating',
                         consultation.freePharmacist
                       )
                     "
@@ -178,7 +178,7 @@
                     class="ma-2 white--text mr-6"
                     @click="
                       sortArrayDownBy(
-                        'consultationPrice',
+                        'consultantRating',
                         consultation.freePharmacist
                       )
                     "
