@@ -17,6 +17,8 @@ public class PharmacyDTO {
 
     private Double rating;
 
+    private String city;
+
     public PharmacyDTO(){
 
     }
@@ -28,6 +30,15 @@ public class PharmacyDTO {
         this.setLocation(getPharmacyLocation(pharmacy));
         this.setRating(getAvgRatings(pharmacy));
         this.setId(pharmacy.getId());
+        this.setCity(pharmacy.getLocation().getCity());
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     private Double getAvgRatings(Pharmacy pharmacy) {
