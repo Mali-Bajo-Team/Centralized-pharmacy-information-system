@@ -1,12 +1,13 @@
 package com.pharmacy.cpis.userservice.service.impl;
 
+import com.pharmacy.cpis.drugservice.model.drug.Drug;
+import com.pharmacy.cpis.drugservice.repository.IDrugRatingRepository;
+import com.pharmacy.cpis.drugservice.repository.IDrugRepository;
 import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
 import com.pharmacy.cpis.pharmacyservice.repository.IPharmacyRepository;
-import com.pharmacy.cpis.userservice.dto.ratings.ConsultantRatingCreateDTO;
-import com.pharmacy.cpis.userservice.dto.ratings.ConsultantRatingUpdateDTO;
-import com.pharmacy.cpis.userservice.dto.ratings.PharmacyRatingCreateDTO;
-import com.pharmacy.cpis.userservice.dto.ratings.PharmacyRatingUpdateDTO;
+import com.pharmacy.cpis.userservice.dto.ratings.*;
 import com.pharmacy.cpis.userservice.model.ratings.ConsultantRating;
+import com.pharmacy.cpis.userservice.model.ratings.DrugRating;
 import com.pharmacy.cpis.userservice.model.ratings.PharmacyRating;
 import com.pharmacy.cpis.userservice.model.ratings.Rating;
 import com.pharmacy.cpis.userservice.model.users.Consultant;
@@ -34,6 +35,9 @@ public class RatingService implements IRatingService {
     private IPharmacyRatingRepository pharmacyRatingRepository;
 
     @Autowired
+    private IDrugRatingRepository drugRatingRepository;
+
+    @Autowired
     private IUserRepository userRepository;
 
     @Autowired
@@ -44,6 +48,9 @@ public class RatingService implements IRatingService {
 
     @Autowired
     private IPharmacyRepository pharmacyRepository;
+
+    @Autowired
+    private IDrugRepository drugRepository;
 
     @Override
     public List<ConsultantRating> getAllConsultantRatingsByPatient(String patientEmail) {
@@ -109,6 +116,39 @@ public class RatingService implements IRatingService {
         rating.setRating(pharmacyRatingUpdateDTO.getNewRating());
         pharmacyRating.setRating(rating);
         return pharmacyRatingRepository.save(pharmacyRating);
+    }
+
+    @Override
+    public List<DrugRating> getAllDrugRatingsByPatient(String patientEmail) {
+        return drugRatingRepository.findAllByPatientId(userRepository.findByEmail(patientEmail).getPerson().getId());
+    }
+
+    @Override
+    public DrugRating createDrugRating(DrugRatingCreateDTO drugRatingCreateDTO) {
+        DrugRating drugRating = new DrugRating();
+        Rating rating = new Rating();
+        rating.setRating(drugRatingCreateDTO.getRating());
+        Long patientId = userRepository.findByEmail(drugRatingCreateDTO.getPatientEmail()).getPerson().getId();
+        Patient patient = patientRepository.findById(patientId).orElse(null);
+        if(patient == null) throw new PSNotFoundException("Not found that patient");
+        Drug drug = drugRepository.findByCode(drugRatingCreateDTO.getDrugCode());
+        if(drug == null) throw new PSNotFoundException("Not found drug with that code");
+
+        drugRating.setRating(rating);
+        drugRating.setPatient(patient);
+        drugRating.setDrug(drug);
+
+        return drugRatingRepository.save(drugRating);
+    }
+
+    @Override
+    public DrugRating updateDrugRating(DrugRatingUpdateDTO drugRatingUpdateDTO) {
+        DrugRating drugRating = drugRatingRepository.findById(drugRatingUpdateDTO.getId()).orElse(null);
+        if(drugRating == null) throw new PSNotFoundException("Not found that drug rating");
+        Rating newRating = new Rating();
+        newRating.setRating(drugRatingUpdateDTO.getNewRating());
+        drugRating.setRating(newRating);
+        return drugRatingRepository.save(drugRating);
     }
 
 }
