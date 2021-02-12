@@ -65,6 +65,7 @@ export default {
         else if (error.message) this.snackbarText = error.message;
         else this.snackbarText = "An unknown error has occured.";
         this.snackbar = true;
+        this.loading = false;
       });
   },
   computed: {

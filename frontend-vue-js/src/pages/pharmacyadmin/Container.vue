@@ -24,28 +24,37 @@ export default {
       },
       {
         title: "Drugs",
-        to: "/pharmacyadmin/pharmacyadmindrugs"
-      },
-      {
-        title: "Drug procurement",
         children: [
           {
-            title: "All orders",
+            title: "All drugs",
+            to: "/pharmacyadmin/alldrugs"
+          },
+          {
+            title: "Drugs in pharmacy",
+            to: "/pharmacyadmin/drugs"
+          },
+          {
+            title: "Orders",
             to: "/pharmacyadmin/orders"
           }
         ]
       },
       {
-        title: "Vacation requests",
-        to: "/pharmacyadmin/vacationrequests"
-      },
-      {
-        title: "Pharmacists",
-        to: "/pharmacyadmin/pharmacists"
-      },
-      {
-        title: "Dermatologists",
-        to: "/pharmacyadmin/dermatologists"
+        title: "Employees",
+        children: [
+          {
+            title: "Pharmacists",
+            to: "/pharmacyadmin/pharmacists"
+          },
+          {
+            title: "Dermatologists",
+            to: "/pharmacyadmin/dermatologists"
+          },
+          {
+            title: "Vacation requests",
+            to: "/pharmacyadmin/vacationrequests"
+          }
+        ]
       },
       {
         title: "Add promotion",

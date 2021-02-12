@@ -1,5 +1,11 @@
 export function getStringDateFromMilliseconds(dateInMilliseconds) {
-    return new Date(dateInMilliseconds).toISOString().split('T')[0];
+    let today = new Date(dateInMilliseconds);
+    let dd = String(today.getDate()).padStart(2, "0");
+    let mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+    let yyyy = today.getFullYear();
+
+    today = yyyy + "-" + mm + "-" + dd;
+    return today;
 }
 
 // Thanks stacky: https://stackoverflow.com/questions/1531093/how-do-i-get-the-current-date-in-javascript
@@ -23,12 +29,10 @@ export function isAvailableToCancelConsultation(consultationDate) {
 }
 
 export function getStringDateWithTimeFromMilliseconds(dateInMilliseconds) {
-    var date = new Date(dateInMilliseconds).toISOString().split('T')[0];
-    var timeStampPlusOneHour = 3600000 + dateInMilliseconds;
-    var time = new Date(timeStampPlusOneHour).toISOString().split('T')[1];
-    var DateWithTime = date + " " + time.substring(0, 5);
-    
-    return DateWithTime;
+    var date = getStringDateFromMilliseconds(dateInMilliseconds);
+
+    var withTime = new Date(dateInMilliseconds);
+    return date + " " + String(withTime.getHours()).padStart(2, "0") + ":" + String(withTime.getMinutes()).padStart(2, "0");
 }
 
 export function getMillisecondsFromStringDate(date) {
