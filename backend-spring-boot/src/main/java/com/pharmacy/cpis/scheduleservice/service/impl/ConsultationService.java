@@ -218,7 +218,7 @@ public class ConsultationService implements IConsultationService {
 	 */
 	public List<Pharmacy> findAllPatientPharmacies(Patient patient) {
 		List<Pharmacy> allPatientPharmacies = new ArrayList<>();
-		for (Consultation consultation : consultationRepository.findAllByPatient(patient)) {
+		for (Consultation consultation : consultationRepository.findAllByPatientAndStatus(patient, ConsultationStatus.FINISHED)) {
 			boolean alreadyExistPharmacy = false;
 			for (Pharmacy pharmacy : allPatientPharmacies) {
 				if (pharmacy.getId().equals(consultation.getPharmacy().getId())) {
