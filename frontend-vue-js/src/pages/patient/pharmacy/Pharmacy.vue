@@ -24,15 +24,54 @@
             ></v-rating>
           </v-card-title>
           <v-tabs fixed-tabs v-model="tab" background-color="transparent">
+            <v-tab>Location</v-tab>
             <v-tab>Dermatologists</v-tab>
             <v-tab>Pharmacists</v-tab>
+            <v-tab>Available drugs</v-tab>
           </v-tabs>
-          <v-tabs-items v-model="tab" class="pa-0">
-            <v-tab-item class="pa-0">
+          <v-tabs-items v-model="tab">
+            <v-tab-item>
+              <vl-map data-projection="EPSG:4326" style="height: 400px;" v-if="!loading">
+                <vl-view
+                  ref="mapView"
+                  :zoom.sync="zoom"
+                  :center.sync="center"
+                  :rotation.sync="rotation"
+                ></vl-view>
+
+                <vl-layer-tile>
+                  <vl-source-osm></vl-source-osm>
+                </vl-layer-tile>
+
+                <vl-feature v-if="marker">
+                  <vl-geom-point ref="geom" :coordinates="marker"></vl-geom-point>
+                  <vl-style-box>
+                    <vl-style-icon src="@/assets/icon1.png" :scale="1.2" :anchor="[0.5, 1]"></vl-style-icon>
+                  </vl-style-box>
+                </vl-feature>
+
+                <vl-overlay v-if="marker" id="overlay" :position="marker">
+                  <template>
+                    <v-chip
+                      color="white"
+                      text-color="primary"
+                      class="pl-2 pr-2 pt-0 pb-0"
+                      style="transform: translateX(-50%); border: 3px #000000 !important;"
+                      label
+                    >{{pharmacy.address}}</v-chip>
+                  </template>
+                </vl-overlay>
+              </vl-map>
+            </v-tab-item>
+
+            <v-tab-item>
               <consultants :endpoint="dermatologistEndpoint"></consultants>
             </v-tab-item>
-            <v-tab-item class="pa-0">  
+            <v-tab-item>
               <consultants :endpoint="pharmacistEndpoint"></consultants>
+            </v-tab-item>
+            <v-tab-item>
+              <drugs :endpoint="drugEndpoint" :pharmacyId="id"></drugs>
             </v-tab-item>
           </v-tabs-items>
         </v-card>
@@ -51,10 +90,12 @@
 
 <script>
 import consultants from "@/components/consultantSearch/Container";
+import drugs from "./DrugComponent";
 
 export default {
   components: {
-    consultants
+    consultants,
+    drugs
   },
   props: {
     id: {
@@ -62,6 +103,10 @@ export default {
     }
   },
   data: () => ({
+    marker: null,
+    zoom: 15,
+    center: [19.833549, 45.267136],
+    rotation: 0,
     tab: null,
     pharmacy: {},
     loading: true,
@@ -93,6 +138,9 @@ export default {
         )
         .then(response => {
           this.pharmacy = response.data;
+          this.marker = [this.pharmacy.longitude, this.pharmacy.latitude];
+          this.center = this.marker;
+          this.zoom = 15;
           this.loading = false;
         })
         .catch(error => {

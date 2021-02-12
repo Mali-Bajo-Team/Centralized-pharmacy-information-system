@@ -7,31 +7,33 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import com.pharmacy.cpis.drugservice.dto.DrugReservationDTO;
-import com.pharmacy.cpis.scheduleservice.dto.PatientCancelConsultationDTO;
-import com.pharmacy.cpis.userservice.dto.PatientEmailDTO;
-import com.pharmacy.cpis.userservice.model.users.ConsultantType;
-
-import com.pharmacy.cpis.scheduleservice.repository.IConsultationRepository;
-import com.pharmacy.cpis.userservice.dto.ConsultantPredefinedExamDTO;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.pharmacy.cpis.scheduleservice.dto.AddPredefinedConsultationDTO;
 import com.pharmacy.cpis.scheduleservice.dto.ConsultationDTO;
+import com.pharmacy.cpis.scheduleservice.dto.PatientCancelConsultationDTO;
 import com.pharmacy.cpis.scheduleservice.dto.ScheduleExaminationDTO;
 import com.pharmacy.cpis.scheduleservice.model.consultations.Consultation;
 import com.pharmacy.cpis.scheduleservice.model.consultations.ConsultationStatus;
+import com.pharmacy.cpis.scheduleservice.repository.IConsultationRepository;
 import com.pharmacy.cpis.scheduleservice.service.IConsultationService;
 import com.pharmacy.cpis.scheduleservice.service.IWorkingTimesService;
 import com.pharmacy.cpis.userservice.dto.ConsultantDTO;
+import com.pharmacy.cpis.userservice.dto.ConsultantPredefinedExamDTO;
+import com.pharmacy.cpis.userservice.dto.PatientEmailDTO;
+import com.pharmacy.cpis.userservice.model.users.ConsultantType;
 import com.pharmacy.cpis.userservice.model.users.Patient;
 import com.pharmacy.cpis.userservice.model.users.UserAccount;
 import com.pharmacy.cpis.userservice.repository.IPatientRepository;
