@@ -17,22 +17,11 @@ public class DateConversionsAndComparisons {
 	}
 
 	public static int compareTimesWithoutDates(Date d1, Date d2) {
-		int t1;
-		int t2;
-
-		t1 = (int) (d1.getTime() % (24 * 60 * 60 * 1000L));
-		t2 = (int) (d2.getTime() % (24 * 60 * 60 * 1000L));
-		return (t1 - t2);
+		return getTime(d1).compareTo(getTime(d2));
 	}
 
 	public static long compareDatesWithoutTime(Date d1, Date d2) {
-		long t1;
-		long t2;
-		
-		t1 = d1.getTime() - d1.getTime() % (24 * 60 * 60 * 1000L);
-		t2 = d2.getTime() - d2.getTime() % (24 * 60 * 60 * 1000L);
-		
-		return (t1 - t2);
+		return getDate(d1).compareTo(getDate(d2));
 	}
 
 	// Convert 2021-02-12 13:55:00 to Util
@@ -46,23 +35,15 @@ public class DateConversionsAndComparisons {
 		return convertedUtilDate;
 	}
 
-	// d1>d2 => >0
-	// d1<d2 => <0
-	// d1==d2 => =0
 	public static int compareDates(Date d1, Date d2) {
-		int t1;
-		int t2;
-
-		t1 = (int) (d1.getTime());
-		t2 = (int) (d2.getTime());
-		System.out.println(t1 - t2);
-		return (t1 - t2);
+		return d1.compareTo(d2);
 	}
 
 	public static Iterable<Date> getDatesBetween(Date start, Date end) {
 		Collection<Date> retVal = new ArrayList<Date>();
 
-		Date current = new Date(start.getTime() - start.getTime() % (24 * 60 * 60 * 1000L));
+		Date current = getDate(start);
+
 		while (DateConversionsAndComparisons.compareDatesWithoutTime(current, end) <= 0) {
 			retVal.add(current);
 			current = new Date(current.getTime() + 24 * 60 * 60 * 1000L);
@@ -106,11 +87,17 @@ public class DateConversionsAndComparisons {
 	}
 
 	public static Date getTime(Date dateTime) {
-		return new Date(dateTime.getTime() % (24 * 60 * 60 * 1000L));
+		Date date = getDate(dateTime);
+		return new Date(dateTime.getTime() - date.getTime());
 	}
 
 	public static Date getDate(Date dateTime) {
-		return new Date(dateTime.getTime() - dateTime.getTime() % (24 * 60 * 60 * 1000L));
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(dateTime);
+		Calendar newCal = Calendar.getInstance();
+		newCal.clear();
+		newCal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
+		return newCal.getTime();
 	}
 
 }
