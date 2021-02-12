@@ -9,8 +9,11 @@ import com.pharmacy.cpis.pharmacyservice.model.pharmacy.Pharmacy;
 import com.pharmacy.cpis.scheduleservice.model.prescriptions.EPrescription;
 import com.pharmacy.cpis.userservice.dto.PatientEmailDTO;
 import com.pharmacy.cpis.userservice.model.users.Patient;
+import org.joda.time.LocalDate;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 
 public interface IReservationService {
     Reservation makeReservation(DrugReservationDTO reservationDTO);
@@ -30,4 +33,6 @@ public interface IReservationService {
 
     // All reserved drugs (there is also ones which are made with ePrescription)
     List<Drug> findAllPatientDrugsAvailableForRating(String patientEmail);
+
+    Set<Reservation> getUnclaimedReservationsForDate(LocalDate date);
 }

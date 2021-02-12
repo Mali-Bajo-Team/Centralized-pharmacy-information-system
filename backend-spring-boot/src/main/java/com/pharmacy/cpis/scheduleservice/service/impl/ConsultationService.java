@@ -7,6 +7,7 @@ import com.pharmacy.cpis.scheduleservice.dto.*;
 import com.pharmacy.cpis.scheduleservice.model.workschedule.WorkingTimes;
 import com.pharmacy.cpis.userservice.dto.PatientEmailDTO;
 import com.pharmacy.cpis.userservice.repository.IUserRepository;
+import com.pharmacy.cpis.userservice.service.IPatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,6 +51,9 @@ public class ConsultationService implements IConsultationService {
 
     @Autowired
     private IUserRepository userRepository;
+
+    @Autowired
+    private IPatientService patientService;
 
     @Override
     public Collection<Consultation> findByPharmacyAndStatus(Long pharmacyId, ConsultationStatus status) {
@@ -257,6 +261,17 @@ public class ConsultationService implements IConsultationService {
         if (consultation == null) throw new PSNotFoundException("Not found that consultation");
         consultation.setStatus(ConsultationStatus.CANCELLED);
         consultationRepository.save(consultation);
+    }
+
+    @Override
+    public void updateConsultation(Long consultationId,String patientEmail){
+       Consultation consultation = consultationRepository.findById(consultationId).orElse(null);
+       consultation.setStatus(ConsultationStatus.SCHEDULED);
+       Patient patient = patientService.findByEmail(patientEmail);
+       consultation.setPatient(patient);
+
+       consultationRepository.save(consultation);
+
     }
 
     @Override

@@ -42,4 +42,6 @@ public interface IConsultationService {
     Boolean isConsultantFreeForConsultation(Long consultantId, Long pharmacyID, Date examinationStartDate, Date examinationEndDate);
 
     List<FreePharmacyReadDTO> allPharmaciesWhichHaveMinOnePharmacistFree(String examinationStartDateString);
+
+    void updateConsultation(Long consultationId,String patientEmail);
 }

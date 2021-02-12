@@ -27,7 +27,7 @@ import PatientRating from './../pages/patient/rating/ConsultantsRating';
 import PatientPharmaciesRating from './../pages/patient/rating/PharmaciesRating';
 import PatientDrugsRating from './../pages/patient/rating/DrugsRating';
 import PatientSchedullingConsultations from './../pages/patient/schedulling/Consultations';
-import PatientSchedullingExaminations from './../pages/patient/schedulling/Examinations';
+
 
 
 
@@ -208,12 +208,7 @@ const routes = [
                 component: PatientSchedullingConsultations,
                 name: 'schedullingconsultations',
                 path: 'schedullingconsultations'
-            },
-            {
-                component: PatientSchedullingExaminations,
-                name: 'schedullingexaminations',
-                path: 'schedullingexaminations'
-            }
+            }          
         ]
     },
     {
