@@ -80,6 +80,10 @@ export default {
       {
         title: "Add promotion",
         to: "/pharmacyadmin/promotion"
+      },
+      {
+        title: "My profile",
+        to: "/pharmacyadmin/profile"
       }
     ]
   })
