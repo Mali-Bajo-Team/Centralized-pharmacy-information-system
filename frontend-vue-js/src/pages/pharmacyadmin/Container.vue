@@ -47,8 +47,16 @@ export default {
             to: "/pharmacyadmin/pharmacists"
           },
           {
+            title: "Add pharmacist",
+            to: "/pharmacyadmin/pharmacists/add"
+          },
+          {
             title: "Dermatologists",
             to: "/pharmacyadmin/dermatologists"
+          },
+          {
+            title: "Add dermatologist",
+            to: "/pharmacyadmin/dermatologists/add"
           },
           {
             title: "Vacation requests",
