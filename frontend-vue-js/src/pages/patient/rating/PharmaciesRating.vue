@@ -21,10 +21,10 @@
                 medium
               ></v-rating>
               <v-btn
-                small
                 width="110px"
                 color="primary"
                 class="ma-2 white--text mr-6"
+                @click="makeNewRating()"
               >
                 Rate
                 <v-icon small right dark> mdi-star </v-icon>
@@ -139,6 +139,11 @@ export default {
       id: 0,
       newRating: 1,
     },
+    createRatingDTO: {
+      pharmacyId: 0,
+      rating: 1,
+      patientEmail: "",
+    },
   }),
   mounted() {
     this.axios
@@ -166,6 +171,27 @@ export default {
       this.updateRatingDTO.id = pharmacyRated.id;
       this.updateRatingDTO.newRating = pharmacyRated.rating;
     },
+    makeNewRating() {
+      this.axios
+        .post(
+          process.env.VUE_APP_BACKEND_URL +
+            process.env.VUE_APP_PATIENT_CHANGE_RATING_PHARMACIES_ENDPOINT,
+          {
+            patientEmail: "cpisuser+dragana@gmail.com",
+            rating: 4,
+            pharmacyId: 2,
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("JWT-CPIS"),
+            },
+          }
+        )
+        .then(() => {})
+        .catch((error) => {
+          alert(error);
+        });
+    },
 
     confirmNewRate() {
       this.axios
@@ -174,7 +200,7 @@ export default {
             process.env.VUE_APP_PATIENT_CHANGE_RATING_PHARMACIES_ENDPOINT,
           {
             newRating: this.updateRatingDTO.newRating,
-            id: this.updateRatingDTO.id
+            id: this.updateRatingDTO.id,
           },
           {
             headers: {
@@ -185,14 +211,12 @@ export default {
         .then((resp) => {
           console.log(resp.data);
           alert("Successfully confirmed!");
-          for(let pharmacyRate of this.pharmaciesRated){
-            if(pharmacyRate.id == this.updateRatingDTO.id){
-               pharmacyRate.rating = resp.data.rating;
+          for (let pharmacyRate of this.pharmaciesRated) {
+            if (pharmacyRate.id == this.updateRatingDTO.id) {
+              pharmacyRate.rating = resp.data.rating;
               break;
             }
           }
-          
-
         })
         .catch((error) => {
           alert(error);

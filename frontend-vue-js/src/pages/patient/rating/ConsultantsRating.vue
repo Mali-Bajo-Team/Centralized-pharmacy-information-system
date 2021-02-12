@@ -21,7 +21,7 @@
                 medium
               ></v-rating>
               <v-btn
-                small
+                
                 width="110px"
                 color="primary"
                 class="ma-2 white--text mr-6"
