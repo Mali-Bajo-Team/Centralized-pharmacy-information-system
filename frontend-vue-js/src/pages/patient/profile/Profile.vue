@@ -132,7 +132,7 @@
     </v-card>
     <!-- End of the card for the base info about patient -->
     <!-- Card for the complaints -->
-    <v-card width="600px" class="mx-auto mb-14">
+    <v-card width="600px" class="mx-auto mb-1">
       <v-row justify="end">
         <v-card-subtitle class="ml-5 mr-5">
           Dear {{ patient.name }}, if you have some complain on some of the
